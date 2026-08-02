@@ -1,7 +1,24 @@
-# SKO website — Phase 1 planning deliverables
+# SKO website — project documentation
 
 Project: production bilingual (km/en) website for **Samatapheap Khnom Organization**, Phnom Penh.
 Stack per brief: Astro + TypeScript + Tailwind · Sanity · Cloudflare Pages + Functions + Turnstile · Resend · Cloudflare Web Analytics.
+
+Delivered in six phases, each with an approval gate. The original brief this was built from:
+**[00-original-brief.md](00-original-brief.md)**.
+
+**Start here if you are:**
+
+| You are… | Read |
+|---|---|
+| SKO staff who will edit the site | [HANDOVER-en.md](HANDOVER-en.md) · [HANDOVER-km.md](HANDOVER-km.md) |
+| Deploying it | [09-deployment.md](09-deployment.md) |
+| A developer picking this up | [../README.md](../README.md), then [07-architecture.md](07-architecture.md) |
+| Reviewing security | [SECURITY.md](SECURITY.md) |
+| Looking at the design | [design-preview.html](design-preview.html) — open in a browser |
+
+---
+
+# Phase 1 — Planning
 
 | # | Deliverable | Document |
 |---|---|---|
