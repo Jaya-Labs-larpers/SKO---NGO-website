@@ -1,0 +1,94 @@
+name: Verify
+
+# Runs on pull requests and on pushes to main.
+#
+# Deliberately NOT part of the Cloudflare production build. Cloudflare runs
+# `npm run build`; if a structural check ever tripped on a content edit, staff
+# would be unable to publish. Verification belongs here, between developers.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install (locked)
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build and run structural checks
+        run: npm run verify
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Serve the build
+        run: npx --yes serve dist -l 4321 &
+
+      - name: Wait for the server
+        run: npx --yes wait-on http://127.0.0.1:4321 --timeout 60000
+
+      # Mobile profile — that is the one that matters for this audience.
+      # Thresholds match the definition of done, not Lighthouse's defaults.
+      - name: Lighthouse (English and Khmer homepages)
+        run: |
+          for url in http://127.0.0.1:4321/ http://127.0.0.1:4321/km/; do
+            npx --yes lighthouse@12 "$url" \
+              --quiet --chrome-flags="--headless=new --no-sandbox" \
+              --output=json --output-path=./report.json
+            node -e '
+              const r = require("./report.json");
+              const floors = { performance: 90, accessibility: 95, "best-practices": 95, seo: 95 };
+              let failed = false;
+              for (const [key, floor] of Object.entries(floors)) {
+                const score = Math.round(r.categories[key].score * 100);
+                const ok = score >= floor;
+                if (!ok) failed = true;
+                console.log(`${ok ? "PASS" : "FAIL"}  ${key.padEnd(16)} ${score} (floor ${floor})`);
+              }
+              if (failed) process.exit(1);
+            '
+          done
+
+  studio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: studio/package-lock.json
+      - run: npm ci
+        working-directory: studio
+      - run: npm run typecheck
+        working-directory: studio

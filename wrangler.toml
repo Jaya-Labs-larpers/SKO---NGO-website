@@ -1,0 +1,48 @@
+# Cloudflare Pages configuration.
+#
+# Keeping this in the repo means the build settings are versioned and reviewable
+# rather than living only in a dashboard nobody can diff. Cloudflare reads it
+# automatically; you do not run `wrangler deploy` for a Pages project.
+
+name = "sko-website"
+compatibility_date = "2026-01-01"
+pages_build_output_dir = "dist"
+
+# ---------------------------------------------------------------------------
+# KV namespace for form rate limiting.
+#
+# Left commented out because the id below must be a real namespace — an invalid
+# id fails the deploy. Create it once:
+#
+#   npx wrangler kv namespace create RATE_LIMIT_KV
+#   npx wrangler kv namespace create RATE_LIMIT_KV --preview
+#
+# then paste the ids in and uncomment. Binding it through the Pages dashboard
+# instead works identically; this way it is version-controlled.
+#
+# Without the binding the Function still works — rate limiting is deliberately
+# fail-open, because Turnstile is the primary control and blocking a genuine
+# grant inquiry over a KV blip would be the worse outcome. It logs a warning on
+# each submission so a missing binding is visible in the Workers logs.
+# ---------------------------------------------------------------------------
+
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT_KV"
+# id = "REPLACE_WITH_PRODUCTION_NAMESPACE_ID"
+# preview_id = "REPLACE_WITH_PREVIEW_NAMESPACE_ID"
+
+# ---------------------------------------------------------------------------
+# Secrets are NOT set here. wrangler.toml is committed; secrets are not.
+# Set these per environment in the Cloudflare Pages dashboard:
+#
+#   TURNSTILE_SECRET_KEY   RESEND_API_KEY   MAIL_FROM
+#   CONTACT_TO_EMAIL       PARTNER_TO_EMAIL
+#
+# and the public build-time values:
+#
+#   PUBLIC_SITE_URL              PUBLIC_TURNSTILE_SITE_KEY
+#   PUBLIC_SANITY_PROJECT_ID     PUBLIC_SANITY_DATASET
+#   PUBLIC_SANITY_API_VERSION    PUBLIC_CF_ANALYTICS_TOKEN
+#
+# See docs/09-deployment.md.
+# ---------------------------------------------------------------------------
