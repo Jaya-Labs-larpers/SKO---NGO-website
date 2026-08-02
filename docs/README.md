@@ -89,30 +89,36 @@ was **failing open** when unconfigured — it now fails closed.
 | 19 | Pages build settings under version control | `../wrangler.toml` |
 | 20 | CI: typecheck, structural checks, audit, Lighthouse floors | `../.github/workflows/verify.yml` |
 
-Repository initialised, two commits, nothing pushed. **The deployment itself needs accounts and a
-domain** — the runbook is the sequence to follow.
+**Status: prepared, awaiting accounts and a domain to execute.** The runbook is the sequence to follow.
 
-**Status: Phase 6 — prepared, awaiting accounts to execute.**
+---
 
-## Decisions that need an explicit yes/no from you
+## Decisions on the record
 
-| # | Decision | My recommendation |
+Settled during the phase gates, and load-bearing — changing any of them means revisiting the phase
+that decided it.
+
+| Decision | Outcome | Where |
 |---|---|---|
-| 1 | URL style: `/about/` + `/km/about/` vs `/en/about/` + `/km/about/` | Unprefixed English |
-| 2 | Sanity i18n: field-level `{en, km}` vs separate translated documents | Field-level |
-| 3 | Sanity dataset **public, no read token in the build** | Yes — and it makes the safeguarding rules binding |
-| 4 | `/partners/` (logo wall) + `/partner-with-us/` (inquiry) naming | As proposed |
-| 5 | No file uploads anywhere, incl. CVs on careers | Email-only applications |
-| 6 | Newsletter signup | Defer past launch |
-| 7 | Nightly rebuild cron (expires job posts automatically) | Include |
-| 8 | Text version of the org chart alongside the image | Include — it's the accessible route |
+| URL style | English unprefixed (`/about/`), Khmer at `/km/about/` | [01](01-sitemap-and-urls.md) |
+| Sanity i18n | Field-level `{en, km}` — one document, one Publish button | [02](02-sanity-content-model.md) |
+| Sanity dataset | **Public, no token anywhere in the build** | ADR-004, [04](04-tech-decisions.md) |
+| Palette | White-dominant, slate blue `#475D8C` + `#C3E9E8` / `#9BE1FF`. No green | [06](06-design-system.md) |
+| Translation | Staff write both languages. **No machine translation anywhere** | [02](02-sanity-content-model.md) |
+| File uploads | None anywhere, including CVs on careers | [04](04-tech-decisions.md) |
+| Payments | QR and bank details only. No card fields, no payment SDK, zero PCI scope | [01](01-sitemap-and-urls.md) |
+| Org chart | Image treatment **plus** a text version — the accessible route | [06](06-design-system.md) |
+| Newsletter | Deferred past launch | [01](01-sitemap-and-urls.md) |
+| Nightly rebuild | Included — it is why job deadlines expire on their own | ADR-007 |
 
-## Information I need before Phase 3
+## Two things that must not drift
 
-Domain ownership + registrar · Git host and who owns the account · Destination inboxes and DNS control for email sending · Who at SKO writes and reviews the Khmer copy.
+**Khmer copy is placeholder.** Every Khmer route, font rule and CMS field is built, and the interface
+strings are a working translation marked for review in `src/lib/i18n/strings.ts`. The *content* — the
+mission, the programme descriptions, the Director's message — needs a Khmer-speaking staff member
+before launch. A child-protection NGO's mission should not go live machine-translated.
 
-## Two things I want on the record now
-
-**Khmer copy.** I can build every Khmer route, font rule, and CMS field, and I'll write marked Khmer placeholders. I will not machine-translate a child-protection NGO's mission statement and hand it over as launch-ready — that copy needs a Khmer-speaking staff member. Plan for that person's time before go-live.
-
-**Nothing sensitive in the CMS.** The content model has no field anywhere for a beneficiary's real name, age, location, or case detail, and stories can't publish without a consent checkbox. This is a design constraint, not a preference — see ADR-004.
+**Nothing sensitive belongs in the CMS.** No field anywhere models a beneficiary's real name, age,
+location or case detail, and a story cannot publish without a consent tick — enforced in the Studio
+rule *and* in the published query. The dataset is public by design, so this is not a preference; it
+is the condition that makes ADR-004 safe.
