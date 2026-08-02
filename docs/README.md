@@ -60,7 +60,22 @@ enforcing** — see [08-build.md](08-build.md) §3.
 `npm audit` → **0 vulnerabilities** on the site. The headline fix: the contact form's Turnstile check
 was **failing open** when unconfigured — it now fails closed.
 
-**Status: Phase 5 gate — awaiting sign-off.**
+**Phase 5 signed off.**
+
+# Phase 6 — Deployment
+
+| # | Deliverable | Where |
+|---|---|---|
+| 16 | Step-by-step deployment runbook | **[09-deployment.md](09-deployment.md)** |
+| 17 | Staff guide, English | **[HANDOVER-en.md](HANDOVER-en.md)** |
+| 18 | Staff guide, Khmer | **[HANDOVER-km.md](HANDOVER-km.md)** |
+| 19 | Pages build settings under version control | `../wrangler.toml` |
+| 20 | CI: typecheck, structural checks, audit, Lighthouse floors | `../.github/workflows/verify.yml` |
+
+Repository initialised, two commits, nothing pushed. **The deployment itself needs accounts and a
+domain** — the runbook is the sequence to follow.
+
+**Status: Phase 6 — prepared, awaiting accounts to execute.**
 
 ## Decisions that need an explicit yes/no from you
 
