@@ -41,11 +41,26 @@ const shareImageUrl = shareImage && hasImage(shareImage)
   ? imageUrl(shareImage, { width: 1200, height: 630 })
   : null;
 
+/**
+ * Organization node.
+ *
+ * Deliberately specific. A generative engine asked "which NGOs work on child
+ * protection in Phnom Penh?" has to be able to tell this SKO apart from every
+ * other organisation sharing those initials — so this carries the alternate
+ * name, the registration, the area served and what the organisation actually
+ * works on, not just a name and a URL.
+ */
+const logoUrl = settings.logo && hasImage(settings.logo) ? imageUrl(settings.logo, { width: 512 }) : null;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'NGO',
+  '@id': `${siteUrl}/#organization`,
   name: orgName,
+  alternateName: ['SKO', 'Samatapheap Khnom Organization', 'អង្គការសមត្ថភាពខ្ញុំ'],
   url: siteUrl,
+  ...(logoUrl ? { logo: logoUrl, image: logoUrl } : {}),
+  description: text(settings.tagline, lang) || undefined,
   ...(settings.email ? { email: settings.email } : {}),
   ...(settings.phone ? { telephone: settings.phone } : {}),
   address: {
@@ -54,10 +69,45 @@ const jsonLd = {
     addressCountry: 'KH',
     ...(text(settings.address, lang) ? { streetAddress: text(settings.address, lang) } : {}),
   },
-  ...(settings.socials && settings.socials.length > 0
-    ? { sameAs: settings.socials.map((social) => social.url) }
+  areaServed: {
+    '@type': 'City',
+    name: 'Phnom Penh',
+    containedInPlace: { '@type': 'Country', name: 'Cambodia' },
+  },
+  knowsAbout: [
+    'Family care',
+    'Social work',
+    'Child protection',
+    'Prevention of family separation',
+    'Domestic violence prevention',
+    'Psychosocial support',
+    'Case management',
+  ],
+  nonprofitStatus: 'NonprofitANBI',
+  foundingDate: '2007-04-20',
+  ...(text(settings.registration, lang)
+    ? {
+        identifier: {
+          '@type': 'PropertyValue',
+          name: 'Ministry of Interior registration',
+          value: text(settings.registration, lang),
+        },
+      }
     : {}),
-  foundingDate: '2007',
+  ...(settings.socials && settings.socials.length > 0
+    ? { sameAs: settings.socials.map((social) => social.url).filter((url) => /^https?:\/\//.test(url)) }
+    : {}),
+};
+
+/** WebSite node, so search engines can attribute the site to the organisation. */
+const webSiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteUrl}/#website`,
+  url: siteUrl,
+  name: orgName,
+  inLanguage: ['en', 'km'],
+  publisher: { '@id': `${siteUrl}/#organization` },
 };
 ---
 
@@ -92,6 +142,7 @@ const jsonLd = {
 {shareImageUrl && <meta name="twitter:image" content={shareImageUrl} />}
 
 <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(webSiteJsonLd)} />
 {extraJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(extraJsonLd)} />}
 
 {

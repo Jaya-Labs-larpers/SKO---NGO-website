@@ -98,6 +98,15 @@ export const siteSettings = defineType({
       of: [{ type: 'socialLink' }],
       group: 'contact',
     }),
+    defineField({
+      name: 'donationFaqs',
+      title: 'Donation questions',
+      type: 'array',
+      of: [{ type: 'faqItem' }],
+      group: 'donation',
+      description:
+        'Shown at the bottom of the Donate page and published as structured data. "How can I donate?", "Can I get a receipt?", "Where does my money go?" are the ones people actually ask.',
+    }),
 
     defineField({
       name: 'donation',
@@ -146,6 +155,14 @@ export const page = defineType({
     defineField({ name: 'intro', title: 'Intro', type: 'localeText' }),
     defineField({ name: 'heroImage', title: 'Hero image', type: 'imageWithAlt' }),
     defineField({ name: 'body', title: 'Body', type: 'localeBlock' }),
+    defineField({
+      name: 'faqs',
+      title: 'Common questions',
+      type: 'array',
+      of: [{ type: 'faqItem' }],
+      description:
+        'Shown at the bottom of the page and published as structured data, which is how Google and AI assistants pick up answers. Three to six good questions beat a long list.',
+    }),
     defineField({ name: 'seo', title: 'Search & social', type: 'seo' }),
   ],
   preview: { select: { title: 'title.en', subtitle: 'slug.current' } },

@@ -7,6 +7,7 @@ import PageHero from '~/components/content/PageHero.astro';
 import SectionHeading from '~/components/content/SectionHeading.astro';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
 import RichText from '~/components/content/RichText.astro';
+import FaqSection from '~/components/content/FaqSection.astro';
 
 interface Props {
   lang: Locale;
@@ -159,6 +160,12 @@ const barTone = ['bg-[color:var(--color-blue-700)]', 'bg-[color:var(--color-sky-
       }
     </div>
   </section>
+
+  {
+    settings.donationFaqs && settings.donationFaqs.length > 0 && (
+      <FaqSection lang={lang} faqs={settings.donationFaqs} />
+    )
+  }
 </BaseLayout>
 
 <script>

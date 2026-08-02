@@ -50,6 +50,40 @@ export const callout = defineType({
   },
 });
 
+/**
+ * A question and its answer.
+ *
+ * These are published as structured data, which is how a page gets picked up by
+ * Google's "People also ask" and quoted by AI assistants. Write each answer so
+ * it makes sense on its own, lifted away from the page around it — and keep it
+ * factual. A vague answer is not quoted by anything.
+ */
+export const faqItem = defineType({
+  name: 'faqItem',
+  title: 'Question and answer',
+  type: 'object',
+  fields: [
+    defineField({
+      name: 'question',
+      title: 'Question',
+      type: 'localeString',
+      description: 'Write it the way someone would actually ask it.',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'answer',
+      title: 'Answer',
+      type: 'localeText',
+      description:
+        'Two or three sentences. Must make sense on its own — it will be read without the rest of the page.',
+      validation: (rule) => rule.required(),
+    }),
+  ],
+  preview: {
+    select: { title: 'question.en', subtitle: 'answer.en' },
+  },
+});
+
 export const seo = defineType({
   name: 'seo',
   title: 'Search & social',

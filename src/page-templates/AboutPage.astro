@@ -11,6 +11,7 @@ import DirectorMessage from '~/components/content/DirectorMessage.astro';
 import OrgChart from '~/components/content/OrgChart.astro';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
+import FaqSection from '~/components/content/FaqSection.astro';
 
 interface Props {
   lang: Locale;
@@ -104,6 +105,8 @@ const seo = resolveSeo(page?.seo, lang, {
       </section>
     )
   }
+
+  {page?.faqs && page.faqs.length > 0 && <FaqSection lang={lang} faqs={page.faqs} />}
 
   <CtaBand lang={lang} title={t(lang, 'ctaAboutTitle')} body={t(lang, 'ctaAboutBody')} />
 </BaseLayout>

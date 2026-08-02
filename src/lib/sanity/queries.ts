@@ -24,6 +24,8 @@ const FILE = `{
 
 const SEO = `{ title, description, noindex, image ${IMAGE} }`;
 
+const FAQ = `{ question, answer }`;
+
 const IMPACT_STAT = `{ _id, label, value, displayValue, suffix, context, order }`;
 
 const PROGRAM_REF = `{ "slug": slug.current, title }`;
@@ -34,6 +36,7 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   logo ${IMAGE},
   ogImage ${IMAGE},
   homeHero ${IMAGE},
+  donationFaqs[]${FAQ},
   donation{
     note,
     qrCodes[]{ label, instructions, image ${IMAGE} },
@@ -45,6 +48,7 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
 
 export const pageBySlugQuery = `*[_type == "page" && slug.current == $slug][0]{
   _id, "slug": slug.current, title, intro, body,
+  faqs[]${FAQ},
   heroImage ${IMAGE},
   seo ${SEO}
 }`;

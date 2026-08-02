@@ -57,6 +57,7 @@ const en = {
   tapToEnlarge: 'Tap to enlarge',
 
   // --- Section headings -----------------------------------------------------
+  faqHeading: 'Common questions',
   latestActivities: 'Latest activities',
   whatWeDo: 'What we do',
   trustedBy: 'Trusted by',
@@ -227,6 +228,7 @@ const km: Record<UIKey, string> = {
   enlargeImage: 'ពង្រីករូបភាព',
   tapToEnlarge: 'ចុចដើម្បីពង្រីក',
 
+  faqHeading: 'សំណួរដែលសួរញឹកញាប់',
   latestActivities: 'សកម្មភាពថ្មីៗ',
   whatWeDo: 'អ្វីដែលយើងធ្វើ',
   trustedBy: 'ដៃគូរបស់យើង',

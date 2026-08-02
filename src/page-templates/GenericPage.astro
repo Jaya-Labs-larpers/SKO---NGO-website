@@ -8,6 +8,7 @@ import { resolveSeo } from '~/lib/seo';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
 import RichText from '~/components/content/RichText.astro';
+import FaqSection from '~/components/content/FaqSection.astro';
 import type { Crumb } from '~/lib/breadcrumbs';
 
 interface Props {
@@ -52,6 +53,8 @@ const seo = resolveSeo(page?.seo, lang, {
       <slot />
     </div>
   </section>
+
+  {page?.faqs && page.faqs.length > 0 && <FaqSection lang={lang} faqs={page.faqs} />}
 
   <slot name="after" />
 </BaseLayout>

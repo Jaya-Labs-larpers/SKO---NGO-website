@@ -4,6 +4,7 @@ import {
   bankAccount,
   callout,
   donationQr,
+  faqItem,
   imageWithAlt,
   seo,
   socialLink,
@@ -32,6 +33,7 @@ export const schemaTypes = [
   // Reusable objects
   imageWithAlt,
   callout,
+  faqItem,
   seo,
   socialLink,
   bankAccount,

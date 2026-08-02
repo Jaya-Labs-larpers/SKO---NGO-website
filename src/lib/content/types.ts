@@ -140,6 +140,8 @@ export interface SiteSettings {
   safeguardingContact?: LocaleString | null;
   officeHours?: LocaleString | null;
   socials?: SocialLink[] | null;
+  /** Questions shown on the Donate page and emitted as FAQPage structured data. */
+  donationFaqs?: FaqItem[] | null;
   donation?: {
     qrCodes?: DonationQr[] | null;
     bankAccounts?: BankAccount[] | null;
@@ -149,6 +151,16 @@ export interface SiteSettings {
   footerNote?: LocaleBlocks | null;
 }
 
+/**
+ * A question and its answer, rendered on the page and emitted as FAQPage
+ * structured data. Each answer must stand on its own — answer engines lift them
+ * whole, without the surrounding page.
+ */
+export interface FaqItem {
+  question?: LocaleString | null;
+  answer?: LocaleString | null;
+}
+
 export interface Page {
   _id: string;
   slug: string;
@@ -156,6 +168,7 @@ export interface Page {
   intro?: LocaleString | null;
   heroImage?: CmsImage | null;
   body?: LocaleBlocks | null;
+  faqs?: FaqItem[] | null;
   seo?: Seo | null;
 }
 

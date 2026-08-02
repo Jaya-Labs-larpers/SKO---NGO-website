@@ -1,0 +1,68 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { FaqItem } from '~/lib/content/types';
+import { pick, t } from '~/lib/i18n/utils';
+import SectionHeading from './SectionHeading.astro';
+
+interface Props {
+  lang: Locale;
+  faqs: FaqItem[];
+  heading?: string;
+}
+
+const { lang, faqs, heading } = Astro.props;
+
+/**
+ * Each answer is written to stand alone, because that is how answer engines and
+ * AI assistants use them — lifted whole, without the page around them.
+ *
+ * The markup is <dl> rather than a set of <details>: an answer hidden behind a
+ * click is an answer some crawlers never see, and there are few enough of these
+ * that collapsing them saves nothing worth the cost.
+ */
+const resolved = faqs
+  .map((faq) => ({ question: pick(faq.question, lang), answer: pick(faq.answer, lang) }))
+  .filter((faq) => faq.question.value && faq.answer.value);
+
+const jsonLd =
+  resolved.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: resolved.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question.value,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer.value },
+        })),
+      }
+    : null;
+---
+
+{
+  resolved.length > 0 && (
+    <section class="section bg-[color:var(--color-surface-subtle)]">
+      <div class="wrap">
+        <SectionHeading title={heading ?? t(lang, 'faqHeading')} />
+        <dl class="mt-8 max-w-[68ch] border-t border-[color:var(--color-line)]">
+          {resolved.map((faq) => (
+            <div class="border-b border-[color:var(--color-line)] py-6">
+              <dt
+                class="text-[length:var(--text-h4)] font-semibold text-[color:var(--color-ink-900)]"
+                lang={faq.question.isFallback ? faq.question.lang : undefined}
+              >
+                {faq.question.value}
+              </dt>
+              <dd
+                class="mt-2.5 text-[color:var(--color-ink-600)]"
+                lang={faq.answer.isFallback ? faq.answer.lang : undefined}
+              >
+                {faq.answer.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    </section>
+  )
+}
