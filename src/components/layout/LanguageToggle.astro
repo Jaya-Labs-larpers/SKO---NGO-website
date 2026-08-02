@@ -1,0 +1,61 @@
+---
+import { locales, localeShort, localeName, htmlLang, type Locale } from '~/lib/i18n/config';
+import { alternatePath, t } from '~/lib/i18n/utils';
+
+interface Props {
+  lang: Locale;
+  /** Current pathname, so the toggle lands on the same page in the other language. */
+  pathname: string;
+  full?: boolean;
+}
+
+const { lang, pathname, full = false } = Astro.props;
+
+/**
+ * The group carries the "Language" label; each link's accessible name is just
+ * its own visible text.
+ *
+ * An earlier version put aria-label="Switch to English" on a link whose visible
+ * text was "EN". That fails WCAG 2.5.3 (Label in Name) — a speech-input user
+ * saying "EN" could not activate it — and axe flags it. Context belongs on the
+ * group, not on the item.
+ */
+---
+
+<nav
+  aria-label={t(lang, 'language')}
+  class:list={[
+    'inline-flex overflow-hidden rounded-[var(--radius-sm)] border border-[color:var(--color-line-strong)]',
+    full && 'w-full',
+  ]}
+>
+  {
+    locales.map((locale) => {
+      const current = locale === lang;
+      return (
+        <a
+          href={alternatePath(pathname, locale)}
+          hreflang={htmlLang[locale]}
+          lang={htmlLang[locale]}
+          aria-current={current ? 'true' : undefined}
+          title={
+            current
+              ? undefined
+              : locale === 'km'
+                ? t(lang, 'switchToKhmer')
+                : t(lang, 'switchToEnglish')
+          }
+          class:list={[
+            'px-[11px] py-2 text-[13px] font-semibold no-underline transition-colors',
+            full && 'flex-1 py-3 text-center',
+            current
+              ? 'bg-[color:var(--color-blue-700)] text-white'
+              : 'bg-white text-[color:var(--color-ink-400)] hover:bg-[color:var(--color-blue-50)] hover:text-[color:var(--color-blue-800)]',
+          ]}
+        >
+          {full ? localeName[locale] : localeShort[locale]}
+        </a>
+      );
+    })
+  }
+</nav>

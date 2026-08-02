@@ -1,0 +1,117 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { SiteSettings } from '~/lib/content/types';
+import { localizePath, pick, t, text } from '~/lib/i18n/utils';
+import { footerNav } from '~/lib/nav';
+
+interface Props {
+  lang: Locale;
+  settings: SiteSettings;
+}
+
+const { lang, settings } = Astro.props;
+
+const orgName = text(settings.orgName, lang);
+const address = pick(settings.address, lang);
+const registration = pick(settings.registration, lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="on-inverse bg-[color:var(--color-blue-900)] pt-[60px] pb-7 text-[14.5px] text-white/70">
+  <div class="wrap">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+      <div>
+        <div class="flex items-center gap-3">
+          <span
+            class="grid h-[38px] w-[38px] place-items-center rounded-[var(--radius-sm)] bg-white text-[15px] font-extrabold text-[color:var(--color-blue-900)]"
+            aria-hidden="true">{settings.orgShortName ?? 'SKO'}</span
+          >
+          <span class="flex flex-col leading-[1.15]">
+            <span class="text-[15px] font-bold text-white">{orgName}</span>
+            <span class="text-[11px] text-white/60">Samatapheap Khnom Organization</span>
+          </span>
+        </div>
+
+        {
+          address.value && (
+            <p
+              class="mt-4 max-w-[34ch] whitespace-pre-line"
+              lang={address.isFallback ? address.lang : undefined}
+            >
+              {address.value}
+            </p>
+          )
+        }
+
+        <p class="mt-2.5">
+          {settings.phone && <span class="block">{settings.phone}</span>}
+          {
+            settings.email && (
+              <a href={`mailto:${settings.email}`} class="text-white/70 hover:text-white">
+                {settings.email}
+              </a>
+            )
+          }
+        </p>
+
+        {
+          settings.socials && settings.socials.length > 0 && (
+            <ul class="mt-4 flex list-none gap-2 p-0">
+              {settings.socials.map((social) => (
+                <li>
+                  <a
+                    href={social.url}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    class="grid h-9 w-9 place-items-center rounded-[var(--radius-sm)] border border-white/25 text-[12px] font-bold text-white no-underline hover:bg-white/10"
+                  >
+                    <span class="sr-only-focusable">{social.platform}</span>
+                    <span aria-hidden="true">{social.platform.slice(0, 2)}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+
+      {
+        footerNav.map((group) => (
+          <nav aria-label={t(lang, group.heading)}>
+            <h2 class="mb-4 text-[13px] tracking-[0.1em] text-white uppercase">
+              {t(lang, group.heading)}
+            </h2>
+            <ul class="list-none p-0">
+              {group.items.map((item) => (
+                <li>
+                  <a
+                    href={localizePath(item.path, lang)}
+                    class="block py-1 text-white/70 no-underline hover:text-white"
+                  >
+                    {t(lang, item.key)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div
+      class="mt-11 flex flex-wrap justify-between gap-5 border-t border-white/15 pt-5.5 text-[13px] text-white/55"
+    >
+      <span lang={registration.isFallback ? registration.lang : undefined}>
+        © {year} {orgName}. {registration.value}
+      </span>
+      <span class="flex gap-4.5">
+        <a href={localizePath('/privacy', lang)} class="text-white/55 no-underline hover:text-white"
+          >{t(lang, 'navPrivacy')}</a
+        >
+        <a href={localizePath('/contact', lang)} class="text-white/55 no-underline hover:text-white"
+          >{t(lang, 'navContact')}</a
+        >
+      </span>
+    </div>
+  </div>
+</footer>

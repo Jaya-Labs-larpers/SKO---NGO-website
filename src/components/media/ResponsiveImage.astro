@@ -1,0 +1,71 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { CmsImage } from '~/lib/content/types';
+import { text } from '~/lib/i18n/utils';
+import { hasImage, imageDimensions, imageSrcSet, imageUrl } from '~/lib/sanity/image';
+
+interface Props {
+  image?: CmsImage | null;
+  lang: Locale;
+  /** Overrides the CMS alt text. Pass "" only for genuinely decorative images. */
+  alt?: string;
+  sizes?: string;
+  /** CSS aspect-ratio, e.g. "3/2". Reserves the box so CLS stays at zero. */
+  aspect?: string;
+  /** Above-the-fold images only — skips lazy loading and raises priority. */
+  eager?: boolean;
+  class?: string;
+  placeholder?: string;
+}
+
+const {
+  image,
+  lang,
+  alt,
+  sizes = '(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw',
+  aspect = '3/2',
+  eager = false,
+  class: className = '',
+  placeholder = '[PLACEHOLDER PHOTO]',
+} = Astro.props;
+
+/**
+ * A missing image is scaffolding, not content: when there is no alt text the
+ * placeholder is hidden from assistive tech entirely rather than announced as
+ * "[PLACEHOLDER PHOTO]".
+ */
+const present = hasImage(image);
+const altText = alt ?? (image ? text(image.alt, lang) : '');
+const { width, height } = imageDimensions(image);
+const src = present && image ? imageUrl(image, { width: 1200 }) : null;
+const srcset = present && image ? imageSrcSet(image) : null;
+const lqip = image?.lqip ?? null;
+---
+
+{
+  present && src ? (
+    <img
+      src={src}
+      srcset={srcset ?? undefined}
+      sizes={sizes}
+      width={width}
+      height={height}
+      alt={altText}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding={eager ? 'sync' : 'async'}
+      fetchpriority={eager ? 'high' : undefined}
+      class:list={['block w-full h-full object-cover', className]}
+      style={lqip ? `background-image:url(${lqip});background-size:cover;background-position:center` : undefined}
+    />
+  ) : (
+    <div
+      class:list={['media-placeholder w-full h-full', className]}
+      style={`aspect-ratio:${aspect}`}
+      role={altText ? 'img' : undefined}
+      aria-label={altText || undefined}
+      aria-hidden={altText ? undefined : 'true'}
+    >
+      {placeholder}
+    </div>
+  )
+}

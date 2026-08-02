@@ -1,0 +1,14 @@
+# Normalise line endings in the repository so a Windows checkout and the Linux
+# build container produce byte-identical files. This matters more than usual
+# here: scripts/csp.mjs hashes inline scripts from the built HTML, and a stray
+# CRLF would change every hash.
+* text=auto eol=lf
+
+# Binary assets — never touch these.
+*.woff2 binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary

@@ -1,0 +1,48 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { Activity } from '~/lib/content/types';
+import { localizePath, t } from '~/lib/i18n/utils';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/content/PageHero.astro';
+import ActivityCard from '~/components/content/ActivityCard.astro';
+import EmptyState from '~/components/content/EmptyState.astro';
+import Pagination from '~/components/content/Pagination.astro';
+
+interface Props {
+  lang: Locale;
+  activities: Activity[];
+  currentPage: number;
+  totalPages: number;
+}
+
+const { lang, activities, currentPage, totalPages } = Astro.props;
+const heading = t(lang, 'pageActivities');
+
+const hrefFor = (page: number) =>
+  page === 1 ? localizePath('/activities', lang) : localizePath(`/activities/page/${page}`, lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={heading}
+  description={t(lang, 'introActivities')}
+  noindex={currentPage > 1}
+>
+  <PageHero lang={lang} title={heading} intro={t(lang, 'introActivities')} trail={[{ label: heading }]} />
+  <section class="section">
+    <div class="wrap">
+      {
+        activities.length === 0 ? (
+          <EmptyState message={t(lang, 'emptyActivities')} />
+        ) : (
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {activities.map((activity) => (
+              <ActivityCard lang={lang} activity={activity} />
+            ))}
+          </div>
+        )
+      }
+      <Pagination lang={lang} current={currentPage} total={totalPages} hrefFor={hrefFor} />
+    </div>
+  </section>
+</BaseLayout>

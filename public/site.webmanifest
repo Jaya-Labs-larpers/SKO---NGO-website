@@ -1,0 +1,9 @@
+{
+  "name": "Samatapheap Khnom Organization",
+  "short_name": "SKO",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#475d8c",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

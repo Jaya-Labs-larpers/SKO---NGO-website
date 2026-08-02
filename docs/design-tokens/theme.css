@@ -1,0 +1,286 @@
+/* ============================================================================
+   SKO — design tokens
+   Tailwind v4 CSS-first config. In Phase 3 this file moves to
+   src/styles/theme.css and is imported by src/styles/global.css.
+
+   Tailwind v4 replaced tailwind.config.js with @theme in CSS. Same thing the
+   brief asked for ("design system as Tailwind config"), current file format.
+   Every token below generates utilities: --color-blue-700 -> bg-blue-700,
+   text-blue-700, border-blue-700, etc.
+
+   PALETTE: slate blue #475D8C brand, with #C3E9E8 and #9BE1FF as supports.
+   Contrast ratios in comments are computed against #FFFFFF and are WCAG 2.1
+   relative-luminance figures, not eyeballed.
+   ========================================================================= */
+
+@import "tailwindcss";
+
+@theme {
+  /* ---------------------------------------------------------------------
+     SURFACES — the site is white. Everything else is a hairline or a tint.
+     --------------------------------------------------------------------- */
+  --color-canvas: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f4f7fc;   /* section banding — cool white */
+  --color-surface-sunken: #e6ecf5;   /* image placeholder wells, bar tracks */
+  --color-surface-inverse: #26314f;  /* footer, one CTA band. Used twice, max */
+
+  /* ---------------------------------------------------------------------
+     INK — blue-black, so text sits in the same family as the brand
+     --------------------------------------------------------------------- */
+  --color-ink-900: #111a2b;  /* 17.4:1  headings */
+  --color-ink-700: #2a3549;  /* 12.3:1  emphasis body */
+  --color-ink-600: #414d63;  /*  8.5:1  body copy */
+  --color-ink-400: #5f6b82;  /*  5.4:1  meta, captions — AA floor for small text */
+  --color-ink-300: #929bad;  /*  2.8:1  NOT for text. Dividers, disabled, icons only */
+
+  /* ---------------------------------------------------------------------
+     BRAND BLUE — built out from #475D8C
+     --------------------------------------------------------------------- */
+  --color-blue-900: #26314f;  /* 12.8:1  footer, CTA band */
+  --color-blue-800: #384a70;  /*  8.8:1  links, hover, text on light tints */
+  --color-blue-700: #475d8c;  /*  6.2:1  BRAND. Buttons, rules, stat numerals */
+  --color-blue-600: #5c74a6;  /*  4.6:1  secondary text, icons, active borders */
+  --color-blue-200: #b9c6de;  /*         borders, underlines at rest */
+  --color-blue-50:  #eff3fa;  /*         hover fills, selected rows */
+
+  /* ---------------------------------------------------------------------
+     SUPPORTING TINTS — #C3E9E8 and #9BE1FF.
+     Both are light: they carry surfaces, never text. Text on either is
+     ink-900 (13.4:1 / 12.1:1) or blue-800 (6.8:1 / 6.1:1) — both AA.
+     --------------------------------------------------------------------- */
+  --color-aqua-200: #c3e9e8;  /* chips, decorative quote mark, selection, notices */
+  --color-aqua-50:  #effafa;
+  --color-sky-200:  #9be1ff;  /* accent bars, hero wash, focus glow, allocation */
+  --color-sky-50:   #eaf8ff;
+
+  /* ---------------------------------------------------------------------
+     SEMANTIC — the only two hues outside the blue family, and they exist
+     purely to mean something. Never decorative.
+     --------------------------------------------------------------------- */
+  --color-danger-700: #b42318;  /* 6.6:1  errors, "closes in N days" */
+  --color-danger-50:  #fef3f2;
+  --color-success-700: #067647; /* 5.7:1  form success only */
+  --color-success-50:  #ecfdf3;
+
+  /* ---------------------------------------------------------------------
+     BORDERS — structure comes from these, not from shadows
+     --------------------------------------------------------------------- */
+  --color-line-subtle: #edf1f7;
+  --color-line: #e0e6f0;
+  --color-line-strong: #c6cfdf;
+
+  /* ---------------------------------------------------------------------
+     TYPE FAMILIES
+     Khmer is not a fallback. It leads its own stack.
+     --------------------------------------------------------------------- */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-khmer: "Kantumruy Pro", "Noto Sans Khmer", "Khmer UI", "Leelawadee UI", sans-serif;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+
+  /* ---------------------------------------------------------------------
+     TYPE SCALE — fluid, clamped. Base 17px: Khmer and Latin both need the
+     extra pixel over 16 on phones.
+     --------------------------------------------------------------------- */
+  --text-display: clamp(2.5rem, 1.7rem + 3.6vw, 4rem);
+  --text-display--line-height: 1.06;
+  --text-display--letter-spacing: -0.025em;
+
+  --text-h1: clamp(2rem, 1.5rem + 2.2vw, 3rem);
+  --text-h1--line-height: 1.12;
+  --text-h1--letter-spacing: -0.02em;
+
+  --text-h2: clamp(1.5rem, 1.25rem + 1.15vw, 2.125rem);
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.015em;
+
+  --text-h3: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.4;
+
+  --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --text-lead--line-height: 1.6;
+
+  --text-body: 1.0625rem;      /* 17px */
+  --text-body--line-height: 1.65;
+
+  --text-sm: 0.9375rem;        /* 15px */
+  --text-sm--line-height: 1.55;
+
+  --text-xs: 0.8125rem;        /* 13px — smallest permitted size anywhere */
+  --text-xs--line-height: 1.5;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.12em;
+
+  --text-stat: clamp(2.75rem, 2rem + 3vw, 4rem);
+  --text-stat--line-height: 1;
+  --text-stat--letter-spacing: -0.03em;
+
+  /* ---------------------------------------------------------------------
+     SPACING — Tailwind's 4px base, plus a section rhythm token
+     --------------------------------------------------------------------- */
+  --spacing-section: clamp(3.5rem, 2rem + 6vw, 7rem);
+  --spacing-gutter: clamp(1.25rem, 0.75rem + 2vw, 2.5rem);
+
+  /* Content widths */
+  --container-page: 75rem;      /* 1200px */
+  --container-prose: 44rem;     /* ~68ch Latin */
+  --container-prose-km: 40rem;  /* ~62ch Khmer — wider glyphs, same read length */
+  --container-narrow: 56rem;
+
+  /* ---------------------------------------------------------------------
+     RADIUS — moderate. Pills read consumer-app; sharp corners read austere.
+     --------------------------------------------------------------------- */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* ---------------------------------------------------------------------
+     SHADOWS — deliberately weak. On a white site, a 1px line does the work
+     of a shadow without the haze. Tinted with ink-900, never pure black.
+     --------------------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px rgb(17 26 43 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(17 26 43 / 0.06), 0 1px 2px rgb(17 26 43 / 0.04);
+  --shadow-md: 0 4px 14px rgb(17 26 43 / 0.07);
+  --shadow-lg: 0 12px 32px rgb(17 26 43 / 0.10);
+  --shadow-overlay: 0 24px 64px rgb(17 26 43 / 0.22);
+
+  /* ---------------------------------------------------------------------
+     MOTION — short, and entirely optional
+     --------------------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+  --duration-slow: 340ms;
+
+  /* ---------------------------------------------------------------------
+     BREAKPOINTS
+     --------------------------------------------------------------------- */
+  --breakpoint-sm: 40rem;   /* 640 */
+  --breakpoint-md: 48rem;   /* 768 */
+  --breakpoint-lg: 64rem;   /* 1024 */
+  --breakpoint-xl: 80rem;   /* 1280 */
+}
+
+/* ============================================================================
+   BASE
+   ========================================================================= */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink-600);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 { color: var(--color-ink-900); font-weight: 700; }
+
+  /* --------------------------------------------------------------------
+     KHMER SCRIPT RULES — enforced, not left to per-component judgement.
+     Applied by :lang(), so they follow the language wherever it appears,
+     including a Khmer name inside an English sentence.
+     -------------------------------------------------------------------- */
+  :lang(km) {
+    font-family: var(--font-khmer);
+    line-height: 1.9;              /* subscript consonants + vowel signs need room */
+    letter-spacing: normal;        /* tracking mangles the script */
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;                 /* breaks mid-cluster */
+  }
+  :lang(km) h1, :lang(km) h2, :lang(km) h3, :lang(km) h4 {
+    line-height: 1.5;
+    letter-spacing: normal;
+  }
+  /* em-scoped so it never compounds through nesting */
+  p:lang(km), li:lang(km), dd:lang(km), figcaption:lang(km) { font-size: 1.0625em; }
+  :lang(km) .uppercase,
+  :lang(km) [class*="eyebrow"] { text-transform: none; letter-spacing: normal; }
+
+  /* --------------------------------------------------------------------
+     FOCUS — visible, always, on every interactive element
+     -------------------------------------------------------------------- */
+  :focus-visible {
+    outline: 3px solid var(--color-blue-700);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+  /* on dark/blue surfaces the blue ring disappears — invert it */
+  .on-inverse :focus-visible,
+  .btn-primary:focus-visible {
+    outline-color: #ffffff;
+    box-shadow: 0 0 0 6px rgb(17 26 43 / 0.55);
+  }
+
+  ::selection { background: var(--color-aqua-200); color: var(--color-ink-900); }
+}
+
+/* ============================================================================
+   FONT FACES — self-hosted, no third-party request (ADR-006)
+   Files land in /public/fonts in Phase 3.
+   ========================================================================= */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-latin-400.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+2122, U+2191, U+2193, U+2212;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-latin-600.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-latin-700.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Kantumruy Pro";
+  src: url("/fonts/kantumruy-pro-khmer-400.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200B-200D, U+25CC;
+}
+@font-face {
+  font-family: "Kantumruy Pro";
+  src: url("/fonts/kantumruy-pro-khmer-600.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200B-200D, U+25CC;
+}
+@font-face {
+  font-family: "Kantumruy Pro";
+  src: url("/fonts/kantumruy-pro-khmer-700.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200B-200D, U+25CC;
+}
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("/fonts/source-serif-4-600.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+201C-201D;
+}

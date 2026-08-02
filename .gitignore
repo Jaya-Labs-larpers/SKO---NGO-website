@@ -1,0 +1,23 @@
+# Secrets — first, before anything that could create one exists
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+.astro/
+.wrangler/
+studio/dist/
+
+# Dependencies
+node_modules/
+studio/node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+.vscode/*
+!.vscode/extensions.json
+.idea/

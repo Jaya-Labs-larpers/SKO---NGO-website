@@ -1,0 +1,81 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import { getJobs } from '~/lib/content';
+import { formatDate, localizePath, pick, t } from '~/lib/i18n/utils';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/content/PageHero.astro';
+import EmptyState from '~/components/content/EmptyState.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const jobs = await getJobs();
+const heading = t(lang, 'pageCareers');
+
+const typeLabels: Record<string, Record<Locale, string>> = {
+  'full-time': { en: 'Full time', km: 'ពេញម៉ោង' },
+  'part-time': { en: 'Part time', km: 'ក្រៅម៉ោង' },
+  consultant: { en: 'Consultant', km: 'ទីប្រឹក្សា' },
+  internship: { en: 'Internship', km: 'កម្មសិក្សា' },
+};
+
+const daysLeft = (deadline?: string | null) => {
+  if (!deadline) return null;
+  const diff = Math.ceil((new Date(deadline).getTime() - Date.now()) / 86_400_000);
+  return diff >= 0 ? diff : null;
+};
+---
+
+<BaseLayout lang={lang} title={heading} description={t(lang, 'introCareers')}>
+  <PageHero
+    lang={lang}
+    title={heading}
+    intro={t(lang, 'introCareers')}
+    trail={[{ label: heading }]}
+  />
+  <section class="section">
+    <div class="wrap max-w-[900px]">
+      {
+        jobs.length === 0 ? (
+          <EmptyState message={t(lang, 'emptyJobs')} />
+        ) : (
+          <ul class="grid list-none gap-4 p-0">
+            {jobs.map((job) => {
+              const title = pick(job.title, lang);
+              const location = pick(job.location, lang);
+              const remaining = daysLeft(job.deadline);
+              return (
+                <li class="card relative p-5.5">
+                  <div class="flex flex-wrap items-center gap-2.5">
+                    {job.employmentType && (
+                      <span class="chip">{typeLabels[job.employmentType]?.[lang] ?? job.employmentType}</span>
+                    )}
+                    {remaining !== null && remaining <= 14 && (
+                      <span class="chip chip-alert">
+                        {t(lang, 'closesOn')} {formatDate(job.deadline, lang)}
+                      </span>
+                    )}
+                  </div>
+                  <h2 class="mt-2.5 text-[19px]" lang={title.isFallback ? title.lang : undefined}>
+                    <a
+                      href={localizePath(`/careers/${job.slug}`, lang)}
+                      class="text-inherit no-underline before:absolute before:inset-0 before:content-['']"
+                    >
+                      {title.value}
+                    </a>
+                  </h2>
+                  <p class="mt-1.5 text-[14px] text-[color:var(--color-ink-400)]">
+                    {location.value}
+                    {job.deadline && <span> · {t(lang, 'closesOn')} {formatDate(job.deadline, lang)}</span>}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import { getPage, getSiteSettings } from '~/lib/content';
+import { pick, t } from '~/lib/i18n/utils';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/content/PageHero.astro';
+import RichText from '~/components/content/RichText.astro';
+import ContactForm from '~/components/forms/ContactForm.astro';
+
+interface Props {
+  lang: Locale;
+  /** 'partner' routes to the partnerships inbox; 'volunteer' to the general one. */
+  variant: 'partner' | 'volunteer';
+  slug: string;
+}
+
+const { lang, variant, slug } = Astro.props;
+
+const [page, settings] = await Promise.all([getPage(slug), getSiteSettings()]);
+const title = pick(page?.title, lang);
+const intro = pick(page?.intro, lang);
+const heading = title.value ?? t(lang, variant === 'partner' ? 'pagePartnerInquiry' : 'pageVolunteer');
+const inbox = variant === 'partner' ? (settings.partnerEmail ?? settings.email) : settings.email;
+---
+
+<BaseLayout lang={lang} title={heading} description={intro.value ?? undefined}>
+  <PageHero
+    lang={lang}
+    title={heading}
+    intro={intro.value}
+    introLang={intro.isFallback ? intro.lang : undefined}
+    trail={[{ label: heading }]}
+  />
+  <section class="section">
+    <div class="wrap grid items-start gap-12 lg:grid-cols-2">
+      <RichText blocks={page?.body} lang={lang} />
+      <ContactForm lang={lang} variant={variant} fallbackEmail={inbox} />
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,71 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { Story } from '~/lib/content/types';
+import { pick } from '~/lib/i18n/utils';
+import { hasImage } from '~/lib/sanity/image';
+import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
+
+interface Props {
+  lang: Locale;
+  story: Story;
+  /** Show the person's avatar alongside the attribution. */
+  showAvatar?: boolean;
+}
+
+const { lang, story, showAvatar = false } = Astro.props;
+
+const quote = pick(story.quote, lang);
+const role = pick(story.personRole, lang);
+
+/**
+ * A photo is only shown when one exists AND staff have not asked for the
+ * silhouette. The illustrated avatar is the compliant option for the common
+ * case: a real story where no publishable photo exists.
+ */
+const usePhoto = !story.useSilhouette && hasImage(story.photo);
+
+const quoteClass =
+  lang === 'km'
+    ? 'font-[family-name:var(--font-khmer)] text-[22px] leading-[1.8] font-semibold'
+    : 'font-[family-name:var(--font-display)] text-[27px] leading-[1.4] font-semibold';
+---
+
+<figure class="m-0">
+  <div class="rule-accent"></div>
+  <blockquote
+    class:list={['mt-4.5 text-[color:var(--color-ink-900)]', quoteClass]}
+    lang={quote.isFallback ? quote.lang : undefined}
+  >
+    {quote.value}
+  </blockquote>
+
+  <figcaption class="mt-4.5 flex items-center gap-3 text-[15px] text-[color:var(--color-ink-400)]">
+    {
+      showAvatar &&
+        (usePhoto ? (
+          <span class="h-11 w-11 flex-none overflow-hidden rounded-full">
+            <ResponsiveImage image={story.photo} lang={lang} alt="" aspect="1/1" sizes="44px" />
+          </span>
+        ) : (
+          <span
+            class="grid h-11 w-11 flex-none place-items-center rounded-full bg-[color:var(--color-aqua-200)]"
+            aria-hidden="true"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8.5" r="3.75" fill="var(--color-blue-700)" />
+              <path
+                d="M4.5 20.5c0-3.9 3.36-6.5 7.5-6.5s7.5 2.6 7.5 6.5"
+                stroke="var(--color-blue-700)"
+                stroke-width="2.25"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+        ))
+    }
+    <span>
+      — {story.personName}
+      {role.value && <span lang={role.isFallback ? role.lang : undefined}>, {role.value}</span>}
+    </span>
+  </figcaption>
+</figure>

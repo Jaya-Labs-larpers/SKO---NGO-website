@@ -1,0 +1,181 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import { getSiteSettings } from '~/lib/content';
+import { pick, t } from '~/lib/i18n/utils';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/content/PageHero.astro';
+import SectionHeading from '~/components/content/SectionHeading.astro';
+import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
+import RichText from '~/components/content/RichText.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+
+const settings = await getSiteSettings();
+const donation = settings.donation ?? {};
+const qrCodes = donation.qrCodes ?? [];
+const accounts = donation.bankAccounts ?? [];
+const allocation = donation.allocation ?? [];
+const heading = t(lang, 'pageDonate');
+
+/**
+ * No card fields, no payment SDK, no iframes — QR images and bank details only.
+ * The site carries zero PCI scope by construction.
+ */
+const barTone = ['bg-[color:var(--color-blue-700)]', 'bg-[color:var(--color-sky-200)]', 'bg-[color:var(--color-aqua-200)]'];
+---
+
+<BaseLayout lang={lang} title={heading} description={t(lang, 'noCardNotice')}>
+  <PageHero
+    lang={lang}
+    title={t(lang, 'donateHeroTitle')}
+    intro={`${t(lang, 'donateHeroIntro')} ${t(lang, 'noCardNotice')}`}
+    trail={[{ label: heading }]}
+  />
+
+  {
+    qrCodes.length > 0 && (
+      <section class="section">
+        <div class="wrap">
+          <SectionHeading title={t(lang, 'scanToGive')} />
+          <ul class="mt-7.5 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3">
+            {qrCodes.map((qr) => {
+              const label = pick(qr.label, lang);
+              const instructions = pick(qr.instructions, lang);
+              return (
+                <li class="rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white p-5.5 text-center">
+                  <div class="mx-auto mb-4 max-w-[260px] overflow-hidden rounded-[var(--radius-md)]">
+                    <ResponsiveImage
+                      image={qr.image}
+                      lang={lang}
+                      alt=""
+                      aspect="1/1"
+                      sizes="260px"
+                      placeholder="[PLACEHOLDER QR CODE]"
+                    />
+                  </div>
+                  <b
+                    class="block text-[16px] text-[color:var(--color-ink-900)]"
+                    lang={label.isFallback ? label.lang : undefined}
+                  >
+                    {label.value}
+                  </b>
+                  {instructions.value && (
+                    <span
+                      class="mt-1.5 block text-[13.5px] text-[color:var(--color-ink-400)]"
+                      lang={instructions.isFallback ? instructions.lang : undefined}
+                    >
+                      {instructions.value}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section bg-[color:var(--color-surface-subtle)] pt-0">
+    <div class="wrap grid gap-12 pt-[var(--spacing-section)] lg:grid-cols-[1.25fr_1fr]">
+      <div>
+        <SectionHeading title={t(lang, 'bankTransfer')} />
+        {
+          accounts.map((account) => (
+            <dl class="mt-5 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white">
+              {(
+                [
+                  [t(lang, 'accountName'), account.accountName],
+                  [t(lang, 'accountNumber'), account.accountNumber],
+                  [t(lang, 'bankName'), account.bankName],
+                  [t(lang, 'swift'), account.swift],
+                  [t(lang, 'bankAddress'), account.branchAddress],
+                  [t(lang, 'currency'), account.currency],
+                ] as [string, string | null | undefined][]
+              )
+                .filter(([, value]) => Boolean(value))
+                .map(([label, value]) => (
+                  <div class="flex flex-col gap-1 border-b border-[color:var(--color-line-subtle)] px-4.5 py-3.5 last:border-b-0 sm:flex-row sm:items-center sm:gap-4">
+                    <dt class="text-[13px] text-[color:var(--color-ink-400)] sm:w-[190px] sm:flex-none sm:text-[14px]">
+                      {label}
+                    </dt>
+                    <dd class="m-0 flex flex-1 items-center justify-between gap-3 font-semibold text-[color:var(--color-ink-900)]">
+                      <span class="font-mono text-[14.5px] break-all">{value}</span>
+                      <button
+                        type="button"
+                        class="flex-none rounded-[var(--radius-xs)] border border-[color:var(--color-blue-200)] bg-[color:var(--color-blue-50)] px-2.5 py-1.5 font-sans text-[12px] font-semibold text-[color:var(--color-blue-800)]"
+                        data-copy={value}
+                        data-copied-label={t(lang, 'copied')}
+                      >
+                        {t(lang, 'copy')}
+                      </button>
+                    </dd>
+                  </div>
+                ))}
+            </dl>
+          ))
+        }
+        <RichText blocks={donation.note} lang={lang} class="mt-4.5 text-[14px]" />
+      </div>
+
+      {
+        allocation.length > 0 && (
+          <div>
+            <SectionHeading title={t(lang, 'whereMoneyGoes')} />
+            <ul class="mt-5.5 grid list-none gap-4 p-0">
+              {allocation.map((item, index) => {
+                const label = pick(item.label, lang);
+                const note = pick(item.note, lang);
+                return (
+                  <li>
+                    <b class="flex justify-between text-[15px] text-[color:var(--color-ink-900)]">
+                      <span lang={label.isFallback ? label.lang : undefined}>{label.value}</span>
+                      <span>[{item.percent}%]</span>
+                    </b>
+                    <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-[color:var(--color-surface-sunken)]">
+                      <span
+                        class:list={['block h-full rounded-full', barTone[index % barTone.length]]}
+                        style={`width:${item.percent ?? 0}%`}
+                      />
+                    </div>
+                    {note.value && (
+                      <span
+                        class="mt-1.5 block text-[13.5px] text-[color:var(--color-ink-400)]"
+                        lang={note.isFallback ? note.lang : undefined}
+                      >
+                        {note.value}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const value = button.dataset.copy;
+      if (!value) return;
+      try {
+        await navigator.clipboard.writeText(value);
+        const original = button.textContent;
+        button.textContent = button.dataset.copiedLabel ?? 'Copied';
+        window.setTimeout(() => {
+          button.textContent = original;
+        }, 1800);
+      } catch {
+        // Clipboard blocked — the value is on screen and selectable anyway.
+      }
+    });
+  });
+</script>

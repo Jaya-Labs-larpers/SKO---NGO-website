@@ -1,0 +1,22 @@
+---
+import { getJob, getJobs } from '~/lib/content';
+import CareerDetail from '~/page-templates/CareerDetail.astro';
+import type { JobPost } from '~/lib/content/types';
+
+export async function getStaticPaths() {
+  const list = await getJobs();
+  const detailed = await Promise.all(list.map((entry) => getJob(entry.slug)));
+  return detailed
+    .map((job) => (job ? { params: { slug: job.slug }, props: { job } } : null))
+    .filter((route): route is NonNullable<typeof route> => route !== null);
+}
+
+const { job } = Astro.props as { job: JobPost };
+---
+
+<!--
+  Route shell. All page markup lives in src/page-templates/ so the English and
+  Khmer routes render from one source and can never drift apart.
+  Locale: km
+-->
+<CareerDetail lang="km" job={job} />

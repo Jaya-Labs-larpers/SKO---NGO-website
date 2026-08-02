@@ -1,0 +1,46 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import { localizePath, t } from '~/lib/i18n/utils';
+import { siteUrl } from '~/lib/config';
+import type { Crumb } from '~/lib/breadcrumbs';
+
+interface Props {
+  lang: Locale;
+  trail: Crumb[];
+}
+
+const { lang, trail } = Astro.props;
+
+const items = [{ label: t(lang, 'navHome'), path: '/' }, ...trail];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((crumb, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: crumb.label,
+    ...(crumb.path ? { item: new URL(localizePath(crumb.path, lang), siteUrl).href } : {}),
+  })),
+};
+---
+
+<nav aria-label={t(lang, 'breadcrumbLabel')} class="text-[13px] text-[color:var(--color-ink-400)]">
+  <ol class="flex list-none flex-wrap items-center gap-2 p-0">
+    {
+      items.map((crumb, index) => (
+        <li class="flex items-center gap-2">
+          {crumb.path && index < items.length - 1 ? (
+            <a href={localizePath(crumb.path, lang)} class="text-inherit no-underline hover:text-[color:var(--color-blue-800)]">
+              {crumb.label}
+            </a>
+          ) : (
+            <span aria-current="page">{crumb.label}</span>
+          )}
+          {index < items.length - 1 && <span aria-hidden="true">/</span>}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

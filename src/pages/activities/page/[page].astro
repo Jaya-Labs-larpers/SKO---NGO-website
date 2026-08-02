@@ -1,0 +1,41 @@
+---
+import { getActivities } from '~/lib/content';
+import ActivitiesPage from '~/page-templates/ActivitiesPage.astro';
+import { PER_PAGE } from '~/lib/pagination';
+import type { Activity } from '~/lib/content/types';
+
+export async function getStaticPaths() {
+  const all = await getActivities();
+  const totalPages = Math.max(1, Math.ceil(all.length / PER_PAGE));
+  const routes = [];
+  for (let page = 2; page <= totalPages; page += 1) {
+    routes.push({
+      params: { page: String(page) },
+      props: {
+        activities: all.slice((page - 1) * PER_PAGE, page * PER_PAGE),
+        currentPage: page,
+        totalPages,
+      },
+    });
+  }
+  return routes;
+}
+
+const { activities, currentPage, totalPages } = Astro.props as {
+  activities: Activity[];
+  currentPage: number;
+  totalPages: number;
+};
+---
+
+<!--
+  Route shell. All page markup lives in src/page-templates/ so the English and
+  Khmer routes render from one source and can never drift apart.
+  Locale: en
+-->
+<ActivitiesPage
+  lang="en"
+  activities={activities}
+  currentPage={currentPage}
+  totalPages={totalPages}
+/>

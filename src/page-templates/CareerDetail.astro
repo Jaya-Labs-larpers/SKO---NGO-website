@@ -1,0 +1,72 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { JobPost } from '~/lib/content/types';
+import { formatDate, localizePath, pick, t } from '~/lib/i18n/utils';
+import { siteUrl } from '~/lib/config';
+import { blocksToPlainText } from '~/lib/portable-text';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
+import RichText from '~/components/content/RichText.astro';
+
+interface Props {
+  lang: Locale;
+  job: JobPost;
+}
+
+const { lang, job } = Astro.props;
+
+const title = pick(job.title, lang);
+const location = pick(job.location, lang);
+const heading = title.value ?? '';
+const description =
+  blocksToPlainText(pick(job.description, lang).value) ||
+  [heading, location.value].filter(Boolean).join(' · ');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: heading,
+  ...(job.publishedAt ? { datePosted: job.publishedAt } : {}),
+  ...(job.deadline ? { validThrough: job.deadline } : {}),
+  employmentType: job.employmentType ?? undefined,
+  jobLocation: {
+    '@type': 'Place',
+    address: { '@type': 'PostalAddress', addressLocality: 'Phnom Penh', addressCountry: 'KH' },
+  },
+  url: new URL(localizePath(`/careers/${job.slug}`, lang), siteUrl).href,
+};
+---
+
+<BaseLayout lang={lang} title={heading} description={description} jsonLd={jsonLd}>
+  <article class="section">
+    <div class="wrap max-w-[760px]">
+      <Breadcrumbs
+        lang={lang}
+        trail={[{ label: t(lang, 'pageCareers'), path: '/careers' }, { label: heading }]}
+      />
+      <h1
+        class="mt-4 text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]"
+        lang={title.isFallback ? title.lang : undefined}
+      >
+        {heading}
+      </h1>
+      <p class="mt-3 flex flex-wrap gap-2.5 text-[14px] text-[color:var(--color-ink-400)]">
+        {location.value && <span>{location.value}</span>}
+        {job.employmentType && <span>· {job.employmentType}</span>}
+        {job.deadline && <span>· {t(lang, 'closesOn')} {formatDate(job.deadline, lang)}</span>}
+      </p>
+
+      <div class="mt-7"><RichText blocks={job.description} lang={lang} /></div>
+
+      <div
+        class="mt-8 rounded-r-[var(--radius-md)] border-l-[3px] border-[color:var(--color-blue-700)] bg-[color:var(--color-aqua-50)] px-5 py-4"
+      >
+        <RichText blocks={job.howToApply} lang={lang} class="max-w-none text-[15px]" />
+      </div>
+
+      <p class="mt-7">
+        <a href={localizePath('/careers', lang)} class="link-arrow">← {t(lang, 'pageCareers')}</a>
+      </p>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,48 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import { getReports } from '~/lib/content';
+import { t } from '~/lib/i18n/utils';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/content/PageHero.astro';
+import ReportList from '~/components/content/ReportList.astro';
+import EmptyState from '~/components/content/EmptyState.astro';
+
+interface Props {
+  lang: Locale;
+  /** 'policy' on the safeguarding page, everything else here. */
+  types?: string[];
+}
+
+const { lang, types } = Astro.props;
+
+const all = await getReports();
+const reports = types ? all.filter((report) => types.includes(report.type ?? 'other')) : all;
+
+const years = [...new Set(reports.map((report) => report.year ?? 0))].sort((a, b) => b - a);
+const heading = t(lang, 'pageReports');
+---
+
+<BaseLayout lang={lang} title={heading} description={t(lang, 'introReports')}>
+  <PageHero
+    lang={lang}
+    title={heading}
+    intro={t(lang, 'introReports')}
+    trail={[{ label: heading }]}
+  />
+  <section class="section">
+    <div class="wrap max-w-[900px]">
+      {
+        reports.length === 0 ? (
+          <EmptyState message={t(lang, 'emptyReports')} />
+        ) : (
+          years.map((year) => (
+            <div class="mb-9">
+              <h2 class="mb-4 text-[length:var(--text-h3)]">{year || '—'}</h2>
+              <ReportList lang={lang} reports={reports.filter((report) => (report.year ?? 0) === year)} />
+            </div>
+          ))
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

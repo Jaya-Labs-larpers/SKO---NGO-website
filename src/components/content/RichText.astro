@@ -1,0 +1,29 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { LocaleBlocks } from '~/lib/content/types';
+import { pick } from '~/lib/i18n/utils';
+import { blocksToHtml } from '~/lib/portable-text';
+
+interface Props {
+  blocks?: LocaleBlocks | null;
+  lang: Locale;
+  class?: string;
+}
+
+const { blocks, lang, class: className = '' } = Astro.props;
+
+// pick() resolves the requested locale, falling back to English and reporting
+// it so we can stamp lang="en" on the block for screen readers.
+const picked = pick(blocks, lang);
+const html = blocksToHtml(picked.value, picked.lang);
+---
+
+{
+  html && (
+    <div
+      class:list={['prose', className]}
+      lang={picked.isFallback ? picked.lang : undefined}
+      set:html={html}
+    />
+  )
+}

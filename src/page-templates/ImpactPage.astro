@@ -1,0 +1,65 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import { getImpactStats, getStories } from '~/lib/content';
+import { localizePath, t } from '~/lib/i18n/utils';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PageHero from '~/components/content/PageHero.astro';
+import ImpactStats from '~/components/content/ImpactStats.astro';
+import StoryQuote from '~/components/content/StoryQuote.astro';
+import EmptyState from '~/components/content/EmptyState.astro';
+import CtaBand from '~/components/content/CtaBand.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const [stats, stories] = await Promise.all([getImpactStats(), getStories()]);
+const heading = t(lang, 'pageImpact');
+---
+
+<BaseLayout lang={lang} title={heading} description={t(lang, 'introImpact')}>
+  <PageHero
+    lang={lang}
+    title={heading}
+    intro={t(lang, 'introImpact')}
+    trail={[{ label: heading }]}
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <ImpactStats lang={lang} stats={stats} />
+      <p
+        class="mt-5 max-w-[68ch] rounded-r-[var(--radius-md)] border-l-[3px] border-[color:var(--color-blue-700)] bg-[color:var(--color-aqua-50)] px-4.5 py-4 text-[14.5px] text-[color:var(--color-ink-700)]"
+      >
+        <b>{t(lang, 'methodologyTitle')}</b> {t(lang, 'methodologyBody')}
+      </p>
+    </div>
+  </section>
+
+  <section class="section bg-[color:var(--color-surface-subtle)] pt-0">
+    <div class="wrap pt-[var(--spacing-section)]">
+      {
+        stories.length === 0 ? (
+          <EmptyState message={t(lang, 'emptyGeneric')} />
+        ) : (
+          <ul class="grid list-none gap-11 p-0 lg:grid-cols-2">
+            {stories.map((story) => (
+              <li class="rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white p-7">
+                <StoryQuote lang={lang} story={story} showAvatar />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <p class="mt-8">
+        <a href={localizePath('/reports', lang)} class="link-arrow">
+          {t(lang, 'seeReports')}
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={t(lang, 'ctaImpactTitle')} />
+</BaseLayout>

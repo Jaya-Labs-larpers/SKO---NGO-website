@@ -1,0 +1,26 @@
+{
+  "name": "sko-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Sanity Studio for the SKO website",
+  "comment": "Deliberately NOT an npm workspace of the root project. Cloudflare Pages runs `npm install` at the repo root on every build; a workspace would drag Sanity's React toolchain into a production build of a site that ships no React. Run `cd studio && npm install` once, locally.",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sanity/vision": "4.22.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "sanity": "4.22.0",
+    "styled-components": "6.4.4"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "typescript": "5.9.3"
+  }
+}

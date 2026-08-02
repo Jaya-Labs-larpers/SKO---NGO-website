@@ -1,0 +1,12 @@
+# Cloudflare Pages redirects.
+#
+# Astro emits directory-style URLs (/about/), and Cloudflare already handles the
+# trailing-slash normalisation, so this file exists for locale defaults and for
+# legacy paths once the old site's URLs are known.
+
+# Khmer 404s should land on the Khmer 404 page, not the English one.
+/km/*  /km/404/  404
+
+# [PLACEHOLDER] Add redirects from the previous site's URLs here in Phase 6,
+# once SKO supplies the old sitemap. Example:
+# /old-page.html  /about/  301
