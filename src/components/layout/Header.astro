@@ -3,6 +3,7 @@ import type { Locale } from '~/lib/i18n/config';
 import type { SiteSettings } from '~/lib/content/types';
 import { localizePath, t, text } from '~/lib/i18n/utils';
 import { mainNav, mobileNav } from '~/lib/nav';
+import { hasImage, imageDimensions, imageUrl } from '~/lib/sanity/image';
 import LanguageToggle from './LanguageToggle.astro';
 
 interface Props {
@@ -14,7 +15,15 @@ interface Props {
 const { lang, pathname, settings } = Astro.props;
 
 const orgName = text(settings.orgName, lang);
-const shortName = settings.orgShortName ?? 'SKO';
+
+/**
+ * The real logo the moment it is uploaded in the CMS. Until then a small mark
+ * drawn from the logo's own elements — the triangle and a butterfly — rather
+ * than an "SKO" tile, which was placeholder styling pretending to be identity.
+ */
+const hasLogo = hasImage(settings.logo);
+const logoSrc = hasLogo && settings.logo ? imageUrl(settings.logo, { width: 320 }) : null;
+const { width: logoWidth, height: logoHeight } = imageDimensions(settings.logo, 3 / 1);
 
 function isCurrent(path: string): boolean {
   const target = localizePath(path, lang);
@@ -25,18 +34,47 @@ function isCurrent(path: string): boolean {
 <header class="site-header relative z-20 border-b border-[color:var(--color-line-subtle)] bg-white">
   <div class="wrap flex h-[68px] items-center gap-6 lg:h-[76px]">
     <a href={localizePath('/', lang)} class="flex flex-none items-center gap-3 no-underline">
-      <span
-        class="grid h-9 w-9 place-items-center rounded-[var(--radius-sm)] bg-[color:var(--color-blue-700)] text-[15px] font-extrabold text-white lg:h-[38px] lg:w-[38px]"
-        aria-hidden="true">{shortName}</span
-      >
-      <span class="flex flex-col leading-[1.15]">
-        <span class="text-[14px] font-bold tracking-[-0.01em] text-[color:var(--color-ink-900)] lg:text-[15px]"
-          >{orgName}</span
-        >
-        <span class="hidden text-[11px] text-[color:var(--color-ink-400)] sm:block"
-          >Samatapheap Khnom Organization</span
-        >
-      </span>
+      {
+        hasLogo && logoSrc ? (
+          <img
+            src={logoSrc}
+            alt={orgName}
+            width={logoWidth}
+            height={logoHeight}
+            class="h-10 w-auto lg:h-11"
+            decoding="sync"
+          />
+        ) : (
+          <>
+            <span
+              class="grid h-9 w-9 flex-none place-items-center rounded-[var(--radius-sm)] border border-[color:var(--color-line)] bg-white lg:h-[38px] lg:w-[38px]"
+              aria-hidden="true"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 4 L20.5 19 H3.5 Z"
+                  stroke="var(--color-sky-400)"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+                <g fill="var(--color-blue-700)">
+                  <ellipse cx="9.6" cy="12.6" rx="2.5" ry="1.5" transform="rotate(-20 9.6 12.6)" />
+                  <ellipse cx="14.4" cy="12.6" rx="2.5" ry="1.5" transform="rotate(20 14.4 12.6)" />
+                  <rect x="11.65" y="11.3" width="0.7" height="3.2" rx="0.35" />
+                </g>
+              </svg>
+            </span>
+            <span class="flex flex-col leading-[1.15]">
+              <span class="text-[14px] font-bold tracking-[-0.01em] text-[color:var(--color-ink-900)] lg:text-[15px]">
+                {orgName}
+              </span>
+              <span class="hidden text-[11px] text-[color:var(--color-ink-400)] sm:block">
+                Samatapheap Khnom Organization
+              </span>
+            </span>
+          </>
+        )
+      }
     </a>
 
     <nav class="ml-auto hidden lg:flex lg:gap-0.5" aria-label={t(lang, 'mainNavLabel')}>

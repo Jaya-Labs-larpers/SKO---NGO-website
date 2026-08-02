@@ -126,18 +126,18 @@ dialog[open] {
 }
 
 dialog::backdrop {
-  background: rgb(17 26 43 / 0);
+  background: rgb(14 21 51 / 0);
   transition:
     background var(--duration-base) var(--ease-out-soft),
     overlay var(--duration-base) allow-discrete,
     display var(--duration-base) allow-discrete;
 }
 dialog[open]::backdrop {
-  background: rgb(17 26 43 / 0.72);
+  background: rgb(14 21 51 / 0.72);
 }
 @starting-style {
   dialog[open]::backdrop {
-    background: rgb(17 26 43 / 0);
+    background: rgb(14 21 51 / 0);
   }
 }
 

@@ -8,7 +8,8 @@
    Every token below generates utilities: --color-blue-700 -> bg-blue-700,
    text-blue-700, border-blue-700, etc.
 
-   PALETTE: slate blue #475D8C brand, with #C3E9E8 and #9BE1FF as supports.
+   PALETTE: taken from the SKO logo — the #2B4CC7 wordmark blue, the #2FC4E8
+   cyan of the triangle, and the pale blues of the butterfly wings.
    Contrast ratios in comments are computed against #FFFFFF and are WCAG 2.1
    relative-luminance figures, not eyeballed.
    ========================================================================= */
@@ -19,34 +20,43 @@
      --------------------------------------------------------------------- */
   --color-canvas: #ffffff;
   --color-surface: #ffffff;
-  --color-surface-subtle: #f4f7fc;   /* section banding — cool white */
-  --color-surface-sunken: #e6ecf5;   /* image placeholder wells, bar tracks */
-  --color-surface-inverse: #26314f;  /* footer, one CTA band. Used twice, max */
+  --color-surface-subtle: #f5f7fd;   /* section banding — cool white */
+  --color-surface-sunken: #e7ebf7;   /* image placeholder wells, bar tracks */
+  --color-surface-inverse: #14235c;  /* footer, one CTA band. Used twice, max */
 
   /* ---------------------------------------------------------------------
      INK — blue-black, so text sits in the same family as the brand
      --------------------------------------------------------------------- */
-  --color-ink-900: #111a2b;  /* 17.4:1  headings */
-  --color-ink-700: #2a3549;  /* 12.3:1  emphasis body */
-  --color-ink-600: #414d63;  /*  8.5:1  body copy */
-  --color-ink-400: #5f6b82;  /*  5.4:1  meta, captions — AA floor for small text */
-  --color-ink-300: #929bad;  /*  2.8:1  NOT for text. Dividers, disabled, icons only */
+  --color-ink-900: #0e1533;  /* 17.9:1  headings */
+  --color-ink-700: #26304f;  /* 13.0:1  emphasis body */
+  --color-ink-600: #3e4869;  /*  9.0:1  body copy */
+  --color-ink-400: #5c6689;  /*  5.6:1  meta, captions — AA floor for small text */
+  --color-ink-300: #929ab5;  /*  2.9:1  NOT for text. Dividers, disabled, icons only */
 
   /* ---------------------------------------------------------------------
-     BRAND BLUE — built out from #475D8C
+     BRAND BLUE — taken from the logo wordmark.
+
+     The earlier ramp was built from #475D8C, which sat several steps duller
+     than the identity. This one matches the blue the organisation actually
+     signs its name in, and still clears AA comfortably: the brand step is
+     7.1:1 on white, so it carries body text and white-on-blue buttons without
+     any compensating adjustment.
      --------------------------------------------------------------------- */
-  --color-blue-900: #26314f;  /* 12.8:1  footer, CTA band */
-  --color-blue-800: #384a70;  /*  8.8:1  links, hover, text on light tints */
-  --color-blue-700: #475d8c;  /*  6.2:1  BRAND. Buttons, rules, stat numerals */
-  --color-blue-600: #5c74a6;  /*  4.6:1  secondary text, icons, active borders */
-  --color-blue-200: #b9c6de;  /*         borders, underlines at rest */
-  --color-blue-50:  #eff3fa;  /*         hover fills, selected rows */
+  --color-blue-900: #14235c;  /* 14.7:1  footer, CTA band */
+  --color-blue-800: #1e3894;  /* 10.3:1  links, hover, text on light tints */
+  --color-blue-700: #2b4cc7;  /*  7.1:1  BRAND — the logo wordmark blue */
+  --color-blue-600: #4a6bdb;  /*  4.8:1  secondary text, icons, active borders */
+  --color-blue-200: #b9c6ee;  /*         borders, underlines at rest */
+  --color-blue-50:  #eef2fd;  /*         hover fills, selected rows */
 
   /* ---------------------------------------------------------------------
-     SUPPORTING TINTS — #C3E9E8 and #9BE1FF.
-     Both are light: they carry surfaces, never text. Text on either is
-     ink-900 (13.4:1 / 12.1:1) or blue-800 (6.8:1 / 6.1:1) — both AA.
+     SUPPORTING TINTS — all three come off the logo.
+
+     sky-400 is the cyan of the triangle; sky-200 and aqua-200 are the pale
+     blues of the butterfly wings. Every one of them is light: they carry
+     surfaces, never text. Text on them is ink-900 or blue-800, both AA.
      --------------------------------------------------------------------- */
+  --color-sky-400:  #2fc4e8;  /* logo triangle — accents and rules only, never text */
   --color-aqua-200: #c3e9e8;  /* chips, decorative quote mark, selection, notices */
   --color-aqua-50:  #effafa;
   --color-sky-200:  #9be1ff;  /* accent bars, hero wash, focus glow, allocation */
@@ -64,9 +74,9 @@
   /* ---------------------------------------------------------------------
      BORDERS — structure comes from these, not from shadows
      --------------------------------------------------------------------- */
-  --color-line-subtle: #edf1f7;
-  --color-line: #e0e6f0;
-  --color-line-strong: #c6cfdf;
+  --color-line-subtle: #edf0f9;
+  --color-line: #dfe4f2;
+  --color-line-strong: #c4cbe2;
 
   /* ---------------------------------------------------------------------
      TYPE FAMILIES
@@ -152,11 +162,11 @@
      SHADOWS — deliberately weak. On a white site, a 1px line does the work
      of a shadow without the haze. Tinted with ink-900, never pure black.
      --------------------------------------------------------------------- */
-  --shadow-xs: 0 1px 2px rgb(17 26 43 / 0.05);
-  --shadow-sm: 0 1px 3px rgb(17 26 43 / 0.06), 0 1px 2px rgb(17 26 43 / 0.04);
-  --shadow-md: 0 4px 14px rgb(17 26 43 / 0.07);
-  --shadow-lg: 0 12px 32px rgb(17 26 43 / 0.10);
-  --shadow-overlay: 0 24px 64px rgb(17 26 43 / 0.22);
+  --shadow-xs: 0 1px 2px rgb(14 21 51 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(14 21 51 / 0.06), 0 1px 2px rgb(14 21 51 / 0.04);
+  --shadow-md: 0 4px 14px rgb(14 21 51 / 0.07);
+  --shadow-lg: 0 12px 32px rgb(14 21 51 / 0.10);
+  --shadow-overlay: 0 24px 64px rgb(14 21 51 / 0.22);
 
   /* ---------------------------------------------------------------------
      MOTION — short, and entirely optional
@@ -238,7 +248,7 @@
   .on-inverse :focus-visible,
   .btn-primary:focus-visible {
     outline-color: #ffffff;
-    box-shadow: 0 0 0 6px rgb(17 26 43 / 0.55);
+    box-shadow: 0 0 0 6px rgb(14 21 51 / 0.55);
   }
 
   ::selection { background: var(--color-aqua-200); color: var(--color-ink-900); }

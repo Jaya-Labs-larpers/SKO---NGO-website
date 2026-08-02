@@ -121,7 +121,7 @@ export const siteSettings: SiteSettings = {
     en: '[NEEDS SKO] To report a safeguarding concern, please contact [name and role] directly at [email or phone] rather than using the form below. Concerns are treated confidentially.',
     km: '[NEEDS SKO] ដើម្បីរាយការណ៍អំពីកង្វល់ការពារកុមារ សូមទាក់ទង [ឈ្មោះ និងតួនាទី] ដោយផ្ទាល់ ជាជាងប្រើទម្រង់ខាងក្រោម។',
   },
-  socials: [{ platform: 'Facebook', url: '[NEEDS SKO] https://facebook.com/…' }],
+  socials: [{ platform: 'Facebook', url: 'https://www.facebook.com/samatapheapkhnom' }],
   donation: {
     qrCodes: [
       {
@@ -138,11 +138,11 @@ export const siteSettings: SiteSettings = {
     ],
     bankAccounts: [
       {
-        bankName: '[NEEDS SKO] Bank name',
+        bankName: 'N/A',
         accountName: 'Samatapheap Khnom Organization',
-        accountNumber: '[NEEDS SKO]',
-        swift: '[NEEDS SKO]',
-        branchAddress: '[NEEDS SKO] Branch address, Phnom Penh',
+        accountNumber: 'N/A',
+        swift: 'N/A',
+        branchAddress: 'N/A',
         currency: 'USD / KHR',
       },
     ],
@@ -194,8 +194,8 @@ export const impactStats: ImpactStat[] = [
   },
   {
     _id: 'stat-sangkats',
-    value: 15,
-    displayValue: '15',
+    value: 26,
+    displayValue: '26',
     label: { en: 'Sangkats reached', km: 'សង្កាត់ដែលបានទៅដល់' },
     context: {
       en: 'Urban poor communities across the capital',
@@ -204,13 +204,18 @@ export const impactStats: ImpactStat[] = [
     order: 3,
   },
   {
+    /**
+     * SAMPLE FIGURE — supplied as a placeholder at SKO's request so the layout
+     * can be reviewed. It is not a claim. Replace with the real number from
+     * OSCaR, and put the period it covers in the context line, before launch.
+     */
     _id: 'stat-families',
-    value: 0,
-    displayValue: '[NEEDS SKO]',
+    value: 1200,
+    displayValue: '1,200',
     label: { en: 'Families supported', km: 'គ្រួសារដែលបានទទួលការគាំទ្រ' },
     context: {
-      en: '[NEEDS SKO] Cumulative figure from OSCaR, with the period it covers',
-      km: '[NEEDS SKO] តួលេខសរុបពី OSCaR ព្រមទាំងរយៈពេលដែលគ្របដណ្តប់',
+      en: '[SAMPLE — replace with the figure from OSCaR and the period it covers]',
+      km: '[SAMPLE — សូមជំនួសដោយតួលេខពី OSCaR និងរយៈពេលដែលគ្របដណ្តប់]',
     },
     order: 4,
   },
@@ -441,7 +446,7 @@ export const reports: Report[] = [
 export const team: TeamMember[] = [
   {
     _id: 'team-1',
-    name: { en: '[NEEDS SKO] Name', km: '[NEEDS SKO] ឈ្មោះ' },
+    name: { en: 'Samnang Moun', km: 'សំណាង មួន' },
     role: { en: 'Executive Director', km: 'នាយកប្រតិបត្តិ' },
     group: 'leadership',
     order: 1,
@@ -449,7 +454,7 @@ export const team: TeamMember[] = [
 ];
 
 export const directorMessage: DirectorMessage = {
-  name: { en: '[NEEDS SKO] Director’s name', km: '[NEEDS SKO] ឈ្មោះនាយក' },
+  name: { en: 'Samnang Moun', km: 'សំណាង មួន' },
   title: { en: 'Executive Director', km: 'នាយកប្រតិបត្តិ' },
   pullQuote: {
     en: '[NEEDS SKO] One sentence from the Director, set large above the message.',
@@ -502,7 +507,8 @@ export const pages: Page[] = [
       'SKO was created after finding that poor families and the children most at risk could not access daily basic needs. Families were living without safe or settled accommodation. Households were separating. Domestic violence, poor communication and strained relationships were common. Children were losing the chance of an education, going without enough food, and experiencing abuse or neglect.',
       'The response was not to substitute for those families, but to support them — so that they could improve their own conditions and their children could grow up as full participants in their community.',
       '## Where we work',
-      'SKO works in the urban poor communities of Phnom Penh, across five khans and fifteen sangkats: Chbar Ampov (Chbar Ampov 1, Chbar Ampov 2, Prek Pra), Mean Chey (Chak Angre Leu, Stung Meanchey 2, Stung Meanchey 3, Boeung Tumpun 1, Boeung Tumpun 2), Dangkor (Dangkor, Prey Sar, Prey Veng, Choeung Ek), Prek Pnov (Kork Roka) and Russey Keo (Svay Pak, Toul Sangke).',
+      'SKO works in the urban poor communities of Phnom Penh, across five khans and twenty-six sangkats. The khans are Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo.',
+      'They include Chbar Ampov 1, Chbar Ampov 2 and Prek Pra; Chak Angre Leu, Stung Meanchey 2, Stung Meanchey 3, Boeung Tumpun 1 and Boeung Tumpun 2; Dangkor, Prey Sar, Prey Veng and Choeung Ek; Kork Roka; and Svay Pak and Toul Sangke.',
       'The target area can be extended to neighbouring communities at the request of the Department of Social Affairs, Veterans and Youth Rehabilitation.',
     ]),
     faqs: [
@@ -516,8 +522,8 @@ export const pages: Page[] = [
       {
         question: { en: 'Where does SKO work?', km: 'តើ SKO ធ្វើការនៅកន្លែងណា?' },
         answer: {
-          en: 'SKO works in the urban poor communities of Phnom Penh, Cambodia — across five khans (Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo) and fifteen sangkats.',
-          km: 'SKO ធ្វើការនៅសហគមន៍ក្រីក្រតាមទីក្រុងក្នុងរាជធានីភ្នំពេញ គ្របដណ្តប់ ៥ ខណ្ឌ (ច្បារអំពៅ មានជ័យ ដង្កោ ព្រែកព្នៅ និងឫស្សីកែវ) និង ១៥ សង្កាត់។',
+          en: 'SKO works in the urban poor communities of Phnom Penh, Cambodia — across five khans (Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo) and twenty-six sangkats.',
+          km: 'SKO ធ្វើការនៅសហគមន៍ក្រីក្រតាមទីក្រុងក្នុងរាជធានីភ្នំពេញ គ្របដណ្តប់ ៥ ខណ្ឌ (ច្បារអំពៅ មានជ័យ ដង្កោ ព្រែកព្នៅ និងឫស្សីកែវ) និង ២៦ សង្កាត់។',
         },
       },
       {

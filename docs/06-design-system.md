@@ -14,14 +14,14 @@ rather than around it.
 - **Structure comes from hairlines, not fills.** Every surface is `#FFFFFF` bounded by a 1px `#E1E8E5`
   border. Section banding uses `#F4F8F6` — a tint so slight it reads as a change in air pressure rather
   than a grey box.
-- **The brand blue is rationed.** `#475D8C` appears as: primary buttons, a 44×3px accent rule above
+- **The brand blue is rationed.** `#2B4CC7` appears as: primary buttons, a 44×3px accent rule above
   section headings, the impact numerals, link underlines, and two large filled areas per page maximum
   (one CTA band, the footer). Nothing else gets to use it.
 - **The two light blues do the softening.** `#C3E9E8` and `#9BE1FF` carry chips, the decorative quotation
   mark, the page-hero wash, the donation-allocation bars, the registration badge and the input focus glow.
   They are surfaces, never text.
 - **Shadows are the hover state, not the resting state.** On a white page a shadow reads as haze. Cards
-  ship flat with a border; elevation appears on interaction. Shadow colour is `#111A2B` at low alpha, not
+  ship flat with a border; elevation appears on interaction. Shadow colour is `#0E1533` at low alpha, not
   black — neutral-black shadows look dirty against a cool white.
 - **The numbers carry the trust.** Impact figures are set at 46px in teal, the largest type on the page
   after the H1, and every one carries a context line. "1,240 families" is marketing; "1,240 families since
@@ -36,22 +36,22 @@ against `#FFFFFF`, not estimates.
 
 | Role | Token | Hex | Contrast | Use |
 |---|---|---|---|---|
-| Headings | `ink-900` | `#111A2B` | 17.4:1 | |
-| Body | `ink-600` | `#414D63` | 8.5:1 | |
-| Meta / captions | `ink-400` | `#5F6B82` | 5.4:1 | AA floor for small text |
-| Dividers, disabled | `ink-300` | `#929BAD` | 2.8:1 | **Never text** |
-| **Brand** | `blue-700` | **`#475D8C`** | 6.2:1 | Buttons, rules, numerals |
-| Links, hover | `blue-800` | `#384A70` | 8.8:1 | |
-| Secondary, icons | `blue-600` | `#5C74A6` | 4.6:1 | |
-| Borders, underlines | `blue-200` | `#B9C6DE` | — | |
-| Hover fills | `blue-50` | `#EFF3FA` | — | |
-| Dark surface | `blue-900` | `#26314F` | 12.8:1 | Footer + one CTA band |
+| Headings | `ink-900` | `#0E1533` | 17.4:1 | |
+| Body | `ink-600` | `#3E4869` | 8.5:1 | |
+| Meta / captions | `ink-400` | `#5C6689` | 5.4:1 | AA floor for small text |
+| Dividers, disabled | `ink-300` | `#929AB5` | 2.8:1 | **Never text** |
+| **Brand** | `blue-700` | **`#2B4CC7`** | 6.2:1 | Buttons, rules, numerals |
+| Links, hover | `blue-800` | `#1E3894` | 8.8:1 | |
+| Secondary, icons | `blue-600` | `#4A6BDB` | 4.6:1 | |
+| Borders, underlines | `blue-200` | `#B9C6EE` | — | |
+| Hover fills | `blue-50` | `#EEF2FD` | — | |
+| Dark surface | `blue-900` | `#14235C` | 12.8:1 | Footer + one CTA band |
 | **Support** | `aqua-200` | **`#C3E9E8`** | — | Chips, quote mark, notice wells |
 | **Support** | `sky-200` | **`#9BE1FF`** | — | Accent bars, hero wash, focus glow |
 | Error | `danger-700` | `#B42318` | 6.6:1 | Form errors, "closes in N days" |
 | Success | `success-700` | `#067647` | 5.7:1 | Sent-form confirmation only |
 
-Ink is blue-black rather than neutral grey, so text sits in the same family as the brand. `#475D8C`
+Ink is blue-black rather than neutral grey, so text sits in the same family as the brand. `#2B4CC7`
 lands at 6.2:1 — near-identical to the previous brand colour, so it passes AA for normal text and for
 white-on-blue buttons without any compensating adjustment.
 
