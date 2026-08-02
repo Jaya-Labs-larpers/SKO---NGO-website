@@ -22,7 +22,7 @@ function isCurrent(path: string): boolean {
 }
 ---
 
-<header class="relative z-20 border-b border-[color:var(--color-line-subtle)] bg-white">
+<header class="site-header relative z-20 border-b border-[color:var(--color-line-subtle)] bg-white">
   <div class="wrap flex h-[68px] items-center gap-6 lg:h-[76px]">
     <a href={localizePath('/', lang)} class="flex flex-none items-center gap-3 no-underline">
       <span
@@ -45,12 +45,7 @@ function isCurrent(path: string): boolean {
           <a
             href={localizePath(item.path, lang)}
             aria-current={isCurrent(item.path) ? 'page' : undefined}
-            class:list={[
-              'rounded-[var(--radius-sm)] px-[13px] py-2.5 text-[14.5px] font-semibold no-underline transition-colors',
-              isCurrent(item.path)
-                ? 'text-[color:var(--color-blue-800)] shadow-[inset_0_-2px_0_var(--color-blue-700)]'
-                : 'text-[color:var(--color-ink-700)] hover:bg-[color:var(--color-blue-50)] hover:text-[color:var(--color-blue-800)]',
-            ]}
+            class="nav-link"
           >
             {t(lang, item.key)}
           </a>
@@ -162,12 +157,43 @@ function isCurrent(path: string): boolean {
       panel.querySelector<HTMLElement>(FOCUSABLE)?.focus();
     };
 
-    const close = () => {
+    /**
+     * Closing plays an exit animation before the panel is hidden. `hidden`
+     * removes it instantly, so the element has to survive one animation first.
+     *
+     * Guarded three ways: reduced-motion skips it entirely, a missing
+     * animationend event still resolves via the timeout, and re-entry is
+     * blocked while an exit is already running — otherwise a double-tap on the
+     * close button leaves the panel stuck mid-animation.
+     */
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const finishClose = () => {
       panel.hidden = true;
+      panel.removeAttribute('data-closing');
       document.body.style.overflow = '';
       toggle.setAttribute('aria-expanded', 'false');
       toggle.setAttribute('aria-label', toggle.dataset.labelOpen ?? 'Open menu');
       lastFocused?.focus();
+    };
+
+    const close = () => {
+      if (panel.hidden || panel.hasAttribute('data-closing')) return;
+
+      if (prefersReducedMotion.matches) {
+        finishClose();
+        return;
+      }
+
+      panel.setAttribute('data-closing', '');
+      let done = false;
+      const settle = () => {
+        if (done) return;
+        done = true;
+        finishClose();
+      };
+      panel.addEventListener('animationend', settle, { once: true });
+      window.setTimeout(settle, 400);
     };
 
     toggle.addEventListener('click', open);

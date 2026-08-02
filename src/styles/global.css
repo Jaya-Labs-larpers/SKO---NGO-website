@@ -18,6 +18,165 @@
   display: none !important;
 }
 
+/* ============================================================================
+   MOTION
+   ----------------------------------------------------------------------------
+   Every animation here is a *continuity transition* or *feedback* — it orients
+   the visitor or confirms their action. Nothing decorates.
+
+   Deliberately still absent, and it should stay that way: scroll reveals,
+   parallax, and count-up on the impact numbers. A figure that animates on
+   scroll reads as marketing; a figure that is simply there reads as a fact,
+   and that distinction is the whole job of this site.
+
+   Total cost: zero additional JavaScript. Page transitions are the native
+   cross-document API, so unsupported browsers navigate exactly as before.
+   ========================================================================= */
+
+/* Lets the accordion transition between 0 and `auto` height. */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+/* --- Page transitions ----------------------------------------------------- */
+@view-transition {
+  navigation: auto;
+}
+
+/*
+ * The chrome holds still and only the content changes — a *continuity
+ * transition*. Crossfading the header too would make the logo and nav flicker
+ * on every click, which reads as a page reload rather than a smooth move.
+ */
+header.site-header {
+  view-transition-name: site-header;
+}
+footer.site-footer {
+  view-transition-name: site-footer;
+}
+main {
+  view-transition-name: page-content;
+}
+
+::view-transition-group(site-header),
+::view-transition-group(site-footer) {
+  animation: none;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes page-exit {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Asymmetric: the outgoing page leaves quickly, the incoming one eases in. */
+::view-transition-old(page-content) {
+  animation: page-exit 110ms ease-out both;
+}
+::view-transition-new(page-content) {
+  animation: page-enter 260ms var(--ease-out-soft) both;
+}
+
+/* --- Mobile navigation panel ---------------------------------------------- */
+@keyframes panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+@keyframes panel-exit {
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+#mobile-nav:not([hidden]) {
+  animation: panel-enter 240ms var(--ease-out-soft) both;
+}
+#mobile-nav[data-closing] {
+  animation: panel-exit 160ms ease-in both;
+}
+
+/* --- Dialogs -------------------------------------------------------------- */
+dialog {
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity var(--duration-base) var(--ease-out-soft),
+    transform var(--duration-base) var(--ease-out-soft),
+    overlay var(--duration-base) allow-discrete,
+    display var(--duration-base) allow-discrete;
+}
+dialog[open] {
+  opacity: 1;
+  transform: scale(1);
+}
+@starting-style {
+  dialog[open] {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+dialog::backdrop {
+  background: rgb(17 26 43 / 0);
+  transition:
+    background var(--duration-base) var(--ease-out-soft),
+    overlay var(--duration-base) allow-discrete,
+    display var(--duration-base) allow-discrete;
+}
+dialog[open]::backdrop {
+  background: rgb(17 26 43 / 0.72);
+}
+@starting-style {
+  dialog[open]::backdrop {
+    background: rgb(17 26 43 / 0);
+  }
+}
+
+/* --- Accordion ------------------------------------------------------------ */
+details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size var(--duration-base) var(--ease-out-soft),
+    content-visibility var(--duration-base) allow-discrete;
+}
+details[open]::details-content {
+  block-size: auto;
+}
+details > summary > .disclosure-icon {
+  transition: transform var(--duration-base) var(--ease-out-soft);
+}
+details[open] > summary > .disclosure-icon {
+  transform: rotate(45deg);
+}
+
+/* --- Reduced motion -------------------------------------------------------
+   The global reset in theme.css already collapses transitions and animations.
+   View-transition pseudo-elements live outside the document tree, so they need
+   naming explicitly or the page keeps crossfading for someone who asked it not
+   to. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  dialog,
+  dialog::backdrop,
+  details::details-content {
+    transition: none !important;
+  }
+}
+
 @layer components {
   /* --- Layout ------------------------------------------------------------ */
   .wrap {
@@ -128,6 +287,50 @@
   .link-arrow:hover > .arrow,
   .btn:hover > .arrow {
     transform: translateX(3px);
+  }
+
+  /* Press feedback — a small scale-down so a tap feels physical. */
+  .btn:active:not([aria-disabled='true']):not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  /*
+   * Navigation underline. A *reveal*: the rule grows from the left rather than
+   * the background swapping in, which is quieter and reads as a place marker
+   * rather than a button.
+   */
+  .nav-link {
+    position: relative;
+    border-radius: var(--radius-sm);
+    padding: 0.625rem 0.8125rem;
+    font-size: 0.90625rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    color: var(--color-ink-700);
+    transition: color var(--duration-fast) var(--ease-out-soft);
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0.8125rem;
+    bottom: 0.25rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-blue-700);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--duration-base) var(--ease-out-soft);
+  }
+  .nav-link:hover {
+    color: var(--color-blue-800);
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-current]::after {
+    transform: scaleX(1);
+  }
+  .nav-link[aria-current] {
+    color: var(--color-blue-800);
   }
 
   /* --- Surfaces ----------------------------------------------------------- */

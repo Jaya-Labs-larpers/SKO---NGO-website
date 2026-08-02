@@ -83,7 +83,10 @@ const fullUrl = chart.image && hasImage(chart.image) ? imageUrl(chart.image, { w
     class="flex cursor-pointer list-none items-center justify-between px-4.5 py-3.5 text-[15px] font-semibold text-[color:var(--color-ink-900)] [&::-webkit-details-marker]:hidden"
   >
     {t(lang, 'readAsText')}
-    <span class="text-[19px] font-normal text-[color:var(--color-blue-700)]" aria-hidden="true">+</span>
+    <span
+      class="disclosure-icon text-[19px] leading-none font-normal text-[color:var(--color-blue-700)]"
+      aria-hidden="true">+</span
+    >
   </summary>
   <div class="px-4.5 pb-4.5">
     <RichText blocks={chart.textVersion} lang={lang} class="max-w-none text-[15px]" />
