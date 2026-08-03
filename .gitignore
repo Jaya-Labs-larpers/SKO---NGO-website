@@ -24,3 +24,5 @@ npm-debug.log*
 
 # Generated for review; regenerate with scripts/content-review.mjs
 SKO-content-review.html
+SKO-website-preview/
+SKO-website-preview.zip
