@@ -35,7 +35,7 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   phone, email, partnerEmail, safeguardingContact, officeHours, socials,
   logo ${IMAGE},
   ogImage ${IMAGE},
-  homeHero ${IMAGE},
+  homeHero[]${IMAGE},
   donationFaqs[]${FAQ},
   donation{
     note,

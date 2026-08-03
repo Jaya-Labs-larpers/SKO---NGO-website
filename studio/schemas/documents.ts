@@ -40,11 +40,14 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'homeHero',
-      title: 'Homepage hero photo',
-      type: 'imageWithAlt',
+      title: 'Homepage hero photos',
+      type: 'array',
+      of: [{ type: 'imageWithAlt' }],
       group: 'identity',
       description:
-        'The large photo at the top of the homepage. Text never sits directly on it — a white card holds the words — so you do not need to worry about the photo being too busy or too light.',
+        'The large photo at the top of the homepage. Add one for a still image, or three to four to have them fade slowly from one to the next. Text never sits directly on them — a white card holds the words — so you do not need to worry about a photo being too busy or too light. Only the first loads straight away; the rest arrive afterwards, so extra photos cost visitors on mobile data very little.',
+      validation: (rule) =>
+        rule.max(5).warning('More than four or five is rarely worth the extra weight.'),
     }),
     defineField({
       name: 'registration',

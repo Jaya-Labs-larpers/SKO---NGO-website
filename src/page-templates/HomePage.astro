@@ -10,7 +10,7 @@ import {
   getStories,
 } from '~/lib/content';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
+import HeroSlideshow from '~/components/media/HeroSlideshow.astro';
 import ImpactStats from '~/components/content/ImpactStats.astro';
 import SectionHeading from '~/components/content/SectionHeading.astro';
 import ProgramCard from '~/components/content/ProgramCard.astro';
@@ -49,19 +49,13 @@ const story = stories[0];
   <!-- Hero: photo behind, white card in front. A CMS photo can never be trusted
        to win a contrast check on its own, so text never sits directly on it. -->
   <section class="relative border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)]">
-    <div class="absolute inset-0 hidden lg:block">
-      <ResponsiveImage
-        image={settings.homeHero}
-        lang={lang}
-        alt=""
-        aspect="16/9"
-        eager
-        sizes="100vw"
-        class="h-full"
-      />
-    </div>
-    <div class="lg:hidden">
-      <ResponsiveImage image={settings.homeHero} lang={lang} alt="" aspect="4/3" eager sizes="100vw" />
+    {/*
+      One instance, placed differently by breakpoint: a 4:3 block above the card
+      on phones, full-bleed behind it from lg up. Rendering it twice would
+      duplicate the slides and the keyframes for no gain.
+    */}
+    <div class="aspect-4/3 lg:absolute lg:inset-0 lg:aspect-auto">
+      <HeroSlideshow images={settings.homeHero} lang={lang} class="h-full" />
     </div>
 
     <div class="wrap relative flex min-h-0 items-center lg:min-h-[520px]">
