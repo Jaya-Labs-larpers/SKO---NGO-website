@@ -31,6 +31,7 @@ export const footerNav: { heading: UIKey; items: NavItem[] }[] = [
       { key: 'navAbout', path: '/about' },
       { key: 'navWork', path: '/programs' },
       { key: 'navImpact', path: '/impact' },
+      { key: 'navFaq', path: '/faq' },
       { key: 'navContact', path: '/contact' },
     ],
   },
@@ -63,5 +64,6 @@ export const mobileNav: NavItem[] = [
   { key: 'navReports', path: '/reports' },
   { key: 'navSafeguarding', path: '/safeguarding' },
   { key: 'navPartners', path: '/partners' },
+  { key: 'navFaq', path: '/faq' },
   { key: 'navContact', path: '/contact' },
 ];

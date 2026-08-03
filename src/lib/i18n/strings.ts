@@ -82,6 +82,8 @@ const en = {
   pageContact: 'Contact us',
   pageAbout: 'About us',
   pagePrivacy: 'Privacy',
+  pageFaq: 'Common questions',
+  navFaq: 'FAQ',
 
   // --- Footer ---------------------------------------------------------------
   footerOrganisation: 'Organisation',
@@ -252,6 +254,8 @@ const km: Record<UIKey, string> = {
   pageContact: 'ទាក់ទងមកយើង',
   pageAbout: 'អំពីយើង',
   pagePrivacy: 'ឯកជនភាព',
+  pageFaq: 'សំណួរដែលសួរញឹកញាប់',
+  navFaq: 'សំណួរ​ចម្លើយ',
 
   footerOrganisation: 'អង្គការ',
   footerTransparency: 'តម្លាភាព',

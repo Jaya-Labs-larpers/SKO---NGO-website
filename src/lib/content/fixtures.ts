@@ -536,6 +536,124 @@ export const pages: Page[] = [
     ],
   },
   {
+    _id: 'page-faq',
+    slug: 'faq',
+    title: { en: 'Common questions', km: 'សំណួរដែលសួរញឹកញាប់' },
+    intro: {
+      en: 'Answers to the questions we are asked most often by donors, partners and people who want to understand our work.',
+      km: 'ចម្លើយចំពោះសំណួរដែលយើងត្រូវបានសួរញឹកញាប់បំផុត ដោយម្ចាស់ជំនួយ ដៃគូ និងអ្នកដែលចង់យល់អំពីការងាររបស់យើង។',
+    },
+    body: enOnly([
+      'If your question is not answered here, email info@samatapheapkhnom.org.',
+    ]),
+    faqs: [
+      {
+        question: {
+          en: 'Does SKO run an orphanage or residential care centre?',
+          km: 'តើ SKO មានមណ្ឌលកុមារកំព្រា ឬមណ្ឌលថែទាំកុមារដែរឬទេ?',
+        },
+        answer: {
+          en: 'No. SKO does the opposite: our work is to prevent children being separated from their families in the first place. We provide counselling, case management and practical support so that families under pressure can stay together. Children do better in families than in institutions, and every part of the Family Development Program is built on that principle.',
+          km: 'ទេ។ SKO ធ្វើផ្ទុយពីនេះ៖ ការងាររបស់យើងគឺទប់ស្កាត់កុំឱ្យកុមារត្រូវបែកចេញពីគ្រួសារតាំងពីដំបូង។ យើងផ្តល់ការប្រឹក្សា ការគ្រប់គ្រងករណី និងជំនួយជាក់ស្តែង ដើម្បីឱ្យគ្រួសារដែលកំពុងជួបការលំបាកអាចនៅជាមួយគ្នា។ កុមាររីកចម្រើនល្អជាងនៅក្នុងគ្រួសារ ជាងនៅក្នុងមណ្ឌល។',
+        },
+      },
+      {
+        question: {
+          en: 'Is SKO a religious organisation?',
+          km: 'តើ SKO ជាអង្គការសាសនាដែរឬទេ?',
+        },
+        answer: {
+          en: 'No. SKO is a local, neutral, non-sectarian, non-political, non-racial and non-profit organisation, registered with the Cambodian Ministry of Interior. Support is offered to families on the basis of need alone, with no religious or political condition attached.',
+          km: 'ទេ។ SKO ជាអង្គការមូលដ្ឋាន អព្យាក្រឹត មិនប្រកាន់សាសនា មិនប្រកាន់នយោបាយ មិនប្រកាន់ជាតិសាសន៍ និងមិនរកប្រាក់ចំណេញ។ ជំនួយត្រូវបានផ្តល់ជូនគ្រួសារដោយផ្អែកលើតម្រូវការតែប៉ុណ្ណោះ។',
+        },
+      },
+      {
+        question: { en: 'What does SKO do?', km: 'តើ SKO ធ្វើអ្វីខ្លះ?' },
+        answer: {
+          en: 'SKO works with the most vulnerable families in Phnom Penh’s urban poor communities. Social workers visit families at home, help them identify their own needs and objectives, and connect them to health, education, administrative and economic services. The aim is for families to sustain the progress themselves after SKO withdraws.',
+          km: 'SKO ធ្វើការជាមួយគ្រួសារងាយរងគ្រោះបំផុតនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ។ បុគ្គលិកសង្គមកិច្ចទៅសួរសុខទុក្ខគ្រួសារនៅផ្ទះ ជួយពួកគេកំណត់តម្រូវការ និងគោលដៅរបស់ខ្លួន ហើយភ្ជាប់ពួកគេទៅសេវាសុខភាព អប់រំ រដ្ឋបាល និងសេដ្ឋកិច្ច។',
+        },
+      },
+      {
+        question: { en: 'Who does SKO help?', km: 'តើ SKO ជួយអ្នកណាខ្លះ?' },
+        answer: {
+          en: 'Families living in poverty in Phnom Penh’s urban poor communities, and the children and young people in them — including children at risk of separation from their families, children without birth certificates, children affected by domestic violence, children with disabilities, children affected by HIV/AIDS, and children whose parents have migrated for work.',
+          km: 'គ្រួសារដែលរស់នៅក្នុងភាពក្រីក្រនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ និងកុមារ យុវជននៅក្នុងគ្រួសារទាំងនោះ — រួមទាំងកុមារដែលប្រឈមនឹងការបែកចេញពីគ្រួសារ កុមារគ្មានសំបុត្រកំណើត កុមារដែលរងផលប៉ះពាល់ពីអំពើហិង្សាក្នុងគ្រួសារ កុមារពិការ និងកុមារដែលឪពុកម្តាយចំណាកស្រុក។',
+        },
+      },
+      {
+        question: {
+          en: 'What is the Family Development Approach?',
+          km: 'តើវិធីសាស្ត្រអភិវឌ្ឍន៍គ្រួសារជាអ្វី?',
+        },
+        answer: {
+          en: 'A structured method for working with families in poverty, built on the premise that families are not short of capability but of support, information and access. Social workers visit families at home, assess the situation together, agree objectives the family sets for itself, and work through them over a series of visits.',
+          km: 'វិធីសាស្ត្រមានរចនាសម្ព័ន្ធសម្រាប់ធ្វើការជាមួយគ្រួសារក្រីក្រ ដោយផ្អែកលើគោលការណ៍ថាគ្រួសារមិនខ្វះសមត្ថភាពទេ ប៉ុន្តែខ្វះការគាំទ្រ ព័ត៌មាន និងលទ្ធភាពទទួលបានសេវា។',
+        },
+      },
+      {
+        question: {
+          en: 'How long does SKO work with a family?',
+          km: 'តើ SKO ធ្វើការជាមួយគ្រួសារមួយរយៈពេលប៉ុន្មាន?',
+        },
+        answer: {
+          en: 'There is no fixed length. Work begins with an initial visit and a full family assessment, followed by home visits every week or twice a month. When the family’s objectives are met the case moves to phase-out — and SKO returns six months later to re-assess.',
+          km: 'គ្មានរយៈពេលកំណត់ទេ។ ការងារចាប់ផ្តើមដោយការទៅសួរសុខទុក្ខលើកដំបូង និងការវាយតម្លៃគ្រួសារពេញលេញ បន្តដោយការទៅផ្ទះរៀងរាល់សប្តាហ៍ ឬពីរដងក្នុងមួយខែ។ បន្ទាប់មក SKO ត្រឡប់មកវាយតម្លៃឡើងវិញនៅ ៦ ខែក្រោយ។',
+        },
+      },
+      {
+        question: {
+          en: 'What happens after SKO stops working with a family?',
+          km: 'តើមានអ្វីកើតឡើងបន្ទាប់ពី SKO ឈប់ធ្វើការជាមួយគ្រួសារ?',
+        },
+        answer: {
+          en: 'SKO re-assesses every family six months after phase-out. That follow-up is the point: it is the difference between a case that was closed and a family whose situation actually held.',
+          km: 'SKO វាយតម្លៃគ្រួសារនីមួយៗឡើងវិញ ៦ ខែបន្ទាប់ពីបញ្ចប់កម្មវិធី។ ការតាមដាននេះជាចំណុចសំខាន់៖ វាជាភាពខុសគ្នារវាងករណីដែលបានបិទ និងគ្រួសារដែលស្ថានភាពពិតជាបានប្រសើរឡើងជាប់លាប់។',
+        },
+      },
+      {
+        question: {
+          en: 'Why does SKO work in people’s homes rather than at a centre?',
+          km: 'ហេតុអ្វី SKO ធ្វើការនៅផ្ទះប្រជាជន ជាជាងនៅមណ្ឌល?',
+        },
+        answer: {
+          en: 'Because the obstacles are in the home. Visiting families where they live means seeing the actual conditions, and it removes the cost and time of travelling to an office — which for a family already stretched is often the reason support never starts.',
+          km: 'ព្រោះឧបសគ្គស្ថិតនៅក្នុងផ្ទះ។ ការទៅសួរសុខទុក្ខគ្រួសារនៅកន្លែងរស់នៅ មានន័យថាឃើញលក្ខខណ្ឌជាក់ស្តែង ហើយក៏លុបបំបាត់ការចំណាយ និងពេលវេលាធ្វើដំណើរទៅការិយាល័យផងដែរ។',
+        },
+      },
+      {
+        question: {
+          en: 'How does SKO measure its results?',
+          km: 'តើ SKO វាស់វែងលទ្ធផលរបស់ខ្លួនដោយរបៀបណា?',
+        },
+        answer: {
+          en: 'Cases are managed in OSCaR, the sector-standard monitoring and evaluation system used across Cambodia’s social work sector, so programme outcomes are measured rather than asserted.',
+          km: 'ករណីត្រូវបានគ្រប់គ្រងក្នុងប្រព័ន្ធ OSCaR ដែលជាប្រព័ន្ធត្រួតពិនិត្យ និងវាយតម្លៃស្តង់ដារនៃវិស័យសង្គមកិច្ចនៅកម្ពុជា ដូច្នេះលទ្ធផលកម្មវិធីត្រូវបានវាស់វែង មិនមែនគ្រាន់តែអះអាងទេ។',
+        },
+      },
+      {
+        question: {
+          en: 'Why does this website not show photographs of children?',
+          km: 'ហេតុអ្វីគេហទំព័រនេះមិនបង្ហាញរូបថតកុមារ?',
+        },
+        answer: {
+          en: 'Because a child’s safety outweighs a good photograph. Where we publish a story, names are changed and no detail that could identify a child is included. Photographs appear only where documented consent exists and the image is genuinely safe to publish.',
+          km: 'ព្រោះសុវត្ថិភាពរបស់កុមារសំខាន់ជាងរូបថតស្អាត។ នៅពេលយើងផ្សាយរឿងរ៉ាវ ឈ្មោះត្រូវបានផ្លាស់ប្តូរ ហើយគ្មានព័ត៌មានលម្អិតណាដែលអាចសម្គាល់អត្តសញ្ញាណកុមារត្រូវបានបញ្ចូលឡើយ។',
+        },
+      },
+      {
+        question: {
+          en: 'How can my organisation partner with SKO?',
+          km: 'តើអង្គការរបស់ខ្ញុំអាចក្លាយជាដៃគូជាមួយ SKO ដោយរបៀបណា?',
+        },
+        answer: {
+          en: 'SKO works in partnership with government ministries, NGOs and private-sector partners, and holds quarterly meetings with partners to work through shared challenges. Email info@samatapheapkhnom.org to start a conversation.',
+          km: 'SKO ធ្វើការជាដៃគូជាមួយក្រសួង អង្គការក្រៅរដ្ឋាភិបាល និងដៃគូវិស័យឯកជន ហើយរៀបចំកិច្ចប្រជុំប្រចាំត្រីមាសជាមួយដៃគូ។ សូមផ្ញើអ៊ីមែលទៅ info@samatapheapkhnom.org។',
+        },
+      },
+    ],
+  },
+  {
     _id: 'page-volunteer',
     slug: 'volunteer',
     title: { en: 'Volunteer', km: 'ស្ម័គ្រចិត្ត' },
