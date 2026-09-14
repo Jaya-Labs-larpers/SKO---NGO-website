@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-
-# Paginated archive pages carry noindex in the markup as well.
-Disallow: /activities/page/
-Disallow: /km/activities/page/
-
-Sitemap: https://example.org/sitemap-index.xml
-# [PLACEHOLDER] Replace the host above with the production domain in Phase 6.

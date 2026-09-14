@@ -9,6 +9,14 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadEnv } from 'vite';
+import { contentFailures, deploymentEnvironment } from './readiness.mjs';
+
+const production =
+  deploymentEnvironment({
+    ...loadEnv('production', process.cwd(), ''),
+    ...process.env,
+  }) === 'production';
 
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
 
@@ -31,13 +39,20 @@ for await (const file of htmlFiles(DIST)) {
   const page = `/${relative(DIST, file).split(sep).join('/')}`;
   const html = await readFile(file, 'utf8');
   checked += 1;
+  if (production) {
+    for (const failure of contentFailures(html, page)) check(false, page, failure);
+  }
 
   const isKhmer = page.startsWith('/km/');
   const is404 = page.includes('404');
 
   // Locale correctness
   const lang = /<html lang="([a-z-]+)"/.exec(html)?.[1];
-  check(lang === (isKhmer ? 'km' : 'en'), page, `<html lang> is "${lang}", expected "${isKhmer ? 'km' : 'en'}"`);
+  check(
+    lang === (isKhmer ? 'km' : 'en'),
+    page,
+    `<html lang> is "${lang}", expected "${isKhmer ? 'km' : 'en'}"`,
+  );
 
   // Exactly one h1
   const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;

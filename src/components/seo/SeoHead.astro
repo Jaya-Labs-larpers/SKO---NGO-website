@@ -1,10 +1,11 @@
 ---
 import { htmlLang, locales, ogLocale, type Locale } from '~/lib/i18n/config';
 import { alternatePath } from '~/lib/i18n/utils';
-import { cfAnalyticsToken, siteUrl } from '~/lib/config';
+import { cfAnalyticsToken, siteUrl, isPreviewDeployment } from '~/lib/config';
 import type { CmsImage, SiteSettings } from '~/lib/content/types';
 import { hasImage, imageUrl } from '~/lib/sanity/image';
 import { text } from '~/lib/i18n/utils';
+import { serializeJsonLd } from '~/lib/seo/json-ld';
 
 interface Props {
   lang: Locale;
@@ -114,7 +115,7 @@ const webSiteJsonLd = {
 <title>{fullTitle}</title>
 {description && <meta name="description" content={description} />}
 <link rel="canonical" href={canonical} />
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+{(noindex || isPreviewDeployment) && <meta name="robots" content="noindex, nofollow" />}
 
 {
   locales.map((locale) => (
@@ -141,9 +142,9 @@ const webSiteJsonLd = {
 {description && <meta name="twitter:description" content={description} />}
 {shareImageUrl && <meta name="twitter:image" content={shareImageUrl} />}
 
-<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-<script is:inline type="application/ld+json" set:html={JSON.stringify(webSiteJsonLd)} />
-{extraJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(extraJsonLd)} />}
+<script is:inline type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
+<script is:inline type="application/ld+json" set:html={serializeJsonLd(webSiteJsonLd)} />
+{extraJsonLd && <script is:inline type="application/ld+json" set:html={serializeJsonLd(extraJsonLd)} />}
 
 {
   cfAnalyticsToken && (

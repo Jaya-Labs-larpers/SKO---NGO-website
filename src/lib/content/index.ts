@@ -9,6 +9,8 @@
 import { sanityClient } from '../sanity/client';
 import * as q from '../sanity/queries';
 import * as fixtures from './fixtures';
+import { isProductionDeployment } from '../config';
+import { siteSettingsFailures } from '../../../scripts/readiness.mjs';
 import type {
   Activity,
   DirectorMessage,
@@ -24,14 +26,16 @@ import type {
   TeamMember,
 } from './types';
 
-async function fetchOr<T>(
-  query: string,
-  params: Record<string, unknown>,
-  fallback: T,
-): Promise<T> {
-  if (!sanityClient) return fallback;
+async function fetchOr<T>(query: string, params: Record<string, unknown>, fallback: T): Promise<T> {
+  if (!sanityClient) {
+    if (isProductionDeployment) throw new Error('[readiness] Sanity is required in production');
+    return fallback;
+  }
   try {
     const result = await sanityClient.fetch<T>(query, params);
+    if (isProductionDeployment && result == null) {
+      throw new Error('[readiness] Required published CMS document is missing');
+    }
     return (result ?? fallback) as T;
   } catch (error) {
     // Fail the build loudly. A silently empty section discovered in production
@@ -43,8 +47,13 @@ async function fetchOr<T>(
 
 /* --- Singletons ------------------------------------------------------------ */
 
-export function getSiteSettings(): Promise<SiteSettings> {
-  return fetchOr(q.siteSettingsQuery, {}, fixtures.siteSettings);
+export async function getSiteSettings(): Promise<SiteSettings> {
+  const settings = await fetchOr(q.siteSettingsQuery, {}, fixtures.siteSettings);
+  if (isProductionDeployment) {
+    const failures = siteSettingsFailures(settings);
+    if (failures.length) throw new Error(`[readiness] ${failures.join('; ')}`);
+  }
+  return settings;
 }
 
 export function getDirectorMessage(): Promise<DirectorMessage> {

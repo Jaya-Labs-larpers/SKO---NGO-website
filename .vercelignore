@@ -1,0 +1,11 @@
+.env
+.env.*
+.dev.vars
+.dev.vars.*
+.git
+.wrangler
+studio
+docs
+SKO-content-review.html
+SKO-website-preview
+SKO-website-preview.zip

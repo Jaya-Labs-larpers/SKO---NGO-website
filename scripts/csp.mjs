@@ -11,7 +11,7 @@
  *
  * So a strict CSP needs either `'unsafe-inline'` (which defeats most of the
  * point) or a hash per inline block. The hashes differ per page and change
- * whenever staff edit content, so they cannot live in a hand-written `_headers`
+ * whenever staff edit content, so they cannot live in a hand-written global
  * file — and a union of every page's hashes in one global header would be
  * kilobytes sent on every request.
  *
@@ -19,7 +19,7 @@
  * that page's exact policy into its `<meta http-equiv>` tag. Cost per response:
  * nothing. Scales to any number of activity posts.
  *
- * `frame-ancestors` cannot be set via meta, so it stays in `public/_headers`
+ * `frame-ancestors` cannot be set via meta, so it stays in `vercel.json`
  * alongside the other security headers.
  */
 

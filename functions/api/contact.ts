@@ -23,17 +23,36 @@ interface KVNamespaceLike {
 }
 
 interface Env {
+  PUBLIC_DEPLOYMENT_ENV?: string;
   TURNSTILE_SECRET_KEY?: string;
   RESEND_API_KEY?: string;
   MAIL_FROM?: string;
   CONTACT_TO_EMAIL?: string;
   PARTNER_TO_EMAIL?: string;
   RATE_LIMIT_KV?: KVNamespaceLike;
+  RATE_LIMIT_WAF_ENABLED?: string;
+}
+
+function productionConfigured(env: Env): boolean {
+  if (env.PUBLIC_DEPLOYMENT_ENV !== 'production') return true;
+  if (
+    (!env.RATE_LIMIT_KV && env.RATE_LIMIT_WAF_ENABLED !== 'true') ||
+    !env.RESEND_API_KEY?.startsWith('re_') ||
+    !env.TURNSTILE_SECRET_KEY?.startsWith('0x')
+  )
+    return false;
+  for (const value of [env.MAIL_FROM, env.CONTACT_TO_EMAIL, env.PARTNER_TO_EMAIL]) {
+    if (!value || /[\r\n]/.test(value)) return false;
+    const mailbox = /<([^<>]+)>$/.exec(value)?.[1] ?? value;
+    if (!z.email().safeParse(mailbox).success || /@example\.(com|org|net)$/i.test(mailbox)) return false;
+  }
+  return true;
 }
 
 interface FunctionContext {
   request: Request;
   env: Env;
+  clientIp?: string;
 }
 
 const RATE_LIMIT_MAX = 5;
@@ -46,6 +65,61 @@ const RATE_LIMIT_WINDOW_SECONDS = 600;
  * document just to have it rejected.
  */
 const MAX_BODY_BYTES = 32 * 1024;
+const BODY_TIMEOUT_MS = 5000;
+const SERVICE_TIMEOUT_MS = 8000;
+const KV_TIMEOUT_MS = 1000;
+
+async function bounded<T>(operation: Promise<T>, milliseconds: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      operation,
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('request_timeout')), milliseconds);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+class BodyReadError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string,
+  ) {
+    super(code);
+  }
+}
+
+async function readBody(request: Request): Promise<string> {
+  if (!request.body) return '';
+  const reader = request.body.getReader();
+  const buffer = new Uint8Array(MAX_BODY_BYTES);
+  let size = 0;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new BodyReadError(408, 'request_timeout')), BODY_TIMEOUT_MS);
+  });
+  try {
+    while (true) {
+      const { done, value } = await Promise.race([reader.read(), deadline]);
+      if (done) break;
+      if (size + value.byteLength > MAX_BODY_BYTES) {
+        throw new BodyReadError(413, 'payload_too_large');
+      }
+      buffer.set(value, size);
+      size += value.byteLength;
+    }
+    return new TextDecoder('utf-8', { fatal: true }).decode(buffer.subarray(0, size));
+  } catch (error) {
+    void reader.cancel().catch(() => {});
+    throw error;
+  } finally {
+    clearTimeout(timer);
+    reader.releaseLock();
+  }
+}
 
 const schema = z.object({
   formType: z.enum(['general', 'partner', 'volunteer']).default('general'),
@@ -65,12 +139,7 @@ const schema = z.object({
  */
 type ErrorCode = 'required' | 'email' | 'too_short' | 'too_long' | 'invalid';
 
-function codeFor(issue: {
-  code: string;
-  minimum?: unknown;
-  origin?: unknown;
-  format?: unknown;
-}): ErrorCode {
+function codeFor(issue: { code: string; minimum?: unknown; origin?: unknown; format?: unknown }): ErrorCode {
   // zod v4 reports string formats as invalid_format with `format: 'email'`.
   if (issue.code === 'invalid_format' && (issue.format === 'email' || issue.origin === 'email')) {
     return 'email';
@@ -94,13 +163,15 @@ function json(body: unknown, status = 200): Response {
 
 /** Strip control characters and collapse runaway whitespace before templating. */
 function clean(value: string, max = 5000): string {
-  return value
-    // eslint-disable-next-line no-control-regex
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
-    .replace(/\r\n/g, '\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim()
-    .slice(0, max);
+  return (
+    value
+      // eslint-disable-next-line no-control-regex
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .replace(/\r\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim()
+      .slice(0, max)
+  );
 }
 
 function escapeHtml(value: string): string {
@@ -134,19 +205,23 @@ async function isRateLimited(env: Env, ip: string): Promise<boolean> {
    * submission after a bad deploy.
    */
   if (!env.RATE_LIMIT_KV) {
+    if (env.RATE_LIMIT_WAF_ENABLED === 'true') return false;
     console.warn('[contact] RATE_LIMIT_KV binding is not configured — rate limiting is disabled');
     return false;
   }
   try {
     const key = `rl:${await hashIp(ip)}`;
-    const current = Number((await env.RATE_LIMIT_KV.get(key)) ?? '0');
+    const current = Number((await bounded(env.RATE_LIMIT_KV.get(key), KV_TIMEOUT_MS)) ?? '0');
     if (current >= RATE_LIMIT_MAX) return true;
-    await env.RATE_LIMIT_KV.put(key, String(current + 1), {
-      expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
-    });
+    await bounded(
+      env.RATE_LIMIT_KV.put(key, String(current + 1), {
+        expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
+      }),
+      KV_TIMEOUT_MS,
+    );
     return false;
   } catch {
-    // Never let a storage hiccup block a genuine inquiry.
+    console.warn('[contact] rate_limit_unavailable');
     return false;
   }
 }
@@ -160,8 +235,9 @@ async function verifyTurnstile(secret: string, token: string, ip: string): Promi
   const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
     method: 'POST',
     body,
+    signal: AbortSignal.timeout(SERVICE_TIMEOUT_MS),
   });
-  if (!response.ok) return false;
+  if (!response.ok) throw new Error('Turnstile unavailable');
   const result = (await response.json()) as { success?: boolean };
   return result.success === true;
 }
@@ -169,6 +245,7 @@ async function verifyTurnstile(secret: string, token: string, ip: string): Promi
 async function sendEmail(env: Env, to: string, subject: string, html: string, replyTo: string) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
+    signal: AbortSignal.timeout(SERVICE_TIMEOUT_MS),
     headers: {
       Authorization: `Bearer ${env.RESEND_API_KEY}`,
       'Content-Type': 'application/json',
@@ -188,7 +265,7 @@ async function sendEmail(env: Env, to: string, subject: string, html: string, re
 
 async function handlePost(context: FunctionContext): Promise<Response> {
   const { request, env } = context;
-  const ip = request.headers.get('CF-Connecting-IP') ?? '';
+  const ip = context.clientIp ?? request.headers.get('CF-Connecting-IP') ?? '';
 
   /**
    * Require a JSON content type.
@@ -200,7 +277,7 @@ async function handlePost(context: FunctionContext): Promise<Response> {
    * which this endpoint answers with 405.
    */
   const contentType = request.headers.get('Content-Type') ?? '';
-  if (!contentType.toLowerCase().includes('application/json')) {
+  if (contentType.split(';')[0]?.trim().toLowerCase() !== 'application/json') {
     return json({ ok: false, error: 'unsupported_media_type' }, 415);
   }
 
@@ -211,12 +288,10 @@ async function handlePost(context: FunctionContext): Promise<Response> {
 
   let payload: unknown;
   try {
-    const raw = await request.text();
-    if (raw.length > MAX_BODY_BYTES) {
-      return json({ ok: false, error: 'payload_too_large' }, 413);
-    }
+    const raw = await readBody(request);
     payload = JSON.parse(raw);
-  } catch {
+  } catch (error) {
+    if (error instanceof BodyReadError) return json({ ok: false, error: error.code }, error.status);
     return json({ ok: false, error: 'invalid_json' }, 400);
   }
 
@@ -239,6 +314,11 @@ async function handlePost(context: FunctionContext): Promise<Response> {
     return json({ ok: true });
   }
 
+  if (!productionConfigured(env)) {
+    console.warn('[contact] production_not_configured');
+    return json({ ok: false, error: 'not_configured' }, 500);
+  }
+
   // 2. Rate limit.
   if (await isRateLimited(env, ip)) {
     return json({ ok: false, error: 'rate_limited' }, 429);
@@ -257,12 +337,21 @@ async function handlePost(context: FunctionContext): Promise<Response> {
     return json({ ok: false, error: 'not_configured' }, 500);
   }
   const token = data['cf-turnstile-response'];
-  if (!token || !(await verifyTurnstile(env.TURNSTILE_SECRET_KEY, token, ip))) {
+  if (!token) {
     return json({ ok: false, error: 'verification_failed' }, 403);
+  }
+  try {
+    if (!(await verifyTurnstile(env.TURNSTILE_SECRET_KEY, token, ip))) {
+      return json({ ok: false, error: 'verification_failed' }, 403);
+    }
+  } catch {
+    console.warn('[contact] verification_unavailable');
+    return json({ ok: false, error: 'verification_unavailable' }, 503);
   }
 
   // 4. Route to the right inbox.
-  const to = data.formType === 'partner' ? (env.PARTNER_TO_EMAIL ?? env.CONTACT_TO_EMAIL) : env.CONTACT_TO_EMAIL;
+  const to =
+    data.formType === 'partner' ? (env.PARTNER_TO_EMAIL ?? env.CONTACT_TO_EMAIL) : env.CONTACT_TO_EMAIL;
   if (!to || !env.RESEND_API_KEY || !env.MAIL_FROM) {
     return json({ ok: false, error: 'not_configured' }, 500);
   }
@@ -300,6 +389,7 @@ async function handlePost(context: FunctionContext): Promise<Response> {
   try {
     await sendEmail(env, to, `[SKO website] ${data.formType} inquiry from ${name}`, html, email);
   } catch {
+    console.warn('[contact] send_failed');
     return json({ ok: false, error: 'send_failed' }, 502);
   }
 

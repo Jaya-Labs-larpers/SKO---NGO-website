@@ -1,0 +1,54 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "astro",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build:vercel",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/contact.ts": { "maxDuration": 30 }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "headers": {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()",
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "Strict-Transport-Security": "max-age=86400",
+        "Content-Security-Policy": "frame-ancestors 'none'"
+      },
+      "continue": true
+    },
+    {
+      "src": "/_astro/(.*)",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" },
+      "continue": true
+    },
+    {
+      "src": "/fonts/(.*)",
+      "headers": { "Cache-Control": "public, max-age=86400" },
+      "continue": true
+    },
+    {
+      "src": "/api/(.*)",
+      "headers": { "Cache-Control": "no-store" },
+      "continue": true
+    },
+    { "src": "/api/contact/?", "dest": "/api/contact" },
+    { "handle": "filesystem" },
+    {
+      "src": "/km(?:/.*)?",
+      "dest": "/km/404/index.html",
+      "status": 404,
+      "headers": { "Content-Language": "km", "Cache-Control": "no-store" }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/404.html",
+      "status": 404,
+      "headers": { "Content-Language": "en", "Cache-Control": "no-store" }
+    }
+  ]
+}

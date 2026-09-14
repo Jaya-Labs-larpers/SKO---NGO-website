@@ -8,5 +8,7 @@ export default defineCliConfig({
   // `npx sanity deploy` publishes to <hostname>.sanity.studio — free, and one
   // less thing for SKO to host or keep patched.
   studioHost: process.env.SANITY_STUDIO_HOSTNAME ?? undefined,
-  autoUpdates: true,
+  deployment: {
+    autoUpdates: false,
+  },
 });

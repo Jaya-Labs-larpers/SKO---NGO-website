@@ -3,6 +3,7 @@ import type { Locale } from '~/lib/i18n/config';
 import type { FaqItem } from '~/lib/content/types';
 import { pick, t } from '~/lib/i18n/utils';
 import SectionHeading from './SectionHeading.astro';
+import { serializeJsonLd } from '~/lib/seo/json-ld';
 
 interface Props {
   lang: Locale;
@@ -62,7 +63,7 @@ const jsonLd =
           ))}
         </dl>
       </div>
-      <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      <script is:inline type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
     </section>
   )
 }

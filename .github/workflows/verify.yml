@@ -1,11 +1,5 @@
 name: Verify
 
-# Runs on pull requests and on pushes to main.
-#
-# Deliberately NOT part of the Cloudflare production build. Cloudflare runs
-# `npm run build`; if a structural check ever tripped on a content edit, staff
-# would be unable to publish. Verification belongs here, between developers.
-
 on:
   pull_request:
   push:
@@ -31,11 +25,14 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Regression tests
+        run: npm test
+
       - name: Build and run structural checks
         run: npm run verify
 
-      - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
+      - name: Audit all dependencies
+        run: npm audit --audit-level=moderate
 
   lighthouse:
     runs-on: ubuntu-latest
@@ -91,4 +88,13 @@ jobs:
       - run: npm ci
         working-directory: studio
       - run: npm run typecheck
+        working-directory: studio
+      - run: npm test
+        working-directory: studio
+      - name: Build Studio with a non-live project ID
+        run: npm run build
+        working-directory: studio
+        env:
+          SANITY_STUDIO_PROJECT_ID: abc12345
+      - run: npm audit --audit-level=moderate
         working-directory: studio

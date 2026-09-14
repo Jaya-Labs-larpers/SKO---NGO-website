@@ -1,6 +1,9 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
+  readonly PUBLIC_DEPLOYMENT_ENV?: string;
+  readonly PUBLIC_CONTENT_SOURCE?: string;
+  readonly PUBLIC_CONTACT_ENABLED?: string;
   /** Sanity project id. Blank means "build from local fixtures". */
   readonly PUBLIC_SANITY_PROJECT_ID?: string;
   readonly PUBLIC_SANITY_DATASET?: string;

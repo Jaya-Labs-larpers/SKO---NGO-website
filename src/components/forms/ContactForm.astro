@@ -1,247 +1,429 @@
 ---
-import type { Locale } from '~/lib/i18n/config';
-import { t } from '~/lib/i18n/utils';
-import { turnstileSiteKey } from '~/lib/config';
+import type { Locale } from "~/lib/i18n/config";
+import { t } from "~/lib/i18n/utils";
+import { turnstileSiteKey, contactEnabled } from "~/lib/config";
 
 interface Props {
   lang: Locale;
-  variant?: 'general' | 'partner' | 'volunteer';
+  variant?: "general" | "partner" | "volunteer";
   /** Printed in the failure message. A broken form must never be a dead end. */
   fallbackEmail?: string | null;
 }
 
-const { lang, variant = 'general', fallbackEmail } = Astro.props;
+const { lang, variant = "general", fallbackEmail } = Astro.props;
 
 const id = `form-${variant}`;
-const showOrganization = variant === 'partner';
-const showCountry = variant === 'partner';
-const submitLabel = variant === 'partner' ? t(lang, 'formSendInquiry') : t(lang, 'formSend');
+const showOrganization = variant === "partner";
+const showCountry = variant === "partner";
+const submitLabel =
+  variant === "partner" ? t(lang, "formSendInquiry") : t(lang, "formSend");
 ---
+
+{
+  !contactEnabled && (
+    <p
+      class="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm"
+      role="note"
+    >
+      {lang === "km"
+        ? "នេះជាគេហទំព័រសាកល្បង។ ការផ្ញើទម្រង់ត្រូវបានបិទ។"
+        : "Preview only. Form submissions are disabled; no enquiries will be sent."}
+    </p>
+  )
+}
 
 <form
   id={id}
   class="grid max-w-[600px] gap-4.5"
   novalidate
   data-form-type={variant}
-  data-msg-sending={t(lang, 'formSending')}
+  data-preview-disabled={!contactEnabled ? "true" : undefined}
+  data-msg-sending={t(lang, "formSending")}
   data-msg-submit={submitLabel}
-  data-msg-success-title={t(lang, 'formSuccessTitle')}
-  data-msg-success-body={t(lang, 'formSuccessBody')}
-  data-msg-error-title={t(lang, 'formErrorTitle')}
-  data-msg-error-body={t(lang, 'formErrorBody')}
-  data-fallback-email={fallbackEmail ?? ''}
-  data-err-required={t(lang, 'errRequired')}
-  data-err-email={t(lang, 'errEmail')}
-  data-err-short={t(lang, 'errTooShort')}
-  data-err-long={t(lang, 'errTooLong')}
+  data-msg-success-title={t(lang, "formSuccessTitle")}
+  data-msg-success-body={t(lang, "formSuccessBody")}
+  data-msg-error-title={t(lang, "formErrorTitle")}
+  data-msg-error-body={t(lang, "formErrorBody")}
+  data-fallback-email={fallbackEmail ?? ""}
+  data-err-required={t(lang, "errRequired")}
+  data-err-email={t(lang, "errEmail")}
+  data-err-short={t(lang, "errTooShort")}
+  data-err-long={t(lang, "errTooLong")}
 >
-  <div class="grid gap-1.5">
-    <label for={`${id}-name`} class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]">
-      {t(lang, 'formName')}
-      <span class="ml-0.5 text-[color:var(--color-danger-700)]" aria-hidden="true">*</span>
-      <span class="sr-only-focusable">({t(lang, 'formRequired')})</span>
-    </label>
-    <input class="field" id={`${id}-name`} name="name" type="text" autocomplete="name" required maxlength="120" />
-    <p class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]" data-error-for="name"></p>
-  </div>
-
-  {
-    showOrganization && (
-      <div class="grid gap-1.5">
-        <label for={`${id}-organization`} class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]">
-          {t(lang, 'formOrganization')}
-          <span class="ml-0.5 text-[color:var(--color-danger-700)]" aria-hidden="true">*</span>
-        </label>
-        <input class="field" id={`${id}-organization`} name="organization" type="text" autocomplete="organization" required maxlength="160" />
-        <p class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]" data-error-for="organization" />
-      </div>
-    )
-  }
-
-  <div class="grid gap-1.5">
-    <label for={`${id}-email`} class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]">
-      {t(lang, 'formEmail')}
-      <span class="ml-0.5 text-[color:var(--color-danger-700)]" aria-hidden="true">*</span>
-    </label>
-    <input class="field" id={`${id}-email`} name="email" type="email" autocomplete="email" required maxlength="200" />
-    <p class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]" data-error-for="email"></p>
-  </div>
-
-  {
-    showCountry && (
-      <div class="grid gap-1.5">
-        <label for={`${id}-country`} class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]">
-          {t(lang, 'formCountry')}
-          <span class="text-[color:var(--color-ink-400)]"> ({t(lang, 'formOptional')})</span>
-        </label>
-        <input class="field" id={`${id}-country`} name="country" type="text" autocomplete="country-name" maxlength="80" />
-      </div>
-    )
-  }
-
-  <div class="grid gap-1.5">
-    <label for={`${id}-message`} class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]">
-      {t(lang, 'formMessage')}
-      <span class="ml-0.5 text-[color:var(--color-danger-700)]" aria-hidden="true">*</span>
-    </label>
-    <textarea class="field" id={`${id}-message`} name="message" rows="5" required maxlength="5000"></textarea>
-    <p class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]" data-error-for="message"></p>
-  </div>
-
-  <!-- Honeypot. Off-screen, aria-hidden, never announced or tabbed to. -->
-  <div class="honeypot" aria-hidden="true">
-    <label for={`${id}-website`}>{t(lang, 'formHoneypotLabel')}</label>
-    <input id={`${id}-website`} name="company_website" type="text" tabindex="-1" autocomplete="off" />
-  </div>
-
-  {
-    turnstileSiteKey ? (
-      <div>
-        <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="light" data-language={lang} />
-      </div>
-    ) : (
-      <p class="rounded-[var(--radius-md)] border border-dashed border-[color:var(--color-line-strong)] bg-[color:var(--color-surface-subtle)] px-4 py-3 font-mono text-[12px] text-[color:var(--color-ink-400)]">
-        [PUBLIC_TURNSTILE_SITE_KEY not set — the spam check widget renders here]
+  <fieldset disabled={!contactEnabled} class="contents">
+    <div class="grid gap-1.5">
+      <label
+        for={`${id}-name`}
+        class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
+      >
+        {t(lang, "formName")}
+        <span
+          class="ml-0.5 text-[color:var(--color-danger-700)]"
+          aria-hidden="true">*</span
+        >
+        <span class="sr-only-focusable">({t(lang, "formRequired")})</span>
+      </label>
+      <input
+        class="field"
+        id={`${id}-name`}
+        name="name"
+        type="text"
+        autocomplete="name"
+        required
+        maxlength="120"
+      />
+      <p
+        class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
+        data-error-for="name"
+      >
       </p>
-    )
-  }
+    </div>
 
-  <div>
-    <button type="submit" class="btn btn-primary" data-submit>{submitLabel}</button>
-  </div>
+    {
+      showOrganization && (
+        <div class="grid gap-1.5">
+          <label
+            for={`${id}-organization`}
+            class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
+          >
+            {t(lang, "formOrganization")}
+            <span
+              class="ml-0.5 text-[color:var(--color-danger-700)]"
+              aria-hidden="true"
+            >
+              *
+            </span>
+          </label>
+          <input
+            class="field"
+            id={`${id}-organization`}
+            name="organization"
+            type="text"
+            autocomplete="organization"
+            required
+            maxlength="160"
+          />
+          <p
+            class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
+            data-error-for="organization"
+          />
+        </div>
+      )
+    }
 
-  <!--
+    <div class="grid gap-1.5">
+      <label
+        for={`${id}-email`}
+        class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
+      >
+        {t(lang, "formEmail")}
+        <span
+          class="ml-0.5 text-[color:var(--color-danger-700)]"
+          aria-hidden="true">*</span
+        >
+      </label>
+      <input
+        class="field"
+        id={`${id}-email`}
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        maxlength="200"
+      />
+      <p
+        class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
+        data-error-for="email"
+      >
+      </p>
+    </div>
+
+    {
+      showCountry && (
+        <div class="grid gap-1.5">
+          <label
+            for={`${id}-country`}
+            class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
+          >
+            {t(lang, "formCountry")}
+            <span class="text-[color:var(--color-ink-400)]">
+              {" "}
+              ({t(lang, "formOptional")})
+            </span>
+          </label>
+          <input
+            class="field"
+            id={`${id}-country`}
+            name="country"
+            type="text"
+            autocomplete="country-name"
+            maxlength="80"
+          />
+        </div>
+      )
+    }
+
+    <div class="grid gap-1.5">
+      <label
+        for={`${id}-message`}
+        class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
+      >
+        {t(lang, "formMessage")}
+        <span
+          class="ml-0.5 text-[color:var(--color-danger-700)]"
+          aria-hidden="true">*</span
+        >
+      </label>
+      <textarea
+        class="field"
+        id={`${id}-message`}
+        name="message"
+        rows="5"
+        required
+        maxlength="5000"></textarea>
+      <p
+        class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
+        data-error-for="message"
+      >
+      </p>
+    </div>
+
+    <!-- Honeypot. Off-screen, aria-hidden, never announced or tabbed to. -->
+    <div class="honeypot" aria-hidden="true">
+      <label for={`${id}-website`}>{t(lang, "formHoneypotLabel")}</label>
+      <input
+        id={`${id}-website`}
+        name="company_website"
+        type="text"
+        tabindex="-1"
+        autocomplete="off"
+      />
+    </div>
+
+    {
+      contactEnabled && turnstileSiteKey ? (
+        <div>
+          <div
+            id={`${id}-turnstile`}
+            class="cf-turnstile"
+            data-sitekey={turnstileSiteKey}
+            data-theme="light"
+            data-language={lang}
+          />
+        </div>
+      ) : contactEnabled ? (
+        <p class="rounded-[var(--radius-md)] border border-dashed border-[color:var(--color-line-strong)] bg-[color:var(--color-surface-subtle)] px-4 py-3 font-mono text-[12px] text-[color:var(--color-ink-400)]">
+          [PUBLIC_TURNSTILE_SITE_KEY not set — the spam check widget renders
+          here]
+        </p>
+      ) : null
+    }
+
+    <div>
+      <button type="submit" class="btn btn-primary" data-submit
+        >{submitLabel}</button
+      >
+    </div>
+
+    <!--
     Status region. aria-live="polite" so a screen reader hears the outcome
     without the focus moving out from under the user.
   -->
-  <div data-status role="status" aria-live="polite" class="empty:hidden"></div>
+    <div data-status role="status" aria-live="polite" class="empty:hidden">
+    </div>
+  </fieldset>
 </form>
 
-{turnstileSiteKey && <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js" />}
+{
+  contactEnabled && turnstileSiteKey && (
+    <script
+      is:inline
+      async
+      defer
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    />
+  )
+}
 
 <script>
   const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-  document.querySelectorAll<HTMLFormElement>('form[data-form-type]').forEach((form) => {
-    const submit = form.querySelector<HTMLButtonElement>('[data-submit]');
-    const status = form.querySelector<HTMLElement>('[data-status]');
-    if (!submit || !status) return;
+  document
+    .querySelectorAll<HTMLFormElement>("form[data-form-type]")
+    .forEach((form) => {
+      if (form.dataset.previewDisabled === "true") return;
+      const submit = form.querySelector<HTMLButtonElement>("[data-submit]");
+      const status = form.querySelector<HTMLElement>("[data-status]");
+      if (!submit || !status) return;
 
-    const showFieldError = (name: string, message: string) => {
-      const input = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`);
-      const target = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
-      if (!input || !target) return;
-      input.setAttribute('aria-invalid', 'true');
-      input.setAttribute('aria-describedby', target.id || (target.id = `${name}-error`));
-      target.textContent = `⚠ ${message}`;
-      target.classList.remove('hidden');
-    };
+      const showFieldError = (name: string, message: string) => {
+        const input = form.querySelector<
+          HTMLInputElement | HTMLTextAreaElement
+        >(`[name="${name}"]`);
+        const target = form.querySelector<HTMLElement>(
+          `[data-error-for="${name}"]`,
+        );
+        if (!input || !target) return;
+        input.setAttribute("aria-invalid", "true");
+        input.setAttribute(
+          "aria-describedby",
+          target.id || (target.id = `${name}-error`),
+        );
+        target.textContent = `⚠ ${message}`;
+        target.classList.remove("hidden");
+      };
 
-    const clearErrors = () => {
-      form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((node) => {
-        node.textContent = '';
-        node.classList.add('hidden');
-      });
-      form.querySelectorAll('[aria-invalid]').forEach((node) => node.removeAttribute('aria-invalid'));
-    };
+      const clearErrors = () => {
+        form
+          .querySelectorAll<HTMLElement>("[data-error-for]")
+          .forEach((node) => {
+            node.textContent = "";
+            node.classList.add("hidden");
+          });
+        form
+          .querySelectorAll("[aria-invalid]")
+          .forEach((node) => node.removeAttribute("aria-invalid"));
+      };
 
-    const banner = (tone: 'success' | 'error', title: string, body: string) => {
-      const email = form.dataset.fallbackEmail;
-      const emailLink =
-        tone === 'error' && email ? ` <a href="mailto:${email}" style="color:inherit">${email}</a>.` : '';
-      const colours =
-        tone === 'success'
-          ? 'background:var(--color-success-50);border-color:rgb(6 118 71/.25);color:var(--color-success-700)'
-          : 'background:var(--color-danger-50);border-color:rgb(180 35 24/.25);color:var(--color-danger-700)';
-      status.innerHTML =
-        `<div style="${colours}" class="flex items-start gap-2.5 rounded-[var(--radius-md)] border px-4 py-3.5 text-[14.5px] font-medium">` +
-        `<span aria-hidden="true">${tone === 'success' ? '✓' : '⚠'}</span>` +
-        `<span><b style="display:block">${title}</b>${body}${emailLink}</span></div>`;
-    };
+      const banner = (
+        tone: "success" | "error",
+        title: string,
+        body: string,
+      ) => {
+        const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+        })[character]!);
+        const email = form.dataset.fallbackEmail;
+        const emailLink =
+          tone === "error" && email
+            ? ` <a href="mailto:${encodeURIComponent(email)}" style="color:inherit">${escapeHtml(email)}</a>.`
+            : "";
+        const colours =
+          tone === "success"
+            ? "background:var(--color-success-50);border-color:rgb(6 118 71/.25);color:var(--color-success-700)"
+            : "background:var(--color-danger-50);border-color:rgb(180 35 24/.25);color:var(--color-danger-700)";
+        status.innerHTML =
+          `<div style="${colours}" class="flex items-start gap-2.5 rounded-[var(--radius-md)] border px-4 py-3.5 text-[14.5px] font-medium">` +
+          `<span aria-hidden="true">${tone === "success" ? "✓" : "⚠"}</span>` +
+          `<span><b style="display:block">${escapeHtml(title)}</b>${escapeHtml(body)}${emailLink}</span></div>`;
+      };
 
-    /** Client-side validation is a courtesy. The Function validates again, server-side. */
-    const validate = (data: FormData): boolean => {
-      clearErrors();
-      let valid = true;
+      /** Client-side validation is a courtesy. The Function validates again, server-side. */
+      const validate = (data: FormData): boolean => {
+        clearErrors();
+        let valid = true;
 
-      for (const name of ['name', 'organization', 'message'] as const) {
-        const field = form.querySelector(`[name="${name}"]`);
-        if (!field) continue;
-        if (String(data.get(name) ?? '').trim() === '') {
-          showFieldError(name, form.dataset.errRequired ?? 'Required');
+        for (const name of ["name", "organization", "message"] as const) {
+          const field = form.querySelector(`[name="${name}"]`);
+          if (!field) continue;
+          if (String(data.get(name) ?? "").trim() === "") {
+            showFieldError(name, form.dataset.errRequired ?? "Required");
+            valid = false;
+          }
+        }
+
+        const message = String(data.get("message") ?? "").trim();
+        if (message !== "" && message.length < 20) {
+          showFieldError("message", form.dataset.errShort ?? "Too short");
           valid = false;
         }
-      }
 
-      const message = String(data.get('message') ?? '').trim();
-      if (message !== '' && message.length < 20) {
-        showFieldError('message', form.dataset.errShort ?? 'Too short');
-        valid = false;
-      }
-
-      const email = String(data.get('email') ?? '').trim();
-      if (!EMAIL_PATTERN.test(email)) {
-        showFieldError('email', form.dataset.errEmail ?? 'Invalid email');
-        valid = false;
-      }
-
-      return valid;
-    };
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const data = new FormData(form);
-      if (!validate(data)) {
-        form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
-        return;
-      }
-
-      submit.disabled = true;
-      submit.textContent = form.dataset.msgSending ?? 'Sending…';
-      status.innerHTML = '';
-
-      try {
-        const payload: Record<string, string> = { formType: form.dataset.formType ?? 'general' };
-        data.forEach((value, key) => {
-          payload[key] = String(value);
-        });
-
-        const response = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        const result = (await response.json().catch(() => ({}))) as {
-          ok?: boolean;
-          fieldErrors?: Record<string, string>;
-        };
-
-        if (response.ok && result.ok) {
-          form.reset();
-          (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
-          banner('success', form.dataset.msgSuccessTitle ?? '', form.dataset.msgSuccessBody ?? '');
-        } else if (result.fieldErrors) {
-          // The Function returns codes; the message is rendered in this page's language.
-          const messages: Record<string, string | undefined> = {
-            required: form.dataset.errRequired,
-            email: form.dataset.errEmail,
-            too_short: form.dataset.errShort,
-            too_long: form.dataset.errLong,
-            invalid: form.dataset.errRequired,
-          };
-          for (const [field, code] of Object.entries(result.fieldErrors)) {
-            showFieldError(field, messages[code] ?? form.dataset.errRequired ?? '');
-          }
-          form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
-        } else {
-          banner('error', form.dataset.msgErrorTitle ?? '', form.dataset.msgErrorBody ?? '');
+        const email = String(data.get("email") ?? "").trim();
+        if (!EMAIL_PATTERN.test(email)) {
+          showFieldError("email", form.dataset.errEmail ?? "Invalid email");
+          valid = false;
         }
-      } catch {
-        banner('error', form.dataset.msgErrorTitle ?? '', form.dataset.msgErrorBody ?? '');
-      } finally {
-        submit.disabled = false;
-        submit.textContent = form.dataset.msgSubmit ?? 'Send';
-      }
+
+        return valid;
+      };
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        if (!validate(data)) {
+          form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+          return;
+        }
+
+        submit.disabled = true;
+        submit.textContent = form.dataset.msgSending ?? "Sending…";
+        status.innerHTML = "";
+
+        try {
+          const payload: Record<string, string> = {
+            formType: form.dataset.formType ?? "general",
+          };
+          data.forEach((value, key) => {
+            payload[key] = String(value);
+          });
+
+          const response = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout(25000),
+          });
+          const result = (await response.json().catch(() => ({}))) as {
+            ok?: boolean;
+            fieldErrors?: Record<string, string>;
+          };
+
+          if (response.ok && result.ok) {
+            form.reset();
+            banner(
+              "success",
+              form.dataset.msgSuccessTitle ?? "",
+              form.dataset.msgSuccessBody ?? "",
+            );
+          } else if (result.fieldErrors) {
+            // The Function returns codes; the message is rendered in this page's language.
+            const messages: Record<string, string | undefined> = {
+              required: form.dataset.errRequired,
+              email: form.dataset.errEmail,
+              too_short: form.dataset.errShort,
+              too_long: form.dataset.errLong,
+              invalid: form.dataset.errRequired,
+            };
+            for (const [field, code] of Object.entries(result.fieldErrors)) {
+              showFieldError(
+                field,
+                messages[code] ?? form.dataset.errRequired ?? "",
+              );
+            }
+            form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+          } else {
+            banner(
+              "error",
+              form.dataset.msgErrorTitle ?? "",
+              form.dataset.msgErrorBody ?? "",
+            );
+          }
+        } catch {
+          banner(
+            "error",
+            form.dataset.msgErrorTitle ?? "",
+            form.dataset.msgErrorBody ?? "",
+          );
+        } finally {
+          const widget = form.querySelector<HTMLElement>(".cf-turnstile");
+          if (widget) {
+            try {
+              (
+                window as unknown as {
+                  turnstile?: { reset: (widget: string) => void };
+                }
+              ).turnstile?.reset(`#${widget.id}`);
+            } catch {
+              banner(
+                "error",
+                form.dataset.msgErrorTitle ?? "",
+                form.dataset.msgErrorBody ?? "",
+              );
+            }
+          }
+          submit.disabled = false;
+          submit.textContent = form.dataset.msgSubmit ?? "Send";
+        }
+      });
     });
-  });
 </script>
