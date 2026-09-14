@@ -1,9 +1,10 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
-import { getImpactStats, getStories } from '~/lib/content';
+import { getImpactStats, getPage, getStories } from '~/lib/content';
 import { localizePath, t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
+import RichText from '~/components/content/RichText.astro';
 import ImpactStats from '~/components/content/ImpactStats.astro';
 import StoryQuote from '~/components/content/StoryQuote.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
@@ -14,7 +15,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const [stats, stories] = await Promise.all([getImpactStats(), getStories()]);
+const [stats, stories, page] = await Promise.all([getImpactStats(), getStories(), getPage('impact')]);
 const heading = t(lang, 'pageImpact');
 ---
 
@@ -34,6 +35,7 @@ const heading = t(lang, 'pageImpact');
       >
         <b>{t(lang, 'methodologyTitle')}</b> {t(lang, 'methodologyBody')}
       </p>
+      <RichText blocks={page?.body} lang={lang} class="mt-8" />
     </div>
   </section>
 

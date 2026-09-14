@@ -124,7 +124,7 @@ const en = {
   errEmail: 'Enter a complete email address, for example name@example.org',
   errTooShort: 'Please write a little more so we can help.',
   errTooLong: 'That message is too long. Please shorten it.',
-  formSuccessTitle: 'Thank you — your message has been sent.',
+  formSuccessTitle: 'Thank you. Your message has been sent.',
   formSuccessBody: 'Nothing you typed is stored on this website.',
   formErrorTitle: "We couldn't send that.",
   formErrorBody: 'Please try again, or email us directly at',
@@ -144,34 +144,33 @@ const en = {
   // a Khmer page. In Phase 4 they move into Sanity `page` documents so staff
   // can edit them; the keys stay as the fallback.
   homeHeroIntro:
-    '[PLACEHOLDER] We work alongside Cambodian families to keep children protected, supported and together — through family care, child protection and the prevention of gender-based violence.',
-  introPrograms:
-    '[PLACEHOLDER] Three programs, one goal: a child growing up safe, in a family, in their own community.',
-  introActivities: '[PLACEHOLDER] What our teams are doing, month by month.',
+    'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities.',
+  introPrograms: 'Four projects, one approach: a child growing up safe, in a family, in their own community.',
+  introActivities: 'What our teams are doing, month by month.',
   introImpact:
-    '[PLACEHOLDER] What we have done, how we count it, and what the families we work with say.',
+    'What we have done, how we count it, and what the families we work with say.',
   introReports:
-    '[PLACEHOLDER] Our annual reports, audited financial statements and governance documents.',
-  introPartners: '[PLACEHOLDER] The institutions and organisations we work alongside.',
+    'Our annual reports, audited financial statements and governance documents.',
+  introPartners: 'The institutions and organisations we work alongside.',
   introCareers:
-    '[PLACEHOLDER] Open positions. Applications are by email — we do not accept uploads through this website.',
+    'Open positions. Applications are by email. We do not accept uploads through this website.',
   introContact:
-    '[PLACEHOLDER] Our office address, phone and email, and a form for general enquiries.',
-  donateHeroTitle: '[PLACEHOLDER] Give directly. No middleman.',
+    'Our office address, phone and email, and a form for general enquiries.',
+  donateHeroTitle: 'Give directly. No middleman.',
   donateHeroIntro:
-    '[PLACEHOLDER] Scan a QR code from your banking app, or transfer internationally using the details below.',
-  methodologyTitle: '[PLACEHOLDER] How we count.',
+    'Scan a QR code from your banking app, or transfer internationally using the details below.',
+  methodologyTitle: 'How we count.',
   methodologyBody:
-    '[PLACEHOLDER] A short note explaining the methodology behind these figures — what counts as a family supported, over what period, and who verifies it. A number without this note is marketing; a number with it is evidence.',
-  ctaHomeTitle: '[PLACEHOLDER] Your support keeps a child with their family.',
+    'Figures come from SKO’s project monitoring and partner reports for each project’s period; cases are managed in OSCaR.',
+  ctaHomeTitle: 'Your support keeps a child with their family.',
   ctaHomeBody:
-    '[PLACEHOLDER] Give once or monthly by QR or bank transfer — every riel is accounted for in our annual report.',
-  ctaAboutTitle: '[PLACEHOLDER] Support the families we work with.',
-  ctaAboutBody: '[PLACEHOLDER] Every donation is accounted for in our published annual report.',
-  ctaProgramsTitle: '[PLACEHOLDER] Fund a program.',
-  ctaProgramTitle: '[PLACEHOLDER] Support this program.',
-  ctaImpactTitle: '[PLACEHOLDER] Help us reach more families.',
-  ctaPartnersTitle: '[PLACEHOLDER] Work with us.',
+    'Give once or monthly by QR or bank transfer. It is accounted for in our published annual and audit reports.',
+  ctaAboutTitle: 'Support the families we work with.',
+  ctaAboutBody: 'Every donation is accounted for in our published annual and audit reports.',
+  ctaProgramsTitle: 'Fund a program.',
+  ctaProgramTitle: 'Support this program.',
+  ctaImpactTitle: 'Help us reach more families.',
+  ctaPartnersTitle: 'Work with us.',
   mapPlaceholder: '[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]',
 
   // --- Meta -----------------------------------------------------------------
@@ -293,7 +292,7 @@ const km: Record<UIKey, string> = {
   errEmail: 'សូមបញ្ចូលអាសយដ្ឋានអ៊ីមែលពេញលេញ ឧទាហរណ៍ name@example.org',
   errTooShort: 'សូមសរសេរបន្ថែមទៀត ដើម្បីឱ្យយើងអាចជួយបាន។',
   errTooLong: 'សារវែងពេក។ សូមកាត់បន្ថយ។',
-  formSuccessTitle: 'សូមអរគុណ — សាររបស់អ្នកត្រូវបានផ្ញើ។',
+  formSuccessTitle: 'សូមអរគុណ។ សាររបស់អ្នកត្រូវបានផ្ញើ។',
   formSuccessBody: 'អ្វីដែលអ្នកបានវាយបញ្ចូល មិនត្រូវបានរក្សាទុកនៅលើគេហទំព័រនេះទេ។',
   formErrorTitle: 'យើងមិនអាចផ្ញើសារបានទេ។',
   formErrorBody: 'សូមព្យាយាមម្តងទៀត ឬផ្ញើអ៊ីមែលមកយើងដោយផ្ទាល់តាម',
@@ -308,33 +307,33 @@ const km: Record<UIKey, string> = {
   notFoundCta: 'ត្រឡប់ទៅទំព័រដើម',
 
   homeHeroIntro:
-    '[PLACEHOLDER] យើងធ្វើការជាមួយគ្រួសារកម្ពុជា ដើម្បីរក្សាកុមារឱ្យមានសុវត្ថិភាព ទទួលបានការគាំទ្រ និងនៅជាមួយគ្រួសារ — តាមរយៈការថែទាំគ្រួសារ ការការពារកុមារ និងការទប់ស្កាត់អំពើហិង្សាលើយេនឌ័រ។',
+    'អង្គការសមត្ថភាពខ្ញុំ (SKO) ជាអង្គការក្រៅរដ្ឋាភិបាលក្នុងស្រុករបស់កម្ពុជា ដែលធ្វើការគាំទ្រកុមារ គ្រួសារ និងសហគមន៍ងាយរងគ្រោះ ជាពិសេសនៅសហគមន៍ក្រីក្រទីក្រុង និងសហគមន៍ចំណាកស្រុក។',
   introPrograms:
-    '[PLACEHOLDER] កម្មវិធីបីយ៉ាង គោលដៅតែមួយ៖ កុមារធំធាត់ដោយសុវត្ថិភាព ក្នុងគ្រួសារ និងក្នុងសហគមន៍ខ្លួនឯង។',
-  introActivities: '[PLACEHOLDER] អ្វីដែលក្រុមការងាររបស់យើងកំពុងធ្វើ ពីខែមួយទៅខែមួយ។',
+    'គម្រោងបួន វិធីសាស្ត្រតែមួយ៖ កុមារធំធាត់ដោយសុវត្ថិភាព ក្នុងគ្រួសារ និងក្នុងសហគមន៍ខ្លួនឯង។',
+  introActivities: 'អ្វីដែលក្រុមការងាររបស់យើងកំពុងធ្វើ ពីខែមួយទៅខែមួយ។',
   introImpact:
-    '[PLACEHOLDER] អ្វីដែលយើងបានធ្វើ របៀបដែលយើងរាប់ និងអ្វីដែលគ្រួសារដែលយើងធ្វើការជាមួយបាននិយាយ។',
+    'អ្វីដែលយើងបានធ្វើ របៀបដែលយើងរាប់ និងអ្វីដែលគ្រួសារដែលយើងធ្វើការជាមួយបាននិយាយ។',
   introReports:
-    '[PLACEHOLDER] របាយការណ៍ប្រចាំឆ្នាំ របាយការណ៍ហិរញ្ញវត្ថុដែលបានធ្វើសវនកម្ម និងឯកសារអភិបាលកិច្ចរបស់យើង។',
-  introPartners: '[PLACEHOLDER] ស្ថាប័ន និងអង្គការដែលយើងធ្វើការជាមួយ។',
+    'របាយការណ៍ប្រចាំឆ្នាំ របាយការណ៍ហិរញ្ញវត្ថុដែលបានធ្វើសវនកម្ម និងឯកសារអភិបាលកិច្ចរបស់យើង។',
+  introPartners: 'ស្ថាប័ន និងអង្គការដែលយើងធ្វើការជាមួយ។',
   introCareers:
-    '[PLACEHOLDER] មុខតំណែងទំនេរ។ ការដាក់ពាក្យធ្វើតាមអ៊ីមែល — យើងមិនទទួលឯកសារតាមគេហទំព័រនេះទេ។',
-  introContact: '[PLACEHOLDER] អាសយដ្ឋានការិយាល័យ លេខទូរស័ព្ទ អ៊ីមែល និងទម្រង់សម្រាប់សំណួរទូទៅ។',
-  donateHeroTitle: '[PLACEHOLDER] បរិច្ចាគដោយផ្ទាល់ ដោយគ្មានអន្តរការី។',
+    'មុខតំណែងទំនេរ។ ការដាក់ពាក្យធ្វើតាមអ៊ីមែល។ យើងមិនទទួលឯកសារតាមគេហទំព័រនេះទេ។',
+  introContact: 'អាសយដ្ឋានការិយាល័យ លេខទូរស័ព្ទ អ៊ីមែល និងទម្រង់សម្រាប់សំណួរទូទៅ។',
+  donateHeroTitle: 'បរិច្ចាគដោយផ្ទាល់ ដោយគ្មានអន្តរការី។',
   donateHeroIntro:
-    '[PLACEHOLDER] ស្កេន QR កូដពីកម្មវិធីធនាគាររបស់អ្នក ឬផ្ទេរប្រាក់ពីបរទេសដោយប្រើព័ត៌មានខាងក្រោម។',
-  methodologyTitle: '[PLACEHOLDER] របៀបដែលយើងរាប់។',
+    'ស្កេន QR កូដពីកម្មវិធីធនាគាររបស់អ្នក ឬផ្ទេរប្រាក់ពីបរទេសដោយប្រើព័ត៌មានខាងក្រោម។',
+  methodologyTitle: 'របៀបដែលយើងរាប់។',
   methodologyBody:
-    '[PLACEHOLDER] កំណត់សម្គាល់ខ្លីពន្យល់អំពីវិធីសាស្ត្រនៅពីក្រោយតួលេខទាំងនេះ — អ្វីដែលរាប់ថាជាគ្រួសារដែលបានជួយ ក្នុងរយៈពេលប៉ុន្មាន និងអ្នកណាជាអ្នកផ្ទៀងផ្ទាត់។',
-  ctaHomeTitle: '[PLACEHOLDER] ការគាំទ្ររបស់អ្នក រក្សាកុមារឱ្យនៅជាមួយគ្រួសារ។',
+    'តួលេខទាំងនេះមកពីការត្រួតពិនិត្យគម្រោង និងរបាយការណ៍ដៃគូរបស់ SKO សម្រាប់រយៈពេលនីមួយៗនៃគម្រោង៖ ករណីត្រូវបានគ្រប់គ្រងក្នុងប្រព័ន្ធ OSCaR។',
+  ctaHomeTitle: 'ការគាំទ្ររបស់អ្នក រក្សាកុមារឱ្យនៅជាមួយគ្រួសារ។',
   ctaHomeBody:
-    '[PLACEHOLDER] បរិច្ចាគម្តង ឬរៀងរាល់ខែ តាម QR ឬការផ្ទេរតាមធនាគារ — រាល់ប្រាក់រៀលត្រូវបានរាយការណ៍ក្នុងរបាយការណ៍ប្រចាំឆ្នាំ។',
-  ctaAboutTitle: '[PLACEHOLDER] គាំទ្រគ្រួសារដែលយើងធ្វើការជាមួយ។',
-  ctaAboutBody: '[PLACEHOLDER] រាល់ការបរិច្ចាគត្រូវបានរាយការណ៍ក្នុងរបាយការណ៍ប្រចាំឆ្នាំរបស់យើង។',
-  ctaProgramsTitle: '[PLACEHOLDER] ឧបត្ថម្ភកម្មវិធីមួយ។',
-  ctaProgramTitle: '[PLACEHOLDER] គាំទ្រកម្មវិធីនេះ។',
-  ctaImpactTitle: '[PLACEHOLDER] ជួយយើងឱ្យទៅដល់គ្រួសារកាន់តែច្រើន។',
-  ctaPartnersTitle: '[PLACEHOLDER] ធ្វើការជាមួយយើង។',
+    'បរិច្ចាគម្តង ឬរៀងរាល់ខែ តាម QR ឬការផ្ទេរតាមធនាគារ។ វាត្រូវបានរាយការណ៍ក្នុងរបាយការណ៍ប្រចាំឆ្នាំ និងសវនកម្មដែលបានផ្សព្វផ្សាយរបស់យើង។',
+  ctaAboutTitle: 'គាំទ្រគ្រួសារដែលយើងធ្វើការជាមួយ។',
+  ctaAboutBody: 'រាល់ការបរិច្ចាគត្រូវបានរាយការណ៍ក្នុងរបាយការណ៍ប្រចាំឆ្នាំ និងសវនកម្មដែលបានផ្សព្វផ្សាយរបស់យើង។',
+  ctaProgramsTitle: 'ឧបត្ថម្ភគម្រោងមួយ។',
+  ctaProgramTitle: 'គាំទ្រគម្រោងនេះ។',
+  ctaImpactTitle: 'ជួយយើងឱ្យទៅដល់គ្រួសារកាន់តែច្រើន។',
+  ctaPartnersTitle: 'ធ្វើការជាមួយយើង។',
   mapPlaceholder: '[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]',
 
   fileSizeLabel: 'ទំហំឯកសារ',

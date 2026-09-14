@@ -149,7 +149,7 @@ sections.push(`
 // --- Programmes
 sections.push(`
 <section id="programs">
-  <h2>3. Our work — the five programme pages</h2>
+  <h2>3. Our work — the four programme pages</h2>
   ${programs
     .map(
       (program, index) => `

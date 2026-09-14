@@ -102,3 +102,39 @@ Separate from the questions, these are still outstanding:
   (currently a sample number is shown, clearly marked as a sample)
 - **A short message from the Director**, plus a photograph
 - **Khmer translation review** of the interface text
+
+---
+
+## Update — content now live from the ED-reviewed document
+
+The content document ("SKO (Website) 14 August 2026 Last review by ED.docx") has been used to
+replace the placeholder copy across the site. Programs are now the four funded projects from the
+document — HALI, Children's Active Citizenship, Promoting Children's Education and Health through
+FDP, and Resilient City and Migration Dynamics (RCMD) — including each project's Purpose, Highlight
+Activities, Partner, and Impact & Results. The About, Director's message, Impact, Safeguarding and
+Partner-with-us pages, the site-wide impact statistics, the partner list and the reports list are
+all updated from the document. The 5 thematic programme pages that used to describe the Family
+Development Program in general terms are gone; the FDP methodology paragraph now lives on the About
+page instead.
+
+The Mon Kim Hein story (from the RCMD project) is published under her real name, since it is
+already public via Cities Alliance's reporting on the project — **please confirm SKO is comfortable
+with that**, or say if it should be pseudonymised instead.
+
+Reports and the safeguarding policy currently link to SKO's Google Drive folders as an interim
+measure, since the actual PDFs are not yet in this repository.
+
+### Still needed, beyond the list above
+
+- **Logo and gallery photos** — the three project photo-gallery folders and the Director's portrait
+  are in Drive; downloading and adding them (and wiring the header's logo fallback) is a follow-up
+  task once the user has Drive access.
+- **Donation bank/QR details and allocation percentages** — not in the document.
+- **ED name confirmation** — the document does not name the Director; the site currently shows
+  Samnang Moun from earlier material.
+- **Partner name confirmation** — "Family Fund for Children Organization" is used as written in the
+  document, but the TFCF acronym suggests Taiwan Fund for Children and Families. Please confirm the
+  correct legal name.
+- **Consent confirmation for the Kim Hein story** — see above.
+- **Volunteer roles**, the **privacy retention line**, **first real news posts**, and the **actual
+  report PDFs** — the document does not cover these either.

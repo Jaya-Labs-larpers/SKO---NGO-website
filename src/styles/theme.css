@@ -212,7 +212,12 @@
     text-rendering: optimizeLegibility;
   }
 
-  h1, h2, h3, h4 { color: var(--color-ink-900); font-weight: 700; }
+  h2, h3, h4 { color: var(--color-ink-900); font-weight: 700; }
+  /* The page's one h1 gets the display serif — the only heading role that
+     carries voice. Source Serif 4 self-hosts a single static weight (600), so
+     the rule pins that exact weight rather than requesting 700 and forcing
+     the browser to synthesise a faux bold. */
+  h1 { color: var(--color-ink-900); font-weight: 600; font-family: var(--font-display); }
 
   /* --------------------------------------------------------------------
      KHMER SCRIPT RULES — enforced, not left to per-component judgement.
@@ -231,6 +236,10 @@
     line-height: 1.5;
     letter-spacing: normal;
   }
+  /* Kantumruy Pro has no serif companion, so Khmer h1 stays on the Khmer sans
+     stack at its full variable weight rather than inheriting the serif rule
+     above (which fires before the language cascade widens the family here). */
+  :lang(km) h1 { font-weight: 700; }
   /* em-scoped so it never compounds through nesting */
   p:lang(km), li:lang(km), dd:lang(km), figcaption:lang(km) { font-size: 1.0625em; }
   :lang(km) .uppercase,

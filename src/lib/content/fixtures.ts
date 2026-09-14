@@ -7,13 +7,18 @@
  *
  * CONTENT STATUS
  * --------------
- * English copy is REAL, written from the material SKO supplied: registration
- * details, vision, mission, core values, the Family Development Program, its
- * four work areas, methodology, target areas and contact details.
+ * English copy comes from "SKO (Website) 14 August 2026 Last review by ED.docx" —
+ * the content document signed off by SKO's Executive Director. Programs are the
+ * four funded projects the document describes: HALI, Children's Active
+ * Citizenship (TFCF1), Promoting Children's Education and Health through FDP
+ * (TFCF2), and Resilient City and Migration Dynamics (RCMD).
  *
- * Anything still bracketed as [NEEDS SKO] is a fact I do not have and will not
- * invent — principally beneficiary numbers, staff names, the Director's message,
- * partner organisations and the annual reports.
+ * Anything still bracketed as [NEEDS SKO] is a fact the document does not supply
+ * and this file does not invent — see docs/FAQ-for-team.md for the full list
+ * (donation bank/QR details and allocation %, ED name confirmation, partner name
+ * confirmation for TFCF, consent confirmation for the Kim Hein story, volunteer
+ * roles, privacy retention line, first real news posts, and the actual report
+ * PDFs).
  *
  * Khmer: titles, summaries, values, statistic labels and the FAQ answers are
  * translated and marked for review. Long-form body prose is English-only for
@@ -87,7 +92,7 @@ const donationFaqs: FaqItem[] = [
       km: 'តើការបរិច្ចាគទៅ SKO ត្រូវប្រើសម្រាប់អ្វី?',
     },
     answer: {
-      en: '[NEEDS SKO] Answer with the actual allocation from the most recent audited accounts — for example the share going to direct family support and case work, to staff and training, and to administration.',
+      en: '[NEEDS SKO] Answer with the actual allocation from the most recent audited accounts. For example, the share going to direct family support and case work, to staff and training, and to administration.',
       km: '[NEEDS SKO] សូមឆ្លើយតាមការបែងចែកជាក់ស្តែងពីរបាយការណ៍សវនកម្មចុងក្រោយ។',
     },
   },
@@ -118,8 +123,8 @@ export const siteSettings: SiteSettings = {
   email: 'info@samatapheapkhnom.org',
   partnerEmail: 'info@samatapheapkhnom.org',
   safeguardingContact: {
-    en: '[NEEDS SKO] To report a safeguarding concern, please contact [name and role] directly at [email or phone] rather than using the form below. Concerns are treated confidentially.',
-    km: '[NEEDS SKO] ដើម្បីរាយការណ៍អំពីកង្វល់ការពារកុមារ សូមទាក់ទង [ឈ្មោះ និងតួនាទី] ដោយផ្ទាល់ ជាជាងប្រើទម្រង់ខាងក្រោម។',
+    en: 'To report a safeguarding concern, please contact Soraksmey Heng, Senior Team Leader, directly at stlhali@samatapheapkhnom.org or +855 12 781 203 rather than using the form below. Concerns are treated confidentially.',
+    km: 'ដើម្បីរាយការណ៍អំពីកង្វល់ការពារកុមារ សូមទាក់ទង សូរក្សមី ហេង នាយកក្រុមជាន់ខ្ពស់ ដោយផ្ទាល់តាមអ៊ីមែល stlhali@samatapheapkhnom.org ឬលេខទូរស័ព្ទ +855 12 781 203 ជាជាងប្រើទម្រង់ខាងក្រោម។ រាល់កង្វល់ត្រូវបានរក្សាការសម្ងាត់។',
   },
   socials: [{ platform: 'Facebook', url: 'https://www.facebook.com/samatapheapkhnom' }],
   donation: {
@@ -151,8 +156,8 @@ export const siteSettings: SiteSettings = {
         label: { en: 'Programs', km: 'កម្មវិធី' },
         percent: 0,
         note: {
-          en: '[NEEDS SKO] Percentage and description — take these from the most recent audited accounts.',
-          km: '[NEEDS SKO] ភាគរយ និងការពិពណ៌នា — យកតាមរបាយការណ៍សវនកម្មចុងក្រោយ។',
+          en: '[NEEDS SKO] Percentage and description. Take these from the most recent audited accounts.',
+          km: '[NEEDS SKO] ភាគរយ និងការពិពណ៌នា។ យកតាមរបាយការណ៍សវនកម្មចុងក្រោយ។',
         },
       },
     ],
@@ -163,11 +168,13 @@ export const siteSettings: SiteSettings = {
 };
 
 /* -------------------------------------------------------------------------
-   Impact statistics.
+   Impact statistics (site-wide — Home and Impact pages).
 
-   Only figures SKO has actually stated. The programme reach numbers a funder
-   will look for — families supported, children reached, cases closed — are
-   marked and must come from SKO's own monitoring data (they use OSCaR).
+   The programme-level figures live on each programme page. This is the
+   organisation-wide reach: registration age, area covered, and the one
+   family-level figure the document actually gives (HALI's 200 households),
+   scoped honestly to the project it comes from rather than stated as an
+   org-wide total.
    ------------------------------------------------------------------------- */
 export const impactStats: ImpactStat[] = [
   {
@@ -204,132 +211,233 @@ export const impactStats: ImpactStat[] = [
     order: 3,
   },
   {
-    /**
-     * SAMPLE FIGURE — supplied as a placeholder at SKO's request so the layout
-     * can be reviewed. It is not a claim. Replace with the real number from
-     * OSCaR, and put the period it covers in the context line, before launch.
-     */
     _id: 'stat-families',
-    value: 1200,
-    displayValue: '1,200',
-    label: { en: 'Families supported', km: 'គ្រួសារដែលបានទទួលការគាំទ្រ' },
+    value: 200,
+    displayValue: '200',
+    label: { en: 'Households receiving family counselling', km: 'គ្រួសារដែលទទួលការប្រឹក្សាគ្រួសារ' },
     context: {
-      en: '[SAMPLE — replace with the figure from OSCaR and the period it covers]',
-      km: '[SAMPLE — សូមជំនួសដោយតួលេខពី OSCaR និងរយៈពេលដែលគ្របដណ្តប់]',
+      en: 'HALI project, Phnom Penh',
+      km: 'គម្រោង HALI រាជធានីភ្នំពេញ',
     },
     order: 4,
   },
 ];
 
 /* -------------------------------------------------------------------------
-   Programmes.
+   Programmes — the four funded projects from SKO's content document.
 
-   Structured around what SKO actually runs: the Family Development Program is
-   the flagship and the methodology; the four work areas are its outcomes. That
-   ordering matters for search and answer engines too — the FDP page is the one
-   that should rank for "family development approach Cambodia", and the four
-   below carry the specific, answerable questions.
+   TFCF1 (Children's Active Citizenship) and TFCF2 (Promoting Children's
+   Education and Health through FDP) share one partner and one "Highlight
+   Activities" list in the document. The document attaches that list to
+   TFCF2, so the full activity list and partner line live there; TFCF1 carries
+   its own purpose and impact section, with a pointer to its sister project.
    ------------------------------------------------------------------------- */
 export const programs: Program[] = [
   {
-    _id: 'program-fdp',
-    slug: 'family-development-program',
+    _id: 'program-hali',
+    slug: 'housing-and-living-conditions-hali',
     order: 1,
-    title: { en: 'Family Development Program', km: 'កម្មវិធីអភិវឌ្ឍន៍គ្រួសារ' },
+    title: {
+      en: 'Housing and Living Condition Improvement (HALI)',
+      km: 'ការកែលម្អលំនៅឋាន និងលក្ខខណ្ឌរស់នៅ (HALI)',
+    },
     summary: {
-      en: 'SKO’s flagship programme: home-based counselling and case management that helps families in Phnom Penh’s urban poor communities identify their own needs and solve their own problems.',
-      km: 'កម្មវិធីស្នូលរបស់ SKO៖ ការប្រឹក្សានៅតាមផ្ទះ និងការគ្រប់គ្រងករណី ដែលជួយគ្រួសារនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ ឱ្យកំណត់តម្រូវការ និងដោះស្រាយបញ្ហារបស់ខ្លួនឯង។',
+      en: 'To enhance the quality of life of families, especially children, youth and women, living in urban poor areas. Using the Family Development Program (FDP) methodology, SKO provides psychological counselling, resilience-building, information, and referrals to essential services (health, education, economic, administrative). The project also aims to reduce domestic violence and promote safe, healthy living.',
+      km: 'ដើម្បីលើកម្ពស់គុណភាពជីវិតរបស់គ្រួសារ ជាពិសេសកុមារ យុវជន និងស្ត្រី ដែលរស់នៅក្នុងតំបន់ក្រីក្រទីក្រុង។ ដោយប្រើវិធីសាស្ត្រកម្មវិធីអភិវឌ្ឍន៍គ្រួសារ (FDP) SKO ផ្តល់ការប្រឹក្សាផ្លូវចិត្ត ការកសាងភាពធន់ ព័ត៌មាន និងការបញ្ជូនទៅសេវាសំខាន់ៗ។ គម្រោងក៏មានគោលបំណងកាត់បន្ថយអំពើហិង្សាក្នុងគ្រួសារ និងលើកកម្ពស់ការរស់នៅប្រកបដោយសុវត្ថិភាព។',
     },
     body: enOnly([
-      'The Family Development Program is SKO’s own programme, built on the Family Development Approach (FDA). It works from a single premise: families living in poverty are not short of capability, they are short of support, information and access. Our role is to supply those three things and then step back.',
-      'Social workers visit families at home rather than asking them to travel to an office. Together they assess the situation, agree objectives the family sets for itself, and work through them over a series of visits — with referrals into health, education, administrative and economic services as needed.',
-      '## How the programme works',
-      'An initial visit to build an overall understanding of the household. A full family assessment. Identification of the family’s own needs and objectives. Weekly or twice-monthly home visits. An assessment for phase-out when the home-based follow-up is complete. A re-assessment six months after phase-out, to confirm the progress has held.',
-      'That final six-month re-assessment matters more than it looks. It is the difference between a case that was closed and a family whose situation actually changed.',
-      '## Our methods',
-      'Home visits with counselling. The structured Steps of Family Development. Case management strategy and case management tools. Sharing general knowledge as the family requires it. Information and referral. Collaboration with partner service providers.',
-      'Cases are managed in OSCaR, the sector-standard monitoring and evaluation system, so outcomes can be measured rather than asserted.',
-      '## What families tell us changes',
-      'Confidence, awareness and problem-solving skills improve. Families become able to name their own needs and use the services available to meet them. Parents meet their young children’s developmental needs more consistently. And — the test that counts — families sustain the progress after SKO withdraws.',
+      '## What we do',
+      'Home Counseling. Psychosocial support for families, particularly women experiencing domestic violence. Social workers help identify issues, strengths, and solutions, while connecting families with NGO partners for services.',
+      'Community House Counseling. A safe, confidential space for beneficiaries, especially women, to discuss challenges and receive emotional support.',
+      'Family Development Program Training. Capacity-building for local authorities (CCWCs) and Family Development Volunteers (FDVs) to strengthen support for vulnerable households and reduce domestic violence.',
+      'Gender Group Discussions. Community dialogues to share experiences, promote behavioural change, and improve family relationships.',
+      'Gender-Based Violence Training. Awareness and response training for local authorities and community leaders to strengthen referral systems and support victims.',
+      '## Partner',
+      'Planète Enfants & Développement (PE&D).',
+      '## Impact and results',
+      'Family counselling was provided to 200 households. SKO’s family counselling has proven instrumental in resolving intra-household conflicts and fostering healthier relationships, with a notable percentage of beneficiaries reporting a reduction in domestic violence and improved emotional well-being. 97% of beneficiaries surveyed who received assistance from social workers reported feeling more capable than before of dealing with problems, or knowing better where to get help. Of beneficiaries using referral services facilitated by a social worker, 95% report they will continue to use referral services in future and are satisfied with them.',
+      'Gender awareness and empowerment through gender discussion groups reached 80% of all HALI beneficiaries, through SKO training (40 individuals) and CAFÉ training with PE&D (122 individuals). A large majority of beneficiaries consider gender-based violence a serious issue. 89% of beneficiaries report more equitable decision-making within households, and 75% of female respondents report that they make decisions on financial matters in the household. 94% of beneficiaries surveyed know where to seek assistance if they or someone they know experiences gender-based violence.',
+      'Daily engagement by social workers in the community and within households over an extended period, giving households tools for problem-solving, intra-household communication and links to existing services, has proven crucial to these results within a relatively short period (1.5 years per target area), while also drawing the community into other project activities.',
+      'Group discussions for men and women, including role-playing, have proven effective at engaging participants and helping them understand gender roles and coping mechanisms against stereotypes and domestic violence.',
     ]),
+    impactStats: [
+      {
+        _id: 'hali-households',
+        value: 200,
+        displayValue: '200',
+        label: { en: 'Households counselled', km: 'គ្រួសារទទួលការប្រឹក្សា' },
+        order: 1,
+      },
+      {
+        _id: 'hali-capable',
+        value: 97,
+        displayValue: '97%',
+        label: { en: 'Feel more capable of dealing with problems', km: 'មានអារម្មណ៍ថាមានលទ្ធភាពដោះស្រាយបញ្ហាកាន់តែប្រសើរ' },
+        order: 2,
+      },
+      {
+        _id: 'hali-referral',
+        value: 95,
+        displayValue: '95%',
+        label: { en: 'Continue to use referral services', km: 'បន្តប្រើសេវាបញ្ជូន' },
+        order: 3,
+      },
+      {
+        _id: 'hali-decisions',
+        value: 89,
+        displayValue: '89%',
+        label: { en: 'More equitable household decision-making', km: 'ការសម្រេចចិត្តគ្រួសារប្រកបដោយសមភាពកាន់តែច្រើន' },
+        order: 4,
+      },
+      {
+        _id: 'hali-gbv-help',
+        value: 94,
+        displayValue: '94%',
+        label: { en: 'Know where to seek help for gender-based violence', km: 'ដឹងកន្លែងស្វែងរកជំនួយអំពីអំពើហិង្សាយេនឌ័រ' },
+        order: 5,
+      },
+    ],
   },
   {
-    _id: 'program-child-protection',
-    slug: 'child-protection',
+    _id: 'program-tfcf1',
+    slug: 'childrens-active-citizenship',
     order: 2,
-    title: { en: 'Child protection', km: 'ការការពារកុមារ' },
+    title: { en: "Children's Active Citizenship", km: 'សកម្មភាពពលរដ្ឋកុមារ' },
     summary: {
-      en: 'Training, case management and referral built with khan and sangkat authorities, so that protection for children at risk is a local system rather than a single organisation.',
-      km: 'ការបណ្តុះបណ្តាល ការគ្រប់គ្រងករណី និងការបញ្ជូន ដែលកសាងរួមជាមួយអាជ្ញាធរខណ្ឌ និងសង្កាត់ ដើម្បីឱ្យការការពារកុមារក្លាយជាប្រព័ន្ធក្នុងតំបន់ មិនមែនរបស់អង្គការតែមួយឡើយ។',
+      en: 'To promote understanding of basic education and primary health care among community members, caregivers, and authorities for vulnerable children.',
+      km: 'ដើម្បីលើកកម្ពស់ការយល់ដឹងអំពីការអប់រំមូលដ្ឋាន និងសុខភាពថែទាំបឋមក្នុងចំណោមសមាជិកសហគមន៍ អ្នកថែទាំ និងអាជ្ញាធរ សម្រាប់កុមារងាយរងគ្រោះ។',
     },
     body: enOnly([
-      'Protection only holds when the people already living and working in a community can recognise risk and act on it. SKO therefore works through khan and sangkat authorities, Family Development Volunteers and partner organisations rather than around them.',
-      'We deliver training on child rights, child protection, positive parenting, domestic violence, and parental roles and responsibilities — to local authorities, to volunteers, and to young people in the target communities.',
-      '## Case management and referral',
-      'Case management is opened for young people and vulnerable children, with counselling that helps them and their families understand what they need and find their own solutions. Where a case requires services SKO does not provide, we refer — into the child protection hotline, Child Safe agents, and partner NGOs and government services.',
-      'We build networks with NGOs and private-sector partners to open vocational and life-skills routes for young people and juveniles, and provide practical support where transport or connectivity is the barrier: bicycles, and the cost of getting online to learn.',
-      'Emergency support — food, school materials — is provided to children and families most at risk.',
-      'Outcomes are tracked in OSCaR.',
+      '## Impact and results',
+      'The project made meaningful progress in strengthening vulnerable families and improving the well-being, education, health, and protection of children across the three target Sangkats. Through close collaboration with local authorities, schools, health centers, Family Development Volunteers (FDVs), parents, and community stakeholders, the project reached children, families, and community members with practical and integrated support.',
+      'Under education and child protection, children demonstrated increased awareness of their rights, child protection, online safety, and the risks of drug use. Mobile library activities strengthened children’s reading, listening, communication, and learning engagement, while also improving their knowledge of road safety. The distribution of school materials to 410 children reduced financial pressure on vulnerable families and helped children remain motivated and better equipped for school. School Support Committee meetings also strengthened cooperation among schools, parents, volunteers, and local authorities, enabling stakeholders to identify children at risk of dropping out and develop practical solutions to support their continued education.',
+      'Under health, hygiene, and family well-being, the project improved access to basic healthcare for vulnerable families through 13 medical check-up sessions reaching 656 people, including children and elderly community members. Additional ear health services reached 159 people, particularly children, while health education promoted better sanitation, disease prevention, and awareness of available social protection and healthcare services. Environment Day activities engaged 289 participants in practical hygiene and environmental actions, strengthening community responsibility for cleaner and healthier living environments.',
+      'The project also provided important food and emergency assistance to vulnerable families. A total of 6,782.9 kg of rice was distributed to 313 families supporting 410 children, while an additional 1,900 kg of emergency rice supported 189 families. These interventions helped reduce immediate household financial pressure and food insecurity, allowing parents to better focus on supporting their children’s education and well-being. Community contributions in Sangkat Chbar Ampov further demonstrated local solidarity and strengthened community ownership.',
+      'Under positive parenting and family development, community meetings strengthened parents’ knowledge and practices related to children’s education, health, stress management, legal documentation, communication, and positive parenting. The Child Progress Report covered 398 of 410 children, providing updated information on their education and health and helping the project monitor their progress and respond to emerging needs. The FDV exchange workshop also strengthened volunteers’ knowledge, practical skills, and collaboration across project areas, contributing to more sustainable community-based support.',
+      'Overall, the project contributed to a more supportive and protective environment for vulnerable children and families, strengthening local ownership alongside schools, volunteers, parents and authorities.',
+      'This project shares its partner and highlight activities with its sister project, Promoting Children’s Education and Health through FDP. See that programme page for the full activity list.',
     ]),
+    impactStats: [
+      {
+        _id: 'tfcf1-school-materials',
+        value: 410,
+        displayValue: '410',
+        label: { en: 'Children received school materials', km: 'កុមារទទួលបានសម្ភារៈសិក្សា' },
+        order: 1,
+      },
+      {
+        _id: 'tfcf1-medical',
+        value: 656,
+        displayValue: '656',
+        label: { en: 'People reached through medical check-ups', km: 'អ្នកទទួលការពិនិត្យសុខភាព' },
+        context: { en: '13 sessions', km: '១៣ សម័យ' },
+        order: 2,
+      },
+      {
+        _id: 'tfcf1-rice',
+        value: 6782.9,
+        displayValue: '6,782.9 kg',
+        label: { en: 'Rice distributed to 313 families', km: 'អង្ករចែកចាយដល់គ្រួសារ ៣១៣' },
+        order: 3,
+      },
+      {
+        _id: 'tfcf1-environment-day',
+        value: 289,
+        displayValue: '289',
+        label: { en: 'Environment Day participants', km: 'អ្នកចូលរួមថ្ងៃបរិស្ថាន' },
+        order: 4,
+      },
+    ],
   },
   {
-    _id: 'program-preventing-separation',
-    slug: 'preventing-violence-and-family-separation',
+    _id: 'program-tfcf2',
+    slug: 'childrens-education-and-health',
     order: 3,
     title: {
-      en: 'Preventing violence and family separation',
-      km: 'ការទប់ស្កាត់អំពើហិង្សា និងការបែកបាក់គ្រួសារ',
+      en: "Promoting Children's Education and Health through FDP",
+      km: 'ការលើកកម្ពស់ការអប់រំ និងសុខភាពកុមារតាមរយៈ FDP',
     },
     summary: {
-      en: 'Counselling and case management for children at risk of being separated from their families, and work with parents to prevent domestic violence and abuse before it starts.',
-      km: 'ការប្រឹក្សា និងការគ្រប់គ្រងករណីសម្រាប់កុមារដែលប្រឈមនឹងការបែកបាក់ពីគ្រួសារ ព្រមទាំងការធ្វើការជាមួយឪពុកម្តាយ ដើម្បីទប់ស្កាត់អំពើហិង្សាក្នុងគ្រួសារមុនពេលវាកើតឡើង។',
+      en: 'To foster awareness among parents, caregivers, and local authorities about the importance of basic education and primary health care for vulnerable children.',
+      km: 'ដើម្បីជំរុញការយល់ដឹងក្នុងចំណោមឪពុកម្តាយ អ្នកថែទាំ និងអាជ្ញាធរមូលដ្ឋាន អំពីសារៈសំខាន់នៃការអប់រំមូលដ្ឋាន និងសុខភាពថែទាំបឋមសម្រាប់កុមារងាយរងគ្រោះ។',
     },
     body: enOnly([
-      'A child leaving their family is almost never a single event. It is the end of a sequence — of pressure, of violence, of a household running out of options. The work that matters happens earlier in that sequence.',
-      'SKO provides counselling and case management to children at risk of separation and to families living with unhealthy relationships, and works with parents to build closer relationships with their children.',
-      '## Who this reaches',
-      'Families with no shelter or living on the street. Households affected by drug use. Children without a birth certificate. Children who have been exploited, children with disabilities, children affected by HIV/AIDS, children whose parents have migrated for work, and children living with relatives.',
-      'Where a family’s needs fall outside what SKO can provide, we coordinate with other organisations to meet them — including help obtaining the official documents that unlock everything else: birth certificates, family books, marriage certificates, poor ID cards.',
-      '## Strengthening protection within the household',
-      'Two things change outcomes more than anything else we do: increasing the protection available to women heading households, so they can keep their children safe and domestic violence falls; and increasing men’s responsibility within the household, which makes families measurably more peaceful.',
-      'Champions — women and men selected from the community groups — take on a role-model role in their own communities.',
+      '## What we do',
+      'Child Protection Training. Building children’s capacity to understand and respond to different forms of violence (emotional, sexual, physical, neglect, exploitation).',
+      'Leadership and Management Training for youth and young people. Promotes knowledge, capacity and skill, and a positive, results-oriented attitude, so young people can lead and manage their daily work and living conditions, starting young and carrying into their careers.',
+      'Mobile Library. Improving reading skills, promoting education, and teaching safety practices such as traffic awareness.',
+      'Distribution of School Materials & Emergency Support. Providing essential supplies to vulnerable children, encouraging school attendance, and mobilising resources from charities and NGOs.',
+      'School Support Committee Meetings. Collaboration with CCWC, SSC, local authorities and teachers to monitor student progress and address challenges.',
+      'Medical Checkups. Health services for vulnerable children and families in partnership with health centres.',
+      'Environment & Hygiene Campaigns. Promoting sanitation, hygiene and community clean-up activities as role models for children and families.',
+      'Community Meetings. Promoting positive parenting, child protection and child rights while encouraging parents to share practices and find solutions to education and health challenges, strengthening parents’ and caregivers’ capacity to manage stress and anger, and building more positive, peaceful, resilient thinking for the family, children and community.',
+      '## Partner',
+      'Family Fund for Children Organization.',
+      '## Impact and results',
+      'The Community Development Project, implemented through SKO’s Family Development Approach, contributed to improving the education, health, protection, and overall well-being of 390 vulnerable children (204 girls and 186 boys) and their families in Sangkat Prey Veng, Prey Sar, and Dangkor of Khan Dangkor. The project combined direct support to children with family strengthening, community engagement, health services, and collaboration with local authorities, schools, health centers, and Family Development Volunteers (FDVs).',
+      'Under Objective 1, the project strengthened children’s access to education, learning opportunities, and protection. Four Children’s Clubs provided safe and structured spaces for children to learn, interact, develop life skills, and participate in positive activities. Children’s Club meetings reached 237 children, increasing their awareness of child rights, protection, online safety, and drug prevention. Ten mobile library sessions reached 182 children, promoting reading, creativity, peer learning, nutrition, hygiene, and road safety. School materials were provided to all 390 target children from 322 families, reducing financial pressure on vulnerable households and helping children remain prepared and engaged in school. Six School Support Committee meetings further strengthened collaboration among schools, parents, FDVs, and local authorities to address challenges such as absenteeism and e-cigarette use and to improve monitoring of children’s education.',
+      'Under Objective 2, the project improved access to basic healthcare, hygiene awareness, environmental protection, and essential food support. Ten community medical outreach sessions helped children and adults access health services, identify health concerns early, and receive appropriate health information and follow-up. Environment Day activities strengthened awareness of hygiene, environmental protection, and the link between a clean environment and community health. In addition, 4,940.74 kg of rice was distributed to 247 vulnerable families supporting 304 children, while emergency rice assistance supported another 150 families facing financial difficulties.',
+      'Under Objective 3, the project strengthened positive parenting, family participation, and household resilience. Ten community meetings engaged 153 parents and caregivers, increasing their awareness of positive parenting, children’s education and health monitoring, civil registration, and communication with schools. The savings group also promoted financial discipline, trust, cooperation, and household planning among community members. Through the Child Progress Report process, 372 of 390 children were assessed, allowing staff, parents, volunteers, and local authorities to better monitor children’s education, health, and participation and identify children requiring additional support.',
+      'Overall, the project strengthened the capacity of vulnerable families to better support their children’s education, health, protection, and development, with stronger collaboration among parents, schools, FDVs, health centers, and local authorities.',
     ]),
+    impactStats: [
+      {
+        _id: 'tfcf2-children',
+        value: 390,
+        displayValue: '390',
+        label: { en: 'Vulnerable children reached', km: 'កុមារងាយរងគ្រោះទទួលបានជំនួយ' },
+        context: { en: '204 girls, 186 boys', km: '២០៤ ក្មេងស្រី ១៨៦ ក្មេងប្រុស' },
+        order: 1,
+      },
+      {
+        _id: 'tfcf2-families',
+        value: 322,
+        displayValue: '322',
+        label: { en: 'Families reached', km: 'គ្រួសារទទួលបានជំនួយ' },
+        order: 2,
+      },
+      {
+        _id: 'tfcf2-clubs',
+        value: 237,
+        displayValue: '237',
+        label: { en: 'Children reached through Children’s Clubs', km: 'កុមារចូលរួមក្នុងក្លឹបកុមារ' },
+        order: 3,
+      },
+      {
+        _id: 'tfcf2-rice',
+        value: 4940.74,
+        displayValue: '4,940.74 kg',
+        label: { en: 'Rice distributed to 247 families', km: 'អង្ករចែកចាយដល់គ្រួសារ ២៤៧' },
+        order: 4,
+      },
+    ],
   },
   {
-    _id: 'program-education-health',
-    slug: 'education-and-health',
+    _id: 'program-rcmd',
+    slug: 'resilient-city-and-migration',
     order: 4,
-    title: { en: 'Children’s education and health', km: 'ការអប់រំ និងសុខភាពកុមារ' },
+    title: {
+      en: 'Resilient City and Migration Dynamics (RCMD)',
+      km: 'ភាពធន់ទីក្រុង និងសក្ដានុពលចំណាកស្រុក (RCMD)',
+    },
     summary: {
-      en: 'Mobile libraries, school materials, hygiene training and health check-ups — the practical support that keeps children in school and well enough to learn.',
-      km: 'បណ្ណាល័យចល័ត សម្ភារៈសិក្សា ការបណ្តុះបណ្តាលអនាម័យ និងការពិនិត្យសុខភាព — ជំនួយជាក់ស្តែងដែលរក្សាកុមារឱ្យនៅសាលា និងមានសុខភាពល្អគ្រប់គ្រាន់ដើម្បីរៀន។',
+      en: 'To improve the well-being of migrants and vulnerable families through financial literacy, vocational training, legal and public services, education, health, environmental awareness, gender equality, and capacity-building for local authorities. The project also addresses gender-based violence and promotes community engagement.',
+      km: 'ដើម្បីលើកកម្ពស់សុខុមាលភាពរបស់ជនចំណាកស្រុក និងគ្រួសារងាយរងគ្រោះ តាមរយៈចំណេះដឹងហិរញ្ញវត្ថុ ការបណ្តុះបណ្តាលវិជ្ជាជីវៈ សេវាផ្លូវច្បាប់ និងសាធារណៈ ការអប់រំ សុខភាព ការយល់ដឹងបរិស្ថាន សមភាពយេនឌ័រ និងការកសាងសមត្ថភាពអាជ្ញាធរមូលដ្ឋាន។ គម្រោងក៏ដោះស្រាយអំពើហិង្សាយេនឌ័រ និងលើកកម្ពស់ការចូលរួមសហគមន៍។',
     },
     body: enOnly([
-      'Children in the communities SKO works in rarely leave school because they stopped valuing it. They leave because of cost, illness, or a household that needs them elsewhere. This programme removes those specific obstacles.',
-      '## Education',
-      'A mobile library programme builds the habit of reading and gives children a reason to want school — many return to it. School uniforms and materials are distributed to children who would otherwise go without. We meet parents regularly to follow up on their children’s progress, and mark International Children’s Day in the urban poor communities to make the value of education visible.',
-      'For young people who have already left school, we assess the family’s situation and arrange vocational training matched to what the household actually needs.',
-      '## Health',
-      'Training on hygiene and sanitation, at both community and household level, along with hygiene and disease-prevention kits. Health check-ups and prescriptions through partner NGOs and health centres. Home visits every three months to follow up on health and schooling.',
-      'This work is delivered in close cooperation with the Ministry of Social Affairs, Veterans and Youth Rehabilitation, and with local authorities.',
-    ]),
-  },
-  {
-    _id: 'program-housing',
-    slug: 'housing-and-living-conditions',
-    order: 5,
-    title: { en: 'Safe housing and living conditions', km: 'លំនៅឋាន និងលក្ខខណ្ឌរស់នៅប្រកបដោយសុវត្ថិភាព' },
-    summary: {
-      en: 'Repairing and building small safe homes for unsettled families, and helping households obtain the official documents that unlock every other service.',
-      km: 'ការជួសជុល និងសាងសង់ផ្ទះតូចប្រកបដោយសុវត្ថិភាពសម្រាប់គ្រួសារគ្មានទីលំនៅ និងការជួយគ្រួសារទទួលបានឯកសារផ្លូវការ ដែលបើកផ្លូវទៅកាន់សេវាកម្មផ្សេងទៀត។',
-    },
-    body: enOnly([
-      'A family without secure shelter cannot plan. Counselling, schooling and income all depend on somewhere safe to sleep, so for some households this is where the work has to start.',
-      'SKO repairs and builds small safe houses for unsettled families where that is the barrier, and provides emergency support to children and families most at risk.',
-      '## Documents',
-      'Alongside shelter, we work with local authorities to obtain the paperwork that poverty tends to strip away — birth certificates, family books, marriage certificates and poor ID cards. Without these a family cannot enrol a child in school, access healthcare, or claim the support they are entitled to. Getting them is unglamorous work with a disproportionate effect.',
-      '## Building capacity around the family',
-      'We train community volunteers, local authorities and partner NGOs in counselling and the Family Development Approach, so support does not depend on SKO being present. Quarterly meetings with NGO and government partners work through challenges and share what is working.',
+      '## What we do',
+      'Promote Safe Migration and Public Services. Builds understanding of safe migration among vulnerable families, youth and children in host communities, so they can live safely while receiving appropriate public services from relevant stakeholders and government.',
+      'Public Forum. Builds knowledge of family residency, birth certificates, and Khmer national ID cards, the official documents that support the daily lives of the most vulnerable families, youth, children and migrants, through engagement with sub-national and local authorities.',
+      'Counselling & Referral Services. Identifies the root causes of problems facing host and migrant communities, meets basic needs, strengthens capacity, and works towards sustainable solutions through scheduled counselling from social workers and weekly family visits.',
+      'Gender-Based Violence (GBV) Training. Trains host community and migrant residents on gender concepts and the root causes and impact of GBV, building towards positive change for families and the wider community.',
+      'Men and Women Group Discussion. Promotes understanding and positive practice between men and women, so their daily lives are safer and more supportive, and build a brighter future for children and young people.',
+      'Economic Empowerment. Builds migrant and host community members’ capacity to manage household income and expenses through microfinance, without added stress.',
+      '## Partner',
+      'UNOPS (Cities Alliance), funded by the Swiss Agency for Development and Cooperation.',
+      '## Impact and results',
+      'Through the direct implementation and dedicated efforts of SKO, a project helping migrants obtain identity cards is unlocking access to employment, healthcare, social services, and civic rights for low-income families in Phnom Penh. Funded by the Swiss Agency for Development and Cooperation, the initiative is improving the lives of families living in informal settlements, with a particular focus on supporting women and vulnerable households. Widow Mon Kim Hein takes a deep breath as she recalls the struggles she faced when starting over in Phnom Penh without formal identification. “Before I had a national ID card, my life was difficult. I wanted to find a job, but I couldn’t. I couldn’t borrow money to start a business, access healthcare, or buy insurance. And I couldn’t vote,” she says. Originally from Kampong Cham province in the Mekong River lowlands, Kim Hein moved to Phnom Penh in search of a better life. Like many internal migrant families, she faced difficulties proving her identity and accessing essential services in the city.',
+      'Through SKO’s direct support, counselling, community engagement, and facilitation with relevant authorities, families like Kim Hein’s are empowered to overcome these barriers and access the rights and services they need. This support is not only helping families obtain essential documentation but also strengthening their confidence, resilience, and ability to build a more secure future for themselves and their children. SKO’s contribution demonstrates that lasting change can begin with something as fundamental as an identity document, when families are empowered, supported, and connected to the services and opportunities available to them.',
+      'Urban poor communities, especially in informal settlements, face limited access to basic services, adequate housing, and legal documentation such as birth certificates or ID Poor registration, Cambodia’s national programme that identifies poor households for social protection support. These gaps restrict opportunities for formal employment, healthcare, education and civic participation. That is now beginning to change. This year, Kim Hein and her two children obtained Cambodian citizenship with the support of the Samatapheap Khnom Organization (SKO), a local non-profit and implementing partner in a project aimed at strengthening resilience and inclusion among Phnom Penh’s urban poor.',
     ]),
   },
 ];
@@ -340,7 +448,9 @@ const programRef = (slug: string) => {
 };
 
 /* -------------------------------------------------------------------------
-   Activities. SKO publishes here — these are structural examples only.
+   Activities. SKO's content document has no news posts — these remain
+   structural examples for staff to replace with real posts, repointed at the
+   surviving programme slugs so no reference resolves to null.
    ------------------------------------------------------------------------- */
 export const activities: Activity[] = [
   {
@@ -369,13 +479,13 @@ export const activities: Activity[] = [
     category: 'event',
     author: 'SKO Communications',
     featured: true,
-    program: programRef('child-protection'),
+    program: programRef('housing-and-living-conditions-hali'),
     title: {
       en: '[EXAMPLE] Child protection training with local authorities',
       km: '[EXAMPLE] ការបណ្តុះបណ្តាលការពារកុមារជាមួយអាជ្ញាធរមូលដ្ឋាន',
     },
     excerpt: {
-      en: '[EXAMPLE] A short summary written by staff. Two sentences is right — this is what appears on the listing page and in search results.',
+      en: '[EXAMPLE] A short summary written by staff. Two sentences is right. This is what appears on the listing page and in search results.',
       km: '[EXAMPLE] សេចក្តីសង្ខេបខ្លីសរសេរដោយបុគ្គលិក។ ពីរប្រយោគគឺល្មម។',
     },
     body: enOnly(['[EXAMPLE] The full article goes here.']),
@@ -387,7 +497,7 @@ export const activities: Activity[] = [
     category: 'story',
     author: 'SKO Communications',
     featured: true,
-    program: programRef('family-development-program'),
+    program: programRef('childrens-education-and-health'),
     title: {
       en: '[EXAMPLE] One year after a case closed',
       km: '[EXAMPLE] មួយឆ្នាំក្រោយពីករណីត្រូវបានបិទ',
@@ -404,13 +514,16 @@ export const stories: Story[] = [
   {
     _id: 'story-1',
     quote: {
-      en: '[NEEDS SKO] A quote from a family, in their own words. Use a pseudonym and remove anything that could identify a child.',
-      km: '[NEEDS SKO] សម្រង់ពាក្យពីគ្រួសារមួយ តាមពាក្យរបស់ពួកគេផ្ទាល់។',
+      en: '“Before I had a national ID card, my life was difficult. I wanted to find a job, but I couldn’t. I couldn’t borrow money to start a business, access healthcare, or buy insurance. And I couldn’t vote.”',
+      km: '“មុនពេលមានអត្តសញ្ញាណប័ណ្ណសញ្ជាតិ ជីវិតរបស់ខ្ញុំពិបាកណាស់។ ខ្ញុំចង់រកការងារធ្វើ ប៉ុន្តែមិនអាចទេ។ ខ្ញុំមិនអាចខ្ចីលុយដើម្បីចាប់ផ្តើមអាជីវកម្ម ចូលទៅដល់សេវាសុខភាព ឬទិញធានារ៉ាប់រង។ ហើយខ្ញុំមិនអាចបោះឆ្នោតបានទេ។”',
     },
-    personName: '[Pseudonym]',
-    personRole: { en: 'Parent, Family Development Program', km: 'មាតាបិតា កម្មវិធីអភិវឌ្ឍន៍គ្រួសារ' },
+    personName: 'Mon Kim Hein',
+    personRole: {
+      en: 'Resilient City and Migration Dynamics project',
+      km: 'គម្រោងភាពធន់ទីក្រុង និងសក្ដានុពលចំណាកស្រុក',
+    },
     useSilhouette: true,
-    program: programRef('family-development-program'),
+    program: programRef('resilient-city-and-migration'),
   },
 ];
 
@@ -427,19 +540,59 @@ export const partners: Partner[] = [
     category: 'government',
     order: 2,
   },
-  { _id: 'partner-3', name: '[NEEDS SKO] Partner organisation', category: 'ingo', order: 3 },
+  {
+    _id: 'partner-pead',
+    name: 'Planète Enfants & Développement',
+    category: 'ingo',
+    order: 3,
+  },
+  {
+    // [NEEDS SKO] "TFCF" suggests Taiwan Fund for Children and Families —
+    // confirm the partner's full legal name before publishing.
+    _id: 'partner-tfcf',
+    name: 'Family Fund for Children Organization',
+    category: 'foundation',
+    order: 4,
+  },
+  {
+    _id: 'partner-unops',
+    name: 'UNOPS / Cities Alliance',
+    category: 'un-agency',
+    order: 5,
+  },
+  {
+    _id: 'partner-sdc',
+    name: 'Swiss Agency for Development and Cooperation',
+    category: 'government',
+    order: 6,
+  },
 ];
 
 export const reports: Report[] = [
   {
+    _id: 'report-annual',
+    year: 2025,
+    type: 'annual-report',
+    title: {
+      en: 'Annual reports and audit reports 2023–2025',
+      km: 'របាយការណ៍ប្រចាំឆ្នាំ និងរបាយការណ៍សវនកម្ម ២០២៣–២០២៥',
+    },
+    summary: {
+      en: 'Opens SKO’s reports folder (Google Drive) until the PDFs are uploaded here.',
+      km: 'បើកថតឯកសាររបាយការណ៍របស់ SKO (Google Drive) រហូតដល់ឯកសារ PDF ត្រូវបានផ្ទុកឡើងទីនេះ។',
+    },
+    file: { url: 'https://drive.google.com/drive/folders/1NNiA02FyrtoAtRF-FDAYM-Qmv6UpQXas?usp=sharing' },
+  },
+  {
     _id: 'report-policy',
     year: 2026,
     type: 'policy',
-    title: { en: '[NEEDS SKO] Child Protection Policy', km: '[NEEDS SKO] គោលការណ៍ការពារកុមារ' },
+    title: { en: 'Safeguarding & Child Protection Policy', km: 'គោលការណ៍ការពារកុមារ' },
     summary: {
-      en: '[NEEDS SKO] Upload SKO’s safeguarding policy here. Funders look for this before anything else.',
-      km: '[NEEDS SKO] សូមផ្ទុកឡើងគោលការណ៍ការពារកុមាររបស់ SKO នៅទីនេះ។',
+      en: 'Opens SKO’s reports folder (Google Drive) until the PDF is uploaded here.',
+      km: 'បើកថតឯកសាររបស់ SKO (Google Drive) រហូតដល់ឯកសារ PDF ត្រូវបានផ្ទុកឡើងទីនេះ។',
     },
+    file: { url: 'https://drive.google.com/drive/folders/1O1tcKHz2duE2VS4yp_STFPpzlXNB4DZy?usp=sharing' },
   },
 ];
 
@@ -454,14 +607,17 @@ export const team: TeamMember[] = [
 ];
 
 export const directorMessage: DirectorMessage = {
+  // [NEEDS SKO] The content document does not name the Director — confirmed
+  // here from earlier SKO material as Samnang Moun. Please confirm. Photo is
+  // a follow-up (Drive needs the user's account).
   name: { en: 'Samnang Moun', km: 'សំណាង មួន' },
   title: { en: 'Executive Director', km: 'នាយកប្រតិបត្តិ' },
   pullQuote: {
-    en: '[NEEDS SKO] One sentence from the Director, set large above the message.',
-    km: '[NEEDS SKO] ប្រយោគមួយពីនាយក ដាក់ធំនៅពីលើសារ។',
+    en: 'Our key message is to continue putting families and children at the heart of everything we do.',
+    km: 'សារសំខាន់របស់យើងគឺបន្តដាក់គ្រួសារ និងកុមារជាចំណុចស្នូលនៃអ្វីគ្រប់យ៉ាងដែលយើងធ្វើ។',
   },
   message: enOnly([
-    '[NEEDS SKO] The Director’s message. Two or three paragraphs: what the year held, where the organisation is going, and thanks to partners and supporters.',
+    'SKO is committed to empowering vulnerable families to become stronger, more resilient, and able to find sustainable solutions to their challenges. We will continue to strengthen our professional social work, work closely with communities and partners, and ensure that every child has the opportunity to grow up in a safe, caring, and supportive family environment.',
   ]),
 };
 
@@ -471,7 +627,7 @@ export const orgChart: OrgChart = {
     km: '[NEEDS SKO] រចនាសម្ព័ន្ធអង្គការសមត្ថភាពខ្ញុំ',
   },
   textVersion: enOnly([
-    '[NEEDS SKO] Describe the structure as a nested list — who reports to whom. This is what makes the chart usable on a phone and for screen readers.',
+    '[NEEDS SKO] Describe the structure as a nested list of who reports to whom. This is what makes the chart usable on a phone and for screen readers.',
   ]),
 };
 
@@ -486,16 +642,15 @@ export const pages: Page[] = [
     slug: 'about',
     title: { en: 'About us', km: 'អំពីយើង' },
     intro: {
-      en: 'Samatapheap Khnom Organization is a Cambodian NGO working with the most vulnerable families in Phnom Penh’s urban poor communities. We have been registered with the Ministry of Interior since 2007.',
-      km: 'អង្គការសមត្ថភាពខ្ញុំ ជាអង្គការក្រៅរដ្ឋាភិបាលកម្ពុជា ដែលធ្វើការជាមួយគ្រួសារងាយរងគ្រោះបំផុត នៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ។ យើងបានចុះបញ្ជីជាមួយក្រសួងមហាផ្ទៃតាំងពីឆ្នាំ ២០០៧។',
+      en: 'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities.',
+      km: 'អង្គការសមត្ថភាពខ្ញុំ (SKO) ជាអង្គការក្រៅរដ្ឋាភិបាលក្នុងស្រុករបស់កម្ពុជា ដែលធ្វើការគាំទ្រកុមារ គ្រួសារ និងសហគមន៍ងាយរងគ្រោះ ជាពិសេសនៅសហគមន៍ក្រីក្រទីក្រុង និងសហគមន៍ចំណាកស្រុក។',
     },
     body: enOnly([
-      'Samatapheap Khnom Organization (SKO) is a local, neutral, non-sectarian, non-political, non-racial and non-profit organization, registered with the Ministry of Interior under permit number 457 (សជណ) on 20 April 2007.',
-      'SKO is recognised as a Cambodian expert in family care and social work. Our purpose is to empower and enable families to improve their own lives — through psychosocial support, information, and referrals into a network of quality providers in health, education, administration and economic services.',
+      'Samatapheap Khnom Organization (SKO) is a local, neutral, non-sectarian, non-political, non-racial and non-profit organization, registered with the Ministry of Interior under permit number 457 (សជណ) on 20 April 2007. SKO is recognised as Cambodia’s leading expert in family care and social work.',
       '## Our vision',
-      'The most vulnerable families, children and young people are living with a quality of life and prosperity.',
+      'Vulnerable families, children, and young people live with dignity, quality of life, and prosperity.',
       '## Our mission',
-      'We work in partnership with key stakeholders to empower and enable the most vulnerable children, young people and their families to improve their own lives — through the provision and promotion of safety, health, quality education, social service provision, psychosocial support and economic support.',
+      'We work in partnership and collaboration with key stakeholders to empower and enable the most vulnerable children, young people, and their families.',
       '## Our values',
       'Commitment. We work together effectively, in line with our strategic intent.',
       'Creativity. We accept the power to create and share ideas that enhance the lives of families.',
@@ -503,9 +658,12 @@ export const pages: Page[] = [
       'Integrity. We are honest and transparent in all our actions and decisions.',
       'Respect. We value the dignity, choices, potential and contribution of staff, families, partners and donors.',
       'Responsibility. We accept personal and collective responsibility for our learning and our performance, to increase our impact.',
-      '## Why this work exists',
-      'SKO was created after finding that poor families and the children most at risk could not access daily basic needs. Families were living without safe or settled accommodation. Households were separating. Domestic violence, poor communication and strained relationships were common. Children were losing the chance of an education, going without enough food, and experiencing abuse or neglect.',
-      'The response was not to substitute for those families, but to support them — so that they could improve their own conditions and their children could grow up as full participants in their community.',
+      '## Our approach',
+      'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities. SKO focuses on promoting child rights and child protection, preventing and responding to violence against children and domestic violence, and strengthening families’ access to appropriate social and community services. Through direct implementation, social work, counselling, referrals, awareness raising, and close engagement with families and local stakeholders, SKO supports families to identify challenges, develop practical solutions, and strengthen their capacity to cope with difficulties. The overall approach aims to build family resilience, sustainable problem-solving capacity, and safer and more supportive environments for children and families.',
+      'Underpinning this is the Family Development Program (FDP) methodology: social workers visit families at home rather than asking them to travel to an office, carry out a full assessment, and agree the objectives the family sets for itself, working through them over a series of home visits until the case is ready for phase-out. A re-assessment follows six months later to confirm the progress has held.',
+      '## Networking and partnership',
+      'SKO recognizes that lasting change for children, families, and communities cannot be achieved by one organization alone. Networking and partnership are therefore an important part of SKO’s approach, enabling us to work together with government institutions, local authorities, NGOs, community groups, schools, service providers, development partners, and other stakeholders.',
+      'Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions. By connecting people, services, and resources, SKO aims to strengthen family and community resilience and contribute to safer, more protective, and supportive environments for children and families.',
       '## Where we work',
       'SKO works in the urban poor communities of Phnom Penh, across five khans and twenty-six sangkats. The khans are Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo.',
       'They include Chbar Ampov 1, Chbar Ampov 2 and Prek Pra; Chak Angre Leu, Stung Meanchey 2, Stung Meanchey 3, Boeung Tumpun 1 and Boeung Tumpun 2; Dangkor, Prey Sar, Prey Veng and Choeung Ek; Kork Roka; and Svay Pak and Toul Sangke.',
@@ -522,15 +680,15 @@ export const pages: Page[] = [
       {
         question: { en: 'Where does SKO work?', km: 'តើ SKO ធ្វើការនៅកន្លែងណា?' },
         answer: {
-          en: 'SKO works in the urban poor communities of Phnom Penh, Cambodia — across five khans (Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo) and twenty-six sangkats.',
+          en: 'SKO works in the urban poor communities of Phnom Penh, Cambodia, across five khans (Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo) and twenty-six sangkats.',
           km: 'SKO ធ្វើការនៅសហគមន៍ក្រីក្រតាមទីក្រុងក្នុងរាជធានីភ្នំពេញ គ្របដណ្តប់ ៥ ខណ្ឌ (ច្បារអំពៅ មានជ័យ ដង្កោ ព្រែកព្នៅ និងឫស្សីកែវ) និង ២៦ សង្កាត់។',
         },
       },
       {
         question: { en: 'What does Samatapheap Khnom mean?', km: 'តើ «សមត្ថភាពខ្ញុំ» មានន័យដូចម្តេច?' },
         answer: {
-          en: 'Samatapheap Khnom (សមត្ថភាពខ្ញុំ) is Khmer for “my capacity” — the belief that families already hold the capability to change their own circumstances, and that our job is to support that capacity rather than replace it.',
-          km: '«សមត្ថភាពខ្ញុំ» មានន័យថាសមត្ថភាពរបស់ខ្ញុំ — ជំនឿថាគ្រួសារមានលទ្ធភាពផ្លាស់ប្តូរស្ថានភាពរបស់ខ្លួនរួចទៅហើយ ហើយតួនាទីរបស់យើងគឺគាំទ្រសមត្ថភាពនោះ មិនមែនជំនួសវាទេ។',
+          en: 'Samatapheap Khnom (សមត្ថភាពខ្ញុំ) is Khmer for “my capacity.” The name reflects the belief that families already hold the capability to change their own circumstances, and that our job is to support that capacity rather than replace it.',
+          km: '«សមត្ថភាពខ្ញុំ» មានន័យថាសមត្ថភាពរបស់ខ្ញុំ។ វាឆ្លុះបញ្ចាំងពីជំនឿថាគ្រួសារមានលទ្ធភាពផ្លាស់ប្តូរស្ថានភាពរបស់ខ្លួនរួចទៅហើយ ហើយតួនាទីរបស់យើងគឺគាំទ្រសមត្ថភាពនោះ មិនមែនជំនួសវាទេ។',
         },
       },
     ],
@@ -577,8 +735,8 @@ export const pages: Page[] = [
       {
         question: { en: 'Who does SKO help?', km: 'តើ SKO ជួយអ្នកណាខ្លះ?' },
         answer: {
-          en: 'Families living in poverty in Phnom Penh’s urban poor communities, and the children and young people in them — including children at risk of separation from their families, children without birth certificates, children affected by domestic violence, children with disabilities, children affected by HIV/AIDS, and children whose parents have migrated for work.',
-          km: 'គ្រួសារដែលរស់នៅក្នុងភាពក្រីក្រនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ និងកុមារ យុវជននៅក្នុងគ្រួសារទាំងនោះ — រួមទាំងកុមារដែលប្រឈមនឹងការបែកចេញពីគ្រួសារ កុមារគ្មានសំបុត្រកំណើត កុមារដែលរងផលប៉ះពាល់ពីអំពើហិង្សាក្នុងគ្រួសារ កុមារពិការ និងកុមារដែលឪពុកម្តាយចំណាកស្រុក។',
+          en: 'Families living in poverty in Phnom Penh’s urban poor communities, and the children and young people in them, including children at risk of separation from their families, children without birth certificates, children affected by domestic violence, children with disabilities, children affected by HIV/AIDS, and children whose parents have migrated for work.',
+          km: 'គ្រួសារដែលរស់នៅក្នុងភាពក្រីក្រនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ និងកុមារ យុវជននៅក្នុងគ្រួសារទាំងនោះ រួមទាំងកុមារដែលប្រឈមនឹងការបែកចេញពីគ្រួសារ កុមារគ្មានសំបុត្រកំណើត កុមារដែលរងផលប៉ះពាល់ពីអំពើហិង្សាក្នុងគ្រួសារ កុមារពិការ និងកុមារដែលឪពុកម្តាយចំណាកស្រុក។',
         },
       },
       {
@@ -597,7 +755,7 @@ export const pages: Page[] = [
           km: 'តើ SKO ធ្វើការជាមួយគ្រួសារមួយរយៈពេលប៉ុន្មាន?',
         },
         answer: {
-          en: 'There is no fixed length. Work begins with an initial visit and a full family assessment, followed by home visits every week or twice a month. When the family’s objectives are met the case moves to phase-out — and SKO returns six months later to re-assess.',
+          en: 'There is no fixed length. Work begins with an initial visit and a full family assessment, followed by home visits every week or twice a month. When the family’s objectives are met the case moves to phase-out. SKO returns six months later to re-assess.',
           km: 'គ្មានរយៈពេលកំណត់ទេ។ ការងារចាប់ផ្តើមដោយការទៅសួរសុខទុក្ខលើកដំបូង និងការវាយតម្លៃគ្រួសារពេញលេញ បន្តដោយការទៅផ្ទះរៀងរាល់សប្តាហ៍ ឬពីរដងក្នុងមួយខែ។ បន្ទាប់មក SKO ត្រឡប់មកវាយតម្លៃឡើងវិញនៅ ៦ ខែក្រោយ។',
         },
       },
@@ -617,7 +775,7 @@ export const pages: Page[] = [
           km: 'ហេតុអ្វី SKO ធ្វើការនៅផ្ទះប្រជាជន ជាជាងនៅមណ្ឌល?',
         },
         answer: {
-          en: 'Because the obstacles are in the home. Visiting families where they live means seeing the actual conditions, and it removes the cost and time of travelling to an office — which for a family already stretched is often the reason support never starts.',
+          en: 'Because the obstacles are in the home. Visiting families where they live means seeing the actual conditions, and it removes the cost and time of travelling to an office, which for a family already stretched is often the reason support never starts.',
           km: 'ព្រោះឧបសគ្គស្ថិតនៅក្នុងផ្ទះ។ ការទៅសួរសុខទុក្ខគ្រួសារនៅកន្លែងរស់នៅ មានន័យថាឃើញលក្ខខណ្ឌជាក់ស្តែង ហើយក៏លុបបំបាត់ការចំណាយ និងពេលវេលាធ្វើដំណើរទៅការិយាល័យផងដែរ។',
         },
       },
@@ -677,11 +835,12 @@ export const pages: Page[] = [
       km: 'SKO ធ្វើការជាដៃគូជាមួយក្រសួង អង្គការក្រៅរដ្ឋាភិបាល ដៃគូវិស័យឯកជន និងម្ចាស់ជំនួយស្ថាប័ន។',
     },
     body: enOnly([
-      'Partnership is not incidental to how SKO works — it is the method. Cases are referred into networks of health, education, administrative and economic providers, and quarterly meetings with NGO and government partners work through shared challenges and practice.',
+      'Partnership is not incidental to how SKO works. It is the method. Cases are referred into networks of health, education, administrative and economic providers, and quarterly meetings with NGO and government partners work through shared challenges and practice.',
       '## What we are looking for',
       'Funders and partners interested in family strengthening, child protection, and the prevention of family separation in urban poor communities. We use OSCaR for monitoring and evaluation, so programme outcomes can be reported against.',
       '## What happens next',
-      '[NEEDS SKO] State the response time for partnership enquiries, and add a downloadable capability statement if you have one.',
+      'Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions.',
+      'Email info@samatapheapkhnom.org to start a conversation.',
     ]),
   },
   {
@@ -689,14 +848,29 @@ export const pages: Page[] = [
     slug: 'safeguarding',
     title: { en: 'Safeguarding and child protection', km: 'ការការពារកុមារ' },
     intro: {
-      en: 'Every person working with SKO — staff, volunteers and partners — is responsible for keeping children safe.',
-      km: 'មនុស្សគ្រប់រូបដែលធ្វើការជាមួយ SKO — បុគ្គលិក អ្នកស្ម័គ្រចិត្ត និងដៃគូ — មានទំនួលខុសត្រូវរក្សាសុវត្ថិភាពកុមារ។',
+      en: 'Every person working with SKO, staff, volunteers and partners, is responsible for keeping children safe.',
+      km: 'មនុស្សគ្រប់រូបដែលធ្វើការជាមួយ SKO បុគ្គលិក អ្នកស្ម័គ្រចិត្ត និងដៃគូ មានទំនួលខុសត្រូវរក្សាសុវត្ថិភាពកុមារ។',
     },
     body: enOnly([
-      '[NEEDS SKO] Summarise SKO’s safeguarding policy here in plain language, and upload the full policy as a PDF under Reports & policies.',
       '## Reporting a concern',
-      '[NEEDS SKO] Explain how anyone — staff, partner, community member or visitor — raises a safeguarding concern, who receives it, and what happens next. Give a named contact and a direct email or phone number.',
+      'To report a safeguarding concern, please contact Soraksmey Heng, Senior Team Leader, directly at stlhali@samatapheapkhnom.org or +855 12 781 203 rather than using the form below. Concerns are treated confidentially.',
       'This website deliberately publishes no information that could identify a child. Stories about families use pseudonyms, and photographs are only published where documented consent exists.',
+      'The full policy is available under Reports & policies.',
+    ]),
+  },
+  {
+    _id: 'page-impact',
+    slug: 'impact',
+    title: { en: 'Impact & results', km: 'លទ្ធផល និងផលប្រយោជន៍' },
+    intro: {
+      en: 'SKO’s empowerment approach through the Family Development Approach (FDA) goes beyond providing immediate support.',
+      km: 'វិធីសាស្ត្រពង្រឹងអំណាចរបស់ SKO តាមរយៈវិធីសាស្ត្រអភិវឌ្ឍន៍គ្រួសារ (FDA) លើសពីការផ្តល់ជំនួយភ្លាមៗ។',
+    },
+    body: enOnly([
+      'It helps families, youth, and children recognize their own strengths, build confidence, and take an active role in identifying challenges and finding solutions. Through counselling, guidance, and regular engagement, families gradually become more capable of making informed decisions and managing difficulties with greater confidence and resilience.',
+      'For children and youth, empowerment means giving them opportunities to be heard, express their needs, develop life skills, and participate in decisions that affect their lives. This helps them build confidence, responsibility, and hope for their future rather than depending only on external support.',
+      'At the family and community level, empowerment strengthens relationships, communication, mutual support, and community participation. Families become more connected to available services and resources, while communities become better able to support vulnerable children and families. The lasting impact of SKO’s work is therefore not only the support provided today, but the strength, knowledge, confidence, and resilience that people can carry forward and use to create positive change in their own lives and communities.',
+      'The results for each of SKO’s four projects are on their own programme pages, not repeated here.',
     ]),
   },
   {
@@ -722,4 +896,3 @@ export const pages: Page[] = [
     ),
   },
 ];
-
