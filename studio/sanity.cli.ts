@@ -11,4 +11,12 @@ export default defineCliConfig({
   deployment: {
     autoUpdates: false,
   },
+  // Pin Vite to the studio's own tsconfig. Without this it scans every
+  // tsconfig.json up to the repo root, and the root one extends
+  // `astro/tsconfigs/strict`, which is not installed when only `studio/`
+  // is installed (as in CI).
+  vite: (viteConfig) => ({
+    ...viteConfig,
+    tsconfig: 'tsconfig.json',
+  }),
 });
