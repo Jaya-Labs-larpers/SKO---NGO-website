@@ -6,7 +6,7 @@ import type { UIKey } from '~/lib/i18n/strings';
 import { blocksToPlainText } from '~/lib/portable-text';
 import { resolveSeo } from '~/lib/seo';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import PageHero from '~/components/content/PageHero.astro';
+import PageHeading from '~/components/content/PageHeading.astro';
 import RichText from '~/components/content/RichText.astro';
 import FaqSection from '~/components/content/FaqSection.astro';
 import type { Crumb } from '~/lib/breadcrumbs';
@@ -39,19 +39,20 @@ const seo = resolveSeo(page?.seo, lang, {
   ogImage={seo.ogImage}
   noindex={seo.noindex}
 >
-  <PageHero
+  <PageHeading
     lang={lang}
     title={heading}
+    titleLang={title.isFallback ? title.lang : undefined}
     intro={intro.value}
     introLang={intro.isFallback ? intro.lang : undefined}
     trail={trail ?? [{ label: heading }]}
   />
 
-  <section class="section">
-    <div class="wrap">
+  <section class="wrap grid gap-x-10 gap-y-10 pt-10 lg:grid-cols-12 lg:pt-14">
+    <div class="lg:col-span-8 lg:col-start-1">
       <RichText blocks={page?.body} lang={lang} />
-      <slot />
     </div>
+    <slot />
   </section>
 
   {page?.faqs && page.faqs.length > 0 && <FaqSection lang={lang} faqs={page.faqs} />}

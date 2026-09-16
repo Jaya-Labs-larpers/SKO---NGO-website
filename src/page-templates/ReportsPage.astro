@@ -1,11 +1,14 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
-import { getReports } from '~/lib/content';
-import { t } from '~/lib/i18n/utils';
+import { getReports, getSiteSettings } from '~/lib/content';
+import { localizePath, t } from '~/lib/i18n/utils';
+import { reportTypeLabels } from '~/lib/labels';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import PageHero from '~/components/content/PageHero.astro';
-import ReportList from '~/components/content/ReportList.astro';
+import PageHeading from '~/components/content/PageHeading.astro';
+import PageIndex from '~/components/content/PageIndex.astro';
+import DocumentIndex from '~/components/content/DocumentIndex.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
+import Icon from '~/components/ui/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -15,34 +18,67 @@ interface Props {
 
 const { lang, types } = Astro.props;
 
-const all = await getReports();
+const [all, settings] = await Promise.all([getReports(), getSiteSettings()]);
 const reports = types ? all.filter((report) => types.includes(report.type ?? 'other')) : all;
 
-const years = [...new Set(reports.map((report) => report.year ?? 0))].sort((a, b) => b - a);
+const order = ['annual-report', 'financial', 'policy', 'other'];
+const groups = order
+  .map((type) => ({
+    id: type,
+    label: reportTypeLabels[type]![lang],
+    reports: reports
+      .filter((report) => (report.type ?? 'other') === type)
+      .sort((a, b) => (b.year ?? 0) - (a.year ?? 0)),
+  }))
+  .filter((group) => group.reports.length > 0);
+
 const heading = t(lang, 'pageReports');
+const methodTitle = t(lang, 'methodologyTitle').replace(/[.។]$/, '');
+const indexItems = [
+  ...groups.map((group) => ({ id: group.id, label: group.label })),
+  { id: 'method', label: methodTitle },
+];
 ---
 
 <BaseLayout lang={lang} title={heading} description={t(lang, 'introReports')}>
-  <PageHero
-    lang={lang}
-    title={heading}
-    intro={t(lang, 'introReports')}
-    trail={[{ label: heading }]}
-  />
-  <section class="section">
-    <div class="wrap max-w-[900px]">
+  <PageHeading lang={lang} title={heading} intro={t(lang, 'introReports')} trail={[{ label: heading }]} />
+
+  <section class="wrap grid gap-x-10 gap-y-8 pt-8 pb-[var(--spacing-section)] lg:grid-cols-12 lg:pt-12">
+    <aside class="lg:col-span-3">
+      <PageIndex lang={lang} items={indexItems} />
+    </aside>
+
+    <div class="lg:col-span-9">
       {
-        reports.length === 0 ? (
+        groups.length === 0 ? (
           <EmptyState message={t(lang, 'emptyReports')} />
         ) : (
-          years.map((year) => (
-            <div class="mb-9">
-              <h2 class="mb-4 text-[length:var(--text-h3)]">{year || '—'}</h2>
-              <ReportList lang={lang} reports={reports.filter((report) => (report.year ?? 0) === year)} />
-            </div>
+          groups.map((group, index) => (
+            <section class:list={[index > 0 && 'mt-12']} aria-labelledby={`${group.id}-heading`}>
+              <h2 id={group.id} class="mb-4 text-[length:var(--text-h3)] leading-[var(--text-h3--line-height)] tracking-[var(--text-h3--letter-spacing)] scroll-mt-24">
+                <span id={`${group.id}-heading`}>{group.label}</span>
+              </h2>
+              <DocumentIndex lang={lang} reports={group.reports} />
+            </section>
           ))
         )
       }
+
+      <section class="mt-12 border-t border-line pt-8" aria-labelledby="method-heading">
+        <h2 id="method" class="mb-3 text-[length:var(--text-h3)] leading-[var(--text-h3--line-height)] tracking-[var(--text-h3--letter-spacing)] scroll-mt-24"><span id="method-heading">{methodTitle}</span></h2>
+        <p class="max-w-[62ch] text-ink-600">{t(lang, 'methodologyBody')}</p>
+      </section>
+
+      <p class="mt-10 border-t border-line pt-6 text-[15px]">
+        {
+          settings.email && (
+            <a href={localizePath('/contact', lang)} class="link">
+              {t(lang, 'contactUs')}
+              <Icon name="arrow-right" size={14} />
+            </a>
+          )
+        }
+      </p>
     </div>
   </section>
 </BaseLayout>

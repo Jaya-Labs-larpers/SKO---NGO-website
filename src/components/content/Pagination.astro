@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import { t } from '~/lib/i18n/utils';
+import Icon from '~/components/ui/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -12,37 +13,44 @@ interface Props {
 
 const { lang, current, total, hrefFor } = Astro.props;
 const pages = Array.from({ length: total }, (_, index) => index + 1);
+
+const cell =
+  'inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 px-2 text-[15px] font-medium text-ink-900 no-underline hover:text-indigo-700 hover:underline';
 ---
 
 {
   total > 1 && (
-    <nav class="mt-11 flex justify-center gap-1.5" aria-label="Pagination">
-      {current > 1 && (
-        <a href={hrefFor(current - 1)} rel="prev" class="grid h-[42px] min-w-[42px] place-items-center rounded-[var(--radius-sm)] border border-[color:var(--color-line)] bg-white px-3 text-[15px] font-semibold text-[color:var(--color-ink-700)] no-underline hover:border-[color:var(--color-blue-700)] hover:text-[color:var(--color-blue-800)]">
-          ← {t(lang, 'previous')}
+    <nav class="mt-10 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4" aria-label={t(lang, 'pageActivities')}>
+      {current > 1 ? (
+        <a href={hrefFor(current - 1)} rel="prev" class={cell}>
+          <Icon name="arrow-left" size={14} />
+          {t(lang, 'previous')}
         </a>
+      ) : (
+        <span />
       )}
-      {pages.map((page) =>
-        page === current ? (
-          <span
-            aria-current="page"
-            class="grid h-[42px] min-w-[42px] place-items-center rounded-[var(--radius-sm)] border border-[color:var(--color-blue-700)] bg-[color:var(--color-blue-700)] text-[15px] font-semibold text-white"
-          >
-            {page}
-          </span>
-        ) : (
-          <a
-            href={hrefFor(page)}
-            class="grid h-[42px] min-w-[42px] place-items-center rounded-[var(--radius-sm)] border border-[color:var(--color-line)] bg-white text-[15px] font-semibold text-[color:var(--color-ink-700)] no-underline hover:border-[color:var(--color-blue-700)] hover:text-[color:var(--color-blue-800)]"
-          >
-            {page}
-          </a>
-        ),
-      )}
-      {current < total && (
-        <a href={hrefFor(current + 1)} rel="next" class="grid h-[42px] min-w-[42px] place-items-center rounded-[var(--radius-sm)] border border-[color:var(--color-line)] bg-white px-3 text-[15px] font-semibold text-[color:var(--color-ink-700)] no-underline hover:border-[color:var(--color-blue-700)] hover:text-[color:var(--color-blue-800)]">
-          {t(lang, 'next')} →
+      <ol class="flex list-none gap-1 p-0">
+        {pages.map((page) => (
+          <li>
+            {page === current ? (
+              <span aria-current="page" class:list={[cell, 'mono mono-lg border-b border-ink-900 text-ink-900']}>
+                {page}
+              </span>
+            ) : (
+              <a href={hrefFor(page)} class:list={[cell, 'mono mono-lg']}>
+                {page}
+              </a>
+            )}
+          </li>
+        ))}
+      </ol>
+      {current < total ? (
+        <a href={hrefFor(current + 1)} rel="next" class={cell}>
+          {t(lang, 'next')}
+          <Icon name="arrow-right" size={14} />
         </a>
+      ) : (
+        <span />
       )}
     </nav>
   )

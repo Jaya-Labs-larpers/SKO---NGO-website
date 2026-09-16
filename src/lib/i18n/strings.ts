@@ -13,6 +13,9 @@ const en = {
   navHome: 'Home',
   navAbout: 'About',
   navWork: 'Our work',
+  navEvidence: 'Evidence',
+  navNews: 'News',
+  navSupport: 'Support',
   navPrograms: 'Programs',
   navImpact: 'Impact',
   navActivities: 'Activities',
@@ -38,6 +41,7 @@ const en = {
   breadcrumbLabel: 'Breadcrumb',
   mainNavLabel: 'Main navigation',
   footerNavLabel: 'Footer navigation',
+  onThisPage: 'On this page',
 
   // --- Generic actions ------------------------------------------------------
   readMore: 'Read more',
@@ -183,11 +187,22 @@ const en = {
 
 export type UIKey = keyof typeof en;
 
-/** [KHMER REVIEW REQUIRED] — see note at the top of this file. */
-const km: Record<UIKey, string> = {
+/**
+ * [KHMER REVIEW REQUIRED] — see note at the top of this file.
+ *
+ * `null` marks a label that has no reviewed Khmer yet. It renders in English
+ * with lang="en" (see `tPick`) and the production readiness check refuses to
+ * ship it, so a missing translation is visible rather than invented here.
+ * The three navigation group labels reuse existing group translations
+ * (Transparency, Activities & news, Get involved) pending SKO's own wording.
+ */
+const km: Record<UIKey, string | null> = {
   navHome: 'ទំព័រដើម',
   navAbout: 'អំពីយើង',
   navWork: 'ការងាររបស់យើង',
+  navEvidence: 'តម្លាភាព',
+  navNews: 'សកម្មភាព និងព័ត៌មាន',
+  navSupport: 'ចូលរួមជាមួយយើង',
   navPrograms: 'កម្មវិធី',
   navImpact: 'លទ្ធផល',
   navActivities: 'សកម្មភាព',
@@ -212,6 +227,7 @@ const km: Record<UIKey, string> = {
   breadcrumbLabel: 'ផ្លូវរុករក',
   mainNavLabel: 'ម៉ឺនុយមេ',
   footerNavLabel: 'ម៉ឺនុយបាតទំព័រ',
+  onThisPage: null,
 
   readMore: 'អានបន្ថែម',
   learnMore: 'ស្វែងយល់បន្ថែម',
@@ -343,4 +359,4 @@ const km: Record<UIKey, string> = {
   publishedOn: 'ចុះផ្សាយ',
 };
 
-export const ui: Record<Locale, Record<UIKey, string>> = { en, km };
+export const ui: Record<Locale, Record<UIKey, string | null>> = { en, km };

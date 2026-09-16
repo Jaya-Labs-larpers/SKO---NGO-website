@@ -45,7 +45,7 @@ const pathname = Astro.url.pathname;
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#2b4cc7" />
+    <meta name="theme-color" content="#f5f2ea" />
 
     {
       /*
@@ -62,7 +62,7 @@ const pathname = Astro.url.pathname;
       crossorigin="anonymous"
       href={lang === "km"
         ? "/fonts/kantumruy-pro-khmer.woff2"
-        : "/fonts/inter-latin.woff2"}
+        : "/fonts/hanken-grotesk-latin.woff2"}
     />
     <SeoHead
       lang={lang}
@@ -76,10 +76,10 @@ const pathname = Astro.url.pathname;
       jsonLd={jsonLd}
     />
   </head>
-  <body class="bg-white">
+  <body class="bg-canvas">
     <a
       href="#main"
-      class="sr-only-focusable absolute top-3 left-3 z-[100] rounded-[var(--radius-md)] bg-[color:var(--color-blue-700)] px-4 py-3 text-[15px] font-semibold text-white no-underline"
+      class="sr-only-focusable absolute top-3 left-3 z-[100] bg-indigo-700 px-4 py-3 text-[15px] font-medium text-white no-underline"
     >
       {t(lang, "skipToContent")}
     </a>
@@ -87,7 +87,7 @@ const pathname = Astro.url.pathname;
     {
       isPreviewDeployment && (
         <aside
-          class="border-b border-amber-300 bg-amber-50 px-4 py-3 text-center text-sm"
+          class="border-b border-terracotta-700 bg-canvas px-4 py-3 text-center text-[14px] text-terracotta-700"
           aria-label="Preview notice"
         >
           {lang === "km"

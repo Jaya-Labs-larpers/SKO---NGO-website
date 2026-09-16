@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Samatapheap Khnom Organization">
-  <rect width="64" height="64" rx="12" fill="#ffffff"/>
-  <path d="M32 13 L53 49 H11 Z" fill="none" stroke="#2fc4e8" stroke-width="3" stroke-linejoin="round"/>
-  <g fill="#2b4cc7">
+  <rect width="64" height="64" rx="4" fill="#f5f2ea"/>
+  <path d="M32 13 L53 49 H11 Z" fill="none" stroke="#8f4326" stroke-width="3" stroke-linejoin="round"/>
+  <g fill="#2e3d8a">
     <ellipse cx="27.5" cy="33" rx="5.5" ry="3.4" transform="rotate(-20 27.5 33)"/>
     <ellipse cx="36.5" cy="33" rx="5.5" ry="3.4" transform="rotate(20 36.5 33)"/>
     <rect x="31.2" y="30.5" width="1.6" height="7" rx="0.8"/>

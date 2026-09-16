@@ -90,26 +90,23 @@ function renderImage(block: PortableImageBlock, lang: Locale): string {
         const srcset = imageSrcSet(block);
         const width = block.dimensions?.width ?? 1200;
         const height = block.dimensions?.height ?? 800;
-        return `<img src="${esc(src ?? '')}" srcset="${esc(srcset ?? '')}" sizes="(min-width: 48rem) 44rem, 100vw" width="${width}" height="${height}" alt="${alt}" loading="lazy" decoding="async" class="w-full rounded-[var(--radius-lg)]">`;
+        return `<img src="${esc(src ?? '')}" srcset="${esc(srcset ?? '')}" sizes="(min-width: 48rem) 44rem, 100vw" width="${width}" height="${height}" alt="${alt}" loading="lazy" decoding="async" class="block w-full h-auto">`;
       })()
-    : `<div class="media-placeholder rounded-[var(--radius-lg)]" style="aspect-ratio:3/2">[PLACEHOLDER IMAGE]</div>`;
+    : `<div class="media-placeholder" style="aspect-ratio:3/2">[Field photograph]</div>`;
 
   const figcaption = caption
-    ? `<figcaption class="mt-3 text-[color:var(--color-ink-400)] text-[0.9375rem]"${captionLang}>${caption}</figcaption>`
+    ? `<figcaption class="border-t border-[color:var(--color-line)] pt-3"${captionLang}>${caption}</figcaption>`
     : '';
 
-  return `<figure class="my-8">${media}${figcaption}</figure>`;
+  return `<figure>${media}${figcaption}</figure>`;
 }
 
 function renderCallout(block: PortableCalloutBlock, lang: Locale): string {
   const picked = pick(block.text, lang);
   if (!picked.value) return '';
   const langAttr = picked.isFallback ? ` lang="${picked.lang}"` : '';
-  const tone =
-    block.tone === 'warning'
-      ? 'background:var(--color-danger-50);border-color:var(--color-danger-700)'
-      : 'background:var(--color-aqua-50);border-color:var(--color-blue-700)';
-  return `<aside class="my-6 border-l-[3px] px-5 py-4 rounded-r-[var(--radius-md)]" style="${tone}"${langAttr}>${esc(picked.value)}</aside>`;
+  const tone = block.tone === 'warning' ? ' callout-warning' : '';
+  return `<aside class="callout${tone}"${langAttr}>${esc(picked.value)}</aside>`;
 }
 
 /** Convert a locale-resolved block array into HTML. */

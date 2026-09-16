@@ -1,0 +1,35 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { Activity } from '~/lib/content/types';
+import { formatDate, localizePath, pick } from '~/lib/i18n/utils';
+import { activityCategoryLabels, label } from '~/lib/labels';
+import Icon from '~/components/ui/Icon.astro';
+
+/** One dated row: date · category | title | arrow. */
+interface Props {
+  lang: Locale;
+  activity: Activity;
+}
+
+const { lang, activity } = Astro.props;
+
+const title = pick(activity.title, lang);
+const category = label(activityCategoryLabels, activity.category, lang);
+---
+
+<a
+  href={localizePath(`/activities/${activity.slug}`, lang)}
+  class="row-link grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[9.5rem_minmax(0,1fr)_auto]"
+>
+  <span class="mono col-span-full flex flex-wrap gap-x-2 sm:col-span-1 sm:block">
+    <time datetime={activity.publishedAt ?? undefined} class="block">{formatDate(activity.publishedAt, lang)}</time>
+    {category && <span class="block text-terracotta-700">{category}</span>}
+  </span>
+  <span
+    class="text-[length:var(--text-h3)] leading-[var(--text-h3--line-height)] font-semibold tracking-[var(--text-h3--letter-spacing)]"
+    lang={title.isFallback ? title.lang : undefined}
+  >
+    {title.value}
+  </span>
+  <Icon name="arrow-right" size={18} class="row-arrow self-center" />
+</a>

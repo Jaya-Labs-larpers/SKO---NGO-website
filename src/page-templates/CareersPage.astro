@@ -2,9 +2,11 @@
 import type { Locale } from '~/lib/i18n/config';
 import { getJobs } from '~/lib/content';
 import { formatDate, localizePath, pick, t } from '~/lib/i18n/utils';
+import { employmentTypeLabels, label } from '~/lib/labels';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import PageHero from '~/components/content/PageHero.astro';
+import PageHeading from '~/components/content/PageHeading.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
+import Icon from '~/components/ui/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -14,13 +16,6 @@ const { lang } = Astro.props;
 const jobs = await getJobs();
 const heading = t(lang, 'pageCareers');
 
-const typeLabels: Record<string, Record<Locale, string>> = {
-  'full-time': { en: 'Full time', km: 'ពេញម៉ោង' },
-  'part-time': { en: 'Part time', km: 'ក្រៅម៉ោង' },
-  consultant: { en: 'Consultant', km: 'ទីប្រឹក្សា' },
-  internship: { en: 'Internship', km: 'កម្មសិក្សា' },
-};
-
 const daysLeft = (deadline?: string | null) => {
   if (!deadline) return null;
   const diff = Math.ceil((new Date(deadline).getTime() - Date.now()) / 86_400_000);
@@ -29,53 +24,58 @@ const daysLeft = (deadline?: string | null) => {
 ---
 
 <BaseLayout lang={lang} title={heading} description={t(lang, 'introCareers')}>
-  <PageHero
-    lang={lang}
-    title={heading}
-    intro={t(lang, 'introCareers')}
-    trail={[{ label: heading }]}
-  />
-  <section class="section">
-    <div class="wrap max-w-[900px]">
-      {
-        jobs.length === 0 ? (
-          <EmptyState message={t(lang, 'emptyJobs')} />
-        ) : (
-          <ul class="grid list-none gap-4 p-0">
-            {jobs.map((job) => {
-              const title = pick(job.title, lang);
-              const location = pick(job.location, lang);
-              const remaining = daysLeft(job.deadline);
-              return (
-                <li class="card relative p-5.5">
-                  <div class="flex flex-wrap items-center gap-2.5">
-                    {job.employmentType && (
-                      <span class="chip">{typeLabels[job.employmentType]?.[lang] ?? job.employmentType}</span>
-                    )}
-                    {remaining !== null && remaining <= 14 && (
-                      <span class="chip chip-alert">
-                        {t(lang, 'closesOn')} {formatDate(job.deadline, lang)}
-                      </span>
-                    )}
-                  </div>
-                  <h2 class="mt-2.5 text-[19px]" lang={title.isFallback ? title.lang : undefined}>
+  <PageHeading lang={lang} title={heading} intro={t(lang, 'introCareers')} trail={[{ label: heading }]} />
+  <section class="wrap pt-10 lg:pt-14">
+    <div class="lg:grid lg:grid-cols-12 lg:gap-x-10">
+      <div class="lg:col-span-10">
+        {
+          jobs.length === 0 ? (
+            <EmptyState message={t(lang, 'emptyJobs')} />
+          ) : (
+            <ul class="list-none border-b border-line p-0">
+              {jobs.map((job) => {
+                const title = pick(job.title, lang);
+                const location = pick(job.location, lang);
+                const remaining = daysLeft(job.deadline);
+                const closingSoon = remaining !== null && 14 >= remaining;
+                return (
+                  <li>
                     <a
                       href={localizePath(`/careers/${job.slug}`, lang)}
-                      class="text-inherit no-underline before:absolute before:inset-0 before:content-['']"
+                      class="row-link grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[9.5rem_minmax(0,1fr)_auto]"
                     >
-                      {title.value}
+                      <span class="mono col-span-full sm:col-span-1">
+                        {job.employmentType && (
+                          <span class="block">{label(employmentTypeLabels, job.employmentType, lang) ?? job.employmentType}</span>
+                        )}
+                        {job.deadline && (
+                          <span class:list={['block', closingSoon && 'text-danger-700']}>
+                            {t(lang, 'closesOn')} <time datetime={job.deadline}>{formatDate(job.deadline, lang)}</time>
+                          </span>
+                        )}
+                      </span>
+                      <span class="min-w-0">
+                        <span
+                          class="block text-[length:var(--text-h3)] leading-[var(--text-h3--line-height)] font-semibold tracking-[var(--text-h3--letter-spacing)]"
+                          lang={title.isFallback ? title.lang : undefined}
+                        >
+                          {title.value}
+                        </span>
+                        {location.value && (
+                          <span class="mt-1 block text-[15px] text-ink-600" lang={location.isFallback ? location.lang : undefined}>
+                            {location.value}
+                          </span>
+                        )}
+                      </span>
+                      <Icon name="arrow-right" size={18} class="row-arrow self-center" />
                     </a>
-                  </h2>
-                  <p class="mt-1.5 text-[14px] text-[color:var(--color-ink-400)]">
-                    {location.value}
-                    {job.deadline && <span> · {t(lang, 'closesOn')} {formatDate(job.deadline, lang)}</span>}
-                  </p>
-                </li>
-              );
-            })}
-          </ul>
-        )
-      }
+                  </li>
+                );
+              })}
+            </ul>
+          )
+        }
+      </div>
     </div>
   </section>
 </BaseLayout>

@@ -1,24 +1,27 @@
 ---
 interface Props {
   title: string;
+  titleLang?: string | undefined;
   intro?: string | null;
   introLang?: string | undefined;
   as?: 'h2' | 'h3';
+  id?: string;
 }
 
-const { title, intro, introLang, as: Tag = 'h2' }: Props = Astro.props;
+const { title, titleLang, intro, introLang, as: Tag = 'h2', id }: Props = Astro.props;
 ---
 
-<div class="max-w-[640px]">
-  <div class="rule-accent"></div>
+<div class="max-w-[40rem]">
   <Tag
-    class="mt-3 text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)]"
+    id={id}
+    class="text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)] scroll-mt-24"
+    lang={titleLang}
   >
     {title}
   </Tag>
   {
     intro && (
-      <p class="mt-3.5 text-[length:var(--text-lead)] leading-[1.6] text-[color:var(--color-ink-400)]" lang={introLang}>
+      <p class="mt-3 text-ink-600" lang={introLang}>
         {intro}
       </p>
     )

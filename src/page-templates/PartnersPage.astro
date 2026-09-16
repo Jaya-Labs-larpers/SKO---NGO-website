@@ -2,11 +2,12 @@
 import type { Locale } from '~/lib/i18n/config';
 import { getPartners } from '~/lib/content';
 import { t } from '~/lib/i18n/utils';
+import { partnerCategoryLabels } from '~/lib/labels';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import PageHero from '~/components/content/PageHero.astro';
-import PartnerWall from '~/components/content/PartnerWall.astro';
+import PageHeading from '~/components/content/PageHeading.astro';
+import PartnerIndex from '~/components/content/PartnerIndex.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
-import CtaBand from '~/components/content/CtaBand.astro';
+import CloseBand from '~/components/content/CloseBand.astro';
 
 interface Props {
   lang: Locale;
@@ -16,44 +17,30 @@ const { lang } = Astro.props;
 const partners = await getPartners();
 const heading = t(lang, 'pagePartners');
 
-const categoryLabels: Record<string, Record<Locale, string>> = {
-  'un-agency': { en: 'UN agencies', km: 'ទីភ្នាក់ងារអង្គការសហប្រជាជាតិ' },
-  ingo: { en: 'International NGOs', km: 'អង្គការក្រៅរដ្ឋាភិបាលអន្តរជាតិ' },
-  government: { en: 'Government', km: 'រដ្ឋាភិបាល' },
-  foundation: { en: 'Foundations', km: 'មូលនិធិ' },
-  corporate: { en: 'Corporate', km: 'ក្រុមហ៊ុន' },
-};
-
 const groups = [...new Set(partners.map((partner) => partner.category ?? 'other'))];
 ---
 
 <BaseLayout lang={lang} title={heading} description={t(lang, 'introPartners')}>
-  <PageHero
-    lang={lang}
-    title={heading}
-    intro={t(lang, 'introPartners')}
-    trail={[{ label: heading }]}
-  />
-  <section class="section">
-    <div class="wrap">
-      {
-        partners.length === 0 ? (
-          <EmptyState message={t(lang, 'emptyGeneric')} />
-        ) : (
-          groups.map((group) => (
-            <div class="mb-10">
-              <h2 class="mb-4 font-mono text-[11px] font-semibold tracking-[0.1em] text-[color:var(--color-ink-400)] uppercase">
-                {categoryLabels[group]?.[lang] ?? group}
-              </h2>
-              <PartnerWall
-                lang={lang}
-                partners={partners.filter((partner) => (partner.category ?? 'other') === group)}
-              />
-            </div>
-          ))
-        )
-      }
-    </div>
+  <PageHeading lang={lang} title={heading} intro={t(lang, 'introPartners')} trail={[{ label: heading }]} />
+
+  <section class="wrap pt-4 lg:pt-8">
+    {
+      partners.length === 0 ? (
+        <EmptyState message={t(lang, 'emptyGeneric')} />
+      ) : (
+        groups.map((group) => (
+          <div class="ledger">
+            <h2 class="text-[length:var(--text-h3)] leading-[var(--text-h3--line-height)] tracking-[var(--text-h3--letter-spacing)]">{partnerCategoryLabels[group]?.[lang] ?? group}</h2>
+            <PartnerIndex
+              lang={lang}
+              partners={partners.filter((partner) => (partner.category ?? 'other') === group)}
+              categories={false}
+            />
+          </div>
+        ))
+      )
+    }
   </section>
-  <CtaBand lang={lang} title={t(lang, 'ctaPartnersTitle')} />
+
+  <CloseBand lang={lang} title={t(lang, 'ctaPartnersTitle')} />
 </BaseLayout>

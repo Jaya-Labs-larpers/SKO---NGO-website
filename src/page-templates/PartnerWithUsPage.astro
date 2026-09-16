@@ -3,7 +3,7 @@ import type { Locale } from '~/lib/i18n/config';
 import { getPage, getSiteSettings } from '~/lib/content';
 import { pick, t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import PageHero from '~/components/content/PageHero.astro';
+import PageHeading from '~/components/content/PageHeading.astro';
 import RichText from '~/components/content/RichText.astro';
 import ContactForm from '~/components/forms/ContactForm.astro';
 
@@ -24,16 +24,20 @@ const inbox = variant === 'partner' ? (settings.partnerEmail ?? settings.email) 
 ---
 
 <BaseLayout lang={lang} title={heading} description={intro.value ?? undefined}>
-  <PageHero
+  <PageHeading
     lang={lang}
     title={heading}
+    titleLang={title.isFallback ? title.lang : undefined}
     intro={intro.value}
     introLang={intro.isFallback ? intro.lang : undefined}
     trail={[{ label: heading }]}
+    display
   />
-  <section class="section">
-    <div class="wrap grid items-start gap-12 lg:grid-cols-2">
+  <section class="wrap grid items-start gap-x-10 gap-y-10 pt-10 lg:grid-cols-12 lg:pt-14">
+    <div class="lg:col-span-5">
       <RichText blocks={page?.body} lang={lang} />
+    </div>
+    <div class="lg:col-span-6 lg:col-start-7">
       <ContactForm lang={lang} variant={variant} fallbackEmail={inbox} />
     </div>
   </section>
