@@ -24,42 +24,47 @@ const role = pick(story.personRole, lang);
  */
 const usePhoto = !story.useSilhouette && hasImage(story.photo);
 
-/**
- * English quotations take the italic; Khmer has no italic tradition, so it
- * stays upright in Kantumruy at a slightly larger size with looser leading.
- */
 const quoteClass =
   lang === 'km'
-    ? 'text-[1.25rem] leading-[1.8] font-medium'
-    : 'text-[1.375rem] leading-[1.4] font-normal italic tracking-[-0.005em]';
+    ? 'font-[family-name:var(--font-khmer)] text-[22px] leading-[1.8] font-semibold'
+    : 'font-[family-name:var(--font-display)] text-[27px] leading-[1.4] font-semibold';
 ---
 
-<figure class="m-0 border-l border-terracotta-700 pl-5">
+<figure class="m-0">
+  <div class="rule-accent"></div>
   <blockquote
-    class:list={['m-0 max-w-[40ch] text-ink-900', quoteClass]}
+    class:list={['mt-4.5 text-[color:var(--color-ink-900)]', quoteClass]}
     lang={quote.isFallback ? quote.lang : undefined}
   >
     {quote.value}
   </blockquote>
 
-  <figcaption class="mt-4 flex items-center gap-3 text-[15px] text-ink-600">
+  <figcaption class="mt-4.5 flex items-center gap-3 text-[15px] text-[color:var(--color-ink-400)]">
     {
       showAvatar &&
         (usePhoto ? (
-          <span class="h-10 w-10 flex-none overflow-hidden">
-            <ResponsiveImage image={story.photo} lang={lang} alt="" aspect="1/1" sizes="40px" />
+          <span class="h-11 w-11 flex-none overflow-hidden rounded-full">
+            <ResponsiveImage image={story.photo} lang={lang} alt="" aspect="1/1" sizes="44px" />
           </span>
         ) : (
-          <span class="grid h-10 w-10 flex-none place-items-center bg-surface-sunken" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-ink-400">
-              <circle cx="10" cy="7" r="3.25" />
-              <path d="M3.75 17c0-3.2 2.8-5.25 6.25-5.25s6.25 2.05 6.25 5.25" />
+          <span
+            class="grid h-11 w-11 flex-none place-items-center rounded-full bg-[color:var(--color-aqua-200)]"
+            aria-hidden="true"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8.5" r="3.75" fill="var(--color-blue-700)" />
+              <path
+                d="M4.5 20.5c0-3.9 3.36-6.5 7.5-6.5s7.5 2.6 7.5 6.5"
+                stroke="var(--color-blue-700)"
+                stroke-width="2.25"
+                stroke-linecap="round"
+              />
             </svg>
           </span>
         ))
     }
     <span>
-      <span class="font-medium text-ink-900">{story.personName}</span>
+      — {story.personName}
       {role.value && <span lang={role.isFallback ? role.lang : undefined}>, {role.value}</span>}
     </span>
   </figcaption>

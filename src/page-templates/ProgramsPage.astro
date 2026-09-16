@@ -3,10 +3,10 @@ import type { Locale } from '~/lib/i18n/config';
 import { getPrograms } from '~/lib/content';
 import { t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import PageHeading from '~/components/content/PageHeading.astro';
-import ProgramIndex from '~/components/content/ProgramIndex.astro';
+import PageHero from '~/components/content/PageHero.astro';
+import ProgramCard from '~/components/content/ProgramCard.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
-import CloseBand from '~/components/content/CloseBand.astro';
+import CtaBand from '~/components/content/CtaBand.astro';
 
 interface Props {
   lang: Locale;
@@ -18,19 +18,26 @@ const heading = t(lang, 'pagePrograms');
 ---
 
 <BaseLayout lang={lang} title={heading} description={t(lang, 'introPrograms')}>
-  <PageHeading lang={lang} title={heading} intro={t(lang, 'introPrograms')} trail={[{ label: heading }]} />
-  <section class="wrap pt-10 lg:pt-14">
-    {
-      programs.length === 0 ? (
-        <EmptyState message={t(lang, 'emptyGeneric')} />
-      ) : (
-        <div class="lg:grid lg:grid-cols-12 lg:gap-x-10">
-          <div class="lg:col-span-10">
-            <ProgramIndex lang={lang} programs={programs} />
+  <PageHero
+    lang={lang}
+    title={heading}
+    intro={t(lang, 'introPrograms')}
+    trail={[{ label: heading }]}
+  />
+  <section class="section">
+    <div class="wrap">
+      {
+        programs.length === 0 ? (
+          <EmptyState message={t(lang, 'emptyGeneric')} />
+        ) : (
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {programs.map((program) => (
+              <ProgramCard lang={lang} program={program} />
+            ))}
           </div>
-        </div>
-      )
-    }
+        )
+      }
+    </div>
   </section>
-  <CloseBand lang={lang} title={t(lang, 'ctaProgramsTitle')} />
+  <CtaBand lang={lang} title={t(lang, 'ctaProgramsTitle')} />
 </BaseLayout>

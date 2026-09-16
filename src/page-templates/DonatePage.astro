@@ -1,13 +1,13 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import { getSiteSettings } from '~/lib/content';
-import { localizePath, pick, t } from '~/lib/i18n/utils';
+import { pick, t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import PageHeading from '~/components/content/PageHeading.astro';
+import PageHero from '~/components/content/PageHero.astro';
+import SectionHeading from '~/components/content/SectionHeading.astro';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
 import RichText from '~/components/content/RichText.astro';
 import FaqSection from '~/components/content/FaqSection.astro';
-import Icon from '~/components/ui/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -26,52 +26,52 @@ const heading = t(lang, 'pageDonate');
  * No card fields, no payment SDK, no iframes — QR images and bank details only.
  * The site carries zero PCI scope by construction.
  */
-const h2 =
-  'text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)]';
-
-/** Mirrors the readiness check: these are not bank details, they are gaps. */
-const usable = (value: string | null | undefined) =>
-  Boolean(value && value.trim() && !/^(N\/A|TBD|TODO)$/i.test(value.trim()) && !/\[(NEEDS SKO|PLACEHOLDER)/i.test(value));
+const barTone = ['bg-[color:var(--color-blue-700)]', 'bg-[color:var(--color-sky-200)]', 'bg-[color:var(--color-aqua-200)]'];
 ---
 
 <BaseLayout lang={lang} title={heading} description={t(lang, 'noCardNotice')}>
-  <PageHeading
+  <PageHero
     lang={lang}
     title={t(lang, 'donateHeroTitle')}
-    intro={t(lang, 'donateHeroIntro')}
+    intro={`${t(lang, 'donateHeroIntro')} ${t(lang, 'noCardNotice')}`}
     trail={[{ label: heading }]}
-    display
-  >
-    <p class="mono flex items-center gap-2 py-4 text-ink-900">
-      <Icon name="check" size={14} class="text-success-700" />
-      {t(lang, 'noCardNotice')}
-    </p>
-  </PageHeading>
+  />
 
   {
     qrCodes.length > 0 && (
-      <section class="wrap">
-        <div class="ledger">
-          <h2 class={h2}>{t(lang, 'scanToGive')}</h2>
-          <ul class="grid list-none gap-8 p-0 sm:grid-cols-2">
+      <section class="section">
+        <div class="wrap">
+          <SectionHeading title={t(lang, 'scanToGive')} />
+          <ul class="mt-7.5 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3">
             {qrCodes.map((qr) => {
               const label = pick(qr.label, lang);
               const instructions = pick(qr.instructions, lang);
               return (
-                <li>
-                  <div class="max-w-[16rem]">
-                    <ResponsiveImage image={qr.image} lang={lang} alt="" aspect="1/1" sizes="256px" placeholder="[QR code]" />
+                <li class="rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white p-5.5 text-center">
+                  <div class="mx-auto mb-4 max-w-[260px] overflow-hidden rounded-[var(--radius-md)]">
+                    <ResponsiveImage
+                      image={qr.image}
+                      lang={lang}
+                      alt=""
+                      aspect="1/1"
+                      sizes="260px"
+                      placeholder="[PLACEHOLDER QR CODE]"
+                    />
                   </div>
-                  <p class="mt-3 max-w-[16rem] border-t border-line pt-3">
-                    <span class="block text-[15px] font-medium text-ink-900" lang={label.isFallback ? label.lang : undefined}>
-                      {label.value}
+                  <b
+                    class="block text-[16px] text-[color:var(--color-ink-900)]"
+                    lang={label.isFallback ? label.lang : undefined}
+                  >
+                    {label.value}
+                  </b>
+                  {instructions.value && (
+                    <span
+                      class="mt-1.5 block text-[13.5px] text-[color:var(--color-ink-400)]"
+                      lang={instructions.isFallback ? instructions.lang : undefined}
+                    >
+                      {instructions.value}
                     </span>
-                    {instructions.value && (
-                      <span class="mt-1 block text-[13px] text-ink-400" lang={instructions.isFallback ? instructions.lang : undefined}>
-                        {instructions.value}
-                      </span>
-                    )}
-                  </p>
+                  )}
                 </li>
               );
             })}
@@ -81,13 +81,13 @@ const usable = (value: string | null | undefined) =>
     )
   }
 
-  <section class="wrap">
-    <div class="ledger">
-      <h2 class={h2}>{t(lang, 'bankTransfer')}</h2>
+  <section class="section bg-[color:var(--color-surface-subtle)] pt-0">
+    <div class="wrap grid gap-12 pt-[var(--spacing-section)] lg:grid-cols-[1.25fr_1fr]">
       <div>
+        <SectionHeading title={t(lang, 'bankTransfer')} />
         {
           accounts.map((account) => (
-            <dl class="border-b border-line">
+            <dl class="mt-5 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white">
               {(
                 [
                   [t(lang, 'accountName'), account.accountName],
@@ -100,67 +100,66 @@ const usable = (value: string | null | undefined) =>
               )
                 .filter(([, value]) => Boolean(value))
                 .map(([label, value]) => (
-                  <div class="grid gap-x-6 gap-y-1 border-t border-line py-3.5 sm:grid-cols-[11rem_minmax(0,1fr)_auto] sm:items-center">
-                    <dt class="label">{label}</dt>
-                    <dd class:list={['m-0 font-mono text-[15px] break-all', usable(value) ? 'text-ink-900' : 'text-ink-400']}>
-                      {usable(value) ? value : '[NEEDS SKO]'}
-                    </dd>
-                    <dd class="m-0 sm:justify-self-end">
-                      {usable(value) && <button
+                  <div class="flex flex-col gap-1 border-b border-[color:var(--color-line-subtle)] px-4.5 py-3.5 last:border-b-0 sm:flex-row sm:items-center sm:gap-4">
+                    <dt class="text-[13px] text-[color:var(--color-ink-400)] sm:w-[190px] sm:flex-none sm:text-[14px]">
+                      {label}
+                    </dt>
+                    <dd class="m-0 flex flex-1 items-center justify-between gap-3 font-semibold text-[color:var(--color-ink-900)]">
+                      <span class="font-mono text-[14.5px] break-all">{value}</span>
+                      <button
                         type="button"
-                        class="inline-flex min-h-11 min-w-11 items-center gap-1.5 border border-line-strong bg-transparent px-3 text-[13px] font-medium text-indigo-700 hover:border-indigo-700"
+                        class="flex-none rounded-[var(--radius-xs)] border border-[color:var(--color-blue-200)] bg-[color:var(--color-blue-50)] px-2.5 py-1.5 font-sans text-[12px] font-semibold text-[color:var(--color-blue-800)]"
                         data-copy={value}
                         data-copied-label={t(lang, 'copied')}
                       >
                         {t(lang, 'copy')}
-                      </button>}
+                      </button>
                     </dd>
                   </div>
                 ))}
             </dl>
           ))
         }
-        <RichText blocks={donation.note} lang={lang} class="mt-5 text-[15px]" />
+        <RichText blocks={donation.note} lang={lang} class="mt-4.5 text-[14px]" />
       </div>
-    </div>
-  </section>
 
-  {
-    allocation.length > 0 && (
-      <section class="wrap">
-        <div class="ledger">
-          <h2 class={h2}>{t(lang, 'whereMoneyGoes')}</h2>
-          <ul class="list-none border-b border-line p-0">
-            {allocation.map((item) => {
-              const label = pick(item.label, lang);
-              const note = pick(item.note, lang);
-              return (
-                <li class="grid gap-x-6 gap-y-1 border-t border-line py-4 sm:grid-cols-[5rem_minmax(0,1fr)]">
-                  <span class="text-[length:var(--text-h3)] font-semibold text-ink-900 tabular-nums">{item.percent}%</span>
-                  <span>
-                    <span class="block text-[15px] font-medium text-ink-900" lang={label.isFallback ? label.lang : undefined}>
-                      {label.value}
-                    </span>
+      {
+        allocation.length > 0 && (
+          <div>
+            <SectionHeading title={t(lang, 'whereMoneyGoes')} />
+            <ul class="mt-5.5 grid list-none gap-4 p-0">
+              {allocation.map((item, index) => {
+                const label = pick(item.label, lang);
+                const note = pick(item.note, lang);
+                return (
+                  <li>
+                    <b class="flex justify-between text-[15px] text-[color:var(--color-ink-900)]">
+                      <span lang={label.isFallback ? label.lang : undefined}>{label.value}</span>
+                      <span>[{item.percent}%]</span>
+                    </b>
+                    <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-[color:var(--color-surface-sunken)]">
+                      <span
+                        class:list={['block h-full rounded-full', barTone[index % barTone.length]]}
+                        style={`width:${item.percent ?? 0}%`}
+                      />
+                    </div>
                     {note.value && (
-                      <span class="mt-1 block text-[13px] text-ink-400" lang={note.isFallback ? note.lang : undefined}>
+                      <span
+                        class="mt-1.5 block text-[13.5px] text-[color:var(--color-ink-400)]"
+                        lang={note.isFallback ? note.lang : undefined}
+                      >
                         {note.value}
                       </span>
                     )}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-          <p class="mt-5 text-[15px] lg:col-start-2">
-            <a href={localizePath('/reports', lang)} class="link">
-              {t(lang, 'seeReports')}
-              <Icon name="arrow-right" size={14} />
-            </a>
-          </p>
-        </div>
-      </section>
-    )
-  }
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
 
   {
     settings.donationFaqs && settings.donationFaqs.length > 0 && (

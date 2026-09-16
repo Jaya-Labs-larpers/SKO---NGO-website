@@ -33,20 +33,9 @@ export function alternatePath(pathname: string, target: Locale): string {
   return localizePath(path, target);
 }
 
-/** Translated UI string. Falls back to English when the key has no translation yet. */
+/** Translated UI string. Falls back to English if a key is somehow missing. */
 export function t(lang: Locale, key: UIKey): string {
-  return ui[lang][key] ?? ui[defaultLocale][key] ?? '';
-}
-
-/**
- * Translated UI string with its provenance, for the few chrome labels still
- * awaiting Khmer: the caller stamps lang="en" so a screen reader switches
- * voice and the readiness check can see the gap.
- */
-export function tPick(lang: Locale, key: UIKey): Picked<string> {
-  const value = ui[lang][key];
-  if (value) return { value, lang, isFallback: false };
-  return { value: ui[defaultLocale][key] ?? '', lang: defaultLocale, isFallback: lang !== defaultLocale };
+  return ui[lang][key] ?? ui[defaultLocale][key];
 }
 
 /* -------------------------------------------------------------------------

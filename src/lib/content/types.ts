@@ -128,7 +128,10 @@ export interface SiteSettings {
   tagline?: LocaleString | null;
   logo?: CmsImage | null;
   ogImage?: CmsImage | null;
-  /** Homepage field photographs. The first one is shown; order is display order. */
+  /**
+   * Photos behind the homepage hero card. One renders static; several
+   * crossfade. Order is the display order.
+   */
   homeHero?: CmsImage[] | null;
   registration?: LocaleString | null;
   address?: LocaleString | null;

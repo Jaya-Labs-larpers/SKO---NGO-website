@@ -8,7 +8,6 @@ import type { CmsImage } from "~/lib/content/types";
 import Header from "~/components/layout/Header.astro";
 import Footer from "~/components/layout/Footer.astro";
 import SeoHead from "~/components/seo/SeoHead.astro";
-import { isPreviewDeployment } from "~/lib/config";
 
 interface Props {
   lang: Locale;
@@ -45,7 +44,7 @@ const pathname = Astro.url.pathname;
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#f5f2ea" />
+    <meta name="theme-color" content="#2b4cc7" />
 
     {
       /*
@@ -62,7 +61,7 @@ const pathname = Astro.url.pathname;
       crossorigin="anonymous"
       href={lang === "km"
         ? "/fonts/kantumruy-pro-khmer.woff2"
-        : "/fonts/hanken-grotesk-latin.woff2"}
+        : "/fonts/inter-latin.woff2"}
     />
     <SeoHead
       lang={lang}
@@ -76,26 +75,13 @@ const pathname = Astro.url.pathname;
       jsonLd={jsonLd}
     />
   </head>
-  <body class="bg-canvas">
+  <body class="bg-white">
     <a
       href="#main"
-      class="sr-only-focusable absolute top-3 left-3 z-[100] bg-indigo-700 px-4 py-3 text-[15px] font-medium text-white no-underline"
+      class="sr-only-focusable absolute top-3 left-3 z-[100] rounded-[var(--radius-md)] bg-[color:var(--color-blue-700)] px-4 py-3 text-[15px] font-semibold text-white no-underline"
     >
       {t(lang, "skipToContent")}
     </a>
-
-    {
-      isPreviewDeployment && (
-        <aside
-          class="border-b border-terracotta-700 bg-canvas px-4 py-3 text-center text-[14px] text-terracotta-700"
-          aria-label="Preview notice"
-        >
-          {lang === "km"
-            ? "គេហទំព័រសាកល្បង — ខ្លឹមសារ និងព័ត៌មានបរិច្ចាគមិនទាន់ត្រូវបានអនុម័ត។"
-            : "Preview website — content and donation details are not yet approved. Do not use this site to make donations."}
-        </aside>
-      )
-    }
 
     <Header lang={lang} pathname={pathname} settings={settings} />
 

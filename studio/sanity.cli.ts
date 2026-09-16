@@ -9,6 +9,7 @@ export default defineCliConfig({
   // less thing for SKO to host or keep patched.
   studioHost: process.env.SANITY_STUDIO_HOSTNAME ?? undefined,
   deployment: {
+    appId: 'ml5mtibpsoqkczq7kkn03a9u',
     autoUpdates: false,
   },
   // Pin Vite to the studio's own tsconfig. Without this it scans every

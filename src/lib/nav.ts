@@ -6,61 +6,37 @@ export interface NavItem {
   children?: NavItem[];
 }
 
-/**
- * Header navigation, grouped: work, then evidence, then the organisation,
- * then news. Support is the header's action, not a group. Every route keeps
- * its existing URL; only the grouping changed.
- */
+/** Header navigation. Order is deliberate: identity, then evidence, then action. */
 export const mainNav: NavItem[] = [
+  { key: 'navAbout', path: '/about' },
+  { key: 'navWork', path: '/programs' },
+  { key: 'navImpact', path: '/impact' },
+  { key: 'navActivities', path: '/activities' },
   {
-    key: 'navWork',
-    path: '/programs',
+    key: 'navGetInvolved',
+    path: '/donate',
     children: [
-      { key: 'navPrograms', path: '/programs' },
-      { key: 'navImpact', path: '/impact' },
-    ],
-  },
-  {
-    key: 'navEvidence',
-    path: '/reports',
-    children: [
-      { key: 'navReports', path: '/reports' },
-      { key: 'navSafeguarding', path: '/safeguarding' },
-      { key: 'navPartners', path: '/partners' },
-    ],
-  },
-  {
-    key: 'navAbout',
-    path: '/about',
-    children: [
-      { key: 'navAbout', path: '/about' },
+      { key: 'navDonate', path: '/donate' },
+      { key: 'navPartnerWithUs', path: '/partner-with-us' },
+      { key: 'navVolunteer', path: '/volunteer' },
       { key: 'navCareers', path: '/careers' },
     ],
   },
-  { key: 'navNews', path: '/activities' },
 ];
-
-export const supportNav: NavItem = {
-  key: 'navSupport',
-  path: '/donate',
-  children: [
-    { key: 'navDonate', path: '/donate' },
-    { key: 'navPartnerWithUs', path: '/partner-with-us' },
-    { key: 'navVolunteer', path: '/volunteer' },
-  ],
-};
 
 export const footerNav: { heading: UIKey; items: NavItem[] }[] = [
   {
-    heading: 'navWork',
+    heading: 'footerOrganisation',
     items: [
-      { key: 'navPrograms', path: '/programs' },
+      { key: 'navAbout', path: '/about' },
+      { key: 'navWork', path: '/programs' },
       { key: 'navImpact', path: '/impact' },
-      { key: 'navActivities', path: '/activities' },
+      { key: 'navFaq', path: '/faq' },
+      { key: 'navContact', path: '/contact' },
     ],
   },
   {
-    heading: 'navEvidence',
+    heading: 'footerTransparency',
     items: [
       { key: 'navReports', path: '/reports' },
       { key: 'navSafeguarding', path: '/safeguarding' },
@@ -69,23 +45,25 @@ export const footerNav: { heading: UIKey; items: NavItem[] }[] = [
     ],
   },
   {
-    heading: 'footerOrganisation',
-    items: [
-      { key: 'navAbout', path: '/about' },
-      { key: 'navCareers', path: '/careers' },
-      { key: 'navFaq', path: '/faq' },
-      { key: 'navContact', path: '/contact' },
-    ],
-  },
-  {
-    heading: 'navSupport',
+    heading: 'footerGetInvolved',
     items: [
       { key: 'navDonate', path: '/donate' },
       { key: 'navPartnerWithUs', path: '/partner-with-us' },
       { key: 'navVolunteer', path: '/volunteer' },
+      { key: 'navCareers', path: '/careers' },
     ],
   },
 ];
 
-/** The mobile panel shows the same groups, flattened into headed lists. */
-export const mobileNav: NavItem[] = [...mainNav, supportNav];
+/** Flattened list used by the mobile panel, where nesting adds nothing. */
+export const mobileNav: NavItem[] = [
+  { key: 'navAbout', path: '/about' },
+  { key: 'navWork', path: '/programs' },
+  { key: 'navImpact', path: '/impact' },
+  { key: 'navActivities', path: '/activities' },
+  { key: 'navReports', path: '/reports' },
+  { key: 'navSafeguarding', path: '/safeguarding' },
+  { key: 'navPartners', path: '/partners' },
+  { key: 'navFaq', path: '/faq' },
+  { key: 'navContact', path: '/contact' },
+];

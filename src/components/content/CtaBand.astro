@@ -1,0 +1,29 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import { localizePath, t } from '~/lib/i18n/utils';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  body?: string;
+}
+
+const { lang, title, body } = Astro.props;
+---
+
+<section class="pb-[var(--spacing-section)]">
+  <div class="wrap">
+    <div
+      class="on-inverse flex flex-wrap items-center justify-between gap-9 rounded-[var(--radius-xl)] bg-[color:var(--color-blue-900)] px-8 py-11 text-white sm:px-12 sm:py-13"
+    >
+      <div>
+        <h2 class="max-w-[22ch] text-[30px] leading-[1.2] tracking-[-0.02em] text-white">{title}</h2>
+        {body && <p class="mt-3 max-w-[46ch] text-[16.5px] text-white/78">{body}</p>}
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href={localizePath('/donate', lang)} class="btn btn-inverse">{t(lang, 'navDonate')}</a>
+        <a href={localizePath('/reports', lang)} class="btn btn-inverse-outline">{t(lang, 'seeReports')}</a>
+      </div>
+    </div>
+  </div>
+</section>

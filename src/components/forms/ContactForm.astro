@@ -22,7 +22,7 @@ const submitLabel =
 {
   !contactEnabled && (
     <p
-      class="mb-5 border-t border-terracotta-700 pt-3 text-[14px] text-terracotta-700"
+      class="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm"
       role="note"
     >
       {lang === "km"
@@ -34,7 +34,7 @@ const submitLabel =
 
 <form
   id={id}
-  class="grid max-w-[36rem] gap-5"
+  class="grid max-w-[600px] gap-4.5"
   novalidate
   data-form-type={variant}
   data-preview-disabled={!contactEnabled ? "true" : undefined}
@@ -54,11 +54,11 @@ const submitLabel =
     <div class="grid gap-1.5">
       <label
         for={`${id}-name`}
-        class="text-[15px] leading-[1.3] font-medium text-ink-900"
+        class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
       >
         {t(lang, "formName")}
         <span
-          class="ml-0.5 text-terracotta-700"
+          class="ml-0.5 text-[color:var(--color-danger-700)]"
           aria-hidden="true">*</span
         >
         <span class="sr-only-focusable">({t(lang, "formRequired")})</span>
@@ -73,7 +73,7 @@ const submitLabel =
         maxlength="120"
       />
       <p
-        class="hidden text-[14px] font-medium text-danger-700"
+        class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
         data-error-for="name"
       >
       </p>
@@ -84,11 +84,11 @@ const submitLabel =
         <div class="grid gap-1.5">
           <label
             for={`${id}-organization`}
-            class="text-[15px] leading-[1.3] font-medium text-ink-900"
+            class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
           >
             {t(lang, "formOrganization")}
             <span
-              class="ml-0.5 text-terracotta-700"
+              class="ml-0.5 text-[color:var(--color-danger-700)]"
               aria-hidden="true"
             >
               *
@@ -104,7 +104,7 @@ const submitLabel =
             maxlength="160"
           />
           <p
-            class="hidden text-[14px] font-medium text-danger-700"
+            class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
             data-error-for="organization"
           />
         </div>
@@ -114,11 +114,11 @@ const submitLabel =
     <div class="grid gap-1.5">
       <label
         for={`${id}-email`}
-        class="text-[15px] leading-[1.3] font-medium text-ink-900"
+        class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
       >
         {t(lang, "formEmail")}
         <span
-          class="ml-0.5 text-terracotta-700"
+          class="ml-0.5 text-[color:var(--color-danger-700)]"
           aria-hidden="true">*</span
         >
       </label>
@@ -132,7 +132,7 @@ const submitLabel =
         maxlength="200"
       />
       <p
-        class="hidden text-[14px] font-medium text-danger-700"
+        class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
         data-error-for="email"
       >
       </p>
@@ -143,10 +143,10 @@ const submitLabel =
         <div class="grid gap-1.5">
           <label
             for={`${id}-country`}
-            class="text-[15px] leading-[1.3] font-medium text-ink-900"
+            class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
           >
             {t(lang, "formCountry")}
-            <span class="font-normal text-ink-400">
+            <span class="text-[color:var(--color-ink-400)]">
               {" "}
               ({t(lang, "formOptional")})
             </span>
@@ -166,11 +166,11 @@ const submitLabel =
     <div class="grid gap-1.5">
       <label
         for={`${id}-message`}
-        class="text-[15px] leading-[1.3] font-medium text-ink-900"
+        class="text-[14.5px] leading-[1.3] font-semibold text-[color:var(--color-ink-900)]"
       >
         {t(lang, "formMessage")}
         <span
-          class="ml-0.5 text-terracotta-700"
+          class="ml-0.5 text-[color:var(--color-danger-700)]"
           aria-hidden="true">*</span
         >
       </label>
@@ -182,7 +182,7 @@ const submitLabel =
         required
         maxlength="5000"></textarea>
       <p
-        class="hidden text-[14px] font-medium text-danger-700"
+        class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
         data-error-for="message"
       >
       </p>
@@ -212,7 +212,7 @@ const submitLabel =
           />
         </div>
       ) : contactEnabled ? (
-        <p class="media-placeholder px-4 py-3 normal-case">
+        <p class="rounded-[var(--radius-md)] border border-dashed border-[color:var(--color-line-strong)] bg-[color:var(--color-surface-subtle)] px-4 py-3 font-mono text-[12px] text-[color:var(--color-ink-400)]">
           [PUBLIC_TURNSTILE_SITE_KEY not set — the spam check widget renders
           here]
         </p>
@@ -269,7 +269,7 @@ const submitLabel =
           "aria-describedby",
           target.id || (target.id = `${name}-error`),
         );
-        target.textContent = message;
+        target.textContent = `⚠ ${message}`;
         target.classList.remove("hidden");
       };
 
@@ -300,11 +300,12 @@ const submitLabel =
             : "";
         const colours =
           tone === "success"
-            ? "background:var(--color-success-50);border-color:var(--color-success-700);color:var(--color-success-700)"
-            : "background:var(--color-danger-50);border-color:var(--color-danger-700);color:var(--color-danger-700)";
+            ? "background:var(--color-success-50);border-color:rgb(6 118 71/.25);color:var(--color-success-700)"
+            : "background:var(--color-danger-50);border-color:rgb(180 35 24/.25);color:var(--color-danger-700)";
         status.innerHTML =
-          `<div style="${colours}" class="border-t px-4 py-3.5 text-[15px] font-medium">` +
-          `<b style="display:block">${escapeHtml(title)}</b>${escapeHtml(body)}${emailLink}</div>`;
+          `<div style="${colours}" class="flex items-start gap-2.5 rounded-[var(--radius-md)] border px-4 py-3.5 text-[14.5px] font-medium">` +
+          `<span aria-hidden="true">${tone === "success" ? "✓" : "⚠"}</span>` +
+          `<span><b style="display:block">${escapeHtml(title)}</b>${escapeHtml(body)}${emailLink}</span></div>`;
       };
 
       /** Client-side validation is a courtesy. The Function validates again, server-side. */

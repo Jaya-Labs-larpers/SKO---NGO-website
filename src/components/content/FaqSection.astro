@@ -2,16 +2,16 @@
 import type { Locale } from '~/lib/i18n/config';
 import type { FaqItem } from '~/lib/content/types';
 import { pick, t } from '~/lib/i18n/utils';
+import SectionHeading from './SectionHeading.astro';
 import { serializeJsonLd } from '~/lib/seo/json-ld';
 
 interface Props {
   lang: Locale;
   faqs: FaqItem[];
   heading?: string;
-  id?: string;
 }
 
-const { lang, faqs, heading, id = 'faq' } = Astro.props;
+const { lang, faqs, heading } = Astro.props;
 
 /**
  * Each answer is written to stand alone, because that is how answer engines and
@@ -41,21 +41,22 @@ const jsonLd =
 
 {
   resolved.length > 0 && (
-    <section class="wrap">
-      <div class="ledger">
-        <h2 id={id} class="text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)] scroll-mt-24">
-          {heading ?? t(lang, 'faqHeading')}
-        </h2>
-        <dl class="max-w-[64ch]">
-          {resolved.map((faq, index) => (
-            <div class:list={['border-line py-5', index > 0 && 'border-t']}>
+    <section class="section bg-[color:var(--color-surface-subtle)]">
+      <div class="wrap">
+        <SectionHeading title={heading ?? t(lang, 'faqHeading')} />
+        <dl class="mt-8 max-w-[68ch] border-t border-[color:var(--color-line)]">
+          {resolved.map((faq) => (
+            <div class="border-b border-[color:var(--color-line)] py-6">
               <dt
-                class="text-[length:var(--text-h3)] leading-[var(--text-h3--line-height)] font-semibold text-ink-900"
+                class="text-[length:var(--text-h4)] font-semibold text-[color:var(--color-ink-900)]"
                 lang={faq.question.isFallback ? faq.question.lang : undefined}
               >
                 {faq.question.value}
               </dt>
-              <dd class="mt-2 text-ink-600" lang={faq.answer.isFallback ? faq.answer.lang : undefined}>
+              <dd
+                class="mt-2.5 text-[color:var(--color-ink-600)]"
+                lang={faq.answer.isFallback ? faq.answer.lang : undefined}
+              >
                 {faq.answer.value}
               </dd>
             </div>

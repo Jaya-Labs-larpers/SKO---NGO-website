@@ -2,16 +2,14 @@
 import type { Locale } from '~/lib/i18n/config';
 import type { Activity } from '~/lib/content/types';
 import { formatDate, localizePath, pick, t } from '~/lib/i18n/utils';
-import { activityCategoryLabels, label } from '~/lib/labels';
 import { blocksToPlainText } from '~/lib/portable-text';
 import { resolveSeo } from '~/lib/seo';
 import { siteUrl } from '~/lib/config';
 import { hasImage, imageUrl } from '~/lib/sanity/image';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
-import Figure from '~/components/media/Figure.astro';
+import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
 import RichText from '~/components/content/RichText.astro';
-import Icon from '~/components/ui/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -46,7 +44,13 @@ const articleJsonLd = {
   mainEntityOfPage: canonical,
 };
 
-const category = label(activityCategoryLabels, activity.category, lang);
+const categoryLabels: Record<string, Record<Locale, string>> = {
+  news: { en: 'News', km: 'ព័ត៌មាន' },
+  event: { en: 'Event', km: 'ព្រឹត្តិការណ៍' },
+  story: { en: 'Story', km: 'រឿងរ៉ាវ' },
+  announcement: { en: 'Announcement', km: 'សេចក្តីជូនដំណឹង' },
+};
+const category = activity.category ? categoryLabels[activity.category]?.[lang] : null;
 const programTitle = pick(activity.program?.title, lang);
 ---
 
@@ -59,26 +63,32 @@ const programTitle = pick(activity.program?.title, lang);
   publishedAt={activity.publishedAt}
   jsonLd={articleJsonLd}
 >
-  <article class="wrap pt-6 lg:pt-8">
-    <Breadcrumbs lang={lang} trail={[{ label: t(lang, 'pageActivities'), path: '/activities' }, { label: heading }]} />
+  <article class="section">
+    <div class="wrap max-w-[760px]">
+      <Breadcrumbs
+        lang={lang}
+        trail={[{ label: t(lang, 'pageActivities'), path: '/activities' }, { label: heading }]}
+      />
 
-    <header class="grid gap-x-10 gap-y-6 border-b border-line-ink pt-8 pb-8 lg:grid-cols-12 lg:pt-12 lg:pb-10">
-      <p class="flex flex-wrap gap-x-4 gap-y-1 self-end text-[13px] text-ink-400 lg:col-span-3 lg:block lg:[&>span]:mb-2">
-        <span class="mono block">
-          <time datetime={activity.publishedAt ?? undefined} class="text-ink-900">
-            {formatDate(activity.publishedAt, lang)}
-          </time>
-        </span>
-        {category && <span class="mono block text-terracotta-700">{category}</span>}
-        {activity.author && <span class="block text-ink-900">{activity.author}</span>}
+      {category && <span class="chip mt-4">{category}</span>}
+
+      <h1
+        class="mt-3.5 text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]"
+        lang={title.isFallback ? title.lang : undefined}
+      >
+        {heading}
+      </h1>
+
+      <p class="mt-3.5 flex flex-wrap items-center gap-2.5 text-[13px] text-[color:var(--color-ink-400)]">
+        <time datetime={activity.publishedAt ?? undefined}>{formatDate(activity.publishedAt, lang)}</time>
+        {activity.author && <span>· {activity.author}</span>}
         {
           activity.program && programTitle.value && (
-            <span class="block">
-              {t(lang, 'relatedProgram')}:{' '}
+            <span>
+              ·{' '}
               <a
                 href={localizePath(`/programs/${activity.program.slug}`, lang)}
-                class="text-ink-900"
-                lang={programTitle.isFallback ? programTitle.lang : undefined}
+                class="text-[color:var(--color-blue-800)]"
               >
                 {programTitle.value}
               </a>
@@ -86,61 +96,52 @@ const programTitle = pick(activity.program?.title, lang);
           )
         }
       </p>
-      <h1
-        class="text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)] lg:col-span-9"
-        lang={title.isFallback ? title.lang : undefined}
-      >
-        {heading}
-      </h1>
-    </header>
 
-    <div class="grid gap-x-10 pt-8 lg:grid-cols-12 lg:pt-10">
-      <div class="lg:col-span-9 lg:col-start-4">
-        <Figure
+      <div class="mt-6.5 overflow-hidden rounded-[var(--radius-lg)]">
+        <ResponsiveImage
           image={activity.coverImage}
           lang={lang}
+          alt=""
           aspect="16/9"
           eager
-          sizes="(min-width: 64rem) 900px, 100vw"
+          sizes="(min-width: 48rem) 760px, 100vw"
         />
+      </div>
 
+      {
+        excerpt.value && (
+          <p
+            class="mt-6.5 text-[19px] leading-[1.6] text-[color:var(--color-ink-700)]"
+            lang={excerpt.isFallback ? excerpt.lang : undefined}
+          >
+            {excerpt.value}
+          </p>
+        )
+      }
+
+      <div class="mt-4.5"><RichText blocks={activity.body} lang={lang} /></div>
+
+      <nav
+        class="mt-8.5 flex flex-wrap justify-between gap-4 border-t border-[color:var(--color-line)] pt-5.5"
+        aria-label={t(lang, 'pageActivities')}
+      >
         {
-          excerpt.value && (
-            <p
-              class="mt-8 max-w-[52ch] text-[length:var(--text-lead)] leading-[var(--text-lead--line-height)] text-ink-900"
-              lang={excerpt.isFallback ? excerpt.lang : undefined}
-            >
-              {excerpt.value}
-            </p>
+          previous ? (
+            <a href={localizePath(`/activities/${previous.slug}`, lang)} class="link-arrow" rel="prev">
+              ← {t(lang, 'previous')}
+            </a>
+          ) : (
+            <span />
           )
         }
-
-        <div class="mt-6"><RichText blocks={activity.body} lang={lang} /></div>
-
-        <nav
-          class="mt-12 flex flex-wrap justify-between gap-4 border-t border-line pt-5"
-          aria-label={t(lang, 'pageActivities')}
-        >
-          {
-            previous ? (
-              <a href={localizePath(`/activities/${previous.slug}`, lang)} class="link text-[15px]" rel="prev">
-                <Icon name="arrow-left" size={14} />
-                {t(lang, 'previous')}
-              </a>
-            ) : (
-              <span />
-            )
-          }
-          {
-            next && (
-              <a href={localizePath(`/activities/${next.slug}`, lang)} class="link text-[15px]" rel="next">
-                {t(lang, 'next')}
-                <Icon name="arrow-right" size={14} />
-              </a>
-            )
-          }
-        </nav>
-      </div>
+        {
+          next && (
+            <a href={localizePath(`/activities/${next.slug}`, lang)} class="link-arrow" rel="next">
+              {t(lang, 'next')} →
+            </a>
+          )
+        }
+      </nav>
     </div>
   </article>
 </BaseLayout>

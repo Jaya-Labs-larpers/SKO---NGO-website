@@ -1,0 +1,38 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
+import type { Crumb } from '~/lib/breadcrumbs';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  intro?: string | null;
+  introLang?: string | undefined;
+  eyebrow?: string;
+  trail?: Crumb[];
+}
+
+const { lang, title, intro, introLang, eyebrow, trail } = Astro.props;
+---
+
+<section
+  class="border-b border-[color:var(--color-line-subtle)] bg-[linear-gradient(180deg,var(--color-sky-50)_0%,#fff_100%)] pt-14 pb-13"
+>
+  <div class="wrap">
+    {trail && <Breadcrumbs lang={lang} trail={trail} />}
+    {eyebrow && <p class="eyebrow mt-4">{eyebrow}</p>}
+    <h1
+      class="mt-3.5 max-w-[18ch] text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]"
+    >
+      {title}
+    </h1>
+    {
+      intro && (
+        <p class="mt-4 max-w-[60ch] text-[length:var(--text-lead)] text-[color:var(--color-ink-400)]" lang={introLang}>
+          {intro}
+        </p>
+      )
+    }
+    <slot />
+  </div>
+</section>

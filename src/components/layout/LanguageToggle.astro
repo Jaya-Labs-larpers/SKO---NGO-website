@@ -13,48 +13,48 @@ const { lang, pathname, full = false } = Astro.props;
 
 /**
  * The group carries the "Language" label; each link's accessible name is just
- * its own visible text (WCAG 2.5.3, Label in Name). Context belongs on the
+ * its own visible text.
+ *
+ * An earlier version put aria-label="Switch to English" on a link whose visible
+ * text was "EN". That fails WCAG 2.5.3 (Label in Name) — a speech-input user
+ * saying "EN" could not activate it — and axe flags it. Context belongs on the
  * group, not on the item.
  */
 ---
 
 <nav
   aria-label={t(lang, 'language')}
-  class:list={['flex items-center', full ? 'w-full border-t border-line' : 'gap-0.5']}
+  class:list={[
+    'inline-flex overflow-hidden rounded-[var(--radius-sm)] border border-[color:var(--color-line-strong)]',
+    full && 'w-full',
+  ]}
 >
   {
-    locales.map((locale, index) => {
+    locales.map((locale) => {
       const current = locale === lang;
       return (
-        <>
-          {index > 0 && !full && (
-            <span class="text-ink-300" aria-hidden="true">
-              /
-            </span>
-          )}
-          <a
-            href={alternatePath(pathname, locale)}
-            hreflang={htmlLang[locale]}
-            lang={htmlLang[locale]}
-            aria-current={current ? 'true' : undefined}
-            title={
-              current
-                ? undefined
-                : locale === 'km'
-                  ? t(lang, 'switchToKhmer')
-                  : t(lang, 'switchToEnglish')
-            }
-            class:list={[
-              'inline-flex min-h-11 items-center no-underline',
-              full ? 'flex-1 justify-center border-b border-line py-3 text-[17px]' : 'min-w-11 justify-center px-1.5 text-[15px]',
-              current
-                ? 'font-semibold text-ink-900 underline decoration-ink-900 underline-offset-[0.3em]'
-                : 'font-medium text-ink-400 hover:text-ink-900',
-            ]}
-          >
-            {full ? localeName[locale] : localeShort[locale]}
-          </a>
-        </>
+        <a
+          href={alternatePath(pathname, locale)}
+          hreflang={htmlLang[locale]}
+          lang={htmlLang[locale]}
+          aria-current={current ? 'true' : undefined}
+          title={
+            current
+              ? undefined
+              : locale === 'km'
+                ? t(lang, 'switchToKhmer')
+                : t(lang, 'switchToEnglish')
+          }
+          class:list={[
+            'px-[11px] py-2 text-[13px] font-semibold no-underline transition-colors',
+            full && 'flex-1 py-3 text-center',
+            current
+              ? 'bg-[color:var(--color-blue-700)] text-white'
+              : 'bg-white text-[color:var(--color-ink-400)] hover:bg-[color:var(--color-blue-50)] hover:text-[color:var(--color-blue-800)]',
+          ]}
+        >
+          {full ? localeName[locale] : localeShort[locale]}
+        </a>
       );
     })
   }

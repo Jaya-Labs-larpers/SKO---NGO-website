@@ -3,7 +3,6 @@ import type { Locale } from '~/lib/i18n/config';
 import type { SiteSettings } from '~/lib/content/types';
 import { localizePath, pick, t, text } from '~/lib/i18n/utils';
 import { footerNav } from '~/lib/nav';
-import Icon from '~/components/ui/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -13,50 +12,63 @@ interface Props {
 const { lang, settings } = Astro.props;
 
 const orgName = text(settings.orgName, lang);
-const shortName = settings.orgShortName ?? 'SKO';
 const address = pick(settings.address, lang);
 const registration = pick(settings.registration, lang);
-const hours = pick(settings.officeHours, lang);
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer mt-[var(--spacing-section)] border-t border-line-ink">
+<footer
+  class="site-footer on-inverse bg-[color:var(--color-blue-900)] pt-[60px] pb-7 text-[14.5px] text-white/70"
+>
   <div class="wrap">
-    <div class="grid gap-x-10 gap-y-8 py-10 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)] lg:py-12">
-      <div class="md:col-span-2 lg:col-span-1">
-        <p class="text-ink-900">
-          <span class="block text-[1.375rem] leading-none font-bold tracking-[-0.03em]">{shortName}</span>
-          <span class="mt-1.5 block text-[15px] font-medium">{orgName}</span>
-        </p>
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+      <div>
+        <div class="flex items-center gap-3">
+          <span
+            class="grid h-[38px] w-[38px] place-items-center rounded-[var(--radius-sm)] bg-white text-[15px] font-extrabold text-[color:var(--color-blue-900)]"
+            aria-hidden="true">{settings.orgShortName ?? 'SKO'}</span
+          >
+          <span class="flex flex-col leading-[1.15]">
+            <span class="text-[15px] font-bold text-white">{orgName}</span>
+            <span class="text-[11px] text-white/60">Samatapheap Khnom Organization</span>
+          </span>
+        </div>
+
         {
           address.value && (
             <p
-              class="mt-4 max-w-[30ch] text-[15px] whitespace-pre-line text-ink-600"
+              class="mt-4 max-w-[34ch] whitespace-pre-line"
               lang={address.isFallback ? address.lang : undefined}
             >
               {address.value}
             </p>
           )
         }
-        <p class="mt-3 text-[15px]">
-          {settings.phone && <a href={`tel:${settings.phone.replace(/\s+/g, '')}`} class="block">{settings.phone}</a>}
-          {settings.email && <a href={`mailto:${settings.email}`} class="block">{settings.email}</a>}
+
+        <p class="mt-2.5">
+          {settings.phone && <span class="block">{settings.phone}</span>}
           {
-            hours.value && (
-              <span class="mt-1 block text-ink-400" lang={hours.isFallback ? hours.lang : undefined}>
-                {hours.value}
-              </span>
+            settings.email && (
+              <a href={`mailto:${settings.email}`} class="text-white/70 hover:text-white">
+                {settings.email}
+              </a>
             )
           }
         </p>
+
         {
           settings.socials && settings.socials.length > 0 && (
-            <ul class="mt-4 flex list-none flex-wrap gap-x-4 p-0 text-[15px]">
+            <ul class="mt-4 flex list-none gap-2 p-0">
               {settings.socials.map((social) => (
                 <li>
-                  <a href={social.url} rel="noopener noreferrer" target="_blank" class="link">
-                    {social.platform}
-                    <Icon name="arrow-up-right" size={14} />
+                  <a
+                    href={social.url}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    class="grid h-9 w-9 place-items-center rounded-[var(--radius-sm)] border border-white/25 text-[12px] font-bold text-white no-underline hover:bg-white/10"
+                  >
+                    <span class="sr-only-focusable">{social.platform}</span>
+                    <span aria-hidden="true">{social.platform.slice(0, 2)}</span>
                   </a>
                 </li>
               ))}
@@ -68,13 +80,15 @@ const year = new Date().getFullYear();
       {
         footerNav.map((group) => (
           <nav aria-label={t(lang, group.heading)}>
-            <h2 class="label mb-3 text-ink-900">{t(lang, group.heading)}</h2>
+            <h2 class="mb-4 text-[13px] tracking-[0.1em] text-white uppercase">
+              {t(lang, group.heading)}
+            </h2>
             <ul class="list-none p-0">
               {group.items.map((item) => (
                 <li>
                   <a
                     href={localizePath(item.path, lang)}
-                    class="inline-block py-1.5 text-[15px] text-ink-700 no-underline hover:text-indigo-700 hover:underline"
+                    class="block py-1 text-white/70 no-underline hover:text-white"
                   >
                     {t(lang, item.key)}
                   </a>
@@ -87,19 +101,19 @@ const year = new Date().getFullYear();
     </div>
 
     <div
-      class="flex flex-col gap-3 border-t border-line py-5 text-[13px] text-ink-400 sm:flex-row sm:items-baseline sm:justify-between"
+      class="mt-11 flex flex-wrap justify-between gap-5 border-t border-white/15 pt-5.5 text-[13px] text-white/55"
     >
-      <p class="max-w-[64ch]" lang={registration.isFallback ? registration.lang : undefined}>
-        © {year} {orgName}{registration.value ? ` · ${registration.value}` : ''}
-      </p>
-      <p class="flex gap-5">
-        <a href={localizePath('/privacy', lang)} class="text-ink-400 no-underline hover:text-ink-900 hover:underline"
+      <span lang={registration.isFallback ? registration.lang : undefined}>
+        © {year} {orgName}. {registration.value}
+      </span>
+      <span class="flex gap-4.5">
+        <a href={localizePath('/privacy', lang)} class="text-white/55 no-underline hover:text-white"
           >{t(lang, 'navPrivacy')}</a
         >
-        <a href={localizePath('/contact', lang)} class="text-ink-400 no-underline hover:text-ink-900 hover:underline"
+        <a href={localizePath('/contact', lang)} class="text-white/55 no-underline hover:text-white"
           >{t(lang, 'navContact')}</a
         >
-      </p>
+      </span>
     </div>
   </div>
 </footer>

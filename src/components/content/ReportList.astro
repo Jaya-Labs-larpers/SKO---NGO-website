@@ -1,0 +1,68 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { Report } from '~/lib/content/types';
+import { formatFileSize, pick, t } from '~/lib/i18n/utils';
+
+interface Props {
+  lang: Locale;
+  reports: Report[];
+}
+
+const { lang, reports } = Astro.props;
+
+const typeLabels: Record<string, Record<Locale, string>> = {
+  'annual-report': { en: 'Annual report', km: 'របាយការណ៍ប្រចាំឆ្នាំ' },
+  financial: { en: 'Financial', km: 'ហិរញ្ញវត្ថុ' },
+  policy: { en: 'Policy', km: 'គោលការណ៍' },
+  other: { en: 'Document', km: 'ឯកសារ' },
+};
+---
+
+<ul
+  class="list-none overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white p-0"
+>
+  {
+    reports.map((report) => {
+      const title = pick(report.title, lang);
+      // Prefer the Khmer PDF when the visitor is reading Khmer and one exists.
+      const file = lang === 'km' && report.fileKm?.url ? report.fileKm : report.file;
+      const fileLanguage =
+        lang === 'km' && report.fileKm?.url ? t(lang, 'languageKhmer') : t(lang, 'languageEnglish');
+      const typeLabel = report.type ? typeLabels[report.type]?.[lang] : null;
+      const size = formatFileSize(file?.size);
+      const meta = [typeLabel, fileLanguage, size].filter(Boolean).join(' · ');
+
+      return (
+        <li class="border-b border-[color:var(--color-line-subtle)] last:border-b-0">
+          <a
+            href={file?.url ?? '#'}
+            download={file?.url ? '' : undefined}
+            aria-disabled={file?.url ? undefined : 'true'}
+            class="flex items-center gap-4.5 px-5.5 py-4.5 no-underline transition-colors hover:bg-[color:var(--color-blue-50)]"
+          >
+            <span
+              class="grid h-12 w-10 flex-none place-items-center rounded-[var(--radius-xs)] border border-[color:var(--color-line-strong)] bg-[color:var(--color-surface-subtle)] font-mono text-[9px] font-bold text-[color:var(--color-danger-700)]"
+              aria-hidden="true"
+            >
+              PDF
+            </span>
+            <span class="min-w-0 flex-1">
+              <b
+                class="block text-[16px] font-semibold text-[color:var(--color-ink-900)]"
+                lang={title.isFallback ? title.lang : undefined}
+              >
+                {title.value}
+                {report.year ? ` (${report.year})` : ''}
+              </b>
+              <span class="mt-1 block text-[13px] text-[color:var(--color-ink-400)]">{meta}</span>
+            </span>
+            <span class="flex flex-none items-center gap-1.5 text-[14px] font-semibold text-[color:var(--color-blue-800)]">
+              {t(lang, 'download')}
+              <span aria-hidden="true">↓</span>
+            </span>
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>

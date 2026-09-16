@@ -7,15 +7,17 @@ import {
   getPartners,
   getPrograms,
   getSiteSettings,
+  getStories,
 } from '~/lib/content';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import Figure from '~/components/media/Figure.astro';
-import Icon from '~/components/ui/Icon.astro';
-import ImpactFigures from '~/components/content/ImpactFigures.astro';
-import ProgramIndex from '~/components/content/ProgramIndex.astro';
-import ActivityRow from '~/components/content/ActivityRow.astro';
-import PartnerIndex from '~/components/content/PartnerIndex.astro';
-import CloseBand from '~/components/content/CloseBand.astro';
+import HeroSlideshow from '~/components/media/HeroSlideshow.astro';
+import ImpactStats from '~/components/content/ImpactStats.astro';
+import SectionHeading from '~/components/content/SectionHeading.astro';
+import ProgramCard from '~/components/content/ProgramCard.astro';
+import ActivityCard from '~/components/content/ActivityCard.astro';
+import PartnerWall from '~/components/content/PartnerWall.astro';
+import StoryQuote from '~/components/content/StoryQuote.astro';
+import CtaBand from '~/components/content/CtaBand.astro';
 
 interface Props {
   lang: Locale;
@@ -23,157 +25,96 @@ interface Props {
 
 const { lang } = Astro.props;
 
-const [settings, stats, programs, activities, partners] = await Promise.all([
+const [settings, stats, programs, activities, partners, stories] = await Promise.all([
   getSiteSettings(),
   getImpactStats(),
   getPrograms(),
   getFeaturedActivities(3),
   getPartners(),
+  getStories(),
 ]);
 
 const orgName = text(settings.orgName, lang);
 const tagline = pick(settings.tagline, lang);
 const registration = pick(settings.registration, lang);
-const photograph = settings.homeHero?.[0] ?? null;
-
-const evidenceLinks = [
-  { label: t(lang, 'navEvidence'), title: t(lang, 'pageReports'), path: '/reports' },
-  { label: t(lang, 'navSafeguarding'), title: t(lang, 'pageSafeguarding'), path: '/safeguarding' },
-];
-
+const story = stories[0];
 ---
 
-<BaseLayout lang={lang} title={orgName} description={tagline.value ?? undefined} ogImage={settings.ogImage}>
-  <section class="wrap">
-    <div class="grid gap-x-10 gap-y-8 pt-8 pb-10 lg:grid-cols-12 lg:pt-14 lg:pb-14">
-      <div class="lg:col-span-7 lg:pr-6">
-        {
-          registration.value && (
-            <p class="mono max-w-[60ch] border-b border-line pb-4" lang={registration.isFallback ? registration.lang : undefined}>
-              {registration.value}
-            </p>
-          )
-        }
+<BaseLayout
+  lang={lang}
+  title={orgName}
+  description={tagline.value ?? undefined}
+  ogImage={settings.ogImage}
+>
+  <!-- Hero: photo behind, white card in front. A CMS photo can never be trusted
+       to win a contrast check on its own, so text never sits directly on it. -->
+  <section class="relative border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)]">
+    {/*
+      One instance, placed differently by breakpoint: a 4:3 block above the card
+      on phones, full-bleed behind it from lg up. Rendering it twice would
+      duplicate the slides and the keyframes for no gain.
+    */}
+    <div class="aspect-4/3 lg:absolute lg:inset-0 lg:aspect-auto">
+      <HeroSlideshow images={settings.homeHero} lang={lang} class="h-full" />
+    </div>
+
+    <div class="wrap relative flex min-h-0 items-center lg:min-h-[520px]">
+      <div
+        class="-mt-10 mb-0 w-full max-w-[588px] rounded-[var(--radius-xl)] border border-[color:var(--color-line)] bg-white p-6 shadow-[var(--shadow-lg)] sm:p-11 lg:my-14 lg:-mt-0"
+      >
+        <p class="eyebrow">Phnom Penh, Cambodia · Since 2007</p>
         <h1
-          class="mt-6 max-w-[18ch] text-[length:var(--text-display)] leading-[var(--text-display--line-height)] tracking-[var(--text-display--letter-spacing)]"
+          class="mt-4 text-[length:var(--text-display)] leading-[var(--text-display--line-height)] tracking-[var(--text-display--letter-spacing)]"
           lang={tagline.isFallback ? tagline.lang : undefined}
         >
           {tagline.value}
         </h1>
-        <p class="mt-6 max-w-[52ch] text-[length:var(--text-lead)] leading-[var(--text-lead--line-height)] text-ink-600">
+        <p class="mt-4.5 text-[length:var(--text-lead)] leading-[1.6] text-[color:var(--color-ink-600)]">
           {t(lang, 'homeHeroIntro')}
         </p>
-        <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-7">
-          <a href={localizePath('/donate', lang)} class="btn btn-primary">
-            {t(lang, 'donateNow')}
-            <Icon name="arrow-right" size={16} />
-          </a>
-          <a href={localizePath('/programs', lang)} class="link">
-            {t(lang, 'ourPrograms')}
-            <Icon name="arrow-right" size={14} />
-          </a>
+        <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <a href={localizePath('/donate', lang)} class="btn btn-primary btn-block sm:w-auto"
+            >{t(lang, 'donateNow')}</a
+          >
+          <a href={localizePath('/partner-with-us', lang)} class="btn btn-secondary btn-block sm:w-auto"
+            >{t(lang, 'partnerWithUs')}</a
+          >
         </div>
-      </div>
-
-      <div class="lg:col-span-5">
-        <Figure
-          image={photograph}
-          lang={lang}
-          aspect="4/3"
-          eager
-          sizes="(min-width: 64rem) 520px, 100vw"
-        />
-        <ul class="mt-6 list-none border-b border-line p-0">
-          {
-            evidenceLinks.map((item) => (
-              <li>
-                <a
-                  href={localizePath(item.path, lang)}
-                  class="row-link grid-cols-[minmax(0,1fr)_auto] py-4 sm:grid-cols-[7.5rem_minmax(0,1fr)_auto]"
-                >
-                  <span class="mono hidden sm:block">{item.label}</span>
-                  <span class="text-[17px] font-medium">{item.title}</span>
-                  <Icon name="arrow-right" size={18} class="row-arrow self-center" />
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+        {
+          registration.value && (
+            <p
+              class="mt-6.5 flex items-center gap-2.5 border-t border-[color:var(--color-line-subtle)] pt-4.5 text-[13.5px] text-[color:var(--color-ink-400)]"
+              lang={registration.isFallback ? registration.lang : undefined}
+            >
+              <span
+                class="grid h-[18px] w-[18px] flex-none place-items-center rounded-full bg-[color:var(--color-sky-200)] text-[11px] text-[color:var(--color-blue-900)]"
+                aria-hidden="true"
+              >
+                ✓
+              </span>
+              {registration.value}
+            </p>
+          )
+        }
       </div>
     </div>
+  </section>
 
-    {
-      programs.length > 0 && (
-        <nav aria-label={t(lang, 'whatWeDo')}>
-          <ol class="grid list-none grid-cols-2 border-t border-l border-line p-0 lg:grid-cols-5">
-            {programs.map((program, index) => {
-              const title = pick(program.title, lang);
-              return (
-                <li class="contents">
-                  <a
-                    href={localizePath(`/programs/${program.slug}`, lang)}
-                    class="flex min-h-[7.5rem] flex-col justify-between gap-4 border-r border-b border-line p-4 text-ink-900 no-underline transition-colors hover:bg-surface lg:p-5"
-                  >
-                    <span class="mono text-terracotta-700" aria-hidden="true">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    <span class="text-[15px] leading-[1.35] font-medium" lang={title.isFallback ? title.lang : undefined}>
-                      {title.value}
-                    </span>
-                  </a>
-                </li>
-              );
-            })}
-            <li class="contents">
-              <a
-                href={localizePath('/impact', lang)}
-                class="col-span-2 flex min-h-14 items-center justify-between gap-4 border-r border-b border-line p-4 text-ink-900 no-underline transition-colors hover:bg-surface lg:col-span-1 lg:min-h-[7.5rem] lg:flex-col-reverse lg:items-start lg:p-5"
-              >
-                <span class="text-[15px] leading-[1.35] font-medium">{t(lang, 'pageImpact')}</span>
-                <Icon name="arrow-right" size={16} class="flex-none text-indigo-700" />
-              </a>
-            </li>
-          </ol>
-        </nav>
-      )
-    }
+  <section class="section">
+    <div class="wrap">
+      <ImpactStats lang={lang} stats={stats} />
+    </div>
   </section>
 
   {
     programs.length > 0 && (
-      <section class="wrap mt-[var(--spacing-section)]">
-        <div class="ledger">
-          <div>
-            <h2 class="text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)]">
-              {t(lang, 'whatWeDo')}
-            </h2>
-            <p class="mt-3 max-w-[38ch] text-ink-600">{t(lang, 'introPrograms')}</p>
-          </div>
-          <ProgramIndex lang={lang} programs={programs} />
-        </div>
-      </section>
-    )
-  }
-
-  {
-    stats.length > 0 && (
-      <section class="wrap">
-        <div class="ledger">
-          <div>
-            <h2 class="text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)]">
-              {t(lang, 'pageImpact')}
-            </h2>
-            <p class="mt-3 max-w-[38ch] text-ink-600">{t(lang, 'introImpact')}</p>
-          </div>
-          <div>
-            <ImpactFigures lang={lang} stats={stats} />
-            <p class="mt-5 max-w-[62ch] text-[15px] text-ink-600">
-              <b class="font-medium text-ink-900">{t(lang, 'methodologyTitle')}</b> {t(lang, 'methodologyBody')}
-            </p>
-            <a href={`${localizePath('/impact', lang)}#method`} class="link mt-4 text-[15px]">
-              {t(lang, 'pageImpact')}
-              <Icon name="arrow-right" size={14} />
-            </a>
+      <section class="section pt-0">
+        <div class="wrap">
+          <SectionHeading title={t(lang, 'whatWeDo')} />
+          <div class="mt-8.5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {programs.map((program) => (
+              <ProgramCard lang={lang} program={program} />
+            ))}
           </div>
         </div>
       </section>
@@ -182,51 +123,54 @@ const evidenceLinks = [
 
   {
     activities.length > 0 && (
-      <section class="wrap">
-        <div class="ledger">
-          <div>
-            <h2 class="text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)]">
-              {t(lang, 'latestActivities')}
-            </h2>
-            <p class="mt-3 max-w-[38ch] text-ink-600">{t(lang, 'introActivities')}</p>
-          </div>
-          <div>
-            <ul class="list-none border-b border-line p-0">
-              {activities.map((activity) => (
-                <li>
-                  <ActivityRow lang={lang} activity={activity} />
-                </li>
-              ))}
-            </ul>
-            <a href={localizePath('/activities', lang)} class="link mt-5 text-[15px]">
+      <section class="section bg-[color:var(--color-surface-subtle)]">
+        <div class="wrap">
+          <div class="flex flex-wrap items-end justify-between gap-5">
+            <SectionHeading title={t(lang, 'latestActivities')} />
+            <a href={localizePath('/activities', lang)} class="link-arrow">
               {t(lang, 'allActivities')}
-              <Icon name="arrow-right" size={14} />
+              <span class="arrow" aria-hidden="true">
+                →
+              </span>
             </a>
+          </div>
+          <div class="mt-7.5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {activities.map((activity) => (
+              <ActivityCard lang={lang} activity={activity} />
+            ))}
           </div>
         </div>
       </section>
     )
   }
 
-  {
-    partners.length > 0 && (
-      <section class="wrap">
-        <div class="ledger">
+  <section class="section">
+    <div class="wrap grid items-center gap-14 lg:grid-cols-2">
+      {
+        story && (
           <div>
-            <h2 class="text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)]">
+            <StoryQuote lang={lang} story={story} />
+            <a href={localizePath('/impact', lang)} class="link-arrow mt-5.5">
+              {t(lang, 'moreStories')}
+              <span class="arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </div>
+        )
+      }
+      {
+        partners.length > 0 && (
+          <div>
+            <h2 class="mb-3 font-mono text-[11px] font-semibold tracking-[0.1em] text-[color:var(--color-ink-400)] uppercase">
               {t(lang, 'trustedBy')}
             </h2>
-            <p class="mt-3 max-w-[38ch] text-ink-600">{t(lang, 'introPartners')}</p>
-            <a href={localizePath('/partners', lang)} class="link mt-4 text-[15px]">
-              {t(lang, 'pagePartners')}
-              <Icon name="arrow-right" size={14} />
-            </a>
+            <PartnerWall lang={lang} partners={partners.slice(0, 6)} columns={3} />
           </div>
-          <PartnerIndex lang={lang} partners={partners} />
-        </div>
-      </section>
-    )
-  }
+        )
+      }
+    </div>
+  </section>
 
-  <CloseBand lang={lang} title={t(lang, 'ctaHomeTitle')} body={t(lang, 'ctaHomeBody')} />
+  <CtaBand lang={lang} title={t(lang, 'ctaHomeTitle')} body={t(lang, 'ctaHomeBody')} />
 </BaseLayout>
