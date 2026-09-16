@@ -70,6 +70,9 @@ test("enabled Vercel contact preserves byte limits and ignores forged Cloudflare
   const api = await loadApi();
   assert.equal(typeof api.fetch, "function");
   const settings = {
+    // Vercel sets VERCEL_ENV=production during production builds; pin preview so
+    // the fixture secrets below are not rejected by productionConfigured().
+    VERCEL_ENV: "preview",
     CONTACT_ENABLED: "true",
     TURNSTILE_SECRET_KEY: "secret",
     RESEND_API_KEY: "key",
