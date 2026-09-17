@@ -1,0 +1,47 @@
+---
+/**
+ * Logo.astro — the traced SKO vector. Replaces the hand-coded triangle+ellipses SVG.
+ *
+ *   <Logo variant="emblem" height={28} />            header (inline, above the fold)
+ *   <Logo variant="reversed" width={220} />          footer on Deep Navy
+ *   <Logo variant="full" width={240} />              light backgrounds (About, reports)
+ *
+ * Rules (brand guideline): full lockup never below 180px wide — below that use the emblem.
+ * Reversed on Deep Navy, photos and cyan blocks. Never recolour, stretch, or move the butterflies.
+ * The emblem is NOT a UI icon: header, footer, favicon only.
+ */
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+interface Props {
+  variant?: 'full' | 'reversed' | 'mono' | 'mono-white' | 'emblem' | 'emblem-reversed' | 'emblem-mono';
+  width?: number;
+  height?: number;
+  class?: string;
+  title?: string;
+}
+const { variant = 'full', width, height, class: className = '', title = 'Samatapheap Khnom Organization' } = Astro.props;
+
+const files: Record<string, string> = {
+  'full': 'sko-logo-full-colour.svg',
+  'reversed': 'sko-logo-reversed.svg',
+  'mono': 'sko-logo-mono-ink.svg',
+  'mono-white': 'sko-logo-mono-white.svg',
+  'emblem': 'sko-emblem.svg',
+  'emblem-reversed': 'sko-emblem-reversed.svg',
+  'emblem-mono': 'sko-emblem-mono.svg',
+};
+const isEmblem = variant.startsWith('emblem');
+const ratio = isEmblem ? 728 / 516 : 1384 / 829;   // viewBox aspect ratios of the traced files
+if (!isEmblem && width && width < 180) {
+  console.warn(`[Logo] full lockup at ${width}px is below the 180px minimum — use variant="emblem"`);
+}
+const w = width ?? (height ? Math.round(height * ratio) : undefined);
+const h = height ?? (width ? Math.round(width / ratio) : undefined);
+
+let svg = readFileSync(fileURLToPath(new URL(`../../public/logo/${files[variant]}`, import.meta.url)), 'utf8');
+svg = svg
+  .replace('<svg ', `<svg width="${w}" height="${h}" class="logo logo--${variant} ${className}" `)
+  .replace(/<title id="t">[^<]*<\/title>/, `<title id="t">${title}</title>`);
+---
+<Fragment set:html={svg} />
