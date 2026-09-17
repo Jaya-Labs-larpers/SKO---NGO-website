@@ -1,0 +1,53 @@
+---
+/**
+ * Icon.astro — one sprite, currentColor, per SKO icon guideline §4/§6/§7.
+ *
+ *   <Icon name="map-pin" />                          decorative, beside a visible label
+ *   <Icon name="menu" label="Open menu" />           carries meaning on its own
+ *   <Icon name="heart" size={20} class="text-white" />
+ *   <Icon name="heart" inline />                     inline the path instead of <use> (above-the-fold header icons)
+ *
+ * `name` must be an id in public/icons/sprite.svg (see assets/icons/manifest.json).
+ * Colour comes from CSS `color` on the parent or the class — never hardcode a hex here.
+ */
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+interface Props {
+  name: string;
+  size?: 16 | 20 | 24 | 32 | 40 | 48;
+  label?: string;      // if set, the icon is announced; otherwise aria-hidden
+  inline?: boolean;    // inline the symbol body instead of referencing the sprite
+  class?: string;
+}
+const { name, size = 20, label, inline = false, class: className = '' } = Astro.props;
+
+let body = '';
+if (inline) {
+  const sprite = readFileSync(fileURLToPath(new URL('../../public/icons/sprite.svg', import.meta.url)), 'utf8');
+  const m = sprite.match(new RegExp(`<symbol id="${name}"[^>]*>(.*?)</symbol>`, 's'));
+  if (!m) throw new Error(`Icon "${name}" is not in sprite.svg`);
+  body = m[1];
+}
+const a11y = label
+  ? { role: 'img', 'aria-label': label }
+  : { 'aria-hidden': 'true', focusable: 'false' };
+---
+<svg
+  class={`icon ${className}`}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  {...a11y}
+>
+  {inline ? <Fragment set:html={body} /> : <use href={`/icons/sprite.svg#${name}`} />}
+</svg>
+
+<style is:global>
+  .icon { flex: none; display: inline-block; vertical-align: -0.2em; }
+</style>
