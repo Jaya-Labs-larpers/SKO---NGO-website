@@ -41,6 +41,13 @@ Lighthouse goes deep on a handful of routes. This goes wide on all 64, asserting
 that page's own policy, canonical + all three `hreflang` values, a meta description, Organization
 structured data, a skip link, `<main id="main">`, and no `<img>` without `alt`.
 
+It then scans **every shipped text file** (HTML, JS, CSS, JSON, XML, SVG, manifest) for secrets,
+using `scripts/secrets.mjs`: known token shapes (Resend, Sanity, AWS, GitHub, Stripe, PEM keys, JWTs)
+and the literal value of every secret-looking environment variable that is not `PUBLIC_*`. On Vercel
+that runs against the real production values, so it proves the deployed artifact is clean rather than
+a local approximation. Source maps in `dist/` fail the build outright. Git history is scanned
+separately by gitleaks in `.github/workflows/verify.yml`, pinned by version and checksum.
+
 It found 14 pages with no meta description the moment it first ran — including `/impact/`,
 `/reports/` and `/partners/`, which are exactly the pages a grant officer lands on from a search.
 

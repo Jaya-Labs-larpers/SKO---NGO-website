@@ -7,9 +7,10 @@
  * Order of checks is cheapest-rejection-first:
  *   1. honeypot            — no network calls, no email
  *   2. schema validation   — no network calls
- *   3. rate limit          — one KV read
+ *   3. rate-limit check    — one KV read
  *   4. Turnstile verify    — one outbound request
- *   5. send                — one outbound request
+ *   5. rate-limit record   — one KV read + one KV write (verified requests only)
+ *   6. send                — one outbound request
  *
  * Nothing is persisted. The submission exists in the destination inbox and
  * nowhere else. The only thing stored is a counter keyed by a hash of the IP.
@@ -192,7 +193,23 @@ async function hashIp(ip: string): Promise<string> {
     .join('');
 }
 
-async function isRateLimited(env: Env, ip: string): Promise<boolean> {
+/**
+ * Key for the current fixed window. Fixing the window (rather than refreshing a
+ * TTL on every write) means a burst can never extend its own window, and the
+ * count for a given IP is bounded per window regardless of write ordering.
+ */
+async function rateLimitKey(ip: string, now = Date.now()): Promise<string> {
+  const window = Math.floor(now / 1000 / RATE_LIMIT_WINDOW_SECONDS);
+  return `rl:${await hashIp(ip)}:${window}`;
+}
+
+function rateLimitTtl(now = Date.now()): number {
+  const elapsed = Math.floor(now / 1000) % RATE_LIMIT_WINDOW_SECONDS;
+  // KV rejects TTLs under 60 seconds.
+  return Math.max(60, RATE_LIMIT_WINDOW_SECONDS - elapsed);
+}
+
+function rateLimitingConfigured(env: Env): env is Env & { RATE_LIMIT_KV: KVNamespaceLike } {
   /**
    * Deliberately fail-open, unlike Turnstile.
    *
@@ -204,25 +221,46 @@ async function isRateLimited(env: Env, ip: string): Promise<boolean> {
    * it is logged: Cloudflare's Workers logs will show it on the first
    * submission after a bad deploy.
    */
-  if (!env.RATE_LIMIT_KV) {
-    if (env.RATE_LIMIT_WAF_ENABLED === 'true') return false;
-    console.warn('[contact] RATE_LIMIT_KV binding is not configured — rate limiting is disabled');
+  return Boolean(env.RATE_LIMIT_KV);
+}
+
+/** Read-only check. Never consumes quota, so unverified requests cannot exhaust a shared IP. */
+async function isRateLimited(env: Env, ip: string): Promise<boolean> {
+  if (!rateLimitingConfigured(env)) {
+    if (env.RATE_LIMIT_WAF_ENABLED !== 'true') {
+      console.warn('[contact] RATE_LIMIT_KV binding is not configured — rate limiting is disabled');
+    }
     return false;
   }
   try {
-    const key = `rl:${await hashIp(ip)}`;
-    const current = Number((await bounded(env.RATE_LIMIT_KV.get(key), KV_TIMEOUT_MS)) ?? '0');
-    if (current >= RATE_LIMIT_MAX) return true;
-    await bounded(
-      env.RATE_LIMIT_KV.put(key, String(current + 1), {
-        expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
-      }),
-      KV_TIMEOUT_MS,
-    );
-    return false;
+    const current = Number((await bounded(env.RATE_LIMIT_KV.get(await rateLimitKey(ip)), KV_TIMEOUT_MS)) ?? '0');
+    return current >= RATE_LIMIT_MAX;
   } catch {
     console.warn('[contact] rate_limit_unavailable');
     return false;
+  }
+}
+
+/**
+ * Consume one unit of quota. Called only after Turnstile has verified the
+ * request, so every counted submission cost the sender a solved challenge.
+ *
+ * KV has no atomic increment, so the read and write here can still race with
+ * a concurrent verified submission from the same IP. Re-reading immediately
+ * before the write keeps that gap to milliseconds rather than the full
+ * Turnstile round-trip; a strict limit needs an upstream WAF rule.
+ */
+async function recordSubmission(env: Env, ip: string): Promise<void> {
+  if (!rateLimitingConfigured(env)) return;
+  try {
+    const key = await rateLimitKey(ip);
+    const current = Number((await bounded(env.RATE_LIMIT_KV.get(key), KV_TIMEOUT_MS)) ?? '0');
+    await bounded(
+      env.RATE_LIMIT_KV.put(key, String(current + 1), { expirationTtl: rateLimitTtl() }),
+      KV_TIMEOUT_MS,
+    );
+  } catch {
+    console.warn('[contact] rate_limit_unavailable');
   }
 }
 
@@ -319,7 +357,8 @@ async function handlePost(context: FunctionContext): Promise<Response> {
     return json({ ok: false, error: 'not_configured' }, 500);
   }
 
-  // 2. Rate limit.
+  // 2. Rate limit — check only. Quota is consumed after Turnstile (step 4), so a
+  // bot without a valid token cannot lock out real visitors behind the same NAT.
   if (await isRateLimited(env, ip)) {
     return json({ ok: false, error: 'rate_limited' }, 429);
   }
@@ -349,7 +388,10 @@ async function handlePost(context: FunctionContext): Promise<Response> {
     return json({ ok: false, error: 'verification_unavailable' }, 503);
   }
 
-  // 4. Route to the right inbox.
+  // 4. Only a verified submission counts against the shared-IP quota.
+  await recordSubmission(env, ip);
+
+  // 5. Route to the right inbox.
   const to =
     data.formType === 'partner' ? (env.PARTNER_TO_EMAIL ?? env.CONTACT_TO_EMAIL) : env.CONTACT_TO_EMAIL;
   if (!to || !env.RESEND_API_KEY || !env.MAIL_FROM) {

@@ -17,7 +17,7 @@ special treatments' final polish is Phase 4.
 | Connect Astro to Sanity (typed GROQ) | Done. All queries in one file, typed projections, single content-layer seam. |
 | i18n routing km/en + toggle | Done. 46 pages, 23 per locale. Toggle links to the equivalent page. |
 | Image optimization pipeline | Done. Sanity CDN transforms, srcset, LQIP, intrinsic dimensions, graceful placeholder when no image exists. |
-| Contact form → Pages Function | Done and tested. Honeypot → validation → rate limit → Turnstile → Resend. |
+| Contact form → Pages Function | Done and tested. Honeypot → validation → rate-limit check → Turnstile → rate-limit record → Resend. |
 | Environment config + `.env.example` | Done. `.gitignore` excludes `.env*` from the first commit. No secret in the repo. |
 
 ## 2. Verification — actually run, not assumed

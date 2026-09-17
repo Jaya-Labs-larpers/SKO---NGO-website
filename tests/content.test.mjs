@@ -10,15 +10,15 @@ const compiled = ts.transpileModule(source, {
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
 }).outputText;
 
-function content(production, result) {
+function content(production, result, local = false) {
   const exports = {};
   vm.runInNewContext(compiled, {
     exports,
     require(path) {
-      if (path === '../sanity/client') return { sanityClient: { fetch: async () => result } };
+      if (path === '../sanity/client') return { sanityClient: local ? null : { fetch: async () => result } };
       if (path === '../sanity/queries') return { directorMessageQuery: 'directorMessage' };
       if (path === './fixtures') return { directorMessage: { name: { en: 'Fixture director' } } };
-      if (path === '../config') return { isProductionDeployment: production };
+      if (path === '../config') return { isProductionDeployment: production, isLocalContent: local };
       if (path === '../../../scripts/readiness.mjs') return { siteSettingsFailures };
       throw new Error(`Unexpected import ${path}`);
     },
@@ -37,4 +37,10 @@ test('missing published singleton cannot silently use fixture content in product
     name: { en: 'Approved director', km: 'នាយក' },
   }).getDirectorMessage();
   assert.equal(published.name.en, 'Approved director');
+});
+
+
+test('explicit local content works in production without a CMS client', async () => {
+  const result = await content(true, null, true).getDirectorMessage();
+  assert.equal(result.name.en, 'Fixture director');
 });

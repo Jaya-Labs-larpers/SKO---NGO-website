@@ -44,6 +44,11 @@ export function validateBuildConfig(env) {
   } catch {
     failures.push("PUBLIC_SITE_URL must be a real HTTPS production origin");
   }
+  if (env.PUBLIC_CONTENT_SOURCE === "fixtures") {
+    if (env.PUBLIC_CONTACT_ENABLED !== "false")
+      failures.push("PUBLIC_CONTACT_ENABLED must be false for local content in production");
+    return failures;
+  }
   if (env.PUBLIC_CONTENT_SOURCE !== "sanity")
     failures.push("PUBLIC_CONTENT_SOURCE must be sanity in production");
   if (

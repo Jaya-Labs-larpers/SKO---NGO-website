@@ -186,7 +186,9 @@ Paste production and preview IDs into `wrangler.toml` using `[[kv_namespaces]]` 
 `[[env.preview.kv_namespaces]]` respectively, then uncomment those blocks. A top-level `preview_id`
 is not a deployment-preview override. Do not configure dashboard bindings that contradict the file.
 Binding name must be exactly `RATE_LIMIT_KV`. KV limiting is best effort and fails open on storage
-errors; reads/writes are not atomic. Monitor errors and use upstream abuse controls when needed.
+errors; KV has no atomic increment, so concurrent verified submissions can briefly exceed the limit.
+Only Turnstile-verified submissions count, in fixed ten-minute windows. Monitor errors and use
+upstream abuse controls when needed.
 
 ## 8. Email delivery (Resend)
 

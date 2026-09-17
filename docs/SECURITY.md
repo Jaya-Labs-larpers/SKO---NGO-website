@@ -172,7 +172,7 @@ domain in Phase 6.
 | Permissions-Policy | camera, geolocation, microphone, payment, USB and others all `()` |
 | Turnstile enforced server-side | Yes — and now fail-closed (FIND-001) |
 | Input validation & sanitisation | Zod schema; control characters stripped; HTML escaped before templating into the notification email |
-| Rate limiting | 5 per 10 minutes per IP, keyed by a **hash** of the address so the store never holds an identifiable IP. Verified working. |
+| Rate limiting | 5 per 10 minutes per IP in fixed windows, keyed by a **hash** of the address so the store never holds an identifiable IP. Only Turnstile-verified submissions consume quota, so a bot without a token cannot lock out real visitors on a shared IP. KV has no atomic increment, so the limit is best-effort under concurrency. Verified working. |
 | Honeypot | Verified: a filled honeypot returns success and sends nothing — the bot is never told it failed |
 | No secrets in client bundle or repo | Verified by scan: 123 source and 67 built files, zero findings. The only `PUBLIC_*` name reaching the browser is the Turnstile **site** key, which is public by design |
 | Sanity token read-only / not shipped | **There is no token at all** (ADR-004). The dataset is public; the build reads it unauthenticated |

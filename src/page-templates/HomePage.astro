@@ -18,6 +18,7 @@ import ActivityCard from '~/components/content/ActivityCard.astro';
 import PartnerWall from '~/components/content/PartnerWall.astro';
 import StoryQuote from '~/components/content/StoryQuote.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
+import { cardGridCols } from '~/lib/grid';
 
 interface Props {
   lang: Locale;
@@ -111,7 +112,7 @@ const story = stories[0];
       <section class="section pt-0">
         <div class="wrap">
           <SectionHeading title={t(lang, 'whatWeDo')} />
-          <div class="mt-8.5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class={`mt-8.5 ${cardGridCols(programs.length)}`}>
             {programs.map((program) => (
               <ProgramCard lang={lang} program={program} />
             ))}
@@ -134,7 +135,7 @@ const story = stories[0];
               </span>
             </a>
           </div>
-          <div class="mt-7.5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class={`mt-7.5 ${cardGridCols(activities.length)}`}>
             {activities.map((activity) => (
               <ActivityCard lang={lang} activity={activity} />
             ))}

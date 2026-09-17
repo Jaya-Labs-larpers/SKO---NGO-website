@@ -222,23 +222,90 @@ test('service requests have abort deadlines and verification rejection does not 
 
 test('stalled KV reads and writes fail open within a deadline', async (t) => {
   t.mock.timers.enable({ apis: ['setTimeout'] });
-  t.mock.method(globalThis, 'fetch', async () => Response.json({ success: false }));
+  // Turnstile must pass: the KV write only happens for verified submissions.
+  t.mock.method(globalThis, 'fetch', async () => Response.json({ success: true, id: 'mail-id' }));
   for (const stalled of ['get', 'put']) {
     const kv = { get: async () => '0', put: async () => {} };
-    let reached;
-    const called = new Promise((resolve) => {
-      reached = resolve;
-    });
+    let stalls = 0;
     kv[stalled] = () => {
-      reached();
+      stalls += 1;
       return new Promise(() => {});
     };
+    let settled = false;
     const pending = onRequest({
       request: request(JSON.stringify(valid)),
       env: { ...env, RATE_LIMIT_KV: kv },
+    }).finally(() => {
+      settled = true;
     });
-    await called;
-    t.mock.timers.tick(1000);
-    assert.equal((await pending).status, 403);
+    // Every stalled call (the check read, then the record read/write) is
+    // released only by its deadline, never by the stall resolving.
+    let released = 0;
+    while (!settled) {
+      if (stalls > released) {
+        released = stalls;
+        t.mock.timers.tick(1000);
+      }
+      await new Promise((resolve) => setImmediate(resolve));
+    }
+    assert.ok(stalls >= 1);
+    assert.equal((await pending).status, 200);
   }
+});
+
+test('rate-limit quota is consumed only by Turnstile-verified submissions', async (t) => {
+  const store = new Map();
+  const kv = {
+    get: async (key) => store.get(key) ?? null,
+    put: async (key, value) => {
+      store.set(key, value);
+    },
+  };
+  let verified = false;
+  t.mock.method(globalThis, 'fetch', async (url) => {
+    if (String(url).includes('siteverify')) return Response.json({ success: verified });
+    return Response.json({ id: 'mail-id' });
+  });
+  const withKv = { ...env, RATE_LIMIT_KV: kv };
+
+  // Unverified requests (missing or rejected token) must not touch the counter.
+  const { 'cf-turnstile-response': _token, ...noToken } = valid;
+  assert.equal((await onRequest({ request: request(JSON.stringify(noToken)), env: withKv })).status, 403);
+  assert.equal((await onRequest({ request: request(JSON.stringify(valid)), env: withKv })).status, 403);
+  assert.equal(store.size, 0);
+
+  verified = true;
+  for (let i = 0; i < 5; i += 1) {
+    assert.equal((await onRequest({ request: request(JSON.stringify(valid)), env: withKv })).status, 200);
+  }
+  assert.deepEqual([...store.values()], ['5']);
+  const limited = await onRequest({ request: request(JSON.stringify(valid)), env: withKv });
+  assert.equal(limited.status, 429);
+  assert.equal((await limited.json()).error, 'rate_limited');
+});
+
+test('rate-limit keys use a fixed window so a burst cannot extend its own expiry', async (t) => {
+  const puts = [];
+  const kv = {
+    get: async () => null,
+    put: async (key, value, options) => {
+      puts.push({ key, ttl: options?.expirationTtl });
+    },
+  };
+  t.mock.method(globalThis, 'fetch', async (url) =>
+    Response.json(String(url).includes('siteverify') ? { success: true } : { id: 'mail-id' }),
+  );
+  const at = (ms) => {
+    t.mock.method(Date, 'now', () => ms);
+    return onRequest({ request: request(JSON.stringify(valid)), env: { ...env, RATE_LIMIT_KV: kv } });
+  };
+  const base = 1667 * 600 * 1000; // start of a 600-second window
+  await at(base + 30_000); // 30s into the window
+  await at(base + 599_000); // 599s into the same window
+  await at(base + 600_000); // first second of the next window
+  assert.equal(puts[0].key, puts[1].key);
+  assert.notEqual(puts[1].key, puts[2].key);
+  assert.equal(puts[0].ttl, 570);
+  assert.equal(puts[1].ttl, 60); // clamped to KV's 60-second minimum
+  assert.equal(puts[2].ttl, 600);
 });

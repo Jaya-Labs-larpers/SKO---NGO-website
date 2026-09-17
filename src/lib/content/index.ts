@@ -9,7 +9,7 @@
 import { sanityClient } from '../sanity/client';
 import * as q from '../sanity/queries';
 import * as fixtures from './fixtures';
-import { isProductionDeployment } from '../config';
+import { isProductionDeployment, isLocalContent } from '../config';
 import { siteSettingsFailures } from '../../../scripts/readiness.mjs';
 import type {
   Activity,
@@ -28,7 +28,7 @@ import type {
 
 async function fetchOr<T>(query: string, params: Record<string, unknown>, fallback: T): Promise<T> {
   if (!sanityClient) {
-    if (isProductionDeployment) throw new Error('[readiness] Sanity is required in production');
+    if (isProductionDeployment && !isLocalContent) throw new Error('[readiness] Sanity is required in production');
     return fallback;
   }
   try {
@@ -49,7 +49,7 @@ async function fetchOr<T>(query: string, params: Record<string, unknown>, fallba
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   const settings = await fetchOr(q.siteSettingsQuery, {}, fixtures.siteSettings);
-  if (isProductionDeployment) {
+  if (isProductionDeployment && !isLocalContent) {
     const failures = siteSettingsFailures(settings);
     if (failures.length) throw new Error(`[readiness] ${failures.join('; ')}`);
   }

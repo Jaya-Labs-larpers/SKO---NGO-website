@@ -106,3 +106,27 @@ test('explicit fixture previews do not query a configured CMS project', async ()
     assert.equal(config.hasSanity, expected);
   }
 });
+
+
+test('explicit local production content needs a real domain and disabled forms, but no CMS', async () => {
+  const { validateBuildConfig } = await import('../scripts/readiness.mjs');
+  const env = {
+    VERCEL_ENV: 'production',
+    PUBLIC_SITE_URL: 'https://www.sko-samatapheapkhnom.org',
+    PUBLIC_CONTENT_SOURCE: 'fixtures',
+    PUBLIC_CONTACT_ENABLED: 'false',
+  };
+  assert.deepEqual(validateBuildConfig(env), []);
+  assert.ok(validateBuildConfig({ ...env, PUBLIC_SITE_URL: '' }).length);
+  assert.ok(validateBuildConfig({ ...env, PUBLIC_CONTACT_ENABLED: 'true' }).length);
+  const source = await readFile(new URL('../src/lib/config.ts', import.meta.url), 'utf8');
+  const compiled = ts.transpileModule(source.replaceAll('import.meta.env', JSON.stringify({
+    ...env, PUBLIC_DEPLOYMENT_ENV: 'production',
+  })), {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
+  }).outputText;
+  const config = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
+  assert.equal(config.hasSanity, false);
+  assert.equal(config.contactEnabled, false);
+  assert.equal(config.preventIndexing, true);
+});

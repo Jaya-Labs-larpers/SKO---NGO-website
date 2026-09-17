@@ -1,12 +1,12 @@
 # Graph Report - NGO-website  (2026-09-17)
 
 ## Corpus Check
-- 165 files · ~343,930 words
+- 165 files · ~342,934 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 16 file(s) not represented in the graph (top: (none) 6, .woff2 4, .css 3)
 
 ## Summary
-- 945 nodes · 1529 edges · 64 communities (52 shown, 7 thin omitted)
+- 941 nodes · 1517 edges · 69 communities (57 shown, 7 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -21,8 +21,8 @@
 - schemas/index.ts
 - Phase 6 — Deployment runbook
 - functions/api/contact.ts
-- portable-text.ts
-- PartnersPage.astro
+- lib/config.ts
+- t
 - utils.ts
 - sko/package.json
 - types.ts
@@ -31,22 +31,23 @@
 - Findings
 - package.json
 - queries.ts
-- content-review.mjs
-- CareerDetail.astro
+- readiness.mjs
+- pick
 - compilerOptions
 - Phase 1.4 — Tech decisions
 - Editing the SKO website — a guide for staff
 - ការកែសម្រួលគេហទំព័រ SKO — មគ្គុទ្ទេសក៍សម្រាប់បុគ្គលិក
-- Program
+- ProgramCard.astro
 - Phase 2 — Design system
 - SEO / AEO / GEO — audit and proposals
-- DirectorMessage.astro
+- portable-text.ts
 - Proposed FAQs
 - docs/README.md
 - Product
 - compilerOptions
 - GenericPage.astro
 - check-build.mjs
+- ResponsiveImage.astro
 - Route table
 - Phase 1.3 — Component inventory & low-fi wireframe notes
 - Components
@@ -54,6 +55,8 @@
 - form.test.mjs
 - Phase 4 — Build & implementation
 - Questions for the SKO team
+- scripts
+- devDependencies
 - vercel.json
 - Phase 3 — Architecture & working skeleton
 - compilerOptions
@@ -72,9 +75,11 @@
 - Agent instructions
 - security-overrides.test.mjs
 - env.d.ts
+- SeoHead.astro
 - Header.astro
-- ProgramsPage.astro
-- pick
+- HomePage.astro
+- AboutPage.astro
+- dependencies
 
 ## God Nodes (most connected - your core abstractions)
 1. `t()` - 32 edges
@@ -82,10 +87,10 @@
 3. `localizePath()` - 17 edges
 4. `fetchOr()` - 16 edges
 5. `Phase 6 — Deployment runbook` - 16 edges
-6. `handlePost()` - 13 edges
-7. `scripts` - 13 edges
-8. `Schemas` - 13 edges
-9. `Phase 1.4 — Tech decisions` - 13 edges
+6. `scripts` - 13 edges
+7. `Schemas` - 13 edges
+8. `Phase 1.4 — Tech decisions` - 13 edges
+9. `handlePost()` - 12 edges
 10. `text()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -95,19 +100,19 @@
   src/lib/content/index.ts → scripts/readiness.mjs
 - `isCurrent()` --calls--> `localizePath()`  [EXTRACTED]
   src/components/layout/Header.astro → src/lib/i18n/utils.ts
+- `slides` --calls--> `hasImage()`  [EXTRACTED]
+  src/components/media/HeroSlideshow.astro → src/lib/sanity/image.ts
 - `getStaticPaths()` --calls--> `getActivities()`  [EXTRACTED]
   src/pages/activities/page/[page].astro → src/lib/content/index.ts
-- `getStaticPaths()` --calls--> `getActivities()`  [EXTRACTED]
-  src/pages/km/activities/page/[page].astro → src/lib/content/index.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (64 total, 7 thin omitted)
+## Communities (69 total, 7 thin omitted)
 
 ### Community 0 - "fixtures.ts"
-Cohesion: 0.10
-Nodes (19): activities, blocks(), directorMessage, donationFaqs, enOnly(), impactStats, jobs, orgChart (+11 more)
+Cohesion: 0.09
+Nodes (26): blocksToText(), countNeeds(), esc(), faqBlock(), isPlaceholder(), mark(), OUT, pair() (+18 more)
 
 ### Community 1 - "studio/package.json"
 Cohesion: 0.05
@@ -122,28 +127,28 @@ Cohesion: 0.06
 Nodes (33): 10. Rebuild on publish, 11. Uptime monitoring, 12. Post-deploy verification, 13. Two things to change in code before launch, 1. Git repository, 2. Sanity project, 3. Cloudflare Pages project, 4. Environment variables (+25 more)
 
 ### Community 4 - "functions/api/contact.ts"
+Cohesion: 0.13
+Nodes (22): fetch(), ADR-0001, BodyReadError, bounded(), clean(), codeFor(), Env, ErrorCode (+14 more)
+
+### Community 5 - "lib/config.ts"
 Cohesion: 0.12
-Nodes (26): fetch(), ADR-0001, BodyReadError, bounded(), clean(), codeFor(), Env, ErrorCode (+18 more)
+Nodes (15): ADR-0004, astro, @sanity/client, contactEnabled, contentSource, hasSanity, isLocalContent, isPreviewDeployment (+7 more)
 
-### Community 5 - "portable-text.ts"
-Cohesion: 0.06
-Nodes (47): ADR-0003, ADR-0004, astro, @sanity/client, @sanity/image-url, fadedEnd, fadeInEnd, slides (+39 more)
-
-### Community 6 - "PartnersPage.astro"
-Cohesion: 0.20
-Nodes (3): groups, heading, string
+### Community 6 - "t"
+Cohesion: 0.12
+Nodes (7): Report, t(), groups, heading, string, policies, policies
 
 ### Community 7 - "utils.ts"
-Cohesion: 0.10
-Nodes (21): defaultLocale, isLocale(), Locale, localeName, locales, localeShort, ogLocale, alternatePath() (+13 more)
+Cohesion: 0.11
+Nodes (18): ImpactStat, defaultLocale, isLocale(), Locale, localeName, locales, localeShort, ogLocale (+10 more)
 
 ### Community 8 - "sko/package.json"
 Cohesion: 0.05
 Nodes (39): eslint, @sanity/eslint-config-studio, dependencies, react, react-dom, sanity, @sanity/vision, styled-components (+31 more)
 
 ### Community 9 - "types.ts"
-Cohesion: 0.12
-Nodes (15): AllocationItem, BankAccount, CmsAsset, CmsDimensions, CmsFile, DonationQr, FaqItem, ImpactStat (+7 more)
+Cohesion: 0.11
+Nodes (18): name, pullQuote, title, html, picked, AllocationItem, BankAccount, CmsAsset (+10 more)
 
 ### Community 10 - "Schemas"
 Cohesion: 0.11
@@ -158,20 +163,20 @@ Cohesion: 0.12
 Nodes (16): Beneficiary and child data, Email-injection specifics, Executive summary, FIND-001 — Turnstile failed open when unconfigured, FIND-002 — Cross-origin form POST accepted (CSRF), FIND-003 — No request body cap before parsing, FIND-004 — Astro 5.18.2: multiple XSS and SSRF advisories, FIND-005 — `sharp` / libvips CVEs (+8 more)
 
 ### Community 13 - "package.json"
-Cohesion: 0.05
-Nodes (43): dependencies, astro, @astrojs/sitemap, @sanity/client, @sanity/image-url, zod, description, devDependencies (+35 more)
+Cohesion: 0.12
+Nodes (15): description, engines, node, prettier, @types/node, typescript, name, private (+7 more)
 
 ### Community 14 - "queries.ts"
 Cohesion: 0.12
 Nodes (15): activitiesQuery, activityBySlugQuery, directorMessageQuery, impactStatsQuery, jobBySlugQuery, jobsQuery, orgChartQuery, pageBySlugQuery (+7 more)
 
-### Community 15 - "content-review.mjs"
-Cohesion: 0.36
-Nodes (9): blocksToText(), countNeeds(), esc(), faqBlock(), isPlaceholder(), mark(), OUT, pair() (+1 more)
+### Community 15 - "readiness.mjs"
+Cohesion: 0.17
+Nodes (8): env, failures, SITE, @astrojs/sitemap, @tailwindcss/vite, contentFailures(), deploymentEnvironment(), validateBuildConfig()
 
-### Community 16 - "CareerDetail.astro"
-Cohesion: 0.15
-Nodes (8): excerpt, href, string, title, formatDate(), jsonLd, location, title
+### Community 16 - "pick"
+Cohesion: 0.13
+Nodes (14): excerpt, href, string, title, items, jsonLd, siteUrl, formatDate() (+6 more)
 
 ### Community 17 - "compilerOptions"
 Cohesion: 0.13
@@ -189,9 +194,9 @@ Nodes (14): Adding an annual report, financial statement or policy, Both languag
 Cohesion: 0.14
 Nodes (14): ការកែសម្រួលគេហទំព័រ SKO — មគ្គុទ្ទេសក៍សម្រាប់បុគ្គលិក, ការកែសម្រួលសាររបស់នាយកប្រតិបត្តិ, ការកែសម្រួលអត្ថបទដែលបានផ្សាយរួច, ការចូលប្រើប្រាស់, ការបន្ថែមរបាយការណ៍ប្រចាំឆ្នាំ របាយការណ៍ហិរញ្ញវត្ថុ ឬគោលការណ៍, ការផ្លាស់ប្តូរតួលេខនៅលើគេហទំព័រ, ការលុបអត្ថបទ, ការសរសេរអត្ថបទព័ត៌មាន ឬសកម្មភាព (+6 more)
 
-### Community 21 - "Program"
-Cohesion: 0.29
-Nodes (6): getProgram(), Program, getStaticPaths(), { program }, getStaticPaths(), { program }
+### Community 21 - "ProgramCard.astro"
+Cohesion: 0.50
+Nodes (3): href, summary, title
 
 ### Community 22 - "Phase 2 — Design system"
 Cohesion: 0.15
@@ -201,9 +206,9 @@ Nodes (12): 10. Open for your call, 1. Direction, 2. Colour, 3. Typography, 4. S
 Cohesion: 0.15
 Nodes (12): AEO — thin. This is the biggest gap., Also missing, plain SEO, GEO — partly there, and the good part is genuine., Proposals, in the order I would do them, SEO / AEO / GEO — audit and proposals, SEO — strong. This is largely done., Tier 1 — high value, low effort (about half a day), Tier 2 — worth doing before launch (about a day) (+4 more)
 
-### Community 24 - "DirectorMessage.astro"
-Cohesion: 0.40
-Nodes (4): name, pullQuote, title, DirectorMessage
+### Community 24 - "portable-text.ts"
+Cohesion: 0.23
+Nodes (15): PortableBlock, PortableCalloutBlock, PortableImageBlock, PortableTextBlock, blocksToHtml(), blocksToPlainText(), esc(), isCalloutBlock() (+7 more)
 
 ### Community 25 - "Proposed FAQs"
 Cohesion: 0.17
@@ -222,12 +227,16 @@ Cohesion: 0.17
 Nodes (11): astro/tsconfigs/strict, compilerOptions, baseUrl, noUncheckedIndexedAccess, noUnusedLocals, paths, strict, verbatimModuleSyntax (+3 more)
 
 ### Community 29 - "GenericPage.astro"
-Cohesion: 0.27
-Nodes (3): items, jsonLd, Crumb
+Cohesion: 0.17
+Nodes (8): Crumb, Seo, text(), resolveSeo(), truncate(), seo, summary, title
 
 ### Community 30 - "check-build.mjs"
-Cohesion: 0.11
-Nodes (19): env, failures, SITE, @astrojs/sitemap, allFiles(), DIST, env, failures (+11 more)
+Cohesion: 0.23
+Nodes (11): allFiles(), DIST, env, failures, htmlFiles(), secretEnv, findEnvLeaks(), findSecrets() (+3 more)
+
+### Community 31 - "ResponsiveImage.astro"
+Cohesion: 0.16
+Nodes (14): ADR-0003, fadedEnd, fadeInEnd, slides, visibleEnd, present, { width, height }, CmsImage (+6 more)
 
 ### Community 32 - "Route table"
 Cohesion: 0.18
@@ -242,8 +251,8 @@ Cohesion: 0.07
 Nodes (29): Buttons, Colors, Components, Design System: SKO — Open Field Ledger, Disclosure and Dialog, Do:, Do's and Don'ts, Don't: (+21 more)
 
 ### Community 35 - "ActivitiesPage.astro"
-Cohesion: 0.24
-Nodes (8): Activity, PER_PAGE, heading, hrefFor(), totalPages, getStaticPaths(), totalPages, getStaticPaths()
+Cohesion: 0.17
+Nodes (12): getActivities(), getFeaturedActivities(), Activity, PER_PAGE, heading, totalPages, getStaticPaths(), { activity, previous, next } (+4 more)
 
 ### Community 37 - "Phase 4 — Build & implementation"
 Cohesion: 0.20
@@ -252,6 +261,14 @@ Nodes (9): 1. Verified results, 2. `scripts/check-build.mjs` — breadth, not sp
 ### Community 38 - "Questions for the SKO team"
 Cohesion: 0.20
 Nodes (9): Also still needed for the website, Donations, Organisation, Part 1 — already answered. Please check these are correct., Part 2 — we need answers from the team, Questions for the SKO team, Safeguarding — highest priority, Still needed, beyond the list above (+1 more)
+
+### Community 39 - "scripts"
+Cohesion: 0.15
+Nodes (13): scripts, build, build:production, build:vercel, dev, format, format:check, preview:astro (+5 more)
+
+### Community 40 - "devDependencies"
+Cohesion: 0.22
+Nodes (9): devDependencies, @astrojs/check, prettier, prettier-plugin-astro, prettier-plugin-tailwindcss, tailwindcss, @tailwindcss/vite, @types/node (+1 more)
 
 ### Community 41 - "vercel.json"
 Cohesion: 0.20
@@ -266,16 +283,16 @@ Cohesion: 0.13
 Nodes (14): compilerOptions, allowJs, forceConsistentCasingInFileNames, incremental, isolatedModules, jsx, lib, module (+6 more)
 
 ### Community 44 - "content/index.ts"
-Cohesion: 0.12
-Nodes (25): ADR-0007, fetchOr(), getActivities(), getActivity(), getDirectorMessage(), getFeaturedActivities(), getImpactStats(), getJob() (+17 more)
+Cohesion: 0.13
+Nodes (24): ADR-0007, fetchOr(), getActivity(), getDirectorMessage(), getImpactStats(), getJob(), getJobs(), getOrgChart() (+16 more)
 
 ### Community 46 - "SKO website"
 Cohesion: 0.25
 Nodes (7): Environment, Quick start, Repository layout, Scripts, SKO website, The rules that keep this maintainable, The Studio (separate npm project)
 
 ### Community 47 - "BaseLayout.astro"
-Cohesion: 0.18
-Nodes (4): getSiteSettings(), htmlLang, intro, title
+Cohesion: 0.13
+Nodes (5): siteSettingsFailures(), getSiteSettings(), htmlLang, intro, title
 
 ### Community 48 - "Phase 1.5 — Repo structure"
 Cohesion: 0.29
@@ -301,17 +318,25 @@ Nodes (4): BASE_DIRECTIVES, DIST, htmlFiles(), SCRIPT_HOSTS
 Cohesion: 0.50
 Nodes (3): Regenerating, Self-hosted fonts, Two things that matter about these files
 
+### Community 63 - "SeoHead.astro"
+Cohesion: 0.27
+Nodes (7): jsonLd, orgName, serializeJsonLd(), webSiteJsonLd, cfAnalyticsToken, FaqItem, serializeJsonLd()
+
 ### Community 65 - "Header.astro"
-Cohesion: 0.21
-Nodes (10): isCurrent(), SiteSettings, en, km, ui, UIKey, footerNav, mainNav (+2 more)
+Cohesion: 0.27
+Nodes (9): isCurrent(), SiteSettings, UIKey, localizePath(), footerNav, mainNav, mobileNav, NavItem (+1 more)
 
-### Community 66 - "ProgramsPage.astro"
+### Community 66 - "HomePage.astro"
+Cohesion: 0.24
+Nodes (3): cardGridCols(), LG_COLS, heading
+
+### Community 67 - "AboutPage.astro"
 Cohesion: 0.20
-Nodes (6): href, summary, title, cardGridCols(), LG_COLS, heading
+Nodes (4): getPage(), intro, seo, title
 
-### Community 67 - "pick"
-Cohesion: 0.12
-Nodes (14): html, picked, present, { width, height }, Seo, isEmpty(), pick(), text() (+6 more)
+### Community 68 - "dependencies"
+Cohesion: 0.33
+Nodes (6): dependencies, astro, @astrojs/sitemap, @sanity/client, @sanity/image-url, zod
 
 ## Knowledge Gaps
 - **508 isolated node(s):** `env`, `failures`, `SITE`, `Env`, `FunctionContext` (+503 more)
@@ -321,16 +346,16 @@ Nodes (14): html, picked, present, { width, height }, Seo, isEmpty(), pick(), te
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `@sanity/image-url` connect `portable-text.ts` to `package.json`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Why does `@sanity/image-url` connect `package.json` to `ResponsiveImage.astro`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **Why does `zod` connect `functions/api/contact.ts` to `package.json`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
-- **Why does `@sanity/client` connect `portable-text.ts` to `package.json`?**
-  _High betweenness centrality (0.021) - this node is a cross-community bridge._
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
+- **Why does `@sanity/client` connect `lib/config.ts` to `package.json`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
 - **What connects `env`, `failures`, `SITE` to the rest of the system?**
   _508 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `fixtures.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.1 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08866995073891626 - nodes in this community are weakly interconnected._
 - **Should `studio/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.05 - nodes in this community are weakly interconnected._
 - **Should `schemas/index.ts` be split into smaller, more focused modules?**

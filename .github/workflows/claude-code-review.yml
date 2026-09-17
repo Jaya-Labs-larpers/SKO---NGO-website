@@ -10,13 +10,18 @@ on:
     #   - "src/**/*.js"
     #   - "src/**/*.jsx"
 
+# Every third-party reference below is pinned to a commit SHA. Mutable tags
+# (`@v1`, a marketplace `main` branch) would let an upstream change run with
+# this job's OAuth token and OIDC identity without any change in this repo.
+# Bump the SHAs deliberately; the trailing comment records the tag they came from.
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    # Only PRs from branches in this repository, opened by people with write
+    # access, get the credentialed review. Fork PRs receive no secrets anyway;
+    # this makes the boundary explicit rather than relying on that default.
+    if: |
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.pull_request.author_association)
 
     runs-on: ubuntu-latest
     permissions:
@@ -27,18 +32,33 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 1
+          persist-credentials: false
+
+      # The code-review plugin is installed from a local checkout pinned to a
+      # commit instead of the mutable marketplace URL, so the reviewer's prompts
+      # and tools cannot change underneath this workflow.
+      - name: Checkout pinned plugin marketplace
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: anthropics/claude-code
+          ref: 68ac8bbf0245b615b41517bf8f2b2f35af1ae31d # main, 2026-09-17
+          path: .claude-plugin-marketplace
+          fetch-depth: 1
+          persist-credentials: false
+          sparse-checkout: |
+            .claude-plugin
+            plugins/code-review
 
       - name: Run Claude Code Review
         id: claude-review
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@3b8197d3d486006dd4af54613517f21ac6ac625e # v1.0.227
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
+          plugin_marketplaces: './.claude-plugin-marketplace'
           plugins: 'code-review@claude-code-plugins'
           prompt: '/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
-

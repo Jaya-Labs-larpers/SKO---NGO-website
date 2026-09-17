@@ -47,8 +47,9 @@ vercel deploy --prebuilt
 ```
 
 Link to the intended owner/project and verify the Preview environment first.
-Never promote a fixture preview to Production. Production builds still require
-approved content and real CMS/domain/Turnstile settings.
+Build specifically for Production rather than promoting a preview artifact.
+Production can now explicitly use local content as documented below. Sanity-backed
+production builds still require the CMS and content readiness checks.
 
 After upload, verify English/Khmer home, About and Donate routes, CSS/fonts,
 missing English and Khmer routes (404, not 200), trailing-slash API behavior,
@@ -123,3 +124,24 @@ References: [Node functions](https://vercel.com/docs/functions/runtimes/node-js)
 [WAF rate limiting](https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting),
 [Attack Mode](https://vercel.com/docs/vercel-firewall/attack-mode),
 [Hobby](https://vercel.com/docs/plans/hobby).
+
+
+## Temporary production site without Sanity
+
+The domain can serve the existing local content with these Production settings:
+
+- `PUBLIC_CONTENT_SOURCE=fixtures`
+- `PUBLIC_SITE_URL=https://www.sko-samatapheapkhnom.org`
+- `PUBLIC_CONTACT_ENABLED=false`
+- `CONTACT_ENABLED=false`
+
+This mode does not query Sanity or require its published singleton documents.
+Forms remain disabled, and robots plus page metadata discourage indexing while
+placeholders and Khmer translations are unfinished. Structural and security
+checks still run. Deploy the updated source with `vercel deploy --prod`.
+The project currently uses the `production` Git branch for automatic production
+deployments; pushes to `main` remain previews.
+
+To launch the CMS-backed site later, set `PUBLIC_CONTENT_SOURCE=sanity`, populate
+and publish the required documents, and complete the production readiness checks.
+Enable forms only after their service configuration is ready.

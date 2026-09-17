@@ -15,7 +15,8 @@ export const isProductionDeployment =
   env.PUBLIC_DEPLOYMENT_ENV === "production";
 export const isPreviewDeployment = env.PUBLIC_DEPLOYMENT_ENV === "preview";
 export const contactEnabled =
-  !isPreviewDeployment || env.PUBLIC_CONTACT_ENABLED === "true";
+  env.PUBLIC_CONTACT_ENABLED === "true" ||
+  (!isPreviewDeployment && env.PUBLIC_CONTACT_ENABLED !== "false");
 
 function str(value: string | undefined): string {
   return (value ?? "").trim();
@@ -39,6 +40,8 @@ if (!["sanity", "fixtures"].includes(contentSource))
   throw new Error("[readiness] Invalid PUBLIC_CONTENT_SOURCE");
 if (contentSource === "sanity" && !sanityProjectId)
   throw new Error("[readiness] Sanity content requires a project ID");
+export const isLocalContent = contentSource === "fixtures";
+export const preventIndexing = isPreviewDeployment || isLocalContent;
 export const hasSanity =
   contentSource === "sanity" && sanityProjectId.length > 0;
 

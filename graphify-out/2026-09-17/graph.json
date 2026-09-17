@@ -4,82 +4,82 @@
   "graph": {},
   "nodes": [
     {
-      "id": "src_lib_content_types_localeblocks",
-      "label": "LocaleBlocks",
+      "id": "src_lib_content_types_page",
+      "label": "Page",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
       "community_name": "fixtures.ts",
       "file_type": "code",
-      "norm_label": "localeblocks",
+      "norm_label": "page",
       "source_file": "src/lib/content/types.ts",
-      "source_location": "L13"
+      "source_location": "L167"
     },
     {
-      "id": "src_lib_content_types_orgchart",
-      "label": "OrgChart",
+      "id": "src_lib_content_types_teammember",
+      "label": "TeamMember",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
       "community_name": "fixtures.ts",
       "file_type": "code",
-      "norm_label": "orgchart",
+      "norm_label": "teammember",
       "source_file": "src/lib/content/types.ts",
-      "source_location": "L252"
+      "source_location": "L234"
     },
     {
-      "id": "src_lib_content_types_partner",
-      "label": "Partner",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "fixtures.ts",
-      "file_type": "code",
-      "norm_label": "partner",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L215"
-    },
-    {
-      "id": "src_lib_content_types_report",
-      "label": "Report",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "fixtures.ts",
-      "file_type": "code",
-      "norm_label": "report",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L224"
-    },
-    {
-      "id": "src_lib_content_types_program",
-      "label": "Program",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "Program",
-      "file_type": "code",
-      "norm_label": "program",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L178"
-    },
-    {
-      "id": "src_lib_content_types_directormessage",
-      "label": "DirectorMessage",
+      "id": "src_lib_content_types_portableblock",
+      "label": "PortableBlock",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 24,
-      "community_name": "DirectorMessage.astro",
+      "community_name": "portable-text.ts",
       "file_type": "code",
-      "norm_label": "directormessage",
+      "norm_label": "portableblock",
       "source_file": "src/lib/content/types.ts",
-      "source_location": "L243"
+      "source_location": "L57"
+    },
+    {
+      "id": "src_lib_content_types_portablecalloutblock",
+      "label": "PortableCalloutBlock",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "portablecalloutblock",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "src_lib_content_types_portableimageblock",
+      "label": "PortableImageBlock",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "portableimageblock",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L40"
+    },
+    {
+      "id": "src_lib_content_types_portabletextblock",
+      "label": "PortableTextBlock",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "portabletextblock",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L30"
     },
     {
       "id": "src_lib_breadcrumbs_crumb",
@@ -92,6 +92,71 @@
       "file_type": "code",
       "norm_label": "crumb",
       "source_file": "src/lib/breadcrumbs.ts",
+      "source_location": "L5"
+    },
+    {
+      "id": "src_lib_content_types_seo",
+      "label": "Seo",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "seo",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L92"
+    },
+    {
+      "id": "src_lib_content_types_cmsimage",
+      "label": "CmsImage",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "cmsimage",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L73"
+    },
+    {
+      "id": "src_lib_content_types_orgchart",
+      "label": "OrgChart",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "orgchart",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L252"
+    },
+    {
+      "id": "src_lib_content_types_story",
+      "label": "Story",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "story",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L205"
+    },
+    {
+      "id": "src_lib_seo_resolvedseo",
+      "label": "ResolvedSeo",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "resolvedseo",
+      "source_file": "src/lib/seo.ts",
       "source_location": "L5"
     },
     {
@@ -131,7 +196,7 @@
       "file_type": "code",
       "norm_label": "bodyreaderror",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L87"
+      "source_location": "L86"
     },
     {
       "id": "functions_api_contact_env",
@@ -144,7 +209,7 @@
       "file_type": "code",
       "norm_label": "env",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L26"
+      "source_location": "L25"
     },
     {
       "id": "functions_api_contact_errorcode",
@@ -157,7 +222,7 @@
       "file_type": "code",
       "norm_label": "errorcode",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L141"
+      "source_location": "L140"
     },
     {
       "id": "functions_api_contact_functioncontext",
@@ -170,7 +235,7 @@
       "file_type": "code",
       "norm_label": "functioncontext",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L53"
+      "source_location": "L52"
     },
     {
       "id": "functions_api_contact_kvnamespacelike",
@@ -183,7 +248,7 @@
       "file_type": "code",
       "norm_label": "kvnamespacelike",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L21"
+      "source_location": "L20"
     },
     {
       "id": "src_lib_content_types_jobpost",
@@ -199,82 +264,17 @@
       "source_location": "L258"
     },
     {
-      "id": "src_lib_content_types_cmsimage",
-      "label": "CmsImage",
+      "id": "src_lib_content_types_program",
+      "label": "Program",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
+      "community": 44,
+      "community_name": "content/index.ts",
       "file_type": "code",
-      "norm_label": "cmsimage",
+      "norm_label": "program",
       "source_file": "src/lib/content/types.ts",
-      "source_location": "L73"
-    },
-    {
-      "id": "src_lib_content_types_portableblock",
-      "label": "PortableBlock",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "portableblock",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L57"
-    },
-    {
-      "id": "src_lib_content_types_portablecalloutblock",
-      "label": "PortableCalloutBlock",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "portablecalloutblock",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L50"
-    },
-    {
-      "id": "src_lib_content_types_portableimageblock",
-      "label": "PortableImageBlock",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "portableimageblock",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L40"
-    },
-    {
-      "id": "src_lib_content_types_portabletextblock",
-      "label": "PortableTextBlock",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "portabletextblock",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L30"
-    },
-    {
-      "id": "src_lib_seo_resolvedseo",
-      "label": "ResolvedSeo",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "resolvedseo",
-      "source_file": "src/lib/seo.ts",
-      "source_location": "L5"
+      "source_location": "L178"
     },
     {
       "id": "src_env_d_importmeta",
@@ -301,6 +301,32 @@
       "norm_label": "importmetaenv",
       "source_file": "src/env.d.ts",
       "source_location": "L3"
+    },
+    {
+      "id": "src_lib_content_types_report",
+      "label": "Report",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "report",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L224"
+    },
+    {
+      "id": "src_lib_content_types_faqitem",
+      "label": "FaqItem",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "faqitem",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L162"
     },
     {
       "id": "src_lib_content_types_sitesettings",
@@ -342,17 +368,17 @@
       "source_location": "L3"
     },
     {
-      "id": "src_lib_content_types_seo",
-      "label": "Seo",
+      "id": "src_lib_content_types_impactstat",
+      "label": "ImpactStat",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
+      "community": 7,
+      "community_name": "utils.ts",
       "file_type": "code",
-      "norm_label": "seo",
+      "norm_label": "impactstat",
       "source_file": "src/lib/content/types.ts",
-      "source_location": "L92"
+      "source_location": "L270"
     },
     {
       "id": "src_lib_i18n_config_locale",
@@ -459,6 +485,19 @@
       "source_location": "L84"
     },
     {
+      "id": "src_lib_content_types_directormessage",
+      "label": "DirectorMessage",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "directormessage",
+      "source_file": "src/lib/content/types.ts",
+      "source_location": "L243"
+    },
+    {
       "id": "src_lib_content_types_donationqr",
       "label": "DonationQr",
       "_callable": true,
@@ -472,30 +511,17 @@
       "source_location": "L113"
     },
     {
-      "id": "src_lib_content_types_faqitem",
-      "label": "FaqItem",
+      "id": "src_lib_content_types_localeblocks",
+      "label": "LocaleBlocks",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 9,
       "community_name": "types.ts",
       "file_type": "code",
-      "norm_label": "faqitem",
+      "norm_label": "localeblocks",
       "source_file": "src/lib/content/types.ts",
-      "source_location": "L162"
-    },
-    {
-      "id": "src_lib_content_types_impactstat",
-      "label": "ImpactStat",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "types.ts",
-      "file_type": "code",
-      "norm_label": "impactstat",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L270"
+      "source_location": "L13"
     },
     {
       "id": "src_lib_content_types_localestring",
@@ -511,17 +537,17 @@
       "source_location": "L12"
     },
     {
-      "id": "src_lib_content_types_page",
-      "label": "Page",
+      "id": "src_lib_content_types_partner",
+      "label": "Partner",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 9,
       "community_name": "types.ts",
       "file_type": "code",
-      "norm_label": "page",
+      "norm_label": "partner",
       "source_file": "src/lib/content/types.ts",
-      "source_location": "L167"
+      "source_location": "L215"
     },
     {
       "id": "src_lib_content_types_portablemarkdef",
@@ -563,30 +589,88 @@
       "source_location": "L99"
     },
     {
-      "id": "src_lib_content_types_story",
-      "label": "Story",
+      "id": "scripts_content_review_blockstotext",
+      "label": "blocksToText()",
       "_callable": true,
-      "_callable_class": true,
       "_origin": "ast",
-      "community": 9,
-      "community_name": "types.ts",
+      "community": 0,
+      "community_name": "fixtures.ts",
       "file_type": "code",
-      "norm_label": "story",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L205"
+      "norm_label": "blockstotext()",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L50"
     },
     {
-      "id": "src_lib_content_types_teammember",
-      "label": "TeamMember",
+      "id": "scripts_content_review_countneeds",
+      "label": "countNeeds()",
       "_callable": true,
-      "_callable_class": true,
       "_origin": "ast",
-      "community": 9,
-      "community_name": "types.ts",
+      "community": 0,
+      "community_name": "fixtures.ts",
       "file_type": "code",
-      "norm_label": "teammember",
-      "source_file": "src/lib/content/types.ts",
-      "source_location": "L234"
+      "norm_label": "countneeds()",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L101"
+    },
+    {
+      "id": "scripts_content_review_esc",
+      "label": "esc()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "fixtures.ts",
+      "file_type": "code",
+      "norm_label": "esc()",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L31"
+    },
+    {
+      "id": "scripts_content_review_faqblock",
+      "label": "faqBlock()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "fixtures.ts",
+      "file_type": "code",
+      "norm_label": "faqblock()",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L81"
+    },
+    {
+      "id": "scripts_content_review_isplaceholder",
+      "label": "isPlaceholder()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "fixtures.ts",
+      "file_type": "code",
+      "norm_label": "isplaceholder()",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L47"
+    },
+    {
+      "id": "scripts_content_review_mark",
+      "label": "mark()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "fixtures.ts",
+      "file_type": "code",
+      "norm_label": "mark()",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L38"
+    },
+    {
+      "id": "scripts_content_review_pair",
+      "label": "pair()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "fixtures.ts",
+      "file_type": "code",
+      "norm_label": "pair()",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L63"
     },
     {
       "id": "src_lib_content_fixtures_blocks",
@@ -625,88 +709,64 @@
       "source_location": "L445"
     },
     {
-      "id": "scripts_content_review_blockstotext",
-      "label": "blocksToText()",
+      "id": "scripts_readiness_contentfailures",
+      "label": "contentFailures()",
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "content-review.mjs",
+      "community_name": "readiness.mjs",
       "file_type": "code",
-      "norm_label": "blockstotext()",
-      "source_file": "scripts/content-review.mjs",
-      "source_location": "L50"
+      "norm_label": "contentfailures()",
+      "source_file": "scripts/readiness.mjs",
+      "source_location": "L70"
     },
     {
-      "id": "scripts_content_review_countneeds",
-      "label": "countNeeds()",
+      "id": "scripts_readiness_deploymentenvironment",
+      "label": "deploymentEnvironment()",
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "content-review.mjs",
+      "community_name": "readiness.mjs",
       "file_type": "code",
-      "norm_label": "countneeds()",
-      "source_file": "scripts/content-review.mjs",
-      "source_location": "L101"
+      "norm_label": "deploymentenvironment()",
+      "source_file": "scripts/readiness.mjs",
+      "source_location": "L1"
     },
     {
-      "id": "scripts_content_review_esc",
-      "label": "esc()",
+      "id": "scripts_readiness_validatebuildconfig",
+      "label": "validateBuildConfig()",
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "content-review.mjs",
+      "community_name": "readiness.mjs",
       "file_type": "code",
-      "norm_label": "esc()",
-      "source_file": "scripts/content-review.mjs",
-      "source_location": "L31"
+      "norm_label": "validatebuildconfig()",
+      "source_file": "scripts/readiness.mjs",
+      "source_location": "L22"
     },
     {
-      "id": "scripts_content_review_faqblock",
-      "label": "faqBlock()",
+      "id": "tests_content_test_content",
+      "label": "content()",
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "content-review.mjs",
+      "community_name": "readiness.mjs",
       "file_type": "code",
-      "norm_label": "faqblock()",
-      "source_file": "scripts/content-review.mjs",
-      "source_location": "L81"
+      "norm_label": "content()",
+      "source_file": "tests/content.test.mjs",
+      "source_location": "L13"
     },
     {
-      "id": "scripts_content_review_isplaceholder",
-      "label": "isPlaceholder()",
+      "id": "tests_vercel_test_loadapi",
+      "label": "loadApi()",
       "_callable": true,
       "_origin": "ast",
       "community": 15,
-      "community_name": "content-review.mjs",
+      "community_name": "readiness.mjs",
       "file_type": "code",
-      "norm_label": "isplaceholder()",
-      "source_file": "scripts/content-review.mjs",
-      "source_location": "L47"
-    },
-    {
-      "id": "scripts_content_review_mark",
-      "label": "mark()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "content-review.mjs",
-      "file_type": "code",
-      "norm_label": "mark()",
-      "source_file": "scripts/content-review.mjs",
-      "source_location": "L38"
-    },
-    {
-      "id": "scripts_content_review_pair",
-      "label": "pair()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "content-review.mjs",
-      "file_type": "code",
-      "norm_label": "pair()",
-      "source_file": "scripts/content-review.mjs",
-      "source_location": "L63"
+      "norm_label": "loadapi()",
+      "source_file": "tests/vercel.test.mjs",
+      "source_location": "L7"
     },
     {
       "id": "src_lib_i18n_utils_formatdate",
@@ -714,11 +774,35 @@
       "_callable": true,
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "formatdate()",
       "source_file": "src/lib/i18n/utils.ts",
       "source_location": "L97"
+    },
+    {
+      "id": "src_lib_i18n_utils_isempty",
+      "label": "isEmpty()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "pick",
+      "file_type": "code",
+      "norm_label": "isempty()",
+      "source_file": "src/lib/i18n/utils.ts",
+      "source_location": "L55"
+    },
+    {
+      "id": "src_lib_i18n_utils_pick",
+      "label": "pick()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "pick",
+      "file_type": "code",
+      "norm_label": "pick()",
+      "source_file": "src/lib/i18n/utils.ts",
+      "source_location": "L70"
     },
     {
       "id": "studio_structure_desk_structure",
@@ -733,40 +817,172 @@
       "source_location": "L19"
     },
     {
-      "id": "src_lib_content_index_getprogram",
-      "label": "getProgram()",
+      "id": "src_lib_portable_text_blockstohtml",
+      "label": "blocksToHtml()",
       "_callable": true,
       "_origin": "ast",
-      "community": 21,
-      "community_name": "Program",
+      "community": 24,
+      "community_name": "portable-text.ts",
       "file_type": "code",
-      "norm_label": "getprogram()",
-      "source_file": "src/lib/content/index.ts",
-      "source_location": "L80"
+      "norm_label": "blockstohtml()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L116"
     },
     {
-      "id": "src_pages_km_programs_slug_getstaticpaths",
-      "label": "getStaticPaths()",
+      "id": "src_lib_portable_text_blockstoplaintext",
+      "label": "blocksToPlainText()",
       "_callable": true,
       "_origin": "ast",
-      "community": 21,
-      "community_name": "Program",
+      "community": 24,
+      "community_name": "portable-text.ts",
       "file_type": "code",
-      "norm_label": "getstaticpaths()",
-      "source_file": "src/pages/km/programs/[slug].astro",
-      "source_location": "L6"
+      "norm_label": "blockstoplaintext()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L179"
     },
     {
-      "id": "src_pages_programs_slug_getstaticpaths",
-      "label": "getStaticPaths()",
+      "id": "src_lib_portable_text_esc",
+      "label": "esc()",
       "_callable": true,
       "_origin": "ast",
-      "community": 21,
-      "community_name": "Program",
+      "community": 24,
+      "community_name": "portable-text.ts",
       "file_type": "code",
-      "norm_label": "getstaticpaths()",
-      "source_file": "src/pages/programs/[slug].astro",
-      "source_location": "L6"
+      "norm_label": "esc()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L23"
+    },
+    {
+      "id": "src_lib_portable_text_iscalloutblock",
+      "label": "isCalloutBlock()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "iscalloutblock()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L40"
+    },
+    {
+      "id": "src_lib_portable_text_isimageblock",
+      "label": "isImageBlock()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "isimageblock()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L36"
+    },
+    {
+      "id": "src_lib_portable_text_istextblock",
+      "label": "isTextBlock()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "istextblock()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L32"
+    },
+    {
+      "id": "src_lib_portable_text_rendercallout",
+      "label": "renderCallout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "rendercallout()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L104"
+    },
+    {
+      "id": "src_lib_portable_text_renderimage",
+      "label": "renderImage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "renderimage()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L81"
+    },
+    {
+      "id": "src_lib_portable_text_renderspans",
+      "label": "renderSpans()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "renderspans()",
+      "source_file": "src/lib/portable-text.ts",
+      "source_location": "L44"
+    },
+    {
+      "id": "src_lib_sanity_image_imagesrcset",
+      "label": "imageSrcSet()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "imagesrcset()",
+      "source_file": "src/lib/sanity/image.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_lib_sanity_image_imageurl",
+      "label": "imageUrl()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "portable-text.ts",
+      "file_type": "code",
+      "norm_label": "imageurl()",
+      "source_file": "src/lib/sanity/image.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "src_lib_i18n_utils_text",
+      "label": "text()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "text()",
+      "source_file": "src/lib/i18n/utils.ts",
+      "source_location": "L82"
+    },
+    {
+      "id": "src_lib_seo_resolveseo",
+      "label": "resolveSeo()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "resolveseo()",
+      "source_file": "src/lib/seo.ts",
+      "source_location": "L20"
+    },
+    {
+      "id": "src_lib_seo_truncate",
+      "label": "truncate()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "truncate()",
+      "source_file": "src/lib/seo.ts",
+      "source_location": "L36"
     },
     {
       "id": "scripts_check_build_allfiles",
@@ -803,54 +1019,6 @@
       "norm_label": "htmlfiles()",
       "source_file": "scripts/check-build.mjs",
       "source_location": "L30"
-    },
-    {
-      "id": "scripts_readiness_contentfailures",
-      "label": "contentFailures()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "contentfailures()",
-      "source_file": "scripts/readiness.mjs",
-      "source_location": "L70"
-    },
-    {
-      "id": "scripts_readiness_deploymentenvironment",
-      "label": "deploymentEnvironment()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "deploymentenvironment()",
-      "source_file": "scripts/readiness.mjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "scripts_readiness_sitesettingsfailures",
-      "label": "siteSettingsFailures()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "sitesettingsfailures()",
-      "source_file": "scripts/readiness.mjs",
-      "source_location": "L80"
-    },
-    {
-      "id": "scripts_readiness_validatebuildconfig",
-      "label": "validateBuildConfig()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "validatebuildconfig()",
-      "source_file": "scripts/readiness.mjs",
-      "source_location": "L22"
     },
     {
       "id": "scripts_secrets_findenvleaks",
@@ -901,40 +1069,64 @@
       "source_location": "L49"
     },
     {
-      "id": "tests_content_test_content",
-      "label": "content()",
+      "id": "src_components_media_heroslideshow_pct",
+      "label": "pct()",
       "_callable": true,
       "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
       "file_type": "code",
-      "norm_label": "content()",
-      "source_file": "tests/content.test.mjs",
-      "source_location": "L13"
+      "norm_label": "pct()",
+      "source_file": "src/components/media/HeroSlideshow.astro",
+      "source_location": "L52"
     },
     {
-      "id": "tests_vercel_test_loadapi",
-      "label": "loadApi()",
+      "id": "src_lib_sanity_image_hasimage",
+      "label": "hasImage()",
       "_callable": true,
       "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
       "file_type": "code",
-      "norm_label": "loadapi()",
-      "source_file": "tests/vercel.test.mjs",
-      "source_location": "L7"
+      "norm_label": "hasimage()",
+      "source_file": "src/lib/sanity/image.ts",
+      "source_location": "L12"
     },
     {
-      "id": "src_page_templates_activitiespage_hreffor",
-      "label": "hrefFor()",
+      "id": "src_lib_sanity_image_imagedimensions",
+      "label": "imageDimensions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "imagedimensions()",
+      "source_file": "src/lib/sanity/image.ts",
+      "source_location": "L52"
+    },
+    {
+      "id": "src_lib_content_index_getactivities",
+      "label": "getActivities()",
       "_callable": true,
       "_origin": "ast",
       "community": 35,
       "community_name": "ActivitiesPage.astro",
       "file_type": "code",
-      "norm_label": "hreffor()",
-      "source_file": "src/page-templates/ActivitiesPage.astro",
-      "source_location": "L22"
+      "norm_label": "getactivities()",
+      "source_file": "src/lib/content/index.ts",
+      "source_location": "L87"
+    },
+    {
+      "id": "src_lib_content_index_getfeaturedactivities",
+      "label": "getFeaturedActivities()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "ActivitiesPage.astro",
+      "file_type": "code",
+      "norm_label": "getfeaturedactivities()",
+      "source_file": "src/lib/content/index.ts",
+      "source_location": "L96"
     },
     {
       "id": "src_pages_activities_page_page_getstaticpaths",
@@ -949,6 +1141,18 @@
       "source_location": "L7"
     },
     {
+      "id": "src_pages_activities_slug_getstaticpaths",
+      "label": "getStaticPaths()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "ActivitiesPage.astro",
+      "file_type": "code",
+      "norm_label": "getstaticpaths()",
+      "source_file": "src/pages/activities/[slug].astro",
+      "source_location": "L6"
+    },
+    {
       "id": "src_pages_km_activities_page_page_getstaticpaths",
       "label": "getStaticPaths()",
       "_callable": true,
@@ -959,6 +1163,18 @@
       "norm_label": "getstaticpaths()",
       "source_file": "src/pages/km/activities/page/[page].astro",
       "source_location": "L7"
+    },
+    {
+      "id": "src_pages_km_activities_slug_getstaticpaths",
+      "label": "getStaticPaths()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "ActivitiesPage.astro",
+      "file_type": "code",
+      "norm_label": "getstaticpaths()",
+      "source_file": "src/pages/km/activities/[slug].astro",
+      "source_location": "L6"
     },
     {
       "id": "tests_form_test_add",
@@ -1090,7 +1306,7 @@
       "file_type": "code",
       "norm_label": ".constructor()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L88"
+      "source_location": "L87"
     },
     {
       "id": "functions_api_contact_bounded",
@@ -1102,7 +1318,7 @@
       "file_type": "code",
       "norm_label": "bounded()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L73"
+      "source_location": "L72"
     },
     {
       "id": "functions_api_contact_clean",
@@ -1114,7 +1330,7 @@
       "file_type": "code",
       "norm_label": "clean()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L166"
+      "source_location": "L165"
     },
     {
       "id": "functions_api_contact_codefor",
@@ -1126,7 +1342,7 @@
       "file_type": "code",
       "norm_label": "codefor()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L143"
+      "source_location": "L142"
     },
     {
       "id": "functions_api_contact_escapehtml",
@@ -1138,7 +1354,7 @@
       "file_type": "code",
       "norm_label": "escapehtml()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L178"
+      "source_location": "L177"
     },
     {
       "id": "functions_api_contact_handlepost",
@@ -1150,7 +1366,7 @@
       "file_type": "code",
       "norm_label": "handlepost()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L304"
+      "source_location": "L266"
     },
     {
       "id": "functions_api_contact_haship",
@@ -1162,7 +1378,7 @@
       "file_type": "code",
       "norm_label": "haship()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L188"
+      "source_location": "L187"
     },
     {
       "id": "functions_api_contact_isratelimited",
@@ -1174,7 +1390,7 @@
       "file_type": "code",
       "norm_label": "isratelimited()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L228"
+      "source_location": "L195"
     },
     {
       "id": "functions_api_contact_json",
@@ -1186,7 +1402,7 @@
       "file_type": "code",
       "norm_label": "json()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L154"
+      "source_location": "L153"
     },
     {
       "id": "functions_api_contact_kvnamespacelike_get",
@@ -1198,7 +1414,7 @@
       "file_type": "code",
       "norm_label": ".get()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L22"
+      "source_location": "L21"
     },
     {
       "id": "functions_api_contact_kvnamespacelike_put",
@@ -1210,7 +1426,7 @@
       "file_type": "code",
       "norm_label": ".put()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L23"
+      "source_location": "L22"
     },
     {
       "id": "functions_api_contact_onrequest",
@@ -1222,7 +1438,7 @@
       "file_type": "code",
       "norm_label": "onrequest()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L442"
+      "source_location": "L400"
     },
     {
       "id": "functions_api_contact_productionconfigured",
@@ -1234,43 +1450,7 @@
       "file_type": "code",
       "norm_label": "productionconfigured()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L37"
-    },
-    {
-      "id": "functions_api_contact_ratelimitingconfigured",
-      "label": "rateLimitingConfigured()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "functions/api/contact.ts",
-      "file_type": "code",
-      "norm_label": "ratelimitingconfigured()",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L212"
-    },
-    {
-      "id": "functions_api_contact_ratelimitkey",
-      "label": "rateLimitKey()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "functions/api/contact.ts",
-      "file_type": "code",
-      "norm_label": "ratelimitkey()",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L201"
-    },
-    {
-      "id": "functions_api_contact_ratelimitttl",
-      "label": "rateLimitTtl()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "functions/api/contact.ts",
-      "file_type": "code",
-      "norm_label": "ratelimitttl()",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L206"
+      "source_location": "L36"
     },
     {
       "id": "functions_api_contact_readbody",
@@ -1282,19 +1462,7 @@
       "file_type": "code",
       "norm_label": "readbody()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L96"
-    },
-    {
-      "id": "functions_api_contact_recordsubmission",
-      "label": "recordSubmission()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "functions/api/contact.ts",
-      "file_type": "code",
-      "norm_label": "recordsubmission()",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L253"
+      "source_location": "L95"
     },
     {
       "id": "functions_api_contact_sendemail",
@@ -1306,7 +1474,7 @@
       "file_type": "code",
       "norm_label": "sendemail()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L283"
+      "source_location": "L245"
     },
     {
       "id": "functions_api_contact_verifyturnstile",
@@ -1318,7 +1486,7 @@
       "file_type": "code",
       "norm_label": "verifyturnstile()",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L267"
+      "source_location": "L229"
     },
     {
       "id": "src_lib_content_index_fetchor",
@@ -1331,18 +1499,6 @@
       "norm_label": "fetchor()",
       "source_file": "src/lib/content/index.ts",
       "source_location": "L29"
-    },
-    {
-      "id": "src_lib_content_index_getactivities",
-      "label": "getActivities()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "getactivities()",
-      "source_file": "src/lib/content/index.ts",
-      "source_location": "L87"
     },
     {
       "id": "src_lib_content_index_getactivity",
@@ -1367,18 +1523,6 @@
       "norm_label": "getdirectormessage()",
       "source_file": "src/lib/content/index.ts",
       "source_location": "L59"
-    },
-    {
-      "id": "src_lib_content_index_getfeaturedactivities",
-      "label": "getFeaturedActivities()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "getfeaturedactivities()",
-      "source_file": "src/lib/content/index.ts",
-      "source_location": "L96"
     },
     {
       "id": "src_lib_content_index_getimpactstats",
@@ -1429,18 +1573,6 @@
       "source_location": "L63"
     },
     {
-      "id": "src_lib_content_index_getpage",
-      "label": "getPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "getpage()",
-      "source_file": "src/lib/content/index.ts",
-      "source_location": "L69"
-    },
-    {
       "id": "src_lib_content_index_getpartners",
       "label": "getPartners()",
       "_callable": true,
@@ -1451,6 +1583,18 @@
       "norm_label": "getpartners()",
       "source_file": "src/lib/content/index.ts",
       "source_location": "L108"
+    },
+    {
+      "id": "src_lib_content_index_getprogram",
+      "label": "getProgram()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "content/index.ts",
+      "file_type": "code",
+      "norm_label": "getprogram()",
+      "source_file": "src/lib/content/index.ts",
+      "source_location": "L80"
     },
     {
       "id": "src_lib_content_index_getprograms",
@@ -1501,18 +1645,6 @@
       "source_location": "L116"
     },
     {
-      "id": "src_pages_activities_slug_getstaticpaths",
-      "label": "getStaticPaths()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "getstaticpaths()",
-      "source_file": "src/pages/activities/[slug].astro",
-      "source_location": "L6"
-    },
-    {
       "id": "src_pages_careers_slug_getstaticpaths",
       "label": "getStaticPaths()",
       "_callable": true,
@@ -1522,18 +1654,6 @@
       "file_type": "code",
       "norm_label": "getstaticpaths()",
       "source_file": "src/pages/careers/[slug].astro",
-      "source_location": "L6"
-    },
-    {
-      "id": "src_pages_km_activities_slug_getstaticpaths",
-      "label": "getStaticPaths()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "getstaticpaths()",
-      "source_file": "src/pages/km/activities/[slug].astro",
       "source_location": "L6"
     },
     {
@@ -1549,6 +1669,42 @@
       "source_location": "L6"
     },
     {
+      "id": "src_pages_km_programs_slug_getstaticpaths",
+      "label": "getStaticPaths()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "content/index.ts",
+      "file_type": "code",
+      "norm_label": "getstaticpaths()",
+      "source_file": "src/pages/km/programs/[slug].astro",
+      "source_location": "L6"
+    },
+    {
+      "id": "src_pages_programs_slug_getstaticpaths",
+      "label": "getStaticPaths()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "content/index.ts",
+      "file_type": "code",
+      "norm_label": "getstaticpaths()",
+      "source_file": "src/pages/programs/[slug].astro",
+      "source_location": "L6"
+    },
+    {
+      "id": "scripts_readiness_sitesettingsfailures",
+      "label": "siteSettingsFailures()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 47,
+      "community_name": "BaseLayout.astro",
+      "file_type": "code",
+      "norm_label": "sitesettingsfailures()",
+      "source_file": "scripts/readiness.mjs",
+      "source_location": "L80"
+    },
+    {
       "id": "src_lib_content_index_getsitesettings",
       "label": "getSiteSettings()",
       "_callable": true,
@@ -1561,36 +1717,12 @@
       "source_location": "L50"
     },
     {
-      "id": "src_components_media_heroslideshow_pct",
-      "label": "pct()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "pct()",
-      "source_file": "src/components/media/HeroSlideshow.astro",
-      "source_location": "L52"
-    },
-    {
-      "id": "src_components_seo_seohead_serializejsonld",
-      "label": "serializeJsonLd()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "serializejsonld()",
-      "source_file": "src/components/seo/SeoHead.astro",
-      "source_location": "L146"
-    },
-    {
       "id": "src_lib_config_reportconfig",
       "label": "reportConfig()",
       "_callable": true,
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "reportconfig()",
       "source_file": "src/lib/config.ts",
@@ -1602,167 +1734,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "str()",
       "source_file": "src/lib/config.ts",
       "source_location": "L21"
-    },
-    {
-      "id": "src_lib_portable_text_blockstohtml",
-      "label": "blocksToHtml()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "blockstohtml()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L116"
-    },
-    {
-      "id": "src_lib_portable_text_blockstoplaintext",
-      "label": "blocksToPlainText()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "blockstoplaintext()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L179"
-    },
-    {
-      "id": "src_lib_portable_text_esc",
-      "label": "esc()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "esc()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L23"
-    },
-    {
-      "id": "src_lib_portable_text_iscalloutblock",
-      "label": "isCalloutBlock()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "iscalloutblock()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L40"
-    },
-    {
-      "id": "src_lib_portable_text_isimageblock",
-      "label": "isImageBlock()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "isimageblock()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L36"
-    },
-    {
-      "id": "src_lib_portable_text_istextblock",
-      "label": "isTextBlock()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "istextblock()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L32"
-    },
-    {
-      "id": "src_lib_portable_text_rendercallout",
-      "label": "renderCallout()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "rendercallout()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L104"
-    },
-    {
-      "id": "src_lib_portable_text_renderimage",
-      "label": "renderImage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "renderimage()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L81"
-    },
-    {
-      "id": "src_lib_portable_text_renderspans",
-      "label": "renderSpans()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "renderspans()",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L44"
-    },
-    {
-      "id": "src_lib_sanity_image_hasimage",
-      "label": "hasImage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "hasimage()",
-      "source_file": "src/lib/sanity/image.ts",
-      "source_location": "L12"
-    },
-    {
-      "id": "src_lib_sanity_image_imagesrcset",
-      "label": "imageSrcSet()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "imagesrcset()",
-      "source_file": "src/lib/sanity/image.ts",
-      "source_location": "L37"
-    },
-    {
-      "id": "src_lib_sanity_image_imageurl",
-      "label": "imageUrl()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "imageurl()",
-      "source_file": "src/lib/sanity/image.ts",
-      "source_location": "L22"
-    },
-    {
-      "id": "src_lib_seo_json_ld_serializejsonld",
-      "label": "serializeJsonLd()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "serializejsonld()",
-      "source_file": "src/lib/seo/json-ld.ts",
-      "source_location": "L1"
     },
     {
       "id": "src_pages_robots_txt_get",
@@ -1770,7 +1746,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "get()",
       "source_file": "src/pages/robots.txt.ts",
@@ -1849,6 +1825,42 @@
       "source_location": "L59"
     },
     {
+      "id": "src_lib_i18n_utils_t",
+      "label": "t()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "t()",
+      "source_file": "src/lib/i18n/utils.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_components_seo_seohead_serializejsonld",
+      "label": "serializeJsonLd()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "serializejsonld()",
+      "source_file": "src/components/seo/SeoHead.astro",
+      "source_location": "L146"
+    },
+    {
+      "id": "src_lib_seo_json_ld_serializejsonld",
+      "label": "serializeJsonLd()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "serializejsonld()",
+      "source_file": "src/lib/seo/json-ld.ts",
+      "source_location": "L1"
+    },
+    {
       "id": "src_components_layout_header_iscurrent",
       "label": "isCurrent()",
       "_callable": true,
@@ -1861,88 +1873,52 @@
       "source_location": "L28"
     },
     {
+      "id": "src_lib_i18n_utils_localizepath",
+      "label": "localizePath()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "Header.astro",
+      "file_type": "code",
+      "norm_label": "localizepath()",
+      "source_file": "src/lib/i18n/utils.ts",
+      "source_location": "L10"
+    },
+    {
+      "id": "src_page_templates_activitiespage_hreffor",
+      "label": "hrefFor()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "Header.astro",
+      "file_type": "code",
+      "norm_label": "hreffor()",
+      "source_file": "src/page-templates/ActivitiesPage.astro",
+      "source_location": "L22"
+    },
+    {
       "id": "src_lib_grid_cardgridcols",
       "label": "cardGridCols()",
       "_callable": true,
       "_origin": "ast",
       "community": 66,
-      "community_name": "ProgramsPage.astro",
+      "community_name": "HomePage.astro",
       "file_type": "code",
       "norm_label": "cardgridcols()",
       "source_file": "src/lib/grid.ts",
       "source_location": "L19"
     },
     {
-      "id": "src_lib_i18n_utils_isempty",
-      "label": "isEmpty()",
+      "id": "src_lib_content_index_getpage",
+      "label": "getPage()",
       "_callable": true,
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
-      "norm_label": "isempty()",
-      "source_file": "src/lib/i18n/utils.ts",
-      "source_location": "L55"
-    },
-    {
-      "id": "src_lib_i18n_utils_pick",
-      "label": "pick()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "pick()",
-      "source_file": "src/lib/i18n/utils.ts",
-      "source_location": "L70"
-    },
-    {
-      "id": "src_lib_i18n_utils_text",
-      "label": "text()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "text()",
-      "source_file": "src/lib/i18n/utils.ts",
-      "source_location": "L82"
-    },
-    {
-      "id": "src_lib_sanity_image_imagedimensions",
-      "label": "imageDimensions()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "imagedimensions()",
-      "source_file": "src/lib/sanity/image.ts",
-      "source_location": "L52"
-    },
-    {
-      "id": "src_lib_seo_resolveseo",
-      "label": "resolveSeo()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "resolveseo()",
-      "source_file": "src/lib/seo.ts",
-      "source_location": "L20"
-    },
-    {
-      "id": "src_lib_seo_truncate",
-      "label": "truncate()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "truncate()",
-      "source_file": "src/lib/seo.ts",
-      "source_location": "L36"
+      "norm_label": "getpage()",
+      "source_file": "src/lib/content/index.ts",
+      "source_location": "L69"
     },
     {
       "id": "src_lib_i18n_config_islocale",
@@ -2005,18 +1981,6 @@
       "source_location": "L87"
     },
     {
-      "id": "src_lib_i18n_utils_localizepath",
-      "label": "localizePath()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "localizepath()",
-      "source_file": "src/lib/i18n/utils.ts",
-      "source_location": "L10"
-    },
-    {
       "id": "src_lib_i18n_utils_parsepath",
       "label": "parsePath()",
       "_callable": true,
@@ -2029,16 +1993,37 @@
       "source_location": "L18"
     },
     {
-      "id": "src_lib_i18n_utils_t",
-      "label": "t()",
-      "_callable": true,
+      "id": "scripts_content_review",
+      "label": "content-review.mjs",
       "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
+      "community": 0,
+      "community_name": "fixtures.ts",
       "file_type": "code",
-      "norm_label": "t()",
-      "source_file": "src/lib/i18n/utils.ts",
-      "source_location": "L37"
+      "norm_label": "content-review.mjs",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_content_review_out",
+      "label": "OUT",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "fixtures.ts",
+      "file_type": "code",
+      "norm_label": "out",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L15"
+    },
+    {
+      "id": "scripts_content_review_sections",
+      "label": "sections",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "fixtures.ts",
+      "file_type": "code",
+      "norm_label": "sections",
+      "source_file": "scripts/content-review.mjs",
+      "source_location": "L99"
     },
     {
       "id": "src_lib_content_fixtures",
@@ -3270,72 +3255,6 @@
       "source_location": "L1"
     },
     {
-      "id": "package_dependencies",
-      "label": "dependencies",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "dependencies",
-      "source_file": "package.json",
-      "source_location": "L24"
-    },
-    {
-      "id": "package_dependencies_astro",
-      "label": "astro",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "astro",
-      "source_file": "package.json",
-      "source_location": "L28"
-    },
-    {
-      "id": "package_dependencies_astrojs_sitemap",
-      "label": "@astrojs/sitemap",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "@astrojs/sitemap",
-      "source_file": "package.json",
-      "source_location": "L25"
-    },
-    {
-      "id": "package_dependencies_sanity_client",
-      "label": "@sanity/client",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "@sanity/client",
-      "source_file": "package.json",
-      "source_location": "L26"
-    },
-    {
-      "id": "package_dependencies_sanity_image_url",
-      "label": "@sanity/image-url",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "@sanity/image-url",
-      "source_file": "package.json",
-      "source_location": "L27"
-    },
-    {
-      "id": "package_dependencies_zod",
-      "label": "zod",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "zod",
-      "source_file": "package.json",
-      "source_location": "L29"
-    },
-    {
       "id": "package_description",
       "label": "description",
       "_origin": "ast",
@@ -3345,105 +3264,6 @@
       "norm_label": "description",
       "source_file": "package.json",
       "source_location": "L6"
-    },
-    {
-      "id": "package_devdependencies",
-      "label": "devDependencies",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "devdependencies",
-      "source_file": "package.json",
-      "source_location": "L31"
-    },
-    {
-      "id": "package_devdependencies_astrojs_check",
-      "label": "@astrojs/check",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "@astrojs/check",
-      "source_file": "package.json",
-      "source_location": "L32"
-    },
-    {
-      "id": "package_devdependencies_prettier",
-      "label": "prettier",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "prettier",
-      "source_file": "package.json",
-      "source_location": "L35"
-    },
-    {
-      "id": "package_devdependencies_prettier_plugin_astro",
-      "label": "prettier-plugin-astro",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "prettier-plugin-astro",
-      "source_file": "package.json",
-      "source_location": "L36"
-    },
-    {
-      "id": "package_devdependencies_prettier_plugin_tailwindcss",
-      "label": "prettier-plugin-tailwindcss",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "prettier-plugin-tailwindcss",
-      "source_file": "package.json",
-      "source_location": "L37"
-    },
-    {
-      "id": "package_devdependencies_tailwindcss",
-      "label": "tailwindcss",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "tailwindcss",
-      "source_file": "package.json",
-      "source_location": "L38"
-    },
-    {
-      "id": "package_devdependencies_tailwindcss_vite",
-      "label": "@tailwindcss/vite",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "@tailwindcss/vite",
-      "source_file": "package.json",
-      "source_location": "L33"
-    },
-    {
-      "id": "package_devdependencies_types_node",
-      "label": "@types/node",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "@types/node",
-      "source_file": "package.json",
-      "source_location": "L34"
-    },
-    {
-      "id": "package_devdependencies_typescript",
-      "label": "typescript",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "typescript",
-      "source_file": "package.json",
-      "source_location": "L39"
     },
     {
       "id": "package_engines",
@@ -3488,149 +3308,6 @@
       "norm_label": "private",
       "source_file": "package.json",
       "source_location": "L5"
-    },
-    {
-      "id": "package_scripts",
-      "label": "scripts",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "scripts",
-      "source_file": "package.json",
-      "source_location": "L10"
-    },
-    {
-      "id": "package_scripts_build",
-      "label": "build",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "build",
-      "source_file": "package.json",
-      "source_location": "L12"
-    },
-    {
-      "id": "package_scripts_build_production",
-      "label": "build:production",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "build:production",
-      "source_file": "package.json",
-      "source_location": "L13"
-    },
-    {
-      "id": "package_scripts_build_vercel",
-      "label": "build:vercel",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "build:vercel",
-      "source_file": "package.json",
-      "source_location": "L14"
-    },
-    {
-      "id": "package_scripts_dev",
-      "label": "dev",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "dev",
-      "source_file": "package.json",
-      "source_location": "L11"
-    },
-    {
-      "id": "package_scripts_format",
-      "label": "format",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "format",
-      "source_file": "package.json",
-      "source_location": "L19"
-    },
-    {
-      "id": "package_scripts_format_check",
-      "label": "format:check",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "format:check",
-      "source_file": "package.json",
-      "source_location": "L20"
-    },
-    {
-      "id": "package_scripts_preview_astro",
-      "label": "preview:astro",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "preview:astro",
-      "source_file": "package.json",
-      "source_location": "L16"
-    },
-    {
-      "id": "package_scripts_studio",
-      "label": "studio",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "studio",
-      "source_file": "package.json",
-      "source_location": "L21"
-    },
-    {
-      "id": "package_scripts_studio_deploy",
-      "label": "studio:deploy",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "studio:deploy",
-      "source_file": "package.json",
-      "source_location": "L22"
-    },
-    {
-      "id": "package_scripts_test",
-      "label": "test",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "test",
-      "source_file": "package.json",
-      "source_location": "L15"
-    },
-    {
-      "id": "package_scripts_typecheck",
-      "label": "typecheck",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "typecheck",
-      "source_file": "package.json",
-      "source_location": "L18"
-    },
-    {
-      "id": "package_scripts_verify",
-      "label": "verify",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "code",
-      "norm_label": "verify",
-      "source_file": "package.json",
-      "source_location": "L17"
     },
     {
       "id": "package_type",
@@ -3721,6 +3398,17 @@
       "source_location": "L37"
     },
     {
+      "id": "ref_sanity_image_url",
+      "label": "@sanity/image-url",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "package.json",
+      "file_type": "concept",
+      "norm_label": "@sanity/image-url",
+      "source_file": "package.json",
+      "source_location": "L27"
+    },
+    {
       "id": "ref_tailwindcss",
       "label": "tailwindcss",
       "_origin": "ast",
@@ -3730,17 +3418,6 @@
       "norm_label": "tailwindcss",
       "source_file": "package.json",
       "source_location": "L38"
-    },
-    {
-      "id": "ref_tailwindcss_vite",
-      "label": "@tailwindcss/vite",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "concept",
-      "norm_label": "@tailwindcss/vite",
-      "source_file": "package.json",
-      "source_location": "L33"
     },
     {
       "id": "src_lib_sanity_queries",
@@ -3919,44 +3596,121 @@
       "source_location": "L98"
     },
     {
-      "id": "scripts_content_review",
-      "label": "content-review.mjs",
+      "id": "astro_config",
+      "label": "astro.config.mjs",
       "_origin": "ast",
       "community": 15,
-      "community_name": "content-review.mjs",
+      "community_name": "readiness.mjs",
       "file_type": "code",
-      "norm_label": "content-review.mjs",
-      "source_file": "scripts/content-review.mjs",
+      "norm_label": "astro.config.mjs",
+      "source_file": "astro.config.mjs",
       "source_location": "L1"
     },
     {
-      "id": "scripts_content_review_out",
-      "label": "OUT",
+      "id": "astro_config_env",
+      "label": "env",
       "_origin": "ast",
       "community": 15,
-      "community_name": "content-review.mjs",
+      "community_name": "readiness.mjs",
       "file_type": "code",
-      "norm_label": "out",
-      "source_file": "scripts/content-review.mjs",
+      "norm_label": "env",
+      "source_file": "astro.config.mjs",
+      "source_location": "L11"
+    },
+    {
+      "id": "astro_config_failures",
+      "label": "failures",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "readiness.mjs",
+      "file_type": "code",
+      "norm_label": "failures",
+      "source_file": "astro.config.mjs",
       "source_location": "L15"
     },
     {
-      "id": "scripts_content_review_sections",
-      "label": "sections",
+      "id": "astro_config_site",
+      "label": "SITE",
       "_origin": "ast",
       "community": 15,
-      "community_name": "content-review.mjs",
+      "community_name": "readiness.mjs",
       "file_type": "code",
-      "norm_label": "sections",
-      "source_file": "scripts/content-review.mjs",
-      "source_location": "L99"
+      "norm_label": "site",
+      "source_file": "astro.config.mjs",
+      "source_location": "L18"
+    },
+    {
+      "id": "scripts_readiness",
+      "label": "readiness.mjs",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "readiness.mjs",
+      "file_type": "code",
+      "norm_label": "readiness.mjs",
+      "source_file": "scripts/readiness.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_content_test",
+      "label": "content.test.mjs",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "readiness.mjs",
+      "file_type": "code",
+      "norm_label": "content.test.mjs",
+      "source_file": "tests/content.test.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_readiness_test",
+      "label": "readiness.test.mjs",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "readiness.mjs",
+      "file_type": "code",
+      "norm_label": "readiness.test.mjs",
+      "source_file": "tests/readiness.test.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_vercel_test",
+      "label": "vercel.test.mjs",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "readiness.mjs",
+      "file_type": "code",
+      "norm_label": "vercel.test.mjs",
+      "source_file": "tests/vercel.test.mjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "ref_astrojs_sitemap",
+      "label": "@astrojs/sitemap",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "readiness.mjs",
+      "file_type": "concept",
+      "norm_label": "@astrojs/sitemap",
+      "source_file": "package.json",
+      "source_location": "L25"
+    },
+    {
+      "id": "ref_tailwindcss_vite",
+      "label": "@tailwindcss/vite",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "readiness.mjs",
+      "file_type": "concept",
+      "norm_label": "@tailwindcss/vite",
+      "source_file": "package.json",
+      "source_location": "L33"
     },
     {
       "id": "src_components_content_activitycard",
       "label": "ActivityCard.astro",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "activitycard.astro",
       "source_file": "src/components/content/ActivityCard.astro",
@@ -3967,7 +3721,7 @@
       "label": "excerpt",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "excerpt",
       "source_file": "src/components/content/ActivityCard.astro",
@@ -3978,7 +3732,7 @@
       "label": "href",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "href",
       "source_file": "src/components/content/ActivityCard.astro",
@@ -3989,7 +3743,7 @@
       "label": "string",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "string",
       "source_file": "src/components/content/ActivityCard.astro",
@@ -4000,18 +3754,73 @@
       "label": "title",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "title",
       "source_file": "src/components/content/ActivityCard.astro",
       "source_location": "L14"
     },
     {
+      "id": "src_components_layout_breadcrumbs",
+      "label": "Breadcrumbs.astro",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "pick",
+      "file_type": "code",
+      "norm_label": "breadcrumbs.astro",
+      "source_file": "src/components/layout/Breadcrumbs.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_layout_breadcrumbs_items",
+      "label": "items",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "pick",
+      "file_type": "code",
+      "norm_label": "items",
+      "source_file": "src/components/layout/Breadcrumbs.astro",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_components_layout_breadcrumbs_jsonld",
+      "label": "jsonLd",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "pick",
+      "file_type": "code",
+      "norm_label": "jsonld",
+      "source_file": "src/components/layout/Breadcrumbs.astro",
+      "source_location": "L17"
+    },
+    {
+      "id": "src_lib_config_siteurl",
+      "label": "siteUrl",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "pick",
+      "file_type": "code",
+      "norm_label": "siteurl",
+      "source_file": "src/lib/config.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "src_page_templates_activitydetail",
+      "label": "ActivityDetail.astro",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "pick",
+      "file_type": "code",
+      "norm_label": "activitydetail.astro",
+      "source_file": "src/page-templates/ActivityDetail.astro",
+      "source_location": "L1"
+    },
+    {
       "id": "src_page_templates_careerdetail",
       "label": "CareerDetail.astro",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "careerdetail.astro",
       "source_file": "src/page-templates/CareerDetail.astro",
@@ -4022,7 +3831,7 @@
       "label": "jsonLd",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "jsonld",
       "source_file": "src/page-templates/CareerDetail.astro",
@@ -4033,7 +3842,7 @@
       "label": "location",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "location",
       "source_file": "src/page-templates/CareerDetail.astro",
@@ -4044,44 +3853,33 @@
       "label": "title",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
       "norm_label": "title",
       "source_file": "src/page-templates/CareerDetail.astro",
       "source_location": "L18"
     },
     {
-      "id": "src_page_templates_careerspage",
-      "label": "CareersPage.astro",
+      "id": "src_pages_km_activities_slug",
+      "label": "km/activities/[slug].astro",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
-      "norm_label": "careerspage.astro",
-      "source_file": "src/page-templates/CareersPage.astro",
+      "norm_label": "km/activities/[slug].astro",
+      "source_file": "src/pages/km/activities/[slug].astro",
       "source_location": "L1"
     },
     {
-      "id": "src_pages_careers_index",
-      "label": "pages/careers/index.astro",
+      "id": "src_pages_km_activities_slug_activity_previous_next",
+      "label": "{ activity, previous, next }",
       "_origin": "ast",
       "community": 16,
-      "community_name": "CareerDetail.astro",
+      "community_name": "pick",
       "file_type": "code",
-      "norm_label": "pages/careers/index.astro",
-      "source_file": "src/pages/careers/index.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_km_careers_index",
-      "label": "km/careers/index.astro",
-      "_origin": "ast",
-      "community": 16,
-      "community_name": "CareerDetail.astro",
-      "file_type": "code",
-      "norm_label": "km/careers/index.astro",
-      "source_file": "src/pages/km/careers/index.astro",
-      "source_location": "L1"
+      "norm_label": "{ activity, previous, next }",
+      "source_file": "src/pages/km/activities/[slug].astro",
+      "source_location": "L27"
     },
     {
       "id": "studio_tsconfig",
@@ -5127,48 +4925,48 @@
       "source_location": "L146"
     },
     {
-      "id": "src_pages_km_programs_slug",
-      "label": "km/programs/[slug].astro",
+      "id": "src_components_content_programcard",
+      "label": "ProgramCard.astro",
       "_origin": "ast",
       "community": 21,
-      "community_name": "Program",
+      "community_name": "ProgramCard.astro",
       "file_type": "code",
-      "norm_label": "km/programs/[slug].astro",
-      "source_file": "src/pages/km/programs/[slug].astro",
+      "norm_label": "programcard.astro",
+      "source_file": "src/components/content/ProgramCard.astro",
       "source_location": "L1"
     },
     {
-      "id": "src_pages_km_programs_slug_program",
-      "label": "{ program }",
+      "id": "src_components_content_programcard_href",
+      "label": "href",
       "_origin": "ast",
       "community": 21,
-      "community_name": "Program",
+      "community_name": "ProgramCard.astro",
       "file_type": "code",
-      "norm_label": "{ program }",
-      "source_file": "src/pages/km/programs/[slug].astro",
+      "norm_label": "href",
+      "source_file": "src/components/content/ProgramCard.astro",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_components_content_programcard_summary",
+      "label": "summary",
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "ProgramCard.astro",
+      "file_type": "code",
+      "norm_label": "summary",
+      "source_file": "src/components/content/ProgramCard.astro",
       "source_location": "L14"
     },
     {
-      "id": "src_pages_programs_slug",
-      "label": "pages/programs/[slug].astro",
+      "id": "src_components_content_programcard_title",
+      "label": "title",
       "_origin": "ast",
       "community": 21,
-      "community_name": "Program",
+      "community_name": "ProgramCard.astro",
       "file_type": "code",
-      "norm_label": "pages/programs/[slug].astro",
-      "source_file": "src/pages/programs/[slug].astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_programs_slug_program",
-      "label": "{ program }",
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "Program",
-      "file_type": "code",
-      "norm_label": "{ program }",
-      "source_file": "src/pages/programs/[slug].astro",
-      "source_location": "L14"
+      "norm_label": "title",
+      "source_file": "src/components/content/ProgramCard.astro",
+      "source_location": "L13"
     },
     {
       "id": "docs_06_design_system",
@@ -5483,48 +5281,15 @@
       "source_location": "L19"
     },
     {
-      "id": "src_components_content_directormessage",
-      "label": "DirectorMessage.astro",
+      "id": "src_lib_portable_text",
+      "label": "portable-text.ts",
       "_origin": "ast",
       "community": 24,
-      "community_name": "DirectorMessage.astro",
+      "community_name": "portable-text.ts",
       "file_type": "code",
-      "norm_label": "directormessage.astro",
-      "source_file": "src/components/content/DirectorMessage.astro",
+      "norm_label": "portable-text.ts",
+      "source_file": "src/lib/portable-text.ts",
       "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_directormessage_name",
-      "label": "name",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "DirectorMessage.astro",
-      "file_type": "code",
-      "norm_label": "name",
-      "source_file": "src/components/content/DirectorMessage.astro",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_components_content_directormessage_pullquote",
-      "label": "pullQuote",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "DirectorMessage.astro",
-      "file_type": "code",
-      "norm_label": "pullquote",
-      "source_file": "src/components/content/DirectorMessage.astro",
-      "source_location": "L17"
-    },
-    {
-      "id": "src_components_content_directormessage_title",
-      "label": "title",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "DirectorMessage.astro",
-      "file_type": "code",
-      "norm_label": "title",
-      "source_file": "src/components/content/DirectorMessage.astro",
-      "source_location": "L16"
     },
     {
       "id": "docs_11_faq_proposals",
@@ -6091,50 +5856,6 @@
       "source_location": "L2"
     },
     {
-      "id": "src_components_content_pagehero",
-      "label": "PageHero.astro",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "GenericPage.astro",
-      "file_type": "code",
-      "norm_label": "pagehero.astro",
-      "source_file": "src/components/content/PageHero.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_layout_breadcrumbs",
-      "label": "Breadcrumbs.astro",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "GenericPage.astro",
-      "file_type": "code",
-      "norm_label": "breadcrumbs.astro",
-      "source_file": "src/components/layout/Breadcrumbs.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_layout_breadcrumbs_items",
-      "label": "items",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "GenericPage.astro",
-      "file_type": "code",
-      "norm_label": "items",
-      "source_file": "src/components/layout/Breadcrumbs.astro",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_components_layout_breadcrumbs_jsonld",
-      "label": "jsonLd",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "GenericPage.astro",
-      "file_type": "code",
-      "norm_label": "jsonld",
-      "source_file": "src/components/layout/Breadcrumbs.astro",
-      "source_location": "L17"
-    },
-    {
       "id": "src_lib_breadcrumbs",
       "label": "breadcrumbs.ts",
       "_origin": "ast",
@@ -6143,6 +5864,17 @@
       "file_type": "code",
       "norm_label": "breadcrumbs.ts",
       "source_file": "src/lib/breadcrumbs.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_lib_seo",
+      "label": "seo.ts",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "seo.ts",
+      "source_file": "src/lib/seo.ts",
       "source_location": "L1"
     },
     {
@@ -6155,6 +5887,50 @@
       "norm_label": "genericpage.astro",
       "source_file": "src/page-templates/GenericPage.astro",
       "source_location": "L1"
+    },
+    {
+      "id": "src_page_templates_programdetail",
+      "label": "ProgramDetail.astro",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "programdetail.astro",
+      "source_file": "src/page-templates/ProgramDetail.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_page_templates_programdetail_seo",
+      "label": "seo",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "seo",
+      "source_file": "src/page-templates/ProgramDetail.astro",
+      "source_location": "L24"
+    },
+    {
+      "id": "src_page_templates_programdetail_summary",
+      "label": "summary",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "summary",
+      "source_file": "src/page-templates/ProgramDetail.astro",
+      "source_location": "L21"
+    },
+    {
+      "id": "src_page_templates_programdetail_title",
+      "label": "title",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "GenericPage.astro",
+      "file_type": "code",
+      "norm_label": "title",
+      "source_file": "src/page-templates/ProgramDetail.astro",
+      "source_location": "L20"
     },
     {
       "id": "src_pages_faq",
@@ -6222,7 +5998,7 @@
       "node_kind": "heading",
       "norm_label": "10. rebuild on publish",
       "source_file": "docs/09-deployment.md",
-      "source_location": "L212"
+      "source_location": "L210"
     },
     {
       "id": "docs_09_deployment_11_uptime_monitoring",
@@ -6234,7 +6010,7 @@
       "node_kind": "heading",
       "norm_label": "11. uptime monitoring",
       "source_file": "docs/09-deployment.md",
-      "source_location": "L237"
+      "source_location": "L235"
     },
     {
       "id": "docs_09_deployment_12_post_deploy_verification",
@@ -6246,7 +6022,7 @@
       "node_kind": "heading",
       "norm_label": "12. post-deploy verification",
       "source_file": "docs/09-deployment.md",
-      "source_location": "L251"
+      "source_location": "L249"
     },
     {
       "id": "docs_09_deployment_13_two_things_to_change_in_code_before_launch",
@@ -6258,7 +6034,7 @@
       "node_kind": "heading",
       "norm_label": "13. two things to change in code before launch",
       "source_file": "docs/09-deployment.md",
-      "source_location": "L277"
+      "source_location": "L275"
     },
     {
       "id": "docs_09_deployment_1_git_repository",
@@ -6354,7 +6130,7 @@
       "node_kind": "heading",
       "norm_label": "8. email delivery (resend)",
       "source_file": "docs/09-deployment.md",
-      "source_location": "L193"
+      "source_location": "L191"
     },
     {
       "id": "docs_09_deployment_9_analytics",
@@ -6366,7 +6142,7 @@
       "node_kind": "heading",
       "norm_label": "9. analytics",
       "source_file": "docs/09-deployment.md",
-      "source_location": "L205"
+      "source_location": "L203"
     },
     {
       "id": "docs_09_deployment_before_you_start",
@@ -6402,7 +6178,7 @@
       "node_kind": "heading",
       "norm_label": "what it costs",
       "source_file": "docs/09-deployment.md",
-      "source_location": "L288"
+      "source_location": "L286"
     },
     {
       "id": "docs_12_deployment_readiness",
@@ -6645,50 +6421,6 @@
       "source_location": "L33"
     },
     {
-      "id": "astro_config",
-      "label": "astro.config.mjs",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "astro.config.mjs",
-      "source_file": "astro.config.mjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "astro_config_env",
-      "label": "env",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "env",
-      "source_file": "astro.config.mjs",
-      "source_location": "L11"
-    },
-    {
-      "id": "astro_config_failures",
-      "label": "failures",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "failures",
-      "source_file": "astro.config.mjs",
-      "source_location": "L15"
-    },
-    {
-      "id": "astro_config_site",
-      "label": "SITE",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "site",
-      "source_file": "astro.config.mjs",
-      "source_location": "L18"
-    },
-    {
       "id": "scripts_check_build",
       "label": "check-build.mjs",
       "_origin": "ast",
@@ -6744,17 +6476,6 @@
       "source_location": "L113"
     },
     {
-      "id": "scripts_readiness",
-      "label": "readiness.mjs",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "readiness.mjs",
-      "source_file": "scripts/readiness.mjs",
-      "source_location": "L1"
-    },
-    {
       "id": "scripts_secrets",
       "label": "secrets.mjs",
       "_origin": "ast",
@@ -6777,28 +6498,6 @@
       "source_location": "L19"
     },
     {
-      "id": "tests_content_test",
-      "label": "content.test.mjs",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "content.test.mjs",
-      "source_file": "tests/content.test.mjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_readiness_test",
-      "label": "readiness.test.mjs",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
-      "file_type": "code",
-      "norm_label": "readiness.test.mjs",
-      "source_file": "tests/readiness.test.mjs",
-      "source_location": "L1"
-    },
-    {
       "id": "tests_secrets_test",
       "label": "secrets.test.mjs",
       "_origin": "ast",
@@ -6810,26 +6509,147 @@
       "source_location": "L1"
     },
     {
-      "id": "tests_vercel_test",
-      "label": "vercel.test.mjs",
+      "id": "src_components_content_orgchart",
+      "label": "OrgChart.astro",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
       "file_type": "code",
-      "norm_label": "vercel.test.mjs",
-      "source_file": "tests/vercel.test.mjs",
+      "norm_label": "orgchart.astro",
+      "source_file": "src/components/content/OrgChart.astro",
       "source_location": "L1"
     },
     {
-      "id": "ref_astrojs_sitemap",
-      "label": "@astrojs/sitemap",
+      "id": "src_components_content_storyquote",
+      "label": "StoryQuote.astro",
       "_origin": "ast",
-      "community": 30,
-      "community_name": "check-build.mjs",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "storyquote.astro",
+      "source_file": "src/components/content/StoryQuote.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_media_heroslideshow",
+      "label": "HeroSlideshow.astro",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "heroslideshow.astro",
+      "source_file": "src/components/media/HeroSlideshow.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_media_heroslideshow_fadedend",
+      "label": "fadedEnd",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "fadedend",
+      "source_file": "src/components/media/HeroSlideshow.astro",
+      "source_location": "L56"
+    },
+    {
+      "id": "src_components_media_heroslideshow_fadeinend",
+      "label": "fadeInEnd",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "fadeinend",
+      "source_file": "src/components/media/HeroSlideshow.astro",
+      "source_location": "L54"
+    },
+    {
+      "id": "src_components_media_heroslideshow_slides",
+      "label": "slides",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "slides",
+      "source_file": "src/components/media/HeroSlideshow.astro",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_components_media_heroslideshow_visibleend",
+      "label": "visibleEnd",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "visibleend",
+      "source_file": "src/components/media/HeroSlideshow.astro",
+      "source_location": "L55"
+    },
+    {
+      "id": "src_components_media_responsiveimage",
+      "label": "ResponsiveImage.astro",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "responsiveimage.astro",
+      "source_file": "src/components/media/ResponsiveImage.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_media_responsiveimage_present",
+      "label": "present",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "present",
+      "source_file": "src/components/media/ResponsiveImage.astro",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_components_media_responsiveimage_width_height",
+      "label": "{ width, height }",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "{ width, height }",
+      "source_file": "src/components/media/ResponsiveImage.astro",
+      "source_location": "L39"
+    },
+    {
+      "id": "src_lib_sanity_image",
+      "label": "image.ts",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "image.ts",
+      "source_file": "src/lib/sanity/image.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_lib_sanity_image_default_widths",
+      "label": "DEFAULT_WIDTHS",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
+      "file_type": "code",
+      "norm_label": "default_widths",
+      "source_file": "src/lib/sanity/image.ts",
+      "source_location": "L10"
+    },
+    {
+      "id": "docref_adr_0003",
+      "label": "ADR-0003",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "ResponsiveImage.astro",
       "file_type": "concept",
-      "norm_label": "@astrojs/sitemap",
-      "source_file": "package.json",
-      "source_location": "L25"
+      "norm_label": "adr-0003",
+      "source_file": "src/lib/sanity/image.ts",
+      "source_location": "L19"
     },
     {
       "id": "docs_01_sitemap_and_urls",
@@ -7533,6 +7353,28 @@
       "source_location": "L1"
     },
     {
+      "id": "src_pages_activities_slug",
+      "label": "pages/activities/[slug].astro",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "ActivitiesPage.astro",
+      "file_type": "code",
+      "norm_label": "pages/activities/[slug].astro",
+      "source_file": "src/pages/activities/[slug].astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_pages_activities_slug_activity_previous_next",
+      "label": "{ activity, previous, next }",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "ActivitiesPage.astro",
+      "file_type": "code",
+      "norm_label": "{ activity, previous, next }",
+      "source_file": "src/pages/activities/[slug].astro",
+      "source_location": "L27"
+    },
+    {
       "id": "src_pages_km_activities_index",
       "label": "km/activities/index.astro",
       "_origin": "ast",
@@ -7817,6 +7659,149 @@
       "source_location": "L108"
     },
     {
+      "id": "package_scripts",
+      "label": "scripts",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "scripts",
+      "source_file": "package.json",
+      "source_location": "L10"
+    },
+    {
+      "id": "package_scripts_build",
+      "label": "build",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "build",
+      "source_file": "package.json",
+      "source_location": "L12"
+    },
+    {
+      "id": "package_scripts_build_production",
+      "label": "build:production",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "build:production",
+      "source_file": "package.json",
+      "source_location": "L13"
+    },
+    {
+      "id": "package_scripts_build_vercel",
+      "label": "build:vercel",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "build:vercel",
+      "source_file": "package.json",
+      "source_location": "L14"
+    },
+    {
+      "id": "package_scripts_dev",
+      "label": "dev",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "dev",
+      "source_file": "package.json",
+      "source_location": "L11"
+    },
+    {
+      "id": "package_scripts_format",
+      "label": "format",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "format",
+      "source_file": "package.json",
+      "source_location": "L19"
+    },
+    {
+      "id": "package_scripts_format_check",
+      "label": "format:check",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "format:check",
+      "source_file": "package.json",
+      "source_location": "L20"
+    },
+    {
+      "id": "package_scripts_preview_astro",
+      "label": "preview:astro",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "preview:astro",
+      "source_file": "package.json",
+      "source_location": "L16"
+    },
+    {
+      "id": "package_scripts_studio",
+      "label": "studio",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "studio",
+      "source_file": "package.json",
+      "source_location": "L21"
+    },
+    {
+      "id": "package_scripts_studio_deploy",
+      "label": "studio:deploy",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "studio:deploy",
+      "source_file": "package.json",
+      "source_location": "L22"
+    },
+    {
+      "id": "package_scripts_test",
+      "label": "test",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "test",
+      "source_file": "package.json",
+      "source_location": "L15"
+    },
+    {
+      "id": "package_scripts_typecheck",
+      "label": "typecheck",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "typecheck",
+      "source_file": "package.json",
+      "source_location": "L18"
+    },
+    {
+      "id": "package_scripts_verify",
+      "label": "verify",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "scripts",
+      "file_type": "code",
+      "norm_label": "verify",
+      "source_file": "package.json",
+      "source_location": "L17"
+    },
+    {
       "id": "api_contact",
       "label": "api/contact.ts",
       "_origin": "ast",
@@ -7847,7 +7832,7 @@
       "file_type": "code",
       "norm_label": "schema",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L125"
+      "source_location": "L124"
     },
     {
       "id": "docref_adr_0001",
@@ -7870,6 +7855,105 @@
       "norm_label": "zod",
       "source_file": "package.json",
       "source_location": "L29"
+    },
+    {
+      "id": "package_devdependencies",
+      "label": "devDependencies",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "devdependencies",
+      "source_file": "package.json",
+      "source_location": "L31"
+    },
+    {
+      "id": "package_devdependencies_astrojs_check",
+      "label": "@astrojs/check",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "@astrojs/check",
+      "source_file": "package.json",
+      "source_location": "L32"
+    },
+    {
+      "id": "package_devdependencies_prettier",
+      "label": "prettier",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "prettier",
+      "source_file": "package.json",
+      "source_location": "L35"
+    },
+    {
+      "id": "package_devdependencies_prettier_plugin_astro",
+      "label": "prettier-plugin-astro",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "prettier-plugin-astro",
+      "source_file": "package.json",
+      "source_location": "L36"
+    },
+    {
+      "id": "package_devdependencies_prettier_plugin_tailwindcss",
+      "label": "prettier-plugin-tailwindcss",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "prettier-plugin-tailwindcss",
+      "source_file": "package.json",
+      "source_location": "L37"
+    },
+    {
+      "id": "package_devdependencies_tailwindcss",
+      "label": "tailwindcss",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "tailwindcss",
+      "source_file": "package.json",
+      "source_location": "L38"
+    },
+    {
+      "id": "package_devdependencies_tailwindcss_vite",
+      "label": "@tailwindcss/vite",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "@tailwindcss/vite",
+      "source_file": "package.json",
+      "source_location": "L33"
+    },
+    {
+      "id": "package_devdependencies_types_node",
+      "label": "@types/node",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "@types/node",
+      "source_file": "package.json",
+      "source_location": "L34"
+    },
+    {
+      "id": "package_devdependencies_typescript",
+      "label": "typescript",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "typescript",
+      "source_file": "package.json",
+      "source_location": "L39"
     },
     {
       "id": "vercel",
@@ -8266,39 +8350,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_page_templates_homepage",
-      "label": "HomePage.astro",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "homepage.astro",
-      "source_file": "src/page-templates/HomePage.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_activities_slug",
-      "label": "pages/activities/[slug].astro",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "pages/activities/[slug].astro",
-      "source_file": "src/pages/activities/[slug].astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_activities_slug_activity_previous_next",
-      "label": "{ activity, previous, next }",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "{ activity, previous, next }",
-      "source_file": "src/pages/activities/[slug].astro",
-      "source_location": "L27"
-    },
-    {
       "id": "src_pages_careers_slug",
       "label": "pages/careers/[slug].astro",
       "_origin": "ast",
@@ -8319,39 +8370,6 @@
       "norm_label": "{ job }",
       "source_file": "src/pages/careers/[slug].astro",
       "source_location": "L14"
-    },
-    {
-      "id": "src_pages_index",
-      "label": "pages/index.astro",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "pages/index.astro",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_km_activities_slug",
-      "label": "km/activities/[slug].astro",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "km/activities/[slug].astro",
-      "source_file": "src/pages/km/activities/[slug].astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_km_activities_slug_activity_previous_next",
-      "label": "{ activity, previous, next }",
-      "_origin": "ast",
-      "community": 44,
-      "community_name": "content/index.ts",
-      "file_type": "code",
-      "norm_label": "{ activity, previous, next }",
-      "source_file": "src/pages/km/activities/[slug].astro",
-      "source_location": "L27"
     },
     {
       "id": "src_pages_km_careers_slug",
@@ -8376,15 +8394,48 @@
       "source_location": "L14"
     },
     {
-      "id": "src_pages_km_index",
-      "label": "km/index.astro",
+      "id": "src_pages_km_programs_slug",
+      "label": "km/programs/[slug].astro",
       "_origin": "ast",
       "community": 44,
       "community_name": "content/index.ts",
       "file_type": "code",
-      "norm_label": "km/index.astro",
-      "source_file": "src/pages/km/index.astro",
+      "norm_label": "km/programs/[slug].astro",
+      "source_file": "src/pages/km/programs/[slug].astro",
       "source_location": "L1"
+    },
+    {
+      "id": "src_pages_km_programs_slug_program",
+      "label": "{ program }",
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "content/index.ts",
+      "file_type": "code",
+      "norm_label": "{ program }",
+      "source_file": "src/pages/km/programs/[slug].astro",
+      "source_location": "L14"
+    },
+    {
+      "id": "src_pages_programs_slug",
+      "label": "pages/programs/[slug].astro",
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "content/index.ts",
+      "file_type": "code",
+      "norm_label": "pages/programs/[slug].astro",
+      "source_file": "src/pages/programs/[slug].astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_pages_programs_slug_program",
+      "label": "{ program }",
+      "_origin": "ast",
+      "community": 44,
+      "community_name": "content/index.ts",
+      "file_type": "code",
+      "norm_label": "{ program }",
+      "source_file": "src/pages/programs/[slug].astro",
+      "source_location": "L14"
     },
     {
       "id": "docref_adr_0007",
@@ -8527,6 +8578,28 @@
       "source_location": "L23"
     },
     {
+      "id": "src_components_content_pagehero",
+      "label": "PageHero.astro",
+      "_origin": "ast",
+      "community": 47,
+      "community_name": "BaseLayout.astro",
+      "file_type": "code",
+      "norm_label": "pagehero.astro",
+      "source_file": "src/components/content/PageHero.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_content_sectionheading",
+      "label": "SectionHeading.astro",
+      "_origin": "ast",
+      "community": 47,
+      "community_name": "BaseLayout.astro",
+      "file_type": "code",
+      "norm_label": "sectionheading.astro",
+      "source_file": "src/components/content/SectionHeading.astro",
+      "source_location": "L1"
+    },
+    {
       "id": "src_layouts_baselayout",
       "label": "BaseLayout.astro",
       "_origin": "ast",
@@ -8557,6 +8630,17 @@
       "file_type": "code",
       "norm_label": "contactpage.astro",
       "source_file": "src/page-templates/ContactPage.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_page_templates_donatepage",
+      "label": "DonatePage.astro",
+      "_origin": "ast",
+      "community": 47,
+      "community_name": "BaseLayout.astro",
+      "file_type": "code",
+      "norm_label": "donatepage.astro",
+      "source_file": "src/page-templates/DonatePage.astro",
       "source_location": "L1"
     },
     {
@@ -8604,6 +8688,17 @@
       "source_location": "L1"
     },
     {
+      "id": "src_pages_donate",
+      "label": "pages/donate.astro",
+      "_origin": "ast",
+      "community": 47,
+      "community_name": "BaseLayout.astro",
+      "file_type": "code",
+      "norm_label": "pages/donate.astro",
+      "source_file": "src/pages/donate.astro",
+      "source_location": "L1"
+    },
+    {
       "id": "src_pages_km_contact",
       "label": "km/contact.astro",
       "_origin": "ast",
@@ -8612,6 +8707,17 @@
       "file_type": "code",
       "norm_label": "km/contact.astro",
       "source_file": "src/pages/km/contact.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_pages_km_donate",
+      "label": "km/donate.astro",
+      "_origin": "ast",
+      "community": 47,
+      "community_name": "BaseLayout.astro",
+      "file_type": "code",
+      "norm_label": "km/donate.astro",
+      "source_file": "src/pages/km/donate.astro",
       "source_location": "L1"
     },
     {
@@ -8771,139 +8877,29 @@
       "label": "ContactForm.astro",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "contactform.astro",
       "source_file": "src/components/forms/ContactForm.astro",
       "source_location": "L1"
     },
     {
-      "id": "src_components_media_heroslideshow",
-      "label": "HeroSlideshow.astro",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "heroslideshow.astro",
-      "source_file": "src/components/media/HeroSlideshow.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_media_heroslideshow_fadedend",
-      "label": "fadedEnd",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "fadedend",
-      "source_file": "src/components/media/HeroSlideshow.astro",
-      "source_location": "L56"
-    },
-    {
-      "id": "src_components_media_heroslideshow_fadeinend",
-      "label": "fadeInEnd",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "fadeinend",
-      "source_file": "src/components/media/HeroSlideshow.astro",
-      "source_location": "L54"
-    },
-    {
-      "id": "src_components_media_heroslideshow_slides",
-      "label": "slides",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "slides",
-      "source_file": "src/components/media/HeroSlideshow.astro",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_components_media_heroslideshow_visibleend",
-      "label": "visibleEnd",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "visibleend",
-      "source_file": "src/components/media/HeroSlideshow.astro",
-      "source_location": "L55"
-    },
-    {
-      "id": "src_components_seo_seohead",
-      "label": "SeoHead.astro",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "seohead.astro",
-      "source_file": "src/components/seo/SeoHead.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_seo_seohead_jsonld",
-      "label": "jsonLd",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "jsonld",
-      "source_file": "src/components/seo/SeoHead.astro",
-      "source_location": "L56"
-    },
-    {
-      "id": "src_components_seo_seohead_orgname",
-      "label": "orgName",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "orgname",
-      "source_file": "src/components/seo/SeoHead.astro",
-      "source_location": "L36"
-    },
-    {
-      "id": "src_components_seo_seohead_websitejsonld",
-      "label": "webSiteJsonLd",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "websitejsonld",
-      "source_file": "src/components/seo/SeoHead.astro",
-      "source_location": "L104"
-    },
-    {
       "id": "src_lib_config",
       "label": "lib/config.ts",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "lib/config.ts",
       "source_file": "src/lib/config.ts",
       "source_location": "L1"
     },
     {
-      "id": "src_lib_config_cfanalyticstoken",
-      "label": "cfAnalyticsToken",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "cfanalyticstoken",
-      "source_file": "src/lib/config.ts",
-      "source_location": "L57"
-    },
-    {
       "id": "src_lib_config_contactenabled",
       "label": "contactEnabled",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "contactenabled",
       "source_file": "src/lib/config.ts",
@@ -8914,7 +8910,7 @@
       "label": "contentSource",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "contentsource",
       "source_file": "src/lib/config.ts",
@@ -8925,7 +8921,7 @@
       "label": "hasSanity",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "hassanity",
       "source_file": "src/lib/config.ts",
@@ -8936,7 +8932,7 @@
       "label": "isLocalContent",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "islocalcontent",
       "source_file": "src/lib/config.ts",
@@ -8947,7 +8943,7 @@
       "label": "isPreviewDeployment",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "ispreviewdeployment",
       "source_file": "src/lib/config.ts",
@@ -8958,7 +8954,7 @@
       "label": "isProductionDeployment",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "isproductiondeployment",
       "source_file": "src/lib/config.ts",
@@ -8969,7 +8965,7 @@
       "label": "preventIndexing",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "preventindexing",
       "source_file": "src/lib/config.ts",
@@ -8980,7 +8976,7 @@
       "label": "sanityApiVersion",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "sanityapiversion",
       "source_file": "src/lib/config.ts",
@@ -8991,7 +8987,7 @@
       "label": "sanityDataset",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "sanitydataset",
       "source_file": "src/lib/config.ts",
@@ -9002,51 +8998,29 @@
       "label": "sanityProjectId",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "sanityprojectid",
       "source_file": "src/lib/config.ts",
       "source_location": "L27"
     },
     {
-      "id": "src_lib_config_siteurl",
-      "label": "siteUrl",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "siteurl",
-      "source_file": "src/lib/config.ts",
-      "source_location": "L50"
-    },
-    {
       "id": "src_lib_config_turnstilesitekey",
       "label": "turnstileSiteKey",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "turnstilesitekey",
       "source_file": "src/lib/config.ts",
       "source_location": "L56"
     },
     {
-      "id": "src_lib_portable_text",
-      "label": "portable-text.ts",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "portable-text.ts",
-      "source_file": "src/lib/portable-text.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "src_lib_sanity_client",
       "label": "client.ts",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "client.ts",
       "source_file": "src/lib/sanity/client.ts",
@@ -9057,73 +9031,29 @@
       "label": "sanityClient",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "sanityclient",
       "source_file": "src/lib/sanity/client.ts",
       "source_location": "L13"
     },
     {
-      "id": "src_lib_sanity_image",
-      "label": "image.ts",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "image.ts",
-      "source_file": "src/lib/sanity/image.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_lib_sanity_image_default_widths",
-      "label": "DEFAULT_WIDTHS",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "default_widths",
-      "source_file": "src/lib/sanity/image.ts",
-      "source_location": "L10"
-    },
-    {
-      "id": "src_lib_seo_json_ld",
-      "label": "json-ld.ts",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "code",
-      "norm_label": "json-ld.ts",
-      "source_file": "src/lib/seo/json-ld.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "src_pages_robots_txt",
       "label": "robots.txt.ts",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "code",
       "norm_label": "robots.txt.ts",
       "source_file": "src/pages/robots.txt.ts",
       "source_location": "L1"
     },
     {
-      "id": "docref_adr_0003",
-      "label": "ADR-0003",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "concept",
-      "norm_label": "adr-0003",
-      "source_file": "src/lib/sanity/image.ts",
-      "source_location": "L19"
-    },
-    {
       "id": "docref_adr_0004",
       "label": "ADR-0004",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "concept",
       "norm_label": "adr-0004",
       "source_file": "src/lib/sanity/client.ts",
@@ -9134,7 +9064,7 @@
       "label": "astro",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "concept",
       "norm_label": "astro",
       "source_file": "package.json",
@@ -9145,22 +9075,11 @@
       "label": "@sanity/client",
       "_origin": "ast",
       "community": 5,
-      "community_name": "portable-text.ts",
+      "community_name": "lib/config.ts",
       "file_type": "concept",
       "norm_label": "@sanity/client",
       "source_file": "package.json",
       "source_location": "L26"
-    },
-    {
-      "id": "ref_sanity_image_url",
-      "label": "@sanity/image-url",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "portable-text.ts",
-      "file_type": "concept",
-      "norm_label": "@sanity/image-url",
-      "source_file": "package.json",
-      "source_location": "L27"
     },
     {
       "id": "scripts_offline_copy",
@@ -9549,14 +9468,58 @@
       "source_location": "L1"
     },
     {
+      "id": "src_components_content_ctaband",
+      "label": "CtaBand.astro",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "ctaband.astro",
+      "source_file": "src/components/content/CtaBand.astro",
+      "source_location": "L1"
+    },
+    {
       "id": "src_components_content_emptystate",
       "label": "EmptyState.astro",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "emptystate.astro",
       "source_file": "src/components/content/EmptyState.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_content_pagination",
+      "label": "Pagination.astro",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "pagination.astro",
+      "source_file": "src/components/content/Pagination.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_content_reportlist",
+      "label": "ReportList.astro",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "reportlist.astro",
+      "source_file": "src/components/content/ReportList.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_page_templates_careerspage",
+      "label": "CareersPage.astro",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "careerspage.astro",
+      "source_file": "src/page-templates/CareersPage.astro",
       "source_location": "L1"
     },
     {
@@ -9564,7 +9527,7 @@
       "label": "PartnersPage.astro",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "partnerspage.astro",
       "source_file": "src/page-templates/PartnersPage.astro",
@@ -9575,7 +9538,7 @@
       "label": "groups",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "groups",
       "source_file": "src/page-templates/PartnersPage.astro",
@@ -9586,7 +9549,7 @@
       "label": "heading",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "heading",
       "source_file": "src/page-templates/PartnersPage.astro",
@@ -9597,7 +9560,7 @@
       "label": "string",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "string",
       "source_file": "src/page-templates/PartnersPage.astro",
@@ -9608,10 +9571,32 @@
       "label": "ReportsPage.astro",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "reportspage.astro",
       "source_file": "src/page-templates/ReportsPage.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_pages_careers_index",
+      "label": "pages/careers/index.astro",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "pages/careers/index.astro",
+      "source_file": "src/pages/careers/index.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_pages_km_careers_index",
+      "label": "km/careers/index.astro",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "km/careers/index.astro",
+      "source_file": "src/pages/km/careers/index.astro",
       "source_location": "L1"
     },
     {
@@ -9619,7 +9604,7 @@
       "label": "km/partners.astro",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "km/partners.astro",
       "source_file": "src/pages/km/partners.astro",
@@ -9630,18 +9615,40 @@
       "label": "km/reports.astro",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "km/reports.astro",
       "source_file": "src/pages/km/reports.astro",
       "source_location": "L1"
     },
     {
+      "id": "src_pages_km_safeguarding",
+      "label": "km/safeguarding.astro",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "km/safeguarding.astro",
+      "source_file": "src/pages/km/safeguarding.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_pages_km_safeguarding_policies",
+      "label": "policies",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "policies",
+      "source_file": "src/pages/km/safeguarding.astro",
+      "source_location": "L8"
+    },
+    {
       "id": "src_pages_partners",
       "label": "pages/partners.astro",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "pages/partners.astro",
       "source_file": "src/pages/partners.astro",
@@ -9652,11 +9659,33 @@
       "label": "pages/reports.astro",
       "_origin": "ast",
       "community": 6,
-      "community_name": "PartnersPage.astro",
+      "community_name": "t",
       "file_type": "code",
       "norm_label": "pages/reports.astro",
       "source_file": "src/pages/reports.astro",
       "source_location": "L1"
+    },
+    {
+      "id": "src_pages_safeguarding",
+      "label": "pages/safeguarding.astro",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "pages/safeguarding.astro",
+      "source_file": "src/pages/safeguarding.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_pages_safeguarding_policies",
+      "label": "policies",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "t",
+      "file_type": "code",
+      "norm_label": "policies",
+      "source_file": "src/pages/safeguarding.astro",
+      "source_location": "L8"
     },
     {
       "id": "studio_sanity_cli",
@@ -9692,6 +9721,83 @@
       "source_location": "L1"
     },
     {
+      "id": "src_components_content_faqsection",
+      "label": "FaqSection.astro",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "faqsection.astro",
+      "source_file": "src/components/content/FaqSection.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_seo_seohead",
+      "label": "SeoHead.astro",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "seohead.astro",
+      "source_file": "src/components/seo/SeoHead.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_seo_seohead_jsonld",
+      "label": "jsonLd",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "jsonld",
+      "source_file": "src/components/seo/SeoHead.astro",
+      "source_location": "L56"
+    },
+    {
+      "id": "src_components_seo_seohead_orgname",
+      "label": "orgName",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "orgname",
+      "source_file": "src/components/seo/SeoHead.astro",
+      "source_location": "L36"
+    },
+    {
+      "id": "src_components_seo_seohead_websitejsonld",
+      "label": "webSiteJsonLd",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "websitejsonld",
+      "source_file": "src/components/seo/SeoHead.astro",
+      "source_location": "L104"
+    },
+    {
+      "id": "src_lib_config_cfanalyticstoken",
+      "label": "cfAnalyticsToken",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "cfanalyticstoken",
+      "source_file": "src/lib/config.ts",
+      "source_location": "L57"
+    },
+    {
+      "id": "src_lib_seo_json_ld",
+      "label": "json-ld.ts",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": "SeoHead.astro",
+      "file_type": "code",
+      "norm_label": "json-ld.ts",
+      "source_file": "src/lib/seo/json-ld.ts",
+      "source_location": "L1"
+    },
+    {
       "id": "studio_sko_sanity_cli",
       "label": "sko/sanity.cli.ts",
       "_origin": "ast",
@@ -9700,6 +9806,17 @@
       "file_type": "code",
       "norm_label": "sko/sanity.cli.ts",
       "source_file": "studio/sko/sanity.cli.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_layout_footer",
+      "label": "Footer.astro",
+      "_origin": "ast",
+      "community": 65,
+      "community_name": "Header.astro",
+      "file_type": "code",
+      "norm_label": "footer.astro",
+      "source_file": "src/components/layout/Footer.astro",
       "source_location": "L1"
     },
     {
@@ -9712,50 +9829,6 @@
       "norm_label": "header.astro",
       "source_file": "src/components/layout/Header.astro",
       "source_location": "L1"
-    },
-    {
-      "id": "src_lib_i18n_strings",
-      "label": "strings.ts",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "Header.astro",
-      "file_type": "code",
-      "norm_label": "strings.ts",
-      "source_file": "src/lib/i18n/strings.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_lib_i18n_strings_en",
-      "label": "en",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "Header.astro",
-      "file_type": "code",
-      "norm_label": "en",
-      "source_file": "src/lib/i18n/strings.ts",
-      "source_location": "L11"
-    },
-    {
-      "id": "src_lib_i18n_strings_km",
-      "label": "km",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "Header.astro",
-      "file_type": "code",
-      "norm_label": "km",
-      "source_file": "src/lib/i18n/strings.ts",
-      "source_location": "L187"
-    },
-    {
-      "id": "src_lib_i18n_strings_ui",
-      "label": "ui",
-      "_origin": "ast",
-      "community": 65,
-      "community_name": "Header.astro",
-      "file_type": "code",
-      "norm_label": "ui",
-      "source_file": "src/lib/i18n/strings.ts",
-      "source_location": "L346"
     },
     {
       "id": "src_lib_nav",
@@ -9802,55 +9875,11 @@
       "source_location": "L59"
     },
     {
-      "id": "src_components_content_programcard",
-      "label": "ProgramCard.astro",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "ProgramsPage.astro",
-      "file_type": "code",
-      "norm_label": "programcard.astro",
-      "source_file": "src/components/content/ProgramCard.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_programcard_href",
-      "label": "href",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "ProgramsPage.astro",
-      "file_type": "code",
-      "norm_label": "href",
-      "source_file": "src/components/content/ProgramCard.astro",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_components_content_programcard_summary",
-      "label": "summary",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "ProgramsPage.astro",
-      "file_type": "code",
-      "norm_label": "summary",
-      "source_file": "src/components/content/ProgramCard.astro",
-      "source_location": "L14"
-    },
-    {
-      "id": "src_components_content_programcard_title",
-      "label": "title",
-      "_origin": "ast",
-      "community": 66,
-      "community_name": "ProgramsPage.astro",
-      "file_type": "code",
-      "norm_label": "title",
-      "source_file": "src/components/content/ProgramCard.astro",
-      "source_location": "L13"
-    },
-    {
       "id": "src_lib_grid",
       "label": "grid.ts",
       "_origin": "ast",
       "community": 66,
-      "community_name": "ProgramsPage.astro",
+      "community_name": "HomePage.astro",
       "file_type": "code",
       "norm_label": "grid.ts",
       "source_file": "src/lib/grid.ts",
@@ -9861,18 +9890,29 @@
       "label": "LG_COLS",
       "_origin": "ast",
       "community": 66,
-      "community_name": "ProgramsPage.astro",
+      "community_name": "HomePage.astro",
       "file_type": "code",
       "norm_label": "lg_cols",
       "source_file": "src/lib/grid.ts",
       "source_location": "L11"
     },
     {
+      "id": "src_page_templates_homepage",
+      "label": "HomePage.astro",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "HomePage.astro",
+      "file_type": "code",
+      "norm_label": "homepage.astro",
+      "source_file": "src/page-templates/HomePage.astro",
+      "source_location": "L1"
+    },
+    {
       "id": "src_page_templates_programspage",
       "label": "ProgramsPage.astro",
       "_origin": "ast",
       "community": 66,
-      "community_name": "ProgramsPage.astro",
+      "community_name": "HomePage.astro",
       "file_type": "code",
       "norm_label": "programspage.astro",
       "source_file": "src/page-templates/ProgramsPage.astro",
@@ -9883,18 +9923,40 @@
       "label": "heading",
       "_origin": "ast",
       "community": 66,
-      "community_name": "ProgramsPage.astro",
+      "community_name": "HomePage.astro",
       "file_type": "code",
       "norm_label": "heading",
       "source_file": "src/page-templates/ProgramsPage.astro",
       "source_location": "L18"
     },
     {
+      "id": "src_pages_index",
+      "label": "pages/index.astro",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "HomePage.astro",
+      "file_type": "code",
+      "norm_label": "pages/index.astro",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_pages_km_index",
+      "label": "km/index.astro",
+      "_origin": "ast",
+      "community": 66,
+      "community_name": "HomePage.astro",
+      "file_type": "code",
+      "norm_label": "km/index.astro",
+      "source_file": "src/pages/km/index.astro",
+      "source_location": "L1"
+    },
+    {
       "id": "src_pages_km_programs_index",
       "label": "km/programs/index.astro",
       "_origin": "ast",
       "community": 66,
-      "community_name": "ProgramsPage.astro",
+      "community_name": "HomePage.astro",
       "file_type": "code",
       "norm_label": "km/programs/index.astro",
       "source_file": "src/pages/km/programs/index.astro",
@@ -9905,131 +9967,10 @@
       "label": "pages/programs/index.astro",
       "_origin": "ast",
       "community": 66,
-      "community_name": "ProgramsPage.astro",
+      "community_name": "HomePage.astro",
       "file_type": "code",
       "norm_label": "pages/programs/index.astro",
       "source_file": "src/pages/programs/index.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_faqsection",
-      "label": "FaqSection.astro",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "faqsection.astro",
-      "source_file": "src/components/content/FaqSection.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_orgchart",
-      "label": "OrgChart.astro",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "orgchart.astro",
-      "source_file": "src/components/content/OrgChart.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_partnerwall",
-      "label": "PartnerWall.astro",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "partnerwall.astro",
-      "source_file": "src/components/content/PartnerWall.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_richtext",
-      "label": "RichText.astro",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "richtext.astro",
-      "source_file": "src/components/content/RichText.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_richtext_html",
-      "label": "html",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "html",
-      "source_file": "src/components/content/RichText.astro",
-      "source_location": "L18"
-    },
-    {
-      "id": "src_components_content_richtext_picked",
-      "label": "picked",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "picked",
-      "source_file": "src/components/content/RichText.astro",
-      "source_location": "L17"
-    },
-    {
-      "id": "src_components_content_sectionheading",
-      "label": "SectionHeading.astro",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "sectionheading.astro",
-      "source_file": "src/components/content/SectionHeading.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_media_responsiveimage",
-      "label": "ResponsiveImage.astro",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "responsiveimage.astro",
-      "source_file": "src/components/media/ResponsiveImage.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_media_responsiveimage_present",
-      "label": "present",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "present",
-      "source_file": "src/components/media/ResponsiveImage.astro",
-      "source_location": "L37"
-    },
-    {
-      "id": "src_components_media_responsiveimage_width_height",
-      "label": "{ width, height }",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "{ width, height }",
-      "source_file": "src/components/media/ResponsiveImage.astro",
-      "source_location": "L39"
-    },
-    {
-      "id": "src_lib_seo",
-      "label": "seo.ts",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "seo.ts",
-      "source_file": "src/lib/seo.ts",
       "source_location": "L1"
     },
     {
@@ -10037,7 +9978,7 @@
       "label": "AboutPage.astro",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
       "norm_label": "aboutpage.astro",
       "source_file": "src/page-templates/AboutPage.astro",
@@ -10048,7 +9989,7 @@
       "label": "intro",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
       "norm_label": "intro",
       "source_file": "src/page-templates/AboutPage.astro",
@@ -10059,7 +10000,7 @@
       "label": "seo",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
       "norm_label": "seo",
       "source_file": "src/page-templates/AboutPage.astro",
@@ -10070,32 +10011,21 @@
       "label": "title",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
       "norm_label": "title",
       "source_file": "src/page-templates/AboutPage.astro",
       "source_location": "L29"
     },
     {
-      "id": "src_page_templates_activitydetail",
-      "label": "ActivityDetail.astro",
+      "id": "src_page_templates_impactpage",
+      "label": "ImpactPage.astro",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
-      "norm_label": "activitydetail.astro",
-      "source_file": "src/page-templates/ActivityDetail.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_page_templates_donatepage",
-      "label": "DonatePage.astro",
-      "_origin": "ast",
-      "community": 67,
-      "community_name": "pick",
-      "file_type": "code",
-      "norm_label": "donatepage.astro",
-      "source_file": "src/page-templates/DonatePage.astro",
+      "norm_label": "impactpage.astro",
+      "source_file": "src/page-templates/ImpactPage.astro",
       "source_location": "L1"
     },
     {
@@ -10103,21 +10033,21 @@
       "label": "pages/about.astro",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
       "norm_label": "pages/about.astro",
       "source_file": "src/pages/about.astro",
       "source_location": "L1"
     },
     {
-      "id": "src_pages_donate",
-      "label": "pages/donate.astro",
+      "id": "src_pages_impact",
+      "label": "pages/impact.astro",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
-      "norm_label": "pages/donate.astro",
-      "source_file": "src/pages/donate.astro",
+      "norm_label": "pages/impact.astro",
+      "source_file": "src/pages/impact.astro",
       "source_location": "L1"
     },
     {
@@ -10125,33 +10055,88 @@
       "label": "km/about.astro",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
       "norm_label": "km/about.astro",
       "source_file": "src/pages/km/about.astro",
       "source_location": "L1"
     },
     {
-      "id": "src_pages_km_donate",
-      "label": "km/donate.astro",
+      "id": "src_pages_km_impact",
+      "label": "km/impact.astro",
       "_origin": "ast",
       "community": 67,
-      "community_name": "pick",
+      "community_name": "AboutPage.astro",
       "file_type": "code",
-      "norm_label": "km/donate.astro",
-      "source_file": "src/pages/km/donate.astro",
+      "norm_label": "km/impact.astro",
+      "source_file": "src/pages/km/impact.astro",
       "source_location": "L1"
     },
     {
-      "id": "src_components_content_ctaband",
-      "label": "CtaBand.astro",
+      "id": "package_dependencies",
+      "label": "dependencies",
       "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
+      "community": 68,
+      "community_name": "dependencies",
       "file_type": "code",
-      "norm_label": "ctaband.astro",
-      "source_file": "src/components/content/CtaBand.astro",
-      "source_location": "L1"
+      "norm_label": "dependencies",
+      "source_file": "package.json",
+      "source_location": "L24"
+    },
+    {
+      "id": "package_dependencies_astro",
+      "label": "astro",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "dependencies",
+      "file_type": "code",
+      "norm_label": "astro",
+      "source_file": "package.json",
+      "source_location": "L28"
+    },
+    {
+      "id": "package_dependencies_astrojs_sitemap",
+      "label": "@astrojs/sitemap",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "dependencies",
+      "file_type": "code",
+      "norm_label": "@astrojs/sitemap",
+      "source_file": "package.json",
+      "source_location": "L25"
+    },
+    {
+      "id": "package_dependencies_sanity_client",
+      "label": "@sanity/client",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "dependencies",
+      "file_type": "code",
+      "norm_label": "@sanity/client",
+      "source_file": "package.json",
+      "source_location": "L26"
+    },
+    {
+      "id": "package_dependencies_sanity_image_url",
+      "label": "@sanity/image-url",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "dependencies",
+      "file_type": "code",
+      "norm_label": "@sanity/image-url",
+      "source_file": "package.json",
+      "source_location": "L27"
+    },
+    {
+      "id": "package_dependencies_zod",
+      "label": "zod",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "dependencies",
+      "file_type": "code",
+      "norm_label": "zod",
+      "source_file": "package.json",
+      "source_location": "L29"
     },
     {
       "id": "src_components_content_impactstats",
@@ -10162,50 +10147,6 @@
       "file_type": "code",
       "norm_label": "impactstats.astro",
       "source_file": "src/components/content/ImpactStats.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_pagination",
-      "label": "Pagination.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "pagination.astro",
-      "source_file": "src/components/content/Pagination.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_reportlist",
-      "label": "ReportList.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "reportlist.astro",
-      "source_file": "src/components/content/ReportList.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_content_storyquote",
-      "label": "StoryQuote.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "storyquote.astro",
-      "source_file": "src/components/content/StoryQuote.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_layout_footer",
-      "label": "Footer.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "footer.astro",
-      "source_file": "src/components/layout/Footer.astro",
       "source_location": "L1"
     },
     {
@@ -10286,6 +10227,50 @@
       "source_location": "L12"
     },
     {
+      "id": "src_lib_i18n_strings",
+      "label": "strings.ts",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "utils.ts",
+      "file_type": "code",
+      "norm_label": "strings.ts",
+      "source_file": "src/lib/i18n/strings.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_lib_i18n_strings_en",
+      "label": "en",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "utils.ts",
+      "file_type": "code",
+      "norm_label": "en",
+      "source_file": "src/lib/i18n/strings.ts",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_lib_i18n_strings_km",
+      "label": "km",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "utils.ts",
+      "file_type": "code",
+      "norm_label": "km",
+      "source_file": "src/lib/i18n/strings.ts",
+      "source_location": "L187"
+    },
+    {
+      "id": "src_lib_i18n_strings_ui",
+      "label": "ui",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "utils.ts",
+      "file_type": "code",
+      "norm_label": "ui",
+      "source_file": "src/lib/i18n/strings.ts",
+      "source_location": "L346"
+    },
+    {
       "id": "src_lib_i18n_utils",
       "label": "utils.ts",
       "_origin": "ast",
@@ -10308,17 +10293,6 @@
       "source_location": "L95"
     },
     {
-      "id": "src_page_templates_impactpage",
-      "label": "ImpactPage.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "impactpage.astro",
-      "source_file": "src/page-templates/ImpactPage.astro",
-      "source_location": "L1"
-    },
-    {
       "id": "src_page_templates_notfoundpage",
       "label": "NotFoundPage.astro",
       "_origin": "ast",
@@ -10328,50 +10302,6 @@
       "norm_label": "notfoundpage.astro",
       "source_file": "src/page-templates/NotFoundPage.astro",
       "source_location": "L1"
-    },
-    {
-      "id": "src_page_templates_programdetail",
-      "label": "ProgramDetail.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "programdetail.astro",
-      "source_file": "src/page-templates/ProgramDetail.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_page_templates_programdetail_seo",
-      "label": "seo",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "seo",
-      "source_file": "src/page-templates/ProgramDetail.astro",
-      "source_location": "L24"
-    },
-    {
-      "id": "src_page_templates_programdetail_summary",
-      "label": "summary",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "summary",
-      "source_file": "src/page-templates/ProgramDetail.astro",
-      "source_location": "L21"
-    },
-    {
-      "id": "src_page_templates_programdetail_title",
-      "label": "title",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "title",
-      "source_file": "src/page-templates/ProgramDetail.astro",
-      "source_location": "L20"
     },
     {
       "id": "src_pages_404",
@@ -10385,17 +10315,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_pages_impact",
-      "label": "pages/impact.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "pages/impact.astro",
-      "source_file": "src/pages/impact.astro",
-      "source_location": "L1"
-    },
-    {
       "id": "src_pages_km_404",
       "label": "km/404.astro",
       "_origin": "ast",
@@ -10405,61 +10324,6 @@
       "norm_label": "km/404.astro",
       "source_file": "src/pages/km/404.astro",
       "source_location": "L1"
-    },
-    {
-      "id": "src_pages_km_impact",
-      "label": "km/impact.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "km/impact.astro",
-      "source_file": "src/pages/km/impact.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_km_safeguarding",
-      "label": "km/safeguarding.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "km/safeguarding.astro",
-      "source_file": "src/pages/km/safeguarding.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_km_safeguarding_policies",
-      "label": "policies",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "policies",
-      "source_file": "src/pages/km/safeguarding.astro",
-      "source_location": "L8"
-    },
-    {
-      "id": "src_pages_safeguarding",
-      "label": "pages/safeguarding.astro",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "pages/safeguarding.astro",
-      "source_file": "src/pages/safeguarding.astro",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_pages_safeguarding_policies",
-      "label": "policies",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "utils.ts",
-      "file_type": "code",
-      "norm_label": "policies",
-      "source_file": "src/pages/safeguarding.astro",
-      "source_location": "L8"
     },
     {
       "id": "studio_sko_eslint_config",
@@ -10913,6 +10777,94 @@
       "source_location": "L29"
     },
     {
+      "id": "src_components_content_directormessage",
+      "label": "DirectorMessage.astro",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "directormessage.astro",
+      "source_file": "src/components/content/DirectorMessage.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_content_directormessage_name",
+      "label": "name",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "name",
+      "source_file": "src/components/content/DirectorMessage.astro",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_components_content_directormessage_pullquote",
+      "label": "pullQuote",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "pullquote",
+      "source_file": "src/components/content/DirectorMessage.astro",
+      "source_location": "L17"
+    },
+    {
+      "id": "src_components_content_directormessage_title",
+      "label": "title",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "title",
+      "source_file": "src/components/content/DirectorMessage.astro",
+      "source_location": "L16"
+    },
+    {
+      "id": "src_components_content_partnerwall",
+      "label": "PartnerWall.astro",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "partnerwall.astro",
+      "source_file": "src/components/content/PartnerWall.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_content_richtext",
+      "label": "RichText.astro",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "richtext.astro",
+      "source_file": "src/components/content/RichText.astro",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_content_richtext_html",
+      "label": "html",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "html",
+      "source_file": "src/components/content/RichText.astro",
+      "source_location": "L18"
+    },
+    {
+      "id": "src_components_content_richtext_picked",
+      "label": "picked",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "types.ts",
+      "file_type": "code",
+      "norm_label": "picked",
+      "source_file": "src/components/content/RichText.astro",
+      "source_location": "L17"
+    },
+    {
       "id": "src_lib_content_types",
       "label": "types.ts",
       "_origin": "ast",
@@ -10946,7 +10898,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L306",
+      "source_location": "L268",
       "weight": 1.0
     },
     {
@@ -10958,7 +10910,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L319",
+      "source_location": "L281",
       "weight": 1.0
     },
     {
@@ -10970,7 +10922,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L329",
+      "source_location": "L291",
       "weight": 1.0
     },
     {
@@ -10982,7 +10934,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L343",
+      "source_location": "L305",
       "weight": 1.0
     },
     {
@@ -10994,7 +10946,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L355",
+      "source_location": "L317",
       "weight": 1.0
     },
     {
@@ -11006,7 +10958,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L362",
+      "source_location": "L323",
       "weight": 1.0
     },
     {
@@ -11018,19 +10970,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L383",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact_handlepost",
-      "target": "functions_api_contact_recordsubmission",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L392",
+      "source_location": "L344",
       "weight": 1.0
     },
     {
@@ -11042,7 +10982,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L401",
+      "source_location": "L359",
       "weight": 1.0
     },
     {
@@ -11054,7 +10994,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L417",
+      "source_location": "L375",
       "weight": 1.0
     },
     {
@@ -11066,19 +11006,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L432",
+      "source_location": "L390",
       "weight": 1.0
     },
     {
       "source": "functions_api_contact_isratelimited",
-      "target": "functions_api_contact_ratelimitingconfigured",
+      "target": "functions_api_contact_haship",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L229",
+      "source_location": "L213",
       "weight": 1.0
     },
     {
@@ -11090,7 +11030,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L236",
+      "source_location": "L214",
       "weight": 1.0
     },
     {
@@ -11102,19 +11042,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L236",
+      "source_location": "L214",
       "weight": 1.0
     },
     {
       "source": "functions_api_contact_isratelimited",
-      "target": "functions_api_contact_ratelimitkey",
+      "target": "functions_api_contact_kvnamespacelike_put",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L236",
+      "source_location": "L217",
       "weight": 1.0
     },
     {
@@ -11126,7 +11066,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L443",
+      "source_location": "L401",
       "weight": 1.0
     },
     {
@@ -11138,19 +11078,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L444",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact_ratelimitkey",
-      "target": "functions_api_contact_haship",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L203",
+      "source_location": "L402",
       "weight": 1.0
     },
     {
@@ -11162,79 +11090,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L103",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact_recordsubmission",
-      "target": "functions_api_contact_ratelimitingconfigured",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L254",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact_recordsubmission",
-      "target": "functions_api_contact_ratelimitkey",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L256",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact_recordsubmission",
-      "target": "functions_api_contact_bounded",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L257",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact_recordsubmission",
-      "target": "functions_api_contact_kvnamespacelike_get",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L257",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact_recordsubmission",
-      "target": "functions_api_contact_kvnamespacelike_put",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L259",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact_recordsubmission",
-      "target": "functions_api_contact_ratelimitttl",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L259",
+      "source_location": "L102",
       "weight": 1.0
     },
     {
@@ -11246,7 +11102,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L279",
+      "source_location": "L241",
       "weight": 1.0
     },
     {
@@ -15999,7 +15855,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "functions/api/contact.ts",
-      "source_location": "L19",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -20733,7 +20589,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/09-deployment.md",
-      "source_location": "L193",
+      "source_location": "L191",
       "weight": 1.0
     },
     {
@@ -20744,7 +20600,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/09-deployment.md",
-      "source_location": "L205",
+      "source_location": "L203",
       "weight": 1.0
     },
     {
@@ -20755,7 +20611,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/09-deployment.md",
-      "source_location": "L212",
+      "source_location": "L210",
       "weight": 1.0
     },
     {
@@ -20766,7 +20622,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/09-deployment.md",
-      "source_location": "L237",
+      "source_location": "L235",
       "weight": 1.0
     },
     {
@@ -20777,7 +20633,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/09-deployment.md",
-      "source_location": "L251",
+      "source_location": "L249",
       "weight": 1.0
     },
     {
@@ -20788,7 +20644,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/09-deployment.md",
-      "source_location": "L277",
+      "source_location": "L275",
       "weight": 1.0
     },
     {
@@ -20799,7 +20655,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/09-deployment.md",
-      "source_location": "L288",
+      "source_location": "L286",
       "weight": 1.0
     },
     {
@@ -22009,7 +21865,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L125",
+      "source_location": "L124",
       "weight": 1.0
     },
     {
@@ -22020,7 +21876,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L141",
+      "source_location": "L140",
       "weight": 1.0
     },
     {
@@ -22031,7 +21887,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L143",
+      "source_location": "L142",
       "weight": 1.0
     },
     {
@@ -22042,7 +21898,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L154",
+      "source_location": "L153",
       "weight": 1.0
     },
     {
@@ -22053,7 +21909,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L166",
+      "source_location": "L165",
       "weight": 1.0
     },
     {
@@ -22064,7 +21920,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L178",
+      "source_location": "L177",
       "weight": 1.0
     },
     {
@@ -22075,51 +21931,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L188",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact",
-      "target": "functions_api_contact_ratelimitkey",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L201",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact",
-      "target": "functions_api_contact_ratelimitttl",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L206",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact",
-      "target": "functions_api_contact_kvnamespacelike",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L21",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact",
-      "target": "functions_api_contact_ratelimitingconfigured",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L212",
+      "source_location": "L187",
       "weight": 1.0
     },
     {
@@ -22130,29 +21942,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L228",
+      "source_location": "L195",
       "weight": 1.0
     },
     {
       "source": "functions_api_contact",
-      "target": "functions_api_contact_recordsubmission",
+      "target": "functions_api_contact_kvnamespacelike",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L253",
-      "weight": 1.0
-    },
-    {
-      "source": "functions_api_contact",
-      "target": "functions_api_contact_env",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "functions/api/contact.ts",
-      "source_location": "L26",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -22163,7 +21964,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L267",
+      "source_location": "L229",
       "weight": 1.0
     },
     {
@@ -22174,7 +21975,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L283",
+      "source_location": "L245",
+      "weight": 1.0
+    },
+    {
+      "source": "functions_api_contact",
+      "target": "functions_api_contact_env",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "functions/api/contact.ts",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -22185,7 +21997,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L304",
+      "source_location": "L266",
       "weight": 1.0
     },
     {
@@ -22196,7 +22008,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L37",
+      "source_location": "L36",
       "weight": 1.0
     },
     {
@@ -22207,7 +22019,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L442",
+      "source_location": "L400",
       "weight": 1.0
     },
     {
@@ -22218,7 +22030,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L53",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -22229,7 +22041,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L73",
+      "source_location": "L72",
       "weight": 1.0
     },
     {
@@ -22240,7 +22052,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L87",
+      "source_location": "L86",
       "weight": 1.0
     },
     {
@@ -22251,7 +22063,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L96",
+      "source_location": "L95",
       "weight": 1.0
     },
     {
@@ -28020,7 +27832,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L88",
+      "source_location": "L87",
       "weight": 1.0
     },
     {
@@ -28031,7 +27843,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L22",
+      "source_location": "L21",
       "weight": 1.0
     },
     {
@@ -28042,7 +27854,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "functions/api/contact.ts",
-      "source_location": "L23",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
