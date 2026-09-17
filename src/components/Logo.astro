@@ -11,7 +11,7 @@
  * The emblem is NOT a UI icon: header, footer, favicon only.
  */
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 
 interface Props {
   variant?: 'full' | 'reversed' | 'mono' | 'mono-white' | 'emblem' | 'emblem-reversed' | 'emblem-mono';
@@ -39,7 +39,7 @@ if (!isEmblem && width && width < 180) {
 const w = width ?? (height ? Math.round(height * ratio) : undefined);
 const h = height ?? (width ? Math.round(width / ratio) : undefined);
 
-let svg = readFileSync(fileURLToPath(new URL(`../../public/logo/${files[variant]}`, import.meta.url)), 'utf8');
+let svg = readFileSync(resolve(process.cwd(), 'public/logo', files[variant]), 'utf8');
 svg = svg
   .replace('<svg ', `<svg width="${w}" height="${h}" class="logo logo--${variant} ${className}" `)
   .replace(/<title id="t">[^<]*<\/title>/, `<title id="t">${title}</title>`);

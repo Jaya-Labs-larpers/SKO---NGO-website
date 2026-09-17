@@ -172,6 +172,7 @@ const en = {
   ctaImpactTitle: 'Help us reach more families.',
   ctaPartnersTitle: 'Work with us.',
   mapPlaceholder: '[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]',
+  viewOnGoogleMaps: 'Open in Google Maps',
 
   // --- Meta -----------------------------------------------------------------
   fileSizeLabel: 'file size',
@@ -335,6 +336,7 @@ const km: Record<UIKey, string> = {
   ctaImpactTitle: 'ជួយយើងឱ្យទៅដល់គ្រួសារកាន់តែច្រើន។',
   ctaPartnersTitle: 'ធ្វើការជាមួយយើង។',
   mapPlaceholder: '[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]',
+  viewOnGoogleMaps: 'បើកក្នុង Google Maps',
 
   fileSizeLabel: 'ទំហំឯកសារ',
   languageEnglish: 'ភាសាអង់គ្លេស',

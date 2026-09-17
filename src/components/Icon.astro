@@ -11,7 +11,7 @@
  * Colour comes from CSS `color` on the parent or the class — never hardcode a hex here.
  */
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 
 interface Props {
   name: string;
@@ -24,7 +24,7 @@ const { name, size = 20, label, inline = false, class: className = '' } = Astro.
 
 let body = '';
 if (inline) {
-  const sprite = readFileSync(fileURLToPath(new URL('../../public/icons/sprite.svg', import.meta.url)), 'utf8');
+  const sprite = readFileSync(resolve(process.cwd(), 'public/icons/sprite.svg'), 'utf8');
   const m = sprite.match(new RegExp(`<symbol id="${name}"[^>]*>(.*?)</symbol>`, 's'));
   if (!m) throw new Error(`Icon "${name}" is not in sprite.svg`);
   body = m[1];
