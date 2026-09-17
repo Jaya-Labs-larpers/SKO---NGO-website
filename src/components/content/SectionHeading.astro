@@ -1,19 +1,23 @@
 ---
+import Icon from '~/components/Icon.astro';
+
 interface Props {
   title: string;
   intro?: string | null;
   introLang?: string | undefined;
   as?: 'h2' | 'h3';
+  icon?: string;
 }
 
-const { title, intro, introLang, as: Tag = 'h2' }: Props = Astro.props;
+const { title, intro, introLang, as: Tag = 'h2', icon }: Props = Astro.props;
 ---
 
 <div class="max-w-[640px]">
   <div class="rule-accent"></div>
   <Tag
-    class="mt-3 text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)]"
+    class="mt-3 flex items-center gap-2.5 text-[length:var(--text-h2)] leading-[var(--text-h2--line-height)] tracking-[var(--text-h2--letter-spacing)]"
   >
+    {icon && <Icon name={icon} size={24} class="text-[color:var(--color-blue-700)]" />}
     {title}
   </Tag>
   {

@@ -3,6 +3,8 @@ import type { Locale } from '~/lib/i18n/config';
 import type { SiteSettings } from '~/lib/content/types';
 import { localizePath, pick, t, text } from '~/lib/i18n/utils';
 import { footerNav } from '~/lib/nav';
+import Icon from '~/components/Icon.astro';
+import Logo from '~/components/Logo.astro';
 
 interface Props {
   lang: Locale;
@@ -15,6 +17,15 @@ const orgName = text(settings.orgName, lang);
 const address = pick(settings.address, lang);
 const registration = pick(settings.registration, lang);
 const year = new Date().getFullYear();
+
+/** CMS platform names are free text (e.g. "Facebook"); map the known ones to a sprite icon. */
+const socialIcon: Record<string, string> = {
+  facebook: 'sko-facebook',
+  telegram: 'send',
+};
+function iconForPlatform(platform: string): string {
+  return socialIcon[platform.toLowerCase()] ?? 'link';
+}
 ---
 
 <footer
@@ -23,33 +34,36 @@ const year = new Date().getFullYear();
   <div class="wrap">
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
       <div>
-        <div class="flex items-center gap-3">
-          <span
-            class="grid h-[38px] w-[38px] place-items-center rounded-[var(--radius-sm)] bg-white text-[15px] font-extrabold text-[color:var(--color-blue-900)]"
-            aria-hidden="true">{settings.orgShortName ?? 'SKO'}</span
-          >
-          <span class="flex flex-col leading-[1.15]">
-            <span class="text-[15px] font-bold text-white">{orgName}</span>
-            <span class="text-[11px] text-white/60">Samatapheap Khnom Organization</span>
-          </span>
-        </div>
+        <Logo variant="reversed" width={220} />
 
         {
           address.value && (
             <p
-              class="mt-4 max-w-[34ch] whitespace-pre-line"
+              class="mt-4 flex max-w-[34ch] gap-2 whitespace-pre-line text-[color:var(--color-sky-400)]"
               lang={address.isFallback ? address.lang : undefined}
             >
-              {address.value}
+              <Icon name="map-pin" size={20} class="mt-0.5 flex-none" />
+              <span class="text-white/70">{address.value}</span>
             </p>
           )
         }
 
-        <p class="mt-2.5">
-          {settings.phone && <span class="block">{settings.phone}</span>}
+        <p class="mt-2.5 space-y-1.5 text-[color:var(--color-sky-400)]">
+          {
+            settings.phone && (
+              <span class="flex items-center gap-2">
+                <Icon name="phone" size={20} />
+                <span class="text-white/70">{settings.phone}</span>
+              </span>
+            )
+          }
           {
             settings.email && (
-              <a href={`mailto:${settings.email}`} class="text-white/70 hover:text-white">
+              <a
+                href={`mailto:${settings.email}`}
+                class="flex items-center gap-2 text-white/70 no-underline hover:text-white"
+              >
+                <Icon name="mail" size={20} class="text-[color:var(--color-sky-400)]" />
                 {settings.email}
               </a>
             )
@@ -58,17 +72,17 @@ const year = new Date().getFullYear();
 
         {
           settings.socials && settings.socials.length > 0 && (
-            <ul class="mt-4 flex list-none gap-2 p-0">
+            <ul class="mt-4 flex list-none flex-col gap-2 p-0">
               {settings.socials.map((social) => (
                 <li>
                   <a
                     href={social.url}
                     rel="noopener noreferrer"
                     target="_blank"
-                    class="grid h-9 w-9 place-items-center rounded-[var(--radius-sm)] border border-white/25 text-[12px] font-bold text-white no-underline hover:bg-white/10"
+                    class="flex items-center gap-2 text-white/70 no-underline hover:text-white"
                   >
-                    <span class="sr-only-focusable">{social.platform}</span>
-                    <span aria-hidden="true">{social.platform.slice(0, 2)}</span>
+                    <Icon name={iconForPlatform(social.platform)} size={20} class="text-[color:var(--color-sky-400)]" />
+                    {social.platform}
                   </a>
                 </li>
               ))}
@@ -103,7 +117,11 @@ const year = new Date().getFullYear();
     <div
       class="mt-11 flex flex-wrap justify-between gap-5 border-t border-white/15 pt-5.5 text-[13px] text-white/55"
     >
-      <span lang={registration.isFallback ? registration.lang : undefined}>
+      <span
+        class="flex items-center gap-1.5"
+        lang={registration.isFallback ? registration.lang : undefined}
+      >
+        {registration.value && <Icon name="badge-check" size={16} class="text-[color:var(--color-sky-400)]" />}
         © {year} {orgName}. {registration.value}
       </span>
       <span class="flex gap-4.5">

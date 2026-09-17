@@ -2,6 +2,7 @@
 import type { Locale } from "~/lib/i18n/config";
 import { t } from "~/lib/i18n/utils";
 import { turnstileSiteKey, contactEnabled } from "~/lib/config";
+import Icon from "~/components/Icon.astro";
 
 interface Props {
   lang: Locale;
@@ -63,15 +64,22 @@ const submitLabel =
         >
         <span class="sr-only-focusable">({t(lang, "formRequired")})</span>
       </label>
-      <input
-        class="field"
-        id={`${id}-name`}
-        name="name"
-        type="text"
-        autocomplete="name"
-        required
-        maxlength="120"
-      />
+      <div class="relative">
+        <Icon
+          name="user"
+          size={16}
+          class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[color:var(--color-ink-300)]"
+        />
+        <input
+          class="field pl-9"
+          id={`${id}-name`}
+          name="name"
+          type="text"
+          autocomplete="name"
+          required
+          maxlength="120"
+        />
+      </div>
       <p
         class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
         data-error-for="name"
@@ -122,15 +130,22 @@ const submitLabel =
           aria-hidden="true">*</span
         >
       </label>
-      <input
-        class="field"
-        id={`${id}-email`}
-        name="email"
-        type="email"
-        autocomplete="email"
-        required
-        maxlength="200"
-      />
+      <div class="relative">
+        <Icon
+          name="mail"
+          size={16}
+          class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[color:var(--color-ink-300)]"
+        />
+        <input
+          class="field pl-9"
+          id={`${id}-email`}
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          maxlength="200"
+        />
+      </div>
       <p
         class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
         data-error-for="email"
@@ -174,13 +189,20 @@ const submitLabel =
           aria-hidden="true">*</span
         >
       </label>
-      <textarea
-        class="field"
-        id={`${id}-message`}
-        name="message"
-        rows="5"
-        required
-        maxlength="5000"></textarea>
+      <div class="relative">
+        <Icon
+          name="message-square"
+          size={16}
+          class="pointer-events-none absolute top-3.5 left-3 text-[color:var(--color-ink-300)]"
+        />
+        <textarea
+          class="field pl-9"
+          id={`${id}-message`}
+          name="message"
+          rows="5"
+          required
+          maxlength="5000"></textarea>
+      </div>
       <p
         class="hidden text-[13.5px] font-medium text-[color:var(--color-danger-700)]"
         data-error-for="message"
@@ -220,9 +242,10 @@ const submitLabel =
     }
 
     <div>
-      <button type="submit" class="btn btn-primary" data-submit
-        >{submitLabel}</button
-      >
+      <button type="submit" class="btn btn-primary" data-submit>
+        <span class="hidden" data-submit-spinner><Icon name="loader" size={16} class="animate-spin" /></span>
+        <span data-submit-label>{submitLabel}</span>
+      </button>
     </div>
 
     <!--
@@ -254,7 +277,19 @@ const submitLabel =
       if (form.dataset.previewDisabled === "true") return;
       const submit = form.querySelector<HTMLButtonElement>("[data-submit]");
       const status = form.querySelector<HTMLElement>("[data-status]");
+      const submitSpinner = submit?.querySelector<HTMLElement>(
+        "[data-submit-spinner]",
+      );
+      const submitLabelEl = submit?.querySelector<HTMLElement>(
+        "[data-submit-label]",
+      );
       if (!submit || !status) return;
+
+      const iconSvg = (name: string) =>
+        `<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" ` +
+        `stroke="currentColor" stroke-width="2" stroke-linecap="round" ` +
+        `stroke-linejoin="round" aria-hidden="true" focusable="false">` +
+        `<use href="/icons/sprite.svg#${name}"></use></svg>`;
 
       const showFieldError = (name: string, message: string) => {
         const input = form.querySelector<
@@ -304,7 +339,7 @@ const submitLabel =
             : "background:var(--color-danger-50);border-color:rgb(180 35 24/.25);color:var(--color-danger-700)";
         status.innerHTML =
           `<div style="${colours}" class="flex items-start gap-2.5 rounded-[var(--radius-md)] border px-4 py-3.5 text-[14.5px] font-medium">` +
-          `<span aria-hidden="true">${tone === "success" ? "✓" : "⚠"}</span>` +
+          iconSvg(tone === "success" ? "circle-check" : "circle-alert") +
           `<span><b style="display:block">${escapeHtml(title)}</b>${escapeHtml(body)}${emailLink}</span></div>`;
       };
 
@@ -346,7 +381,10 @@ const submitLabel =
         }
 
         submit.disabled = true;
-        submit.textContent = form.dataset.msgSending ?? "Sending…";
+        submitSpinner?.classList.remove("hidden");
+        if (submitLabelEl) {
+          submitLabelEl.textContent = form.dataset.msgSending ?? "Sending…";
+        }
         status.innerHTML = "";
 
         try {
@@ -422,7 +460,10 @@ const submitLabel =
             }
           }
           submit.disabled = false;
-          submit.textContent = form.dataset.msgSubmit ?? "Send";
+          submitSpinner?.classList.add("hidden");
+          if (submitLabelEl) {
+            submitLabelEl.textContent = form.dataset.msgSubmit ?? "Send";
+          }
         }
       });
     });
