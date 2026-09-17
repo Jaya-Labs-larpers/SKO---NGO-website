@@ -17,9 +17,11 @@ interface Props {
   /** Used when the CMS page is missing entirely. */
   fallbackTitleKey: UIKey;
   trail?: Crumb[];
+  /** Sprite icon shown above the hero title, e.g. sko-child-protection on Safeguarding. */
+  heroIcon?: string;
 }
 
-const { lang, slug, fallbackTitleKey, trail } = Astro.props;
+const { lang, slug, fallbackTitleKey, trail, heroIcon } = Astro.props;
 
 const page = await getPage(slug);
 const title = pick(page?.title, lang);
@@ -45,6 +47,8 @@ const seo = resolveSeo(page?.seo, lang, {
     intro={intro.value}
     introLang={intro.isFallback ? intro.lang : undefined}
     trail={trail ?? [{ label: heading }]}
+    icon={heroIcon}
+    iconSize={48}
   />
 
   <section class="section">

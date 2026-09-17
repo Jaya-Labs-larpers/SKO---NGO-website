@@ -59,14 +59,14 @@ const seo = resolveSeo(page?.seo, lang, {
 
   <section class="section bg-[color:var(--color-surface-subtle)] pt-0">
     <div class="wrap pt-[var(--spacing-section)]">
-      <SectionHeading title={t(lang, 'directorMessage')} />
+      <SectionHeading title={t(lang, 'directorMessage')} icon="message-square" />
       <div class="mt-8"><DirectorMessage lang={lang} director={director} /></div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <SectionHeading title={t(lang, 'orgStructure')} />
+      <SectionHeading title={t(lang, 'orgStructure')} icon="layers" />
       <div class="mt-6.5"><OrgChart lang={lang} chart={chart} /></div>
     </div>
   </section>
@@ -75,7 +75,7 @@ const seo = resolveSeo(page?.seo, lang, {
     team.length > 0 && (
       <section class="section pt-0">
         <div class="wrap">
-          <SectionHeading title={t(lang, 'ourTeam')} />
+          <SectionHeading title={t(lang, 'ourTeam')} icon="users" />
           <ul class="mt-8 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
             {team.map((member) => {
               const name = pick(member.name, lang);

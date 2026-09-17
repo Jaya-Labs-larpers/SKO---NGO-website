@@ -5,6 +5,7 @@ import { pick, t, text } from '~/lib/i18n/utils';
 import { hasImage, imageUrl } from '~/lib/sanity/image';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
 import RichText from './RichText.astro';
+import Icon from '~/components/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -105,10 +106,7 @@ const fullUrl = chart.image && hasImage(chart.image) ? imageUrl(chart.image, { w
       class="grid h-10 w-10 flex-none place-items-center rounded-[var(--radius-md)] border border-[color:var(--color-line-strong)] bg-white text-[color:var(--color-ink-900)]"
       aria-label={t(lang, 'closeMenu')}
     >
-      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" fill="none">
-        <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-        ></path>
-      </svg>
+      <Icon name="x" size={20} />
     </button>
   </div>
   <div class="overflow-auto p-3" style="touch-action: pinch-zoom;">

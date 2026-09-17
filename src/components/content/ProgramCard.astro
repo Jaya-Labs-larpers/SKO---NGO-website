@@ -3,6 +3,8 @@ import type { Locale } from '~/lib/i18n/config';
 import type { Program } from '~/lib/content/types';
 import { localizePath, pick, t } from '~/lib/i18n/utils';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
+import Icon from '~/components/Icon.astro';
+import { iconForProgram } from '~/lib/programIcons';
 
 interface Props {
   lang: Locale;
@@ -18,6 +20,7 @@ const href = localizePath(`/programs/${program.slug}`, lang);
 <article class="card group relative">
   <ResponsiveImage image={program.image} lang={lang} alt="" aspect="3/2" />
   <div class="flex flex-1 flex-col gap-2.5 p-5.5 pb-6">
+    <Icon name={iconForProgram(program.slug)} size={40} class="text-[color:var(--color-blue-700)]" />
     <h3
       class="text-[19px] leading-[1.3] tracking-[-0.01em]"
       lang={title.isFallback ? title.lang : undefined}
