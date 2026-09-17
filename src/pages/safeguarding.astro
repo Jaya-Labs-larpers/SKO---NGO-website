@@ -2,6 +2,7 @@
 import { getReports } from '~/lib/content';
 import GenericPage from '~/page-templates/GenericPage.astro';
 import ReportList from '~/components/content/ReportList.astro';
+import Icon from '~/components/Icon.astro';
 import { t } from '~/lib/i18n/utils';
 
 const lang = 'en' as const;
@@ -13,11 +14,19 @@ const policies = (await getReports()).filter((report) => report.type === 'policy
   Khmer routes render from one source and can never drift apart.
   Locale: en
 -->
-<GenericPage lang={lang} slug="safeguarding" fallbackTitleKey="pageSafeguarding">
+<GenericPage
+  lang={lang}
+  slug="safeguarding"
+  fallbackTitleKey="pageSafeguarding"
+  heroIcon="sko-child-protection"
+>
   {
     policies.length > 0 && (
       <div class="mt-9">
-        <h2 class="mb-4 text-[length:var(--text-h3)]">{t(lang, 'navSafeguarding')}</h2>
+        <h2 class="mb-4 flex items-center gap-2.5 text-[length:var(--text-h3)]">
+          <Icon name="shield-check" size={24} class="text-[color:var(--color-blue-700)]" />
+          {t(lang, 'navSafeguarding')}
+        </h2>
         <ReportList lang={lang} reports={policies} />
       </div>
     )
