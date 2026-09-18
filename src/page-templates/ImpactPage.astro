@@ -34,7 +34,7 @@ const heading = t(lang, 'pageImpact');
       <p
         class="mt-5 flex max-w-[68ch] gap-2.5 rounded-r-[var(--radius-md)] border-l-[3px] border-[color:var(--color-blue-700)] bg-[color:var(--color-aqua-50)] px-4.5 py-4 text-[14.5px] text-[color:var(--color-ink-700)]"
       >
-        <Icon name="info" size={16} class="mt-1 flex-none text-[color:var(--color-blue-700)]" />
+        <Icon name="information-circle" size={16} class="mt-1 flex-none text-[color:var(--color-blue-700)]" />
         <span><b>{t(lang, 'methodologyTitle')}</b> {t(lang, 'methodologyBody')}</span>
       </p>
       <RichText blocks={page?.body} lang={lang} class="mt-8" />
@@ -58,7 +58,7 @@ const heading = t(lang, 'pageImpact');
       }
       <p class="mt-8">
         <a href={localizePath('/reports', lang)} class="link-arrow">
-          <Icon name="file-text" size={16} />
+          <Icon name="document-text" size={16} />
           {t(lang, 'seeReports')}
           <Icon name="arrow-right" size={16} class="arrow" />
         </a>

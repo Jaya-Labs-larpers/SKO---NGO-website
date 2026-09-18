@@ -42,7 +42,7 @@ const barTone = ['bg-[color:var(--color-blue-700)]', 'bg-[color:var(--color-sky-
     qrCodes.length > 0 && (
       <section class="section">
         <div class="wrap">
-          <SectionHeading title={t(lang, 'scanToGive')} icon="sko-khqr" />
+          <SectionHeading title={t(lang, 'scanToGive')} icon="device-phone-mobile" />
           <ul class="mt-7.5 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3">
             {qrCodes.map((qr) => {
               const label = pick(qr.label, lang);
@@ -70,7 +70,7 @@ const barTone = ['bg-[color:var(--color-blue-700)]', 'bg-[color:var(--color-sky-
                       class="mt-1.5 flex items-center justify-center gap-1.5 text-[13.5px] text-[color:var(--color-ink-400)]"
                       lang={instructions.isFallback ? instructions.lang : undefined}
                     >
-                      <Icon name="smartphone" size={16} />
+                      <Icon name="device-phone-mobile" size={16} />
                       {instructions.value}
                     </span>
                   )}
@@ -86,7 +86,7 @@ const barTone = ['bg-[color:var(--color-blue-700)]', 'bg-[color:var(--color-sky-
   <section class="section bg-[color:var(--color-surface-subtle)] pt-0">
     <div class="wrap grid gap-12 pt-[var(--spacing-section)] lg:grid-cols-[1.25fr_1fr]">
       <div>
-        <SectionHeading title={t(lang, 'bankTransfer')} icon="landmark" />
+        <SectionHeading title={t(lang, 'bankTransfer')} icon="building-library" />
         {
           accounts.map((account) => (
             <dl class="mt-5 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white">
@@ -115,7 +115,7 @@ const barTone = ['bg-[color:var(--color-blue-700)]', 'bg-[color:var(--color-sky-
                         data-copied-label={t(lang, 'copied')}
                         data-copy-label={t(lang, 'copy')}
                       >
-                        <Icon name="copy" size={16} />
+                        <Icon name="document-duplicate" size={16} />
                         <span data-copy-text>{t(lang, 'copy')}</span>
                       </button>
                     </dd>

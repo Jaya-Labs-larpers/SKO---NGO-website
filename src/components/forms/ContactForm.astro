@@ -132,7 +132,7 @@ const submitLabel =
       </label>
       <div class="relative">
         <Icon
-          name="mail"
+          name="envelope"
           size={16}
           class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[color:var(--color-ink-300)]"
         />
@@ -191,7 +191,7 @@ const submitLabel =
       </label>
       <div class="relative">
         <Icon
-          name="message-square"
+          name="chat-bubble-left"
           size={16}
           class="pointer-events-none absolute top-3.5 left-3 text-[color:var(--color-ink-300)]"
         />
@@ -243,7 +243,7 @@ const submitLabel =
 
     <div>
       <button type="submit" class="btn btn-primary" data-submit>
-        <span class="hidden" data-submit-spinner><Icon name="loader" size={16} class="animate-spin" /></span>
+        <span class="hidden" data-submit-spinner><span class="pending-ring" aria-hidden="true"></span></span>
         <span data-submit-label>{submitLabel}</span>
       </button>
     </div>

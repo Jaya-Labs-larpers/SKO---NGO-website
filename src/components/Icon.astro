@@ -1,53 +1,90 @@
 ---
 /**
- * Icon.astro — one sprite, currentColor, per SKO icon guideline §4/§6/§7.
+ * Icon.astro — one sprite, currentColor. v3: Heroicons 2.2.0 outline, 1.5 px stroke from CSS.
+ * See docs/16-icons-v3-handoff.md for the name table and the rules.
  *
- *   <Icon name="map-pin" />                          decorative, beside a visible label
- *   <Icon name="menu" label="Open menu" />           carries meaning on its own
- *   <Icon name="heart" size={20} class="text-white" />
- *   <Icon name="heart" inline />                     inline the path instead of <use> (above-the-fold header icons)
+ *   <Icon name="envelope" />                          20 px, aria-hidden (icon beside visible text)
+ *   <Icon name="bars-3" size={24} label="Menu" />     icon-only → role="img" + aria-label
+ *   <Icon name="language" size={16} inline />         inline the paths (above-the-fold icons)
  *
- * `name` must be an id in public/icons/sprite.svg (see assets/icons/manifest.json).
+ * `name` must be an id in public/icons/sprite.svg. The build fails if it is not —
+ * that is how un-remapped v1 (Lucide) names are caught.
  * Colour comes from CSS `color` on the parent or the class — never hardcode a hex here.
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import type { HTMLAttributes } from 'astro/types';
 
 interface Props {
   name: string;
-  size?: 16 | 20 | 24 | 32 | 40 | 48;
-  label?: string;      // if set, the icon is announced; otherwise aria-hidden
-  inline?: boolean;    // inline the symbol body instead of referencing the sprite
+  size?: number; // px; 16 inline text · 20 default UI · 24 headers · 32–48 cards/stats/heroes
+  label?: string; // set only for icon-only controls; otherwise the icon is aria-hidden
+  inline?: boolean; // embed the symbol body instead of referencing the sprite
   class?: string;
 }
 const { name, size = 20, label, inline = false, class: className = '' } = Astro.props;
 
-let body = '';
-if (inline) {
-  const sprite = readFileSync(resolve(process.cwd(), 'public/icons/sprite.svg'), 'utf8');
-  const m = sprite.match(new RegExp(`<symbol id="${name}"[^>]*>(.*?)</symbol>`, 's'));
-  if (!m) throw new Error(`Icon "${name}" is not in sprite.svg`);
-  body = m[1];
+const sprite = readFileSync(resolve(process.cwd(), 'public/icons/sprite.svg'), 'utf8');
+const m = sprite.match(new RegExp(`<symbol id="${name}"[^>]*>([\\s\\S]*?)</symbol>`));
+if (!m) {
+  throw new Error(
+    `Icon "${name}" is not in public/icons/sprite.svg (v1 Lucide name? see docs/16-icons-v3-handoff.md §1)`,
+  );
 }
-const a11y = label
+const body = m[1];
+
+const a11y: HTMLAttributes<'svg'> = label
   ? { role: 'img', 'aria-label': label }
   : { 'aria-hidden': 'true', focusable: 'false' };
 ---
-<svg
-  class={`icon ${className}`}
-  width={size}
-  height={size}
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  stroke-width="2"
-  stroke-linecap="round"
-  stroke-linejoin="round"
-  {...a11y}
->
+
+<svg class={`icon ${className}`} width={size} height={size} viewBox="0 0 24 24" {...a11y}>
   {inline ? <Fragment set:html={body} /> : <use href={`/icons/sprite.svg#${name}`} />}
 </svg>
 
 <style is:global>
-  .icon { flex: none; display: inline-block; vertical-align: -0.2em; }
+  /*
+   * In the base layer on purpose. Astro injects a component's global styles
+   * unlayered, which puts them ahead of every Tailwind utility — so an icon
+   * could never be hidden or re-laid-out from its call site, and the header's
+   * close icon rendered on top of its menu icon. Inside @layer base this still
+   * beats preflight's `svg { display: block }` on specificity and loses to
+   * utilities, which is the order a caller expects.
+   *
+   * The sprite carries no colour or stroke width of its own; this rule decides.
+   * stroke-width is 1.5, not 2 (v3).
+   */
+  @layer base {
+    .icon {
+      display: inline-block;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: -0.15em;
+    }
+    /* pending state — replaces v1's animated `loader` glyph */
+    .pending-ring {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      flex: none;
+      border: 1.5px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: sko-spin 1s linear infinite;
+    }
+    @keyframes sko-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pending-ring {
+        animation: none;
+      }
+    }
+  }
 </style>

@@ -43,7 +43,7 @@ const heading = t(lang, 'pageContact');
               class="link-arrow mt-2.5 inline-flex"
             >
               {t(lang, 'viewOnGoogleMaps')}
-              <Icon name="external-link" size={16} class="arrow" />
+              <Icon name="arrow-top-right-on-square" size={16} class="arrow" />
             </a>
           )
         }
@@ -73,7 +73,7 @@ const heading = t(lang, 'pageContact');
           {
             settings.email && (
               <p class="flex items-center gap-2">
-                <Icon name="mail" size={20} />
+                <Icon name="envelope" size={20} />
                 <a href={`mailto:${settings.email}`} class="text-[color:var(--color-blue-800)]">
                   {settings.email}
                 </a>
@@ -103,7 +103,7 @@ const heading = t(lang, 'pageContact');
             class="mt-6.5 flex gap-3 rounded-[var(--radius-md)] bg-[color:var(--color-blue-200)] px-4.5 py-4 text-[14.5px] text-[color:var(--color-ink-700)]"
             lang={safeguarding.isFallback ? safeguarding.lang : undefined}
           >
-            <Icon name="shield-alert" size={20} class="mt-0.5 flex-none text-[#0A55A0]" />
+            <Icon name="shield-exclamation" size={20} class="mt-0.5 flex-none text-[#0A55A0]" />
             <span>{safeguarding.value}</span>
           </p>
         </div>

@@ -21,7 +21,7 @@ const year = new Date().getFullYear();
 /** CMS platform names are free text (e.g. "Facebook"); map the known ones to a sprite icon. */
 const socialIcon: Record<string, string> = {
   facebook: 'sko-facebook',
-  telegram: 'send',
+  telegram: 'paper-airplane',
 };
 function iconForPlatform(platform: string): string {
   return socialIcon[platform.toLowerCase()] ?? 'link';
@@ -63,7 +63,7 @@ function iconForPlatform(platform: string): string {
                 href={`mailto:${settings.email}`}
                 class="flex items-center gap-2 text-white/70 no-underline hover:text-white"
               >
-                <Icon name="mail" size={20} class="text-[color:var(--color-sky-400)]" />
+                <Icon name="envelope" size={20} class="text-[color:var(--color-sky-400)]" />
                 {settings.email}
               </a>
             )
@@ -121,7 +121,7 @@ function iconForPlatform(platform: string): string {
         class="flex items-center gap-1.5"
         lang={registration.isFallback ? registration.lang : undefined}
       >
-        {registration.value && <Icon name="badge-check" size={16} class="text-[color:var(--color-sky-400)]" />}
+        {registration.value && <Icon name="check-badge" size={16} class="text-[color:var(--color-sky-400)]" />}
         © {year} {orgName}. {registration.value}
       </span>
       <span class="flex gap-4.5">

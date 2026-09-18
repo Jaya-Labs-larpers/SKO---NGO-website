@@ -26,11 +26,11 @@ const categoryLabels: Record<string, Record<Locale, string>> = {
 };
 
 const groupIcon: Record<string, string> = {
-  government: 'landmark',
-  ingo: 'globe',
-  foundation: 'building-2',
-  'un-agency': 'handshake',
-  corporate: 'handshake',
+  government: 'building-library',
+  ingo: 'globe-alt',
+  foundation: 'building-office-2',
+  'un-agency': 'sko-handshake',
+  corporate: 'sko-handshake',
 };
 
 const groups = [...new Set(partners.map((partner) => partner.category ?? 'other'))];
@@ -52,7 +52,7 @@ const groups = [...new Set(partners.map((partner) => partner.category ?? 'other'
           groups.map((group) => (
             <div class="mb-10">
               <h2 class="mb-4 flex items-center gap-2 font-mono text-[11px] font-semibold tracking-[0.1em] text-[color:var(--color-ink-400)] uppercase">
-                <Icon name={groupIcon[group] ?? 'handshake'} size={20} class="text-[color:var(--color-blue-700)]" />
+                <Icon name={groupIcon[group] ?? 'sko-handshake'} size={20} class="text-[color:var(--color-blue-700)]" />
                 {categoryLabels[group]?.[lang] ?? group}
               </h2>
               <PartnerWall
