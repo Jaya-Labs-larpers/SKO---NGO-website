@@ -59,14 +59,14 @@ const seo = resolveSeo(page?.seo, lang, {
 
   <section class="section bg-[color:var(--color-surface-subtle)] pt-0">
     <div class="wrap pt-[var(--spacing-section)]">
-      <SectionHeading title={t(lang, 'directorMessage')} icon="message-square" />
+      <SectionHeading title={t(lang, 'directorMessage')} icon="chat-bubble-left" />
       <div class="mt-8"><DirectorMessage lang={lang} director={director} /></div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <SectionHeading title={t(lang, 'orgStructure')} icon="layers" />
+      <SectionHeading title={t(lang, 'orgStructure')} icon="square-3-stack-3d" />
       <div class="mt-6.5"><OrgChart lang={lang} chart={chart} /></div>
     </div>
   </section>
