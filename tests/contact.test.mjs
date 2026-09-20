@@ -309,3 +309,21 @@ test('rate-limit keys use a fixed window so a burst cannot extend its own expiry
   assert.equal(puts[1].ttl, 60); // clamped to KV's 60-second minimum
   assert.equal(puts[2].ttl, 600);
 });
+
+test('line breaks in the name never reach the mail subject header', async (t) => {
+  let mail;
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    if (String(url).includes('siteverify')) return Response.json({ success: true });
+    mail = JSON.parse(options.body);
+    return Response.json({ id: 'mail-id' });
+  });
+  const response = await onRequest({
+    request: request(
+      JSON.stringify({ ...valid, name: 'Sender\r\nBcc: victim@example.com\nX-Injected: 1' }),
+    ),
+    env,
+  });
+  assert.equal(response.status, 200);
+  assert.doesNotMatch(mail.subject, /[\r\n]/, 'the subject is a single header line');
+  assert.match(mail.subject, /^\[SKO website\] general inquiry from Sender Bcc: victim@example\.com X-Injected: 1$/);
+});

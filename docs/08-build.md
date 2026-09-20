@@ -122,7 +122,7 @@ dialog, and in the "read as text" panel — which is the route that works at 360
 
 - **CMS `seo` overrides** now flow through `src/lib/seo.ts` — one place decides precedence, so it
   cannot drift between page types. The field was queried in Phase 3 but nothing consumed it.
-- **`Article` structured data** on activity detail; `JobPosting` on career detail.
+- **`Article` structured data** on activity detail.
 - **Homepage hero photo** is now a `siteSettings` field, with help text telling staff they needn't
   worry about the photo being busy or light — a white card holds the words, never the photo.
 - **Story avatars** — `useSilhouette` was in the schema but nothing rendered it. Stories now show an

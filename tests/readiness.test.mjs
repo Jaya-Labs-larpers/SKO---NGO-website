@@ -60,57 +60,38 @@ test("production rejects development configuration while explicit previews remai
 test("production content rejects unfinished markers and untranslated Khmer", async () => {
   const { contentFailures } = await import("../scripts/readiness.mjs");
   assert.deepEqual(
-    contentFailures('<html lang="km"><p>ភាសាខ្មែរ</p></html>', "/km/about/"),
-    [],
-  );
-  assert.deepEqual(
     contentFailures(
       '<html lang="km"><a hreflang="en" lang="en" href="/about/">EN</a></html>',
-      "/km/about/",
+      '/km/about/',
     ),
     [],
   );
-  assert.ok(contentFailures("<p>[NEEDS SKO]</p>", "/about/").length);
-  assert.ok(contentFailures("<p>[PLACEHOLDER QR CODE]</p>", "/donate/").length);
+  assert.ok(contentFailures('<p>[NEEDS SKO]</p>', '/about/').length);
+  assert.ok(contentFailures('<p>[PLACEHOLDER MAP]</p>', '/contact/').length);
+  assert.ok(contentFailures('<h3>[EXAMPLE] A training day</h3>', '/activities/').length);
+  assert.ok(contentFailures('<div>[LOGO]</div>', '/partners/').length);
   assert.ok(
-    contentFailures(
-      '<html lang="km"><p lang="en">Fallback</p></html>',
-      "/km/about/",
-    ).length,
+    contentFailures('<html lang="km"><p lang="en">Fallback</p></html>', '/km/about/').length,
   );
 });
 
-test("production donation readiness requires real QR images, bank details and contact inboxes", async () => {
-  const { siteSettingsFailures } = await import("../scripts/readiness.mjs");
+test('production readiness requires approved contact inboxes', async () => {
+  const { siteSettingsFailures } = await import('../scripts/readiness.mjs');
   assert.ok(siteSettingsFailures({}).length);
-  const settings = {
-    email: "info@ngo.org",
-    partnerEmail: "partners@ngo.org",
-    donation: {
-      qrCodes: [{ image: { asset: { url: "https://cdn.sanity.io/qr.png" } } }],
-      bankAccounts: [
-        {
-          bankName: "Bank",
-          accountName: "NGO",
-          accountNumber: "123456",
-          currency: "USD",
-        },
-      ],
-    },
-  };
-  assert.deepEqual(siteSettingsFailures(settings), []);
-  assert.ok(
+  assert.deepEqual(
     siteSettingsFailures({
-      ...settings,
-      donation: { ...settings.donation, qrCodes: [{ image: null }] },
-    }).length,
+      email: 'info@ngo.org',
+      partnerEmail: 'partners@ngo.org',
+    }),
+    [],
   );
   assert.ok(
     siteSettingsFailures({
-      ...settings,
-      donation: { ...settings.donation, bankAccounts: [{ bankName: "N/A" }] },
+      email: 'info@example.com',
+      partnerEmail: 'partners@ngo.org',
     }).length,
   );
+  assert.ok(siteSettingsFailures({ email: 'info@ngo.org', partnerEmail: 'TBD' }).length);
 });
 
 test("explicit fixture previews do not query a configured CMS project", async () => {
@@ -186,4 +167,11 @@ test("explicit local production content needs a real domain and disabled forms, 
   assert.equal(config.hasSanity, false);
   assert.equal(config.contactEnabled, false);
   assert.equal(config.preventIndexing, true);
+});
+
+test('the marker check runs outside production, where the Khmer rule does not', async () => {
+  const { markerFailures } = await import('../scripts/readiness.mjs');
+  assert.deepEqual(markerFailures('<p>Finished copy.</p>'), []);
+  assert.ok(markerFailures('<p>[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]</p>').length);
+  assert.deepEqual(markerFailures('<html lang="km"><p lang="en">Fallback</p></html>'), []);
 });

@@ -26,6 +26,15 @@ const [page, director, chart, team] = await Promise.all([
   getTeam(),
 ]);
 
+/**
+ * The structure section appears only once there is a structure to show — an
+ * empty heading over an empty frame is scaffolding, and scaffolding is not
+ * something a visitor should be shown.
+ */
+const hasOrgChart =
+  Boolean(chart.image?.asset) ||
+  Object.values(chart.textVersion ?? {}).some((value) => Array.isArray(value) && value.length > 0);
+
 const title = pick(page?.title, lang);
 const intro = pick(page?.intro, lang);
 const heading = title.value ?? t(lang, 'pageAbout');
@@ -59,23 +68,29 @@ const seo = resolveSeo(page?.seo, lang, {
 
   <section class="section bg-[color:var(--color-surface-subtle)] pt-0">
     <div class="wrap pt-[var(--spacing-section)]">
-      <SectionHeading title={t(lang, 'directorMessage')} icon="chat-bubble-left" />
+      <SectionHeading title={t(lang, 'directorMessage')} />
       <div class="mt-8"><DirectorMessage lang={lang} director={director} /></div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <SectionHeading title={t(lang, 'orgStructure')} icon="square-3-stack-3d" />
-      <div class="mt-6.5"><OrgChart lang={lang} chart={chart} /></div>
-    </div>
-  </section>
+  {
+    hasOrgChart && (
+      <section class="section">
+        <div class="wrap">
+          <SectionHeading title={t(lang, 'orgStructure')} />
+          <div class="mt-6.5">
+            <OrgChart lang={lang} chart={chart} />
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   {
     team.length > 0 && (
       <section class="section pt-0">
         <div class="wrap">
-          <SectionHeading title={t(lang, 'ourTeam')} icon="users" />
+          <SectionHeading title={t(lang, 'ourTeam')} />
           <ul class="mt-8 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
             {team.map((member) => {
               const name = pick(member.name, lang);

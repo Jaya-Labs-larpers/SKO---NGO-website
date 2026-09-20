@@ -12,9 +12,11 @@ interface Props {
   lang: Locale;
   pathname: string;
   settings: SiteSettings;
+  /** Float the header over a full-bleed hero until the page scrolls. */
+  overlay?: boolean;
 }
 
-const { lang, pathname, settings } = Astro.props;
+const { lang, pathname, settings, overlay = false } = Astro.props;
 
 const orgName = text(settings.orgName, lang);
 
@@ -33,8 +35,12 @@ function isCurrent(path: string): boolean {
 }
 ---
 
-<header class="site-header relative z-20 border-b border-[color:var(--color-line-subtle)] bg-white">
-  <div class="flex h-[68px] w-full items-center gap-6 px-[var(--spacing-gutter)] lg:h-[76px]">
+<header
+  class="site-header sticky top-0 z-20"
+  data-overlay={overlay ? '' : undefined}
+  data-at-top={overlay ? '' : undefined}
+>
+  <div class="flex h-[var(--header-h)] w-full items-center gap-6 px-[var(--spacing-gutter)]">
     <a href={localizePath('/', lang)} class="flex flex-none items-center gap-3 no-underline">
       {
         hasLogo && logoSrc ? (
@@ -88,9 +94,9 @@ function isCurrent(path: string): boolean {
       class="ml-auto flex items-center gap-3 lg:ml-0 lg:border-l lg:border-[color:var(--color-line)] lg:pl-3.5"
     >
       <LanguageToggle lang={lang} pathname={pathname} />
-      <a href={localizePath('/donate', lang)} class="btn btn-primary btn-sm hidden sm:inline-flex">
-        <Icon name="heart" size={16} inline />
-        {t(lang, 'navDonate')}
+      <a href={localizePath('/contact', lang)} class="btn btn-primary btn-sm hidden sm:inline-flex">
+        <Icon name="envelope" size={16} inline />
+        {t(lang, 'contactUs')}
       </a>
       <button
         type="button"
@@ -108,6 +114,8 @@ function isCurrent(path: string): boolean {
     </div>
   </div>
 </header>
+
+{overlay && <div class="header-sentinel" aria-hidden="true" />}
 
 <!-- Mobile navigation panel -->
 <div
@@ -146,8 +154,8 @@ function isCurrent(path: string): boolean {
       ))
     }
 
-    <a href={localizePath('/donate', lang)} class="btn btn-primary btn-block mt-6 py-4">
-      {t(lang, 'navDonate')}
+    <a href={localizePath('/contact', lang)} class="btn btn-primary btn-block mt-6 py-4">
+      {t(lang, 'contactUs')}
     </a>
     <a href={localizePath('/volunteer', lang)} class="btn btn-secondary btn-block mt-2.5 py-4">
       {t(lang, 'navVolunteer')}
@@ -164,6 +172,22 @@ function isCurrent(path: string): boolean {
 </div>
 
 <script>
+  /**
+   * Overlay header: transparent while the top of the hero is in view, solid
+   * once the page has scrolled past it. Watching a marker element rather than
+   * the scroll offset means the browser reports the crossing itself — two
+   * callbacks per visit instead of one per frame.
+   */
+  const overlayHeader = document.querySelector<HTMLElement>('.site-header[data-overlay]');
+  const sentinel = document.querySelector('.header-sentinel');
+
+  if (overlayHeader && sentinel) {
+    new IntersectionObserver(([entry]) => {
+      if (!entry) return;
+      overlayHeader.toggleAttribute('data-at-top', entry.isIntersecting);
+    }).observe(sentinel);
+  }
+
   const toggle = document.getElementById('menu-toggle');
   const closeButton = document.getElementById('menu-close');
   const panel = document.getElementById('mobile-nav');

@@ -15,7 +15,6 @@ interface Props {
   /** Above-the-fold images only — skips lazy loading and raises priority. */
   eager?: boolean;
   class?: string;
-  placeholder?: string;
 }
 
 const {
@@ -26,13 +25,14 @@ const {
   aspect = '3/2',
   eager = false,
   class: className = '',
-  placeholder = '[PLACEHOLDER PHOTO]',
 } = Astro.props;
 
 /**
- * A missing image is scaffolding, not content: when there is no alt text the
- * placeholder is hidden from assistive tech entirely rather than announced as
- * "[PLACEHOLDER PHOTO]".
+ * A missing image reserves its box and says nothing. It used to print
+ * "[PLACEHOLDER PHOTO]" — a note to the team that a visitor was never meant to
+ * read. The box still holds the space so layout and CLS do not change when the
+ * real photograph lands, and it is hidden from assistive tech, which has no use
+ * for an image that does not exist.
  */
 const present = hasImage(image);
 const altText = alt ?? (image ? text(image.alt, lang) : '');
@@ -61,11 +61,7 @@ const lqip = image?.lqip ?? null;
     <div
       class:list={['media-placeholder w-full h-full', className]}
       style={`aspect-ratio:${aspect}`}
-      role={altText ? 'img' : undefined}
-      aria-label={altText || undefined}
-      aria-hidden={altText ? undefined : 'true'}
-    >
-      {placeholder}
-    </div>
+      aria-hidden="true"
+    />
   )
 }

@@ -134,7 +134,9 @@ what a site is *about*.
 
 ## Two honest caveats
 
-**None of this substitutes for content.** The site is currently full of `[PLACEHOLDER]`. Schema
+**None of this substitutes for content.** Much of the site is still unwritten — the gaps are
+tracked in `fixtures.ts` and listed in `SKO-content-review.html`, and render as absent sections
+rather than as `[PLACEHOLDER]` text. Schema
 markup describing placeholder text achieves nothing — worse, publishing structured data that
 describes empty content can be actively counterproductive. **Tier 1 items 2 and 3 should be done
 *after* SKO's real copy is in**, not before.
