@@ -149,9 +149,13 @@ falls back to a system font · 320px and 200%-zoom screenshots per page.
 
 ## 8. Notes on the placeholders
 
-Everything in the preview is marked `[PLACEHOLDER]`. **No SKO facts, statistics, staff names, or a
+Everything in *this preview file* is marked `[PLACEHOLDER]`. **No SKO facts, statistics, staff names, or a
 director's name have been invented** — the numbers shown (1,240 / 3,800 / 18 / 96%) are visibly bracketed
 placeholders demonstrating the component, not claims.
+
+The preview is a design document, not the site. On the site itself those markers never render: the
+content layer drops marked values on the way out, so an unfinished section is absent rather than
+showing a note meant for the team. See `src/lib/content/placeholders.ts`.
 
 Khmer strings are structurally correct and idiomatic enough to demonstrate typography, but they are
 placeholders. They must be written or reviewed by an SKO staff member before launch. Machine-translating a

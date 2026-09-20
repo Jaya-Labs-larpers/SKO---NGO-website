@@ -79,20 +79,22 @@ function renderSpans(block: PortableTextBlock): string {
 }
 
 function renderImage(block: PortableImageBlock, lang: Locale): string {
+  // An image block whose asset has not been uploaded yet is dropped rather than
+  // drawn as an empty frame. Unlike a card or a hero this reserves no slot in
+  // the layout, so there is nothing to hold open, and a caption without its
+  // picture reads as a mistake.
+  if (!hasImage(block)) return '';
+
   const alt = esc(text(block.alt, lang));
   const captionPicked = pick(block.caption, lang);
   const caption = captionPicked.value ? esc(captionPicked.value) : '';
   const captionLang = captionPicked.isFallback ? ` lang="${captionPicked.lang}"` : '';
 
-  const media = hasImage(block)
-    ? (() => {
-        const src = imageUrl(block, { width: 1200 });
-        const srcset = imageSrcSet(block);
-        const width = block.dimensions?.width ?? 1200;
-        const height = block.dimensions?.height ?? 800;
-        return `<img src="${esc(src ?? '')}" srcset="${esc(srcset ?? '')}" sizes="(min-width: 48rem) 44rem, 100vw" width="${width}" height="${height}" alt="${alt}" loading="lazy" decoding="async" class="w-full rounded-[var(--radius-lg)]">`;
-      })()
-    : `<div class="media-placeholder rounded-[var(--radius-lg)]" style="aspect-ratio:3/2">[PLACEHOLDER IMAGE]</div>`;
+  const src = imageUrl(block, { width: 1200 });
+  const srcset = imageSrcSet(block);
+  const width = block.dimensions?.width ?? 1200;
+  const height = block.dimensions?.height ?? 800;
+  const media = `<img src="${esc(src ?? '')}" srcset="${esc(srcset ?? '')}" sizes="(min-width: 48rem) 44rem, 100vw" width="${width}" height="${height}" alt="${alt}" loading="lazy" decoding="async" class="w-full rounded-[var(--radius-lg)]">`;
 
   const figcaption = caption
     ? `<figcaption class="mt-3 text-[color:var(--color-ink-400)] text-[0.9375rem]"${captionLang}>${caption}</figcaption>`
@@ -176,10 +178,7 @@ export function blocksToHtml(blocks: PortableBlock[] | null | undefined, lang: L
 }
 
 /** Plain text, for meta descriptions and excerpts. */
-export function blocksToPlainText(
-  blocks: PortableBlock[] | null | undefined,
-  limit = 160,
-): string {
+export function blocksToPlainText(blocks: PortableBlock[] | null | undefined, limit = 160): string {
   if (!blocks) return '';
   const parts: string[] = [];
   for (const block of blocks) {

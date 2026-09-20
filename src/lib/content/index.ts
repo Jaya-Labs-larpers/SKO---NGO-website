@@ -10,12 +10,13 @@ import { sanityClient } from '../sanity/client';
 import * as q from '../sanity/queries';
 import * as fixtures from './fixtures';
 import { isProductionDeployment, isLocalContent } from '../config';
+import { isEmptyLocaleString, stripPlaceholders } from './placeholders';
 import { siteSettingsFailures } from '../../../scripts/readiness.mjs';
 import type {
   Activity,
   DirectorMessage,
   ImpactStat,
-  JobPost,
+  LocaleString,
   OrgChart,
   Page,
   Partner,
@@ -26,17 +27,23 @@ import type {
   TeamMember,
 } from './types';
 
+/**
+ * Every read passes through `stripPlaceholders`, so an unfinished marker cannot
+ * reach a page whichever source it came from — a local fixture or a draft a
+ * staff member typed into Sanity. See ./placeholders.ts.
+ */
 async function fetchOr<T>(query: string, params: Record<string, unknown>, fallback: T): Promise<T> {
   if (!sanityClient) {
-    if (isProductionDeployment && !isLocalContent) throw new Error('[readiness] Sanity is required in production');
-    return fallback;
+    if (isProductionDeployment && !isLocalContent)
+      throw new Error('[readiness] Sanity is required in production');
+    return stripPlaceholders(fallback);
   }
   try {
     const result = await sanityClient.fetch<T>(query, params);
     if (isProductionDeployment && result == null) {
       throw new Error('[readiness] Required published CMS document is missing');
     }
-    return (result ?? fallback) as T;
+    return stripPlaceholders((result ?? fallback) as T);
   } catch (error) {
     // Fail the build loudly. A silently empty section discovered in production
     // is far worse than a build that stops here.
@@ -44,6 +51,13 @@ async function fetchOr<T>(query: string, params: Record<string, unknown>, fallba
     throw new Error(`[sko] GROQ query failed — ${message}\nQuery: ${query.slice(0, 120)}…`);
   }
 }
+
+/**
+ * A document whose headline was nothing but a marker has no publishable form —
+ * it is example scaffolding, so it leaves the listings and loses its route
+ * rather than appearing as an untitled card.
+ */
+const titled = (value?: LocaleString | null) => !isEmptyLocaleString(value);
 
 /* --- Singletons ------------------------------------------------------------ */
 
@@ -73,24 +87,28 @@ export async function getPage(slug: string): Promise<Page | null> {
 
 /* --- Programs -------------------------------------------------------------- */
 
-export function getPrograms(): Promise<Program[]> {
-  return fetchOr(q.programsQuery, {}, fixtures.programs);
+export async function getPrograms(): Promise<Program[]> {
+  const programs = await fetchOr(q.programsQuery, {}, fixtures.programs);
+  return programs.filter((program) => titled(program.title));
 }
 
 export async function getProgram(slug: string): Promise<Program | null> {
   const fallback = fixtures.programs.find((program) => program.slug === slug) ?? null;
-  return fetchOr(q.programBySlugQuery, { slug }, fallback);
+  const program = await fetchOr(q.programBySlugQuery, { slug }, fallback);
+  return program && titled(program.title) ? program : null;
 }
 
 /* --- Activities ------------------------------------------------------------ */
 
-export function getActivities(): Promise<Activity[]> {
-  return fetchOr(q.activitiesQuery, {}, fixtures.activities);
+export async function getActivities(): Promise<Activity[]> {
+  const activities = await fetchOr(q.activitiesQuery, {}, fixtures.activities);
+  return activities.filter((activity) => titled(activity.title));
 }
 
 export async function getActivity(slug: string): Promise<Activity | null> {
   const fallback = fixtures.activities.find((activity) => activity.slug === slug) ?? null;
-  return fetchOr(q.activityBySlugQuery, { slug }, fallback);
+  const activity = await fetchOr(q.activityBySlugQuery, { slug }, fallback);
+  return activity && titled(activity.title) ? activity : null;
 }
 
 export async function getFeaturedActivities(limit = 3): Promise<Activity[]> {
@@ -101,39 +119,29 @@ export async function getFeaturedActivities(limit = 3): Promise<Activity[]> {
 
 /* --- Everything else ------------------------------------------------------- */
 
-export function getStories(): Promise<Story[]> {
-  return fetchOr(q.storiesQuery, {}, fixtures.stories);
+export async function getStories(): Promise<Story[]> {
+  const stories = await fetchOr(q.storiesQuery, {}, fixtures.stories);
+  return stories.filter((story) => titled(story.quote));
 }
 
-export function getPartners(): Promise<Partner[]> {
-  return fetchOr(q.partnersQuery, {}, fixtures.partners);
+export async function getPartners(): Promise<Partner[]> {
+  const partners = await fetchOr(q.partnersQuery, {}, fixtures.partners);
+  return partners.filter((partner) => partner.name?.trim());
 }
 
-export function getReports(): Promise<Report[]> {
-  return fetchOr(q.reportsQuery, {}, fixtures.reports);
+export async function getReports(): Promise<Report[]> {
+  const reports = await fetchOr(q.reportsQuery, {}, fixtures.reports);
+  return reports.filter((report) => titled(report.title));
 }
 
-export function getTeam(): Promise<TeamMember[]> {
-  return fetchOr(q.teamQuery, {}, fixtures.team);
+export async function getTeam(): Promise<TeamMember[]> {
+  const team = await fetchOr(q.teamQuery, {}, fixtures.team);
+  return team.filter((member) => titled(member.name));
 }
 
-export function getImpactStats(): Promise<ImpactStat[]> {
-  return fetchOr(q.impactStatsQuery, {}, fixtures.impactStats);
-}
-
-/**
- * Open positions only. Expired posts drop out at build time, which is why the
- * nightly rebuild cron exists (docs/04-tech-decisions.md ADR-007).
- */
-export function getJobs(): Promise<JobPost[]> {
-  const today = new Date().toISOString().slice(0, 10);
-  const open = fixtures.jobs.filter((job) => !job.deadline || job.deadline >= today);
-  return fetchOr(q.jobsQuery, { today }, open);
-}
-
-export async function getJob(slug: string): Promise<JobPost | null> {
-  const fallback = fixtures.jobs.find((job) => job.slug === slug) ?? null;
-  return fetchOr(q.jobBySlugQuery, { slug }, fallback);
+export async function getImpactStats(): Promise<ImpactStat[]> {
+  const stats = await fetchOr(q.impactStatsQuery, {}, fixtures.impactStats);
+  return stats.filter((stat) => titled(stat.label));
 }
 
 export type * from './types';

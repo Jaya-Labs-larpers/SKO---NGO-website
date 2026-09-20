@@ -126,6 +126,27 @@ const schema = z.object({
   formType: z.enum(['general', 'partner', 'volunteer']).default('general'),
   name: z.string().trim().min(2).max(120),
   email: z.email().trim().max(200),
+  /**
+   * Optional. An empty string is a legitimate value — the field is not
+   * required — so the shape check only runs once something was typed. 7-15
+   * digits is the E.164 range; the punctuation people type is allowed around
+   * them and stripped before counting.
+   */
+  phone: z
+    .string()
+    .trim()
+    .max(32)
+    .optional()
+    .default('')
+    .refine(
+      (value) => {
+        if (value === '') return true;
+        if (!/^\+?[\d\s().-]+$/.test(value)) return false;
+        const digits = value.replace(/\D/g, '').length;
+        return digits >= 7 && digits <= 15;
+      },
+      { error: 'phone' },
+    ),
   organization: z.string().trim().max(160).optional().default(''),
   country: z.string().trim().max(80).optional().default(''),
   message: z.string().trim().min(20).max(5000),
@@ -138,9 +159,17 @@ const schema = z.object({
  * never returns a user-facing sentence, because it does not know which of the
  * two languages the visitor is reading.
  */
-type ErrorCode = 'required' | 'email' | 'too_short' | 'too_long' | 'invalid';
+type ErrorCode = 'required' | 'email' | 'phone' | 'too_short' | 'too_long' | 'invalid';
 
-function codeFor(issue: { code: string; minimum?: unknown; origin?: unknown; format?: unknown }): ErrorCode {
+function codeFor(issue: {
+  code: string;
+  message?: string;
+  minimum?: unknown;
+  origin?: unknown;
+  format?: unknown;
+}): ErrorCode {
+  // The phone refine above sets its own message, which is the code itself.
+  if (issue.message === 'phone') return 'phone';
   // zod v4 reports string formats as invalid_format with `format: 'email'`.
   if (issue.code === 'invalid_format' && (issue.format === 'email' || issue.origin === 'email')) {
     return 'email';
@@ -400,6 +429,7 @@ async function handlePost(context: FunctionContext): Promise<Response> {
 
   const name = clean(data.name, 120);
   const email = clean(data.email, 200);
+  const phone = clean(data.phone, 32);
   const organization = clean(data.organization, 160);
   const country = clean(data.country, 80);
   const message = clean(data.message, 5000);
@@ -407,6 +437,7 @@ async function handlePost(context: FunctionContext): Promise<Response> {
   const rows: [string, string][] = [
     ['Name', name],
     ['Email', email],
+    ...(phone ? ([['Phone', phone]] as [string, string][]) : []),
     ...(organization ? ([['Organization', organization]] as [string, string][]) : []),
     ...(country ? ([['Country', country]] as [string, string][]) : []),
     ['Form', data.formType],
@@ -428,8 +459,14 @@ async function handlePost(context: FunctionContext): Promise<Response> {
     `<p style="margin-top:24px;color:#5f6b82;font-size:13px">Sent from the SKO website. Reply directly to answer the sender.</p>` +
     `</div>`;
 
+  // The subject is a mail header. `clean()` keeps line breaks because the
+  // message body legitimately has them, so the one value that reaches a header
+  // gets its own CR/LF strip — the same rule productionConfigured() applies to
+  // the configured addresses.
+  const subjectName = name.replace(/[\r\n]+/g, ' ').trim();
+
   try {
-    await sendEmail(env, to, `[SKO website] ${data.formType} inquiry from ${name}`, html, email);
+    await sendEmail(env, to, `[SKO website] ${data.formType} inquiry from ${subjectName}`, html, email);
   } catch {
     console.warn('[contact] send_failed');
     return json({ ok: false, error: 'send_failed' }, 502);

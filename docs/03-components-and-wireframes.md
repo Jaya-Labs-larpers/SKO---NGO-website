@@ -104,9 +104,6 @@
 
 **Volunteer** — Hero → roles → requirements incl. safeguarding screening note → ContactForm.
 
-**Careers** — Hero → JobCard list or EmptyState → general-application note.
-**Career detail** — Title, meta row, description, how to apply, deadline, back link.
-
 **Activities index** — Hero → optional category filter (plain links to `?`-less static filter pages, or drop filtering in v1) → 3-col ActivityCard grid → Pagination.
 **Activity detail** — Cover image → title, date, category → body → gallery → related program → prev/next → back to Activities.
 

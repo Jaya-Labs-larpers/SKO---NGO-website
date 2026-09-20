@@ -13,7 +13,6 @@ import {
   activity,
   directorMessage,
   impactStat,
-  jobPost,
   orgChart,
   page,
   partner,
@@ -51,6 +50,5 @@ export const schemaTypes = [
   teamMember,
   directorMessage,
   orgChart,
-  jobPost,
   impactStat,
 ];

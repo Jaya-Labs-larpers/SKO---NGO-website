@@ -111,13 +111,4 @@ export const orgChartQuery = `*[_type == "orgChart"][0]{
   image ${IMAGE}
 }`;
 
-export const jobsQuery = `*[_type == "jobPost" && (!defined(deadline) || deadline >= $today)] | order(deadline asc){
-  _id, "slug": slug.current, title, employmentType, location, deadline, publishedAt
-}`;
-
-export const jobBySlugQuery = `*[_type == "jobPost" && slug.current == $slug][0]{
-  _id, "slug": slug.current, title, employmentType, location, description, howToApply,
-  deadline, publishedAt
-}`;
-
 export const impactStatsQuery = `*[_type == "impactStat"] | order(order asc, _createdAt asc)${IMPACT_STAT}`;

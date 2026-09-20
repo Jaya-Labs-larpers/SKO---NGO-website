@@ -7,7 +7,6 @@ import PageHero from '~/components/content/PageHero.astro';
 import PartnerWall from '~/components/content/PartnerWall.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
-import Icon from '~/components/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -23,14 +22,6 @@ const categoryLabels: Record<string, Record<Locale, string>> = {
   government: { en: 'Government', km: 'រដ្ឋាភិបាល' },
   foundation: { en: 'Foundations', km: 'មូលនិធិ' },
   corporate: { en: 'Corporate', km: 'ក្រុមហ៊ុន' },
-};
-
-const groupIcon: Record<string, string> = {
-  government: 'building-library',
-  ingo: 'globe-alt',
-  foundation: 'building-office-2',
-  'un-agency': 'sko-handshake',
-  corporate: 'sko-handshake',
 };
 
 const groups = [...new Set(partners.map((partner) => partner.category ?? 'other'))];
@@ -51,8 +42,7 @@ const groups = [...new Set(partners.map((partner) => partner.category ?? 'other'
         ) : (
           groups.map((group) => (
             <div class="mb-10">
-              <h2 class="mb-4 flex items-center gap-2 font-mono text-[11px] font-semibold tracking-[0.1em] text-[color:var(--color-ink-400)] uppercase">
-                <Icon name={groupIcon[group] ?? 'sko-handshake'} size={20} class="text-[color:var(--color-blue-700)]" />
+              <h2 class="mb-4 font-mono text-[11px] font-semibold tracking-[0.1em] text-[color:var(--color-ink-400)] uppercase">
                 {categoryLabels[group]?.[lang] ?? group}
               </h2>
               <PartnerWall

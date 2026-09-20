@@ -43,8 +43,6 @@ Why: the homepage is the URL grant officers and international donors land on, an
 | `{L}/donate/` | `siteSettings.donation` | QR images + bank-wire table + "where your money goes". No payment code. |
 | `{L}/partner-with-us/` | `page` + form | Grant / partnership inquiry form → funder inbox |
 | `{L}/volunteer/` | `page` + form | |
-| `{L}/careers/` | `jobPost[]` | Open roles; empty state when none |
-| `{L}/careers/[slug]/` | `jobPost` | Apply by email — **no CV upload** (see Phase 4 note) |
 
 > **Naming call:** `/partners/` (who supports us) vs `/partner-with-us/` (become a supporter) read as a pair and never collide in nav. Alternative: `/supporters/` + `/partner/`. Your preference.
 
@@ -69,7 +67,7 @@ Why: the homepage is the URL grant officers and international donors land on, an
 
 ## Navigation
 
-**Header:** Logo · About · Our Work · Impact · Activities · Get Involved (dropdown: Donate / Partner / Volunteer / Careers) · **Donate** (button) · **ខ្មែរ / EN** toggle.
+**Header:** Logo · About · Our Work · Impact · Activities · Get Involved (dropdown: Contact / Partner / Volunteer) · **Donate** (button) · **ខ្មែរ / EN** toggle.
 
 The toggle links to the *equivalent page in the other locale*, not the homepage — computed per page, falling back to the locale home only if a translation genuinely doesn't exist (CMS documents always have both, so this is a rare path).
 
@@ -81,4 +79,4 @@ The toggle links to the *equivalent page in the other locale*, not the homepage 
 
 - Breadcrumbs on every page except home, with `BreadcrumbList` structured data.
 - Canonical + `hreflang` alternates on every page.
-- `Organization` + `NGO` schema.org on all pages (from `siteSettings`), `Article` on activity detail, `JobPosting` on career detail.
+- `Organization` + `NGO` schema.org on all pages (from `siteSettings`), `Article` on activity detail.

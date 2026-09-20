@@ -24,23 +24,42 @@ const heading = t(lang, 'pageContact');
   <PageHero lang={lang} title={heading} trail={[{ label: heading }]} />
 
   <section class="section">
-    <div class="wrap grid items-start gap-9 lg:grid-cols-2">
+    <!--
+      Information first, form second — in the DOM as well as on screen. On a
+      phone the grid collapses to one column in source order, so a visitor
+      reads the address, phone and email before being asked to type anything.
+      On desktop the form takes the right-hand column and sticks there while
+      the contact details scroll past it.
+    -->
+    {
+      safeguarding.value && (
+        <div class="wrap">
+          <p
+            class="mb-8 rounded-[var(--radius-md)] bg-[color:var(--color-blue-200)] px-4.5 py-4 text-[14.5px] text-[color:var(--color-ink-700)]"
+            lang={safeguarding.isFallback ? safeguarding.lang : undefined}
+          >
+            {safeguarding.value}
+          </p>
+        </div>
+      )
+    }
+
+    <div class="wrap grid items-start gap-9 lg:grid-cols-[1fr_minmax(0,29rem)] lg:gap-12">
       <div>
-        <a
-          href={settings.mapUrl ?? '#'}
-          rel="noopener noreferrer"
-          target="_blank"
-          class="block overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] no-underline"
-        >
-          <div class="media-placeholder aspect-4/3 w-full">{t(lang, 'mapPlaceholder')}</div>
-        </a>
+        {/*
+          There is no static map image, and there was never going to be one
+          without a maps API key. What stood here was an empty framed box
+          reading "[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]" — a note to the
+          build team wrapped in a link. The address below and the Google Maps
+          link are the part that actually gets someone to the office.
+        */}
         {
           settings.mapUrl && (
             <a
               href={settings.mapUrl}
               rel="noopener noreferrer"
               target="_blank"
-              class="link-arrow mt-2.5 inline-flex"
+              class="link-arrow inline-flex"
             >
               {t(lang, 'viewOnGoogleMaps')}
               <Icon name="arrow-top-right-on-square" size={16} class="arrow" />
@@ -48,11 +67,10 @@ const heading = t(lang, 'pageContact');
           )
         }
 
-        <div class="mt-4.5 flex flex-col gap-3 text-[15px] text-[color:var(--color-blue-700)]">
+        <div class="mt-3.5 flex flex-col gap-3 text-[15px] text-[color:var(--color-blue-700)]">
           {
             address.value && (
-              <p class="flex gap-2 whitespace-pre-line" lang={address.isFallback ? address.lang : undefined}>
-                <Icon name="map-pin" size={20} class="mt-0.5 flex-none" />
+              <p class="whitespace-pre-line" lang={address.isFallback ? address.lang : undefined}>
                 <span class="text-[color:var(--color-ink-600)]">
                   <b class="mb-1 block text-[color:var(--color-ink-900)]">
                     {t(lang, 'footerContactHeading')}
@@ -64,16 +82,14 @@ const heading = t(lang, 'pageContact');
           }
           {
             settings.phone && (
-              <p class="flex items-center gap-2">
-                <Icon name="phone" size={20} />
+              <p>
                 <span class="text-[color:var(--color-ink-600)]">{settings.phone}</span>
               </p>
             )
           }
           {
             settings.email && (
-              <p class="flex items-center gap-2">
-                <Icon name="envelope" size={20} />
+              <p>
                 <a href={`mailto:${settings.email}`} class="text-[color:var(--color-blue-800)]">
                   {settings.email}
                 </a>
@@ -82,8 +98,7 @@ const heading = t(lang, 'pageContact');
           }
           {
             hours.value && (
-              <p class="flex items-center gap-2">
-                <Icon name="clock" size={20} />
+              <p>
                 <span class="text-[color:var(--color-ink-400)]" lang={hours.isFallback ? hours.lang : undefined}>
                   {hours.value}
                 </span>
@@ -93,21 +108,12 @@ const heading = t(lang, 'pageContact');
         </div>
       </div>
 
-      <ContactForm lang={lang} variant="general" fallbackEmail={settings.email} />
+      <ContactForm
+        lang={lang}
+        variant="general"
+        class="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]"
+      />
     </div>
 
-    {
-      safeguarding.value && (
-        <div class="wrap">
-          <p
-            class="mt-6.5 flex gap-3 rounded-[var(--radius-md)] bg-[color:var(--color-blue-200)] px-4.5 py-4 text-[14.5px] text-[color:var(--color-ink-700)]"
-            lang={safeguarding.isFallback ? safeguarding.lang : undefined}
-          >
-            <Icon name="shield-exclamation" size={20} class="mt-0.5 flex-none text-[#0A55A0]" />
-            <span>{safeguarding.value}</span>
-          </p>
-        </div>
-      )
-    }
   </section>
 </BaseLayout>

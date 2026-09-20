@@ -16,9 +16,22 @@ const { lang, chart } = Astro.props;
 
 const caption = pick(chart.caption, lang);
 const altText = chart.image ? text(chart.image.alt, lang) : '';
-const fullUrl = chart.image && hasImage(chart.image) ? imageUrl(chart.image, { width: 2400 }) : null;
+const hasChartImage = hasImage(chart.image);
+const fullUrl = hasChartImage && chart.image ? imageUrl(chart.image, { width: 2400 }) : null;
+
+/**
+ * Until SKO supplies the chart image there is nothing to enlarge, so the
+ * figure, the "tap to enlarge" affordance and the dialog are not rendered at
+ * all. An empty frame inviting a visitor to zoom into nothing is worse than no
+ * frame; the text version below stands on its own and is the route that works
+ * at 360px anyway.
+ */
+const hasTextVersion = Object.values(chart.textVersion ?? {}).some(
+  (value) => Array.isArray(value) && value.length > 0,
+);
 ---
 
+{hasChartImage && (
 <figure class="m-0 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white">
   <!--
     The button has no aria-label: its accessible name comes from its own visible
@@ -46,7 +59,6 @@ const fullUrl = chart.image && hasImage(chart.image) ? imageUrl(chart.image, { w
       alt=""
       aspect="16/8"
       sizes="(min-width: 64rem) 1100px, 100vw"
-      placeholder="[PLACEHOLDER — ORG CHART IMAGE]"
     />
     <span
       class="absolute right-3.5 bottom-3.5 flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-[color:var(--color-line)] bg-white/95 px-3 py-1.5 text-[12.5px] font-semibold text-[color:var(--color-ink-700)] shadow-[var(--shadow-sm)]"
@@ -66,13 +78,23 @@ const fullUrl = chart.image && hasImage(chart.image) ? imageUrl(chart.image, { w
     )
   }
 </figure>
+)}
 
-<!--
+{/*
   The text version is not a substitute for the image treatment — it sits beside
   it. An image of a chart is invisible to a screen reader and unreadable at
-  360px however good the zoom, and this costs one CMS field.
--->
-<details class="mt-3.5 rounded-[var(--radius-md)] border border-[color:var(--color-line)] bg-white">
+  360px however good the zoom, and this costs one CMS field. With no image yet
+  it is the whole section, so it opens expanded rather than hiding real content
+  behind a disclosure that has nothing to disclose it from.
+*/}
+{hasTextVersion && (
+<details
+  class:list={[
+    'rounded-[var(--radius-md)] border border-[color:var(--color-line)] bg-white',
+    hasChartImage && 'mt-3.5',
+  ]}
+  open={!hasChartImage}
+>
   <summary
     class="flex cursor-pointer list-none items-center justify-between px-4.5 py-3.5 text-[15px] font-semibold text-[color:var(--color-ink-900)] [&::-webkit-details-marker]:hidden"
   >
@@ -86,7 +108,9 @@ const fullUrl = chart.image && hasImage(chart.image) ? imageUrl(chart.image, { w
     <RichText blocks={chart.textVersion} lang={lang} class="max-w-none text-[15px]" />
   </div>
 </details>
+)}
 
+{hasChartImage && (
 <dialog
   id="orgchart-dialog"
   class="m-auto max-h-[92dvh] max-w-[96vw] rounded-[var(--radius-lg)] border-0 p-0 shadow-[var(--shadow-overlay)] backdrop:bg-[rgb(17_26_43/0.72)]"
@@ -103,15 +127,10 @@ const fullUrl = chart.image && hasImage(chart.image) ? imageUrl(chart.image, { w
     </button>
   </div>
   <div class="overflow-auto p-3" style="touch-action: pinch-zoom;">
-    {
-      fullUrl ? (
-        <img src={fullUrl} alt={altText} class="mx-auto block h-auto max-w-none" style="max-width:100%" />
-      ) : (
-        <div class="media-placeholder min-h-[40vh] min-w-[70vw]">[PLACEHOLDER — ORG CHART IMAGE]</div>
-      )
-    }
+    <img src={fullUrl!} alt={altText} class="mx-auto block h-auto max-w-none" style="max-width:100%" />
   </div>
 </dialog>
+)}
 
 <script>
   const trigger = document.getElementById('orgchart-open') as HTMLButtonElement | null;

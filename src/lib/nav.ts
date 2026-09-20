@@ -14,12 +14,11 @@ export const mainNav: NavItem[] = [
   { key: 'navActivities', path: '/activities' },
   {
     key: 'navGetInvolved',
-    path: '/donate',
+    path: '/contact',
     children: [
-      { key: 'navDonate', path: '/donate' },
+      { key: 'navContact', path: '/contact' },
       { key: 'navPartnerWithUs', path: '/partner-with-us' },
       { key: 'navVolunteer', path: '/volunteer' },
-      { key: 'navCareers', path: '/careers' },
     ],
   },
 ];
@@ -47,10 +46,8 @@ export const footerNav: { heading: UIKey; items: NavItem[] }[] = [
   {
     heading: 'footerGetInvolved',
     items: [
-      { key: 'navDonate', path: '/donate' },
       { key: 'navPartnerWithUs', path: '/partner-with-us' },
       { key: 'navVolunteer', path: '/volunteer' },
-      { key: 'navCareers', path: '/careers' },
     ],
   },
 ];

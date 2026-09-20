@@ -30,7 +30,6 @@ import type {
   DirectorMessage,
   FaqItem,
   ImpactStat,
-  JobPost,
   LocaleBlocks,
   OrgChart,
   Page,
@@ -630,8 +629,6 @@ export const orgChart: OrgChart = {
     '[NEEDS SKO] Describe the structure as a nested list of who reports to whom. This is what makes the chart usable on a phone and for screen readers.',
   ]),
 };
-
-export const jobs: JobPost[] = [];
 
 /* -------------------------------------------------------------------------
    Pages.

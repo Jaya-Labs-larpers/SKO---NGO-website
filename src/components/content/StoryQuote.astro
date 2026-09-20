@@ -4,7 +4,6 @@ import type { Story } from '~/lib/content/types';
 import { pick } from '~/lib/i18n/utils';
 import { hasImage } from '~/lib/sanity/image';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
-import Icon from '~/components/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -33,7 +32,6 @@ const quoteClass =
 
 <figure class="m-0">
   <div class="rule-accent"></div>
-  <Icon name="chat-bubble-bottom-center-text" size={24} class="mt-4 text-[color:var(--color-blue-200)]" />
   <blockquote
     class:list={['mt-4.5 text-[color:var(--color-ink-900)]', quoteClass]}
     lang={quote.isFallback ? quote.lang : undefined}
@@ -50,11 +48,9 @@ const quoteClass =
           </span>
         ) : (
           <span
-            class="grid h-11 w-11 flex-none place-items-center rounded-full bg-[color:var(--color-aqua-200)]"
+            class="h-11 w-11 flex-none rounded-full bg-[color:var(--color-aqua-200)]"
             aria-hidden="true"
-          >
-            <Icon name="user" size={24} class="text-[color:var(--color-blue-700)]" />
-          </span>
+          />
         ))
     }
     <span>

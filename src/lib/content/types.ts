@@ -255,18 +255,6 @@ export interface OrgChart {
   textVersion?: LocaleBlocks | null;
 }
 
-export interface JobPost {
-  _id: string;
-  slug: string;
-  title?: LocaleString | null;
-  employmentType?: 'full-time' | 'part-time' | 'consultant' | 'internship' | null;
-  location?: LocaleString | null;
-  description?: LocaleBlocks | null;
-  howToApply?: LocaleBlocks | null;
-  deadline?: string | null;
-  publishedAt?: string | null;
-}
-
 export interface ImpactStat {
   _id: string;
   label?: LocaleString | null;
