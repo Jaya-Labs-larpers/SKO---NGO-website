@@ -2,8 +2,8 @@
 
 Bilingual (Khmer / English) website for **Samatapheap Khnom Organization**, Phnom Penh.
 
-Astro + TypeScript + Tailwind v4 · Sanity (headless CMS) · Cloudflare Pages + Pages Functions +
-Turnstile · Resend · Cloudflare Web Analytics.
+Astro + TypeScript + Tailwind v4 · Sanity (headless CMS) · Cloudflare Workers static assets +
+one Worker for the form · Turnstile · Resend · Cloudflare Web Analytics.
 
 Planning, design and architecture documents live in [`docs/`](docs/README.md).
 
@@ -26,36 +26,40 @@ local fixtures in `src/lib/content/fixtures.ts`. The build prints which source i
 cd studio && npm install && npm run dev
 ```
 
-`studio/` is deliberately **not** an npm workspace. Cloudflare Pages runs `npm install` at the repo
-root on every production build; a workspace would drag Sanity's React toolchain into a build of a
-site that ships no React.
+`studio/` is deliberately **not** an npm workspace. CI runs `npm ci` at the repo root on every
+production build; a workspace would drag Sanity's React toolchain into a build of a site that ships
+no React.
 
 ---
 
 ## Scripts
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Astro dev server. Pages only — the form endpoint is not served. |
-| `npm run build` | Static build to `dist/`. This is the Cloudflare build command. |
-| `npm run preview` | Builds, then serves `dist/` **with the Pages Function** via Wrangler. The honest local preview. |
-| `npm run verify` | Build, then structural checks over every built page. Run this in CI, **not** on the production deploy — a tripped check must never stand between a staff member and their post going live. |
-| `npm run typecheck` | `astro check` + `tsc --noEmit`. |
-| `npm run format` | Prettier across the repo. |
-| `npm run studio` | Runs the Studio dev server from the root. |
-| `npm run studio:deploy` | Publishes the Studio to `<hostname>.sanity.studio`. |
+| Command                       | What it does                                                                                  |
+| ----------------------------- | --------------------------------------------------------------------------------------------- |
+| `npm run dev`                 | Astro dev server. Pages only — the form endpoint is not served.                               |
+| `npm run build`               | Static build to `dist/`, then per-page CSP, the Khmer 404 copy and structural checks.         |
+| `npm run check`               | The one command: tests, typecheck, build. CI runs it before every deploy.                     |
+| `npm run preview`             | Builds, then serves `dist/` **with the Worker** via `wrangler dev`. The honest local preview. |
+| `npm run check:edge -- <url>` | Live checks against a deployed copy: routes, 404s, headers, caching, API.                     |
+| `npm run deploy:rehearsal`    | Deploys to workers.dev. `npm run deploy:production` deploys the real site (CI's job).         |
+| `npm run verify`              | Alias of `npm run build`.                                                                     |
+| `npm run typecheck`           | `astro check` + `tsc --noEmit`.                                                               |
+| `npm run format`              | Prettier across the repo.                                                                     |
+| `npm run studio`              | Runs the Studio dev server from the root.                                                     |
+| `npm run studio:deploy`       | Publishes the Studio to `<hostname>.sanity.studio`.                                           |
 
-To exercise the contact form locally you need `npm run preview`, not `npm run dev` — the Function
-only exists under Wrangler.
+To exercise the contact form locally you need `npm run preview`, not `npm run dev` — the Worker
+only exists under Wrangler. Copy `.dev.vars.example` to `.dev.vars` for its runtime settings.
 
 ---
 
 ## Repository layout
 
 ```
-functions/api/contact.ts   The only runtime code. Cloudflare picks this up from the repo
-                           root independently of Astro, so the site stays fully static.
-public/_headers            Security headers + cache policy.
+wrangler.jsonc             Worker config: rehearsal on workers.dev, env.production on the domain.
+worker/index.ts            The Worker. Only /api/* reaches it; everything else is a static file.
+functions/api/contact.ts   The form handler the Worker calls. The only real runtime code.
+public/_headers            Security headers + cache policy for static responses.
 src/lib/config.ts          The single seam for environment configuration.
 src/lib/content/           The content layer. Pages import only from here — never the
                            Sanity client, never raw GROQ.
@@ -78,8 +82,8 @@ studio/                    Sanity Studio — independent npm project.
   component is a review-blocking bug — it is the easiest way for a bilingual site to rot, and it is
   invisible until a Khmer reader hits it.
 - **`PUBLIC_` is load-bearing.** Astro inlines any `PUBLIC_*` variable into the browser bundle.
-  Server-only secrets live in `functions/` and are read from the Cloudflare env binding. They must
-  never be imported into `src/`.
+  Server-only secrets are read in `worker/` and `functions/` from the Cloudflare env binding. They
+  must never be imported into `src/`.
 - **There is no Sanity token anywhere**, by design — see `docs/04-tech-decisions.md` ADR-004. Do not
   add one without revisiting that decision.
 - **Nothing about a beneficiary or a child is modelled in the CMS.** The dataset is public. That is
@@ -89,5 +93,11 @@ studio/                    Sanity Studio — independent npm project.
 
 ## Environment
 
-See `.env.example` for the full list with comments. Nothing in this repo contains a real secret;
-production values are set per-environment in the Cloudflare Pages dashboard.
+See `.env.example` for the build-time list and `.dev.vars.example` for the Worker's runtime list.
+Nothing in this repo contains a real secret. In production, build values are GitHub repository
+variables and runtime secrets are Wrangler secrets on `env.production`.
+
+## Deploying
+
+The runbook is [`docs/16-cloudflare-workers.md`](docs/16-cloudflare-workers.md): rehearsal on
+workers.dev, cutover, CI deploys, rollback, and who does which step.

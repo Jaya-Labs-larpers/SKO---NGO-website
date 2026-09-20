@@ -1,7 +1,9 @@
 # Phase 6 — Deployment runbook
 
-Vercel is now the selected website host. Use [the Vercel preview runbook](14-vercel-preview.md).
-The Cloudflare-specific steps below are retained for reference, not the active upload procedure.
+The site now runs on Cloudflare Workers static assets. Use [the Workers runbook](16-cloudflare-workers.md).
+The Cloudflare Pages steps below, and the Vercel interlude in [14-vercel-preview.md](14-vercel-preview.md),
+are retained for reference, not as the active procedure. The service setup steps (Sanity, Turnstile,
+Resend, analytics) still apply.
 
 **Status: Phase 6 gate — prepared, awaiting the accounts and domain to execute.**
 

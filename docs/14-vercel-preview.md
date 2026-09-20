@@ -1,4 +1,8 @@
-# Vercel preview deployment
+# Vercel preview deployment (historical)
+
+> Superseded on 21 September 2026 by [16-cloudflare-workers.md](16-cloudflare-workers.md). The site
+> moved to Cloudflare Workers; `vercel.json`, `api/contact.ts` and the Vercel firewall notes below no
+> longer describe the repository. Kept for the record of what was verified on Vercel.
 
 Vercel is the chosen website host. Keep Astro and Sanity; do not follow the
 Cloudflare upload commands in `docs/09-deployment.md` for this deployment.

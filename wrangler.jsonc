@@ -1,0 +1,44 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sko-website",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-18",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"],
+  },
+  "observability": { "enabled": true },
+
+  // Top level is the rehearsal, served on workers.dev. Forms never deliver here.
+  // Deploy it with `npm run deploy:rehearsal` (wrangler deploy --env "").
+  "workers_dev": true,
+  "preview_urls": true,
+  "vars": { "PUBLIC_DEPLOYMENT_ENV": "preview", "CONTACT_ENABLED": "false" },
+  "kv_namespaces": [
+    { "binding": "RATE_LIMIT_KV", "id": "0bd8a5bfc040452db9e214f5dee44eb8" },
+  ],
+
+  "env": {
+    "production": {
+      "name": "sko-website-production",
+      "workers_dev": false,
+      "preview_urls": false,
+      "routes": [
+        { "pattern": "www.sko-samatapheapkhnom.org", "custom_domain": true },
+      ],
+      // CONTACT_ENABLED stays false until Resend, Turnstile and the inboxes are verified live.
+      "vars": {
+        "PUBLIC_DEPLOYMENT_ENV": "production",
+        "CONTACT_ENABLED": "false",
+      },
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMIT_KV",
+          "id": "ff33586a0bd441ed84f75231b8045da5",
+        },
+      ],
+    },
+  },
+}

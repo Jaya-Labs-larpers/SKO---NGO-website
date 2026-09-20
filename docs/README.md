@@ -11,7 +11,7 @@ Delivered in six phases, each with an approval gate. The original brief this was
 | You are… | Read |
 |---|---|
 | SKO staff who will edit the site | [HANDOVER-en.md](HANDOVER-en.md) · [HANDOVER-km.md](HANDOVER-km.md) |
-| Deploying it | [09-deployment.md](09-deployment.md) |
+| Deploying it | [16-cloudflare-workers.md](16-cloudflare-workers.md) |
 | A developer picking this up | [../README.md](../README.md), then [07-architecture.md](07-architecture.md) |
 | Reviewing security | [SECURITY.md](SECURITY.md) |
 | Looking at the design | [design-preview.html](design-preview.html) — open in a browser |
@@ -83,7 +83,7 @@ was **failing open** when unconfigured — it now fails closed.
 
 | # | Deliverable | Where |
 |---|---|---|
-| 16 | Step-by-step deployment runbook | **[09-deployment.md](09-deployment.md)** |
+| 16 | Step-by-step deployment runbook | **[16-cloudflare-workers.md](16-cloudflare-workers.md)** (service setup in [09-deployment.md](09-deployment.md)) |
 | 17 | Staff guide, English | **[HANDOVER-en.md](HANDOVER-en.md)** |
 | 18 | Staff guide, Khmer | **[HANDOVER-km.md](HANDOVER-km.md)** |
 | 19 | Pages build settings under version control | `../wrangler.toml` |
