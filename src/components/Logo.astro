@@ -13,8 +13,17 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+type Variant =
+  | 'full'
+  | 'reversed'
+  | 'mono'
+  | 'mono-white'
+  | 'emblem'
+  | 'emblem-reversed'
+  | 'emblem-mono';
+
 interface Props {
-  variant?: 'full' | 'reversed' | 'mono' | 'mono-white' | 'emblem' | 'emblem-reversed' | 'emblem-mono';
+  variant?: Variant;
   width?: number;
   height?: number;
   class?: string;
@@ -22,7 +31,18 @@ interface Props {
 }
 const { variant = 'full', width, height, class: className = '', title = 'Samatapheap Khnom Organization' } = Astro.props;
 
-const files: Record<string, string> = {
+/* The file is read from disk and spliced into a `set:html` fragment, so every
+   caller-supplied value interpolated into it has to be escaped. Nothing passes
+   CMS content today; this keeps it safe when something eventually does. */
+const escapeHtml = (value: string) =>
+  value.replace(
+    /[&<>"']/g,
+    (ch) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch] as string,
+  );
+
+// Keyed by Variant, not string — an indexed read then yields a definite string.
+const files: Record<Variant, string> = {
   'full': 'sko-logo-full-colour.svg',
   'reversed': 'sko-logo-reversed.svg',
   'mono': 'sko-logo-mono-ink.svg',
@@ -31,6 +51,9 @@ const files: Record<string, string> = {
   'emblem-reversed': 'sko-emblem-reversed.svg',
   'emblem-mono': 'sko-emblem-mono.svg',
 };
+const file = files[variant];
+if (!file) throw new Error(`[Logo] unknown variant "${variant}"`);
+
 const isEmblem = variant.startsWith('emblem');
 const ratio = isEmblem ? 728 / 516 : 1384 / 829;   // viewBox aspect ratios of the traced files
 if (!isEmblem && width && width < 180) {
@@ -39,9 +62,9 @@ if (!isEmblem && width && width < 180) {
 const w = width ?? (height ? Math.round(height * ratio) : undefined);
 const h = height ?? (width ? Math.round(width / ratio) : undefined);
 
-let svg = readFileSync(resolve(process.cwd(), 'public/logo', files[variant]), 'utf8');
+let svg = readFileSync(resolve(process.cwd(), 'public/logo', file), 'utf8');
 svg = svg
-  .replace('<svg ', `<svg width="${w}" height="${h}" class="logo logo--${variant} ${className}" `)
-  .replace(/<title id="t">[^<]*<\/title>/, `<title id="t">${title}</title>`);
+  .replace('<svg ', `<svg width="${w}" height="${h}" class="logo logo--${variant} ${escapeHtml(className)}" `)
+  .replace(/<title id="t">[^<]*<\/title>/, `<title id="t">${escapeHtml(title)}</title>`);
 ---
 <Fragment set:html={svg} />
