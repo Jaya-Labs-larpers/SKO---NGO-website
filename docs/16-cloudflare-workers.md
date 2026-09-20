@@ -42,11 +42,11 @@ at `/about/`, redirecting `/about` once. Do not change either side alone.
 ## Rehearsal (workers.dev)
 
 1. Build in preview mode with the rehearsal's own URL as `PUBLIC_SITE_URL`:
-   `PUBLIC_DEPLOYMENT_ENV=preview PUBLIC_SITE_URL=https://sko-website.<subdomain>.workers.dev npm run check`
+   `PUBLIC_DEPLOYMENT_ENV=preview PUBLIC_SITE_URL=https://sko-website.maplematernity-api-825.workers.dev npm run check`
 2. `npm run deploy:rehearsal`. Note the URL it prints.
 3. Set the runtime secrets on the rehearsal with `npx wrangler secret put NAME` (no `--env`). Test values are fine; `CONTACT_ENABLED` is `false` in the config so nothing delivers.
 4. Add the workers.dev hostname to the Turnstile widget (Cloudflare dashboard → Turnstile).
-5. `npm run check:edge -- https://sko-website.<subdomain>.workers.dev` must be all green, and the
+5. `npm run check:edge -- https://sko-website.maplematernity-api-825.workers.dev` must be all green, and the
    page must not be indexable (preview builds emit `noindex` and a disallow-all robots file).
 6. Walk the real journeys on a phone and a desktop.
 

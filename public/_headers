@@ -20,3 +20,7 @@
 
 /fonts/*
   Cache-Control: public, max-age=86400
+
+# The workers.dev rehearsal must never be indexed. Absent from production by construction.
+https://sko-website.maplematernity-api-825.workers.dev/*
+  X-Robots-Tag: noindex
