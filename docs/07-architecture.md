@@ -59,7 +59,8 @@ Worth recording because two of them would have shipped silently.
 
 Also fixed on inspection: the language toggle announced "Switch to English" on the English page it
 was already on, and empty image placeholders were announced to screen readers as
-"[PLACEHOLDER PHOTO]" instead of being hidden.
+"[PLACEHOLDER PHOTO]" instead of being hidden. Those placeholder labels are gone entirely now —
+see "Markers never reach a visitor" below.
 
 ## 4. Key architectural decisions as built
 
@@ -71,6 +72,22 @@ That fallback is not a toy. It means the site builds, previews and can be review
 SKO's Sanity project exists — and the moment the project id is set, the same components render real
 content with no code change. A failed GROQ query throws and fails the build; a silently empty section
 discovered in production is worse than a build that stops.
+
+**Markers never reach a visitor.** Unfinished copy is tracked in the source with bracketed markers —
+`[NEEDS SKO]`, `[EXAMPLE]`, `[PLACEHOLDER …]` — so nobody invents a fact to fill a gap and so
+`scripts/content-review.mjs` can list exactly what SKO still owes. Those markers are a note to the
+team, and the note was being printed on the public site along with the instruction that followed it
+("Replace this with your own first post…"). Every read now passes through
+`stripPlaceholders()` (`src/lib/content/placeholders.ts`) at the content-layer seam, which drops
+marked strings and marked Portable Text blocks from fixtures *and* from CMS content — a staff member
+can type a marker into Sanity just as easily. A document left with no title drops out of its listing
+and loses its route rather than appearing as an untitled card. Components carry the other half:
+a missing image holds its box silently, a partner with no logo file is credited in type, and a
+section with nothing to say hides its heading too.
+
+The rule is enforced, not just intended: `scripts/check-build.mjs` fails **every** build, not only
+production ones, if a marker reaches the HTML. The review tooling reads `fixtures.ts` directly, so
+the team's checklist is unaffected — tracked in the source, invisible in the browser.
 
 **Localised fields resolve through one function.** `pick(field, lang)` returns the value, the locale
 it actually came from, and whether it fell back. Callers stamp `lang="en"` on the element when it
@@ -115,8 +132,10 @@ step (`document.fonts.check()` across every route).
 
 **No real Sanity project.** Needs SKO's account. Everything is ready for the project id.
 
-**Placeholder content throughout**, marked `[PLACEHOLDER]`. No SKO facts, statistics, staff names or
-a director's name have been invented.
+**Placeholder content throughout**, marked `[NEEDS SKO]` / `[EXAMPLE]` in `fixtures.ts`. No SKO
+facts, statistics, staff names or a director's name have been invented. None of it renders: the
+gaps show up on the site as absent sections, and in `SKO-content-review.html` as the list of what
+is owed.
 
 ## 7. Still needed from you before Phase 6
 

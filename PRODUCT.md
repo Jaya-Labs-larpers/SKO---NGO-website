@@ -43,8 +43,6 @@ collecting exactly the data that would violate it.
   workspace); publishing triggers a webhook → Cloudflare Pages Deploy Hook → full rebuild.
 - Staff write both English and Khmer copy directly on every Activity/News post — no machine
   translation anywhere in the workflow.
-- A nightly rebuild exists specifically so job posting deadlines (careers) expire on their own
-  without staff intervention.
 - The Director's message and organizational chart are the two pieces of content with a
   pre-agreed special editorial treatment (portrait + outlined card with a teal accent rule for the
   message; image plus accessible text version for the org chart) — see `docs/06-design-system.md`
@@ -58,7 +56,7 @@ collecting exactly the data that would violate it.
 
 - **No payment or card handling anywhere.** Donate page shows QR codes and bank-wire details only
   — zero PCI scope, by design, not by omission.
-- **No file uploads anywhere**, including CVs on the Careers page.
+- **No file uploads anywhere** on any form.
 - **Nothing about a beneficiary or a child is modelled in the CMS**, and the dataset is public
   with no Sanity write token anywhere in the build (`docs/04-tech-decisions.md` ADR-004). A story
   cannot publish without a consent tick, enforced in both the Studio rule and the published query.
@@ -111,8 +109,10 @@ collecting exactly the data that would violate it.
 2. Never let the build outrun the safeguard: no beneficiary data in the CMS, no payment surface,
    no machine-translated mission content — these are structural constraints, not style choices,
    and any change to them revisits a signed-off ADR.
-3. Placeholder is a visible, tracked state, not a silent gap — flag it, never fill it in with
-   invented facts, names, or numbers.
+3. Placeholder is a tracked state, not a silent gap — flag it, never fill it in with invented
+   facts, names, or numbers. Tracked for the team, not shown to the visitor: markers live in the
+   source and in `SKO-content-review.html`, and the content layer strips them before render, so an
+   unfinished section is absent from the page rather than printing a note meant for us.
 4. Bilingual means genuinely equal, not English-first-with-a-Khmer-afterthought: same routes, same
    fonts done right, same human-written copy in both languages.
 5. Staff independence — SKO must be able to publish an Activity post, add a report PDF, or update

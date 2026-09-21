@@ -26,6 +26,15 @@ const [page, director, chart, team] = await Promise.all([
   getTeam(),
 ]);
 
+/**
+ * The structure section appears only once there is a structure to show — an
+ * empty heading over an empty frame is scaffolding, and scaffolding is not
+ * something a visitor should be shown.
+ */
+const hasOrgChart =
+  Boolean(chart.image?.asset) ||
+  Object.values(chart.textVersion ?? {}).some((value) => Array.isArray(value) && value.length > 0);
+
 const title = pick(page?.title, lang);
 const intro = pick(page?.intro, lang);
 const heading = title.value ?? t(lang, 'pageAbout');
@@ -64,12 +73,18 @@ const seo = resolveSeo(page?.seo, lang, {
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <SectionHeading title={t(lang, 'orgStructure')} />
-      <div class="mt-6.5"><OrgChart lang={lang} chart={chart} /></div>
-    </div>
-  </section>
+  {
+    hasOrgChart && (
+      <section class="section">
+        <div class="wrap">
+          <SectionHeading title={t(lang, 'orgStructure')} />
+          <div class="mt-6.5">
+            <OrgChart lang={lang} chart={chart} />
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   {
     team.length > 0 && (

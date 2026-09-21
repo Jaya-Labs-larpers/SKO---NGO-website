@@ -5,14 +5,18 @@ import { localizePath, t, text } from '~/lib/i18n/utils';
 import { mainNav, mobileNav } from '~/lib/nav';
 import { hasImage, imageDimensions, imageUrl } from '~/lib/sanity/image';
 import LanguageToggle from './LanguageToggle.astro';
+import Icon from '~/components/Icon.astro';
+import Logo from '~/components/Logo.astro';
 
 interface Props {
   lang: Locale;
   pathname: string;
   settings: SiteSettings;
+  /** Float the header over a full-bleed hero until the page scrolls. */
+  overlay?: boolean;
 }
 
-const { lang, pathname, settings } = Astro.props;
+const { lang, pathname, settings, overlay = false } = Astro.props;
 
 const orgName = text(settings.orgName, lang);
 
@@ -31,8 +35,12 @@ function isCurrent(path: string): boolean {
 }
 ---
 
-<header class="site-header relative z-20 border-b border-[color:var(--color-line-subtle)] bg-white">
-  <div class="flex h-[68px] w-full items-center gap-6 px-[var(--spacing-gutter)] lg:h-[76px]">
+<header
+  class="site-header sticky top-0 z-20"
+  data-overlay={overlay ? '' : undefined}
+  data-at-top={overlay ? '' : undefined}
+>
+  <div class="flex h-[var(--header-h)] w-full items-center gap-6 px-[var(--spacing-gutter)]">
     <a href={localizePath('/', lang)} class="flex flex-none items-center gap-3 no-underline">
       {
         hasLogo && logoSrc ? (
@@ -46,31 +54,22 @@ function isCurrent(path: string): boolean {
           />
         ) : (
           <>
-            <span
-              class="grid h-9 w-9 flex-none place-items-center rounded-[var(--radius-sm)] border border-[color:var(--color-line)] bg-white lg:h-[38px] lg:w-[38px]"
-              aria-hidden="true"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 4 L20.5 19 H3.5 Z"
-                  stroke="var(--color-sky-400)"
-                  stroke-width="1.6"
-                  stroke-linejoin="round"
-                />
-                <g fill="var(--color-blue-700)">
-                  <ellipse cx="9.6" cy="12.6" rx="2.5" ry="1.5" transform="rotate(-20 9.6 12.6)" />
-                  <ellipse cx="14.4" cy="12.6" rx="2.5" ry="1.5" transform="rotate(20 14.4 12.6)" />
-                  <rect x="11.65" y="11.3" width="0.7" height="3.2" rx="0.35" />
-                </g>
-              </svg>
-            </span>
+            <Logo variant="emblem" height={32} class="lg:h-[36px] lg:w-auto" />
             <span class="flex flex-col leading-[1.15]">
               <span class="text-[14px] font-bold tracking-[-0.01em] text-[color:var(--color-ink-900)] lg:text-[15px]">
                 {orgName}
               </span>
-              <span class="hidden text-[11px] text-[color:var(--color-ink-400)] sm:block">
-                Samatapheap Khnom Organization
-              </span>
+              {
+                lang === 'km' ? (
+                  <span class="hidden text-[11px] text-[color:var(--color-ink-400)] sm:block">
+                    Samatapheap Khnom Organization
+                  </span>
+                ) : (
+                  <span lang="km" class="hidden text-[12px] text-[color:var(--color-ink-400)] sm:block font-khmer">
+                    អង្គការសមត្ថភាពខ្ញុំ
+                  </span>
+                )
+              }
             </span>
           </>
         )
@@ -95,8 +94,9 @@ function isCurrent(path: string): boolean {
       class="ml-auto flex items-center gap-3 lg:ml-0 lg:border-l lg:border-[color:var(--color-line)] lg:pl-3.5"
     >
       <LanguageToggle lang={lang} pathname={pathname} />
-      <a href={localizePath('/donate', lang)} class="btn btn-primary btn-sm hidden sm:inline-flex">
-        {t(lang, 'navDonate')}
+      <a href={localizePath('/contact', lang)} class="btn btn-primary btn-sm hidden sm:inline-flex">
+        <Icon name="envelope" size={16} inline />
+        {t(lang, 'contactUs')}
       </a>
       <button
         type="button"
@@ -108,17 +108,14 @@ function isCurrent(path: string): boolean {
         data-label-open={t(lang, 'openMenu')}
         data-label-close={t(lang, 'closeMenu')}
       >
-        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" fill="none">
-          <path
-            d="M3 5.5h14M3 10h14M3 14.5h14"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"></path>
-        </svg>
+        <Icon name="bars-3" size={24} inline class="menu-toggle-icon-open" />
+        <Icon name="x-mark" size={24} inline class="menu-toggle-icon-close hidden" />
       </button>
     </div>
   </div>
 </header>
+
+{overlay && <div class="header-sentinel" aria-hidden="true" />}
 
 <!-- Mobile navigation panel -->
 <div
@@ -137,10 +134,7 @@ function isCurrent(path: string): boolean {
       class="ml-auto grid h-11 w-11 place-items-center rounded-[var(--radius-md)] border border-[color:var(--color-line-strong)] bg-white text-[color:var(--color-ink-900)]"
       aria-label={t(lang, 'closeMenu')}
     >
-      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" fill="none">
-        <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-        ></path>
-      </svg>
+      <Icon name="x-mark" size={20} inline />
     </button>
   </div>
 
@@ -160,8 +154,8 @@ function isCurrent(path: string): boolean {
       ))
     }
 
-    <a href={localizePath('/donate', lang)} class="btn btn-primary btn-block mt-6 py-4">
-      {t(lang, 'navDonate')}
+    <a href={localizePath('/contact', lang)} class="btn btn-primary btn-block mt-6 py-4">
+      {t(lang, 'contactUs')}
     </a>
     <a href={localizePath('/volunteer', lang)} class="btn btn-secondary btn-block mt-2.5 py-4">
       {t(lang, 'navVolunteer')}
@@ -178,9 +172,27 @@ function isCurrent(path: string): boolean {
 </div>
 
 <script>
+  /**
+   * Overlay header: transparent while the top of the hero is in view, solid
+   * once the page has scrolled past it. Watching a marker element rather than
+   * the scroll offset means the browser reports the crossing itself — two
+   * callbacks per visit instead of one per frame.
+   */
+  const overlayHeader = document.querySelector<HTMLElement>('.site-header[data-overlay]');
+  const sentinel = document.querySelector('.header-sentinel');
+
+  if (overlayHeader && sentinel) {
+    new IntersectionObserver(([entry]) => {
+      if (!entry) return;
+      overlayHeader.toggleAttribute('data-at-top', entry.isIntersecting);
+    }).observe(sentinel);
+  }
+
   const toggle = document.getElementById('menu-toggle');
   const closeButton = document.getElementById('menu-close');
   const panel = document.getElementById('mobile-nav');
+  const openIcon = toggle?.querySelector('.menu-toggle-icon-open');
+  const closeIcon = toggle?.querySelector('.menu-toggle-icon-close');
 
   if (toggle && panel && closeButton) {
     const FOCUSABLE = 'a[href], button:not([disabled])';
@@ -192,6 +204,8 @@ function isCurrent(path: string): boolean {
       document.body.style.overflow = 'hidden';
       toggle.setAttribute('aria-expanded', 'true');
       toggle.setAttribute('aria-label', toggle.dataset.labelClose ?? 'Close menu');
+      openIcon?.classList.add('hidden');
+      closeIcon?.classList.remove('hidden');
       panel.querySelector<HTMLElement>(FOCUSABLE)?.focus();
     };
 
@@ -212,6 +226,8 @@ function isCurrent(path: string): boolean {
       document.body.style.overflow = '';
       toggle.setAttribute('aria-expanded', 'false');
       toggle.setAttribute('aria-label', toggle.dataset.labelOpen ?? 'Open menu');
+      openIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
       lastFocused?.focus();
     };
 

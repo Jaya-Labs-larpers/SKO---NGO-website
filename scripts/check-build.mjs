@@ -10,7 +10,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
-import { contentFailures, deploymentEnvironment } from './readiness.mjs';
+import { contentFailures, deploymentEnvironment, markerFailures } from './readiness.mjs';
 import { findEnvLeaks, findSecrets, secretEnvEntries } from './secrets.mjs';
 
 const env = { ...loadEnv('production', process.cwd(), ''), ...process.env };
@@ -45,9 +45,12 @@ for await (const file of htmlFiles(DIST)) {
   const page = `/${relative(DIST, file).split(sep).join('/')}`;
   const html = await readFile(file, 'utf8');
   checked += 1;
-  if (production && !localContent) {
-    for (const failure of contentFailures(html, page)) check(false, page, failure);
-  }
+  // An internal content marker in the HTML is a leak in any environment, so it
+  // is checked on every build. The rest of contentFailures() — the Khmer
+  // fallback rule — is a completeness gate and stays production-only.
+  const contentIssues =
+    production && !localContent ? contentFailures(html, page) : markerFailures(html);
+  for (const failure of contentIssues) check(false, page, failure);
 
   const isKhmer = page.startsWith('/km/');
   const is404 = page.includes('404');
@@ -73,7 +76,8 @@ for await (const file of htmlFiles(DIST)) {
   check(/<meta http-equiv="Content-Security-Policy"/.test(html), page, 'no CSP meta tag');
 
   // Every inline script is covered by a hash in this page's own policy
-  const policy = /<meta http-equiv="Content-Security-Policy" content="([^"]*)"/.exec(html)?.[1] ?? '';
+  const policy =
+    /<meta http-equiv="Content-Security-Policy" content="([^"]*)"/.exec(html)?.[1] ?? '';
   const inlineCount = (html.match(/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/g) ?? []).filter(
     (tag) => !/>\s*<\/script>/.test(tag),
   ).length;
@@ -103,9 +107,6 @@ for await (const file of htmlFiles(DIST)) {
   // No image without an alt attribute
   const imgsWithoutAlt = (html.match(/<img(?![^>]*\salt=)[^>]*>/g) ?? []).length;
   check(imgsWithoutAlt === 0, page, `${imgsWithoutAlt} <img> without alt`);
-
-  // The placeholder marker must never leak into a production build unnoticed
-  // (informational only — Phase 4 content is deliberately placeholder).
 }
 
 // Secrets — every shipped text file, not only HTML. `_astro/*.js` is where a

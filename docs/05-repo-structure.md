@@ -50,8 +50,6 @@ sko-website/
 │   │   ├── donate.astro
 │   │   ├── partner-with-us.astro
 │   │   ├── volunteer.astro
-│   │   ├── careers/index.astro
-│   │   ├── careers/[slug].astro
 │   │   ├── activities/[...page].astro
 │   │   ├── activities/[slug].astro
 │   │   ├── contact.astro

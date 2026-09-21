@@ -113,9 +113,14 @@ Two things behave differently in this offline copy:
   * The address bar shows a long file path instead of a web address. That is
     normal for an offline copy.
 
-Where content is still missing you will see [NEEDS SKO], [SAMPLE] or
-[EXAMPLE]. Photographs are not in yet, so you will see striped grey boxes
-where they will go.
+Where content is still missing, the website simply leaves it out rather than
+showing a note to us — a visitor should never read our working notes. So a
+section you expect to see may not be there yet. Photographs are not in yet
+either, so you will see quiet empty panels where they will go.
+
+To see exactly what is still missing, and what we need from SKO, open
+SKO-content-review.html instead. That file lists every field, English beside
+Khmer, and marks each gap.
 
 Generated ${new Date().toISOString().slice(0, 10)}
 `,

@@ -1,5 +1,5 @@
 ---
-import { locales, localeShort, localeName, htmlLang, type Locale } from '~/lib/i18n/config';
+import { localeName, htmlLang, type Locale } from '~/lib/i18n/config';
 import { alternatePath, t } from '~/lib/i18n/utils';
 
 interface Props {
@@ -11,51 +11,28 @@ interface Props {
 
 const { lang, pathname, full = false } = Astro.props;
 
-/**
- * The group carries the "Language" label; each link's accessible name is just
- * its own visible text.
- *
- * An earlier version put aria-label="Switch to English" on a link whose visible
- * text was "EN". That fails WCAG 2.5.3 (Label in Name) — a speech-input user
- * saying "EN" could not activate it — and axe flags it. Context belongs on the
- * group, not on the item.
- */
+/** Flag of the language the link switches TO — a single toggle, not a two-way picker. */
+const otherLocale: Locale = lang === 'en' ? 'km' : 'en';
+const label = otherLocale === 'km' ? t(lang, 'switchToKhmer') : t(lang, 'switchToEnglish');
 ---
 
-<nav
-  aria-label={t(lang, 'language')}
+<a
+  href={alternatePath(pathname, otherLocale)}
+  hreflang={htmlLang[otherLocale]}
+  lang={htmlLang[otherLocale]}
+  title={label}
+  aria-label={label}
   class:list={[
-    'inline-flex overflow-hidden rounded-[var(--radius-sm)] border border-[color:var(--color-line-strong)]',
-    full && 'w-full',
+    'inline-flex items-center gap-2 rounded-[var(--radius-sm)] border border-[color:var(--color-line-strong)] bg-white px-2.5 py-2 text-[13px] font-semibold text-[color:var(--color-ink-600)] no-underline transition-colors hover:border-[color:var(--color-blue-200)] hover:bg-[color:var(--color-blue-50)]',
+    full && 'w-full justify-center py-3',
   ]}
 >
-  {
-    locales.map((locale) => {
-      const current = locale === lang;
-      return (
-        <a
-          href={alternatePath(pathname, locale)}
-          hreflang={htmlLang[locale]}
-          lang={htmlLang[locale]}
-          aria-current={current ? 'true' : undefined}
-          title={
-            current
-              ? undefined
-              : locale === 'km'
-                ? t(lang, 'switchToKhmer')
-                : t(lang, 'switchToEnglish')
-          }
-          class:list={[
-            'px-[11px] py-2 text-[13px] font-semibold no-underline transition-colors',
-            full && 'flex-1 py-3 text-center',
-            current
-              ? 'bg-[color:var(--color-blue-700)] text-white'
-              : 'bg-white text-[color:var(--color-ink-400)] hover:bg-[color:var(--color-blue-50)] hover:text-[color:var(--color-blue-800)]',
-          ]}
-        >
-          {full ? localeName[locale] : localeShort[locale]}
-        </a>
-      );
-    })
-  }
-</nav>
+  <img
+    src={`/flags/${otherLocale}.svg`}
+    width="20"
+    height="14"
+    alt=""
+    class="rounded-[2px] ring-1 ring-black/10"
+  />
+  {full && <span>{localeName[otherLocale]}</span>}
+</a>

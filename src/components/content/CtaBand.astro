@@ -21,7 +21,7 @@ const { lang, title, body } = Astro.props;
         {body && <p class="mt-3 max-w-[46ch] text-[16.5px] text-white/78">{body}</p>}
       </div>
       <div class="flex flex-wrap gap-3">
-        <a href={localizePath('/donate', lang)} class="btn btn-inverse">{t(lang, 'navDonate')}</a>
+        <a href={localizePath('/contact', lang)} class="btn btn-inverse">{t(lang, 'contactUs')}</a>
         <a href={localizePath('/reports', lang)} class="btn btn-inverse-outline">{t(lang, 'seeReports')}</a>
       </div>
     </div>

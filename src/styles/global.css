@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import './theme.css';
+@import "tailwindcss";
+@import "./theme.css";
 
 /* ============================================================================
    Component layer.
@@ -50,7 +50,53 @@
  */
 header.site-header {
   view-transition-name: site-header;
+  background: var(--color-canvas);
+  border-bottom: 1px solid var(--color-line-subtle);
+  transition:
+    background-color var(--duration-base) var(--ease-out-soft),
+    border-color var(--duration-base) var(--ease-out-soft);
 }
+
+/*
+ * Overlay mode, for pages that open on a full-bleed hero: the header keeps its
+ * place but gives up its surface, so the art runs to the top of the window
+ * instead of starting under a white band. It takes the paper back as soon as
+ * the page scrolls — past that point the nav would sit on running text, and no
+ * amount of contrast juggling makes that legible.
+ *
+ * `data-at-top` is rendered server-side and only corrected by the observer in
+ * Header.astro, so a page loaded at the top paints transparent immediately
+ * instead of flashing white.
+ */
+header.site-header[data-overlay][data-at-top] {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+/*
+ * Marks the scroll depth at which the header takes its background back. A bare
+ * marker observed once, rather than a scroll listener that runs every frame.
+ */
+.header-sentinel {
+  position: absolute;
+  top: 120px;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/*
+ * The other half of overlay mode: the hero starts at the very top of the
+ * window rather than below the header, so its art is what fills that band.
+ * Content inside the hero still has to clear the header, which is why the
+ * section pays the height back as padding where the art is a background
+ * layer rather than a block in the flow.
+ */
+.hero-overlap {
+  margin-top: calc(-1 * var(--header-h));
+}
+
 footer.site-footer {
   view-transition-name: site-footer;
 }
@@ -256,7 +302,7 @@ details[open] > summary > .disclosure-icon {
     border-color: #fff;
   }
 
-  .btn[aria-disabled='true'],
+  .btn[aria-disabled="true"],
   .btn:disabled {
     background: var(--color-surface-sunken);
     color: var(--color-ink-300);
@@ -290,7 +336,7 @@ details[open] > summary > .disclosure-icon {
   }
 
   /* Press feedback — a small scale-down so a tap feels physical. */
-  .btn:active:not([aria-disabled='true']):not(:disabled) {
+  .btn:active:not([aria-disabled="true"]):not(:disabled) {
     transform: scale(0.98);
   }
 
@@ -311,7 +357,7 @@ details[open] > summary > .disclosure-icon {
     transition: color var(--duration-fast) var(--ease-out-soft);
   }
   .nav-link::after {
-    content: '';
+    content: "";
     position: absolute;
     inset-inline: 0.8125rem;
     bottom: 0.25rem;
@@ -418,11 +464,11 @@ details[open] > summary > .disclosure-icon {
     border-color: var(--color-blue-700);
     box-shadow: 0 0 0 3px var(--color-sky-200);
   }
-  .field[aria-invalid='true'] {
+  .field[aria-invalid="true"] {
     border-color: var(--color-danger-700);
     background: var(--color-danger-50);
   }
-  .field[aria-invalid='true']:focus {
+  .field[aria-invalid="true"]:focus {
     box-shadow: 0 0 0 3px rgb(180 35 24 / 0.15);
   }
 
@@ -433,6 +479,209 @@ details[open] > summary > .disclosure-icon {
     width: 1px;
     height: 1px;
     overflow: hidden;
+  }
+
+  /* --- Form panel ---------------------------------------------------------
+     Every form on the site lives in one of these. One bordered box, sitting
+     beside the page's own information rather than inside it, so a visitor
+     reads what SKO does before being asked to type anything.
+
+     The colour is the whole point of the box. On a site that is otherwise
+     white, the tinted head band and the blue hairline are what make this read
+     as "the thing you fill in" from across the page — no shadow needed to say
+     it. Every value below is a theme token, so the panel stays in step with
+     the rest of the palette automatically.
+     ---------------------------------------------------------------------- */
+  .form-panel {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-blue-200);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    /* Fields inside respond to the PANEL's width, not the viewport's, so the
+       same panel lays out correctly in a narrow column and a full-width one. */
+    container-type: inline-size;
+  }
+
+  /* The brand stripe across the top. 3px of --color-blue-700 into the logo
+     cyan: the two colours the identity is actually built from. */
+  .form-panel::before {
+    content: "";
+    display: block;
+    height: 3px;
+    flex: none;
+    background: linear-gradient(
+      90deg,
+      var(--color-blue-700) 0%,
+      var(--color-blue-600) 55%,
+      var(--color-sky-400) 100%
+    );
+  }
+
+  .form-panel-head {
+    padding: 1.375rem var(--form-panel-pad, 1.5rem) 1.25rem;
+    background: var(--color-blue-50);
+    border-bottom: 1px solid var(--color-blue-200);
+  }
+  .form-panel-title {
+    margin: 0;
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    letter-spacing: var(--text-h3--letter-spacing);
+    color: var(--color-ink-900);
+    font-weight: 700;
+  }
+  .form-panel-note {
+    margin: 0.4375rem 0 0;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    color: var(--color-ink-400);
+  }
+
+  .form-panel-body {
+    padding: var(--form-panel-pad, 1.5rem);
+  }
+
+  /* The submit row sits on its own tinted band so the action never floats
+     ambiguously under the last field. */
+  .form-panel-foot {
+    padding: 1.125rem var(--form-panel-pad, 1.5rem) 1.25rem;
+    background: var(--color-surface-subtle);
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* Submission failures. Sits under the button so the eye lands on it after
+     the click; the danger tokens match the invalid-field treatment above. */
+  .form-status {
+    margin: 0.875rem 0 0;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--color-danger-700);
+    border-radius: var(--radius-md);
+    background: var(--color-danger-50);
+    color: var(--color-ink-900);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+  }
+  .form-status[hidden] {
+    display: none;
+  }
+
+  /* The submit confirmation. A small pill that floats clear of the page,
+     centred on a phone and bottom-right on a wide screen. */
+  .form-toast {
+    position: fixed;
+    z-index: 60;
+    bottom: 1.5rem;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.125rem;
+    border: 1px solid var(--color-blue-200);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-ink-900);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    /* Sits just below its resting place and fades up into it. */
+    transform: translate(-50%, 0.5rem);
+    opacity: 0;
+    transition:
+      opacity var(--duration-base) var(--ease-out-soft),
+      transform var(--duration-base) var(--ease-out-soft);
+  }
+  .form-toast .icon {
+    flex: none;
+    color: var(--color-success-700);
+  }
+  .form-toast.is-shown {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  @media (width >= 40rem) {
+    .form-toast {
+      left: auto;
+      right: 1.5rem;
+      transform: translate(0, 0.5rem);
+    }
+    .form-toast.is-shown {
+      transform: translate(0, 0);
+    }
+  }
+
+  /* --- Fields inside a panel --------------------------------------------- */
+  .form-grid {
+    display: grid;
+    gap: 1.125rem;
+  }
+  .form-field {
+    display: grid;
+    gap: 0.375rem;
+    min-width: 0;
+    /* Paired fields are equal-height grid items, and one of them carries a hint
+       line. Without this the shorter field's rows stretch to match and its
+       input grows taller than its neighbour's. */
+    align-content: start;
+  }
+  .form-label {
+    font-size: 0.90625rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--color-ink-900);
+  }
+  .form-label-req {
+    margin-left: 0.125rem;
+    color: var(--color-danger-700);
+  }
+
+  /* Leading icon inside a field. --field-icon keeps the icon colour and the
+     input's left padding tied to one another. */
+  .form-control {
+    position: relative;
+  }
+  .form-control > .icon {
+    position: absolute;
+    left: 0.8125rem;
+    top: 0.8125rem;
+    color: var(--color-ink-300);
+    pointer-events: none;
+    transition: color var(--duration-fast) var(--ease-out-soft);
+  }
+  .form-control > .field {
+    padding-left: 2.375rem;
+  }
+  /* The icon picks up the brand blue while the field has focus — the cheapest
+     possible "you are here" on a form with seven rows. */
+  .form-control:focus-within > .icon {
+    color: var(--color-blue-700);
+  }
+  .form-control > .field[aria-invalid="true"] ~ .icon,
+  .form-control:has(.field[aria-invalid="true"]) > .icon {
+    color: var(--color-danger-700);
+  }
+
+  /* Paired fields stack by default and share a row once the PANEL (not the
+     window) is wide enough. The base rule has to carry the gap too, or the two
+     stacked fields collide on a phone. */
+  .form-pair {
+    display: grid;
+    gap: 1.125rem;
+  }
+  @container (min-width: 26rem) {
+    .form-pair {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Khmer labels run long; give the panel its padding back on small screens. */
+  @media (width < 40rem) {
+    .form-panel {
+      --form-panel-pad: 1.125rem;
+      border-radius: var(--radius-lg);
+    }
   }
 
   /* --- Long-form content -------------------------------------------------- */
@@ -506,22 +755,16 @@ details[open] > summary > .disclosure-icon {
 
 /* ============================================================================
    Placeholder media.
-   Renders wherever a CMS image has not been supplied yet, so an unfinished
-   page reads as intentional rather than broken.
+   Holds the box wherever a CMS image has not been supplied yet, so the layout
+   does not shift when the real photograph lands. Silent by design: it carries
+   no text and is hidden from assistive tech. The old diagonal-stripe treatment
+   read as a broken asset to a visitor who had no idea the site was unfinished;
+   a quiet tinted panel simply looks like part of the page.
    ========================================================================= */
 .media-placeholder {
-  display: grid;
-  place-items: center;
-  padding: 0.5rem;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: #7d879e;
-  background: repeating-linear-gradient(
-    135deg,
-    var(--color-surface-sunken) 0 12px,
-    #f0f5fb 12px 24px
+  background: radial-gradient(
+    120% 120% at 50% 0%,
+    var(--color-surface-subtle) 0%,
+    var(--color-surface-sunken) 100%
   );
 }

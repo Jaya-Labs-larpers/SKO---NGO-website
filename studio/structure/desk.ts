@@ -69,11 +69,6 @@ export const structure: StructureResolver = (S) =>
         .icon(() => '👥')
         .child(S.documentTypeList('teamMember').title('Team')),
 
-      S.listItem()
-        .title('Jobs')
-        .icon(() => '💼')
-        .child(S.documentTypeList('jobPost').title('Jobs')),
-
       S.divider(),
 
       S.listItem()

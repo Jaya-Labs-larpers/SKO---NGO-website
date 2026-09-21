@@ -281,9 +281,12 @@ Do all of these on the live site before telling anyone it is launched.
 Neither is a code change you need me for, but both are wrong until you do them:
 
 1. **`public/robots.txt`** — replace `https://example.org/sitemap-index.xml` with the real domain.
-2. **Fixture content** — once Sanity has real content, the placeholders disappear on their own. If
-   any `[PLACEHOLDER]` text is still visible on the live site, that field has not been filled in.
-   Searching the live site for `[PLACEHOLDER]` is a quick way to find what SKO still owes.
+2. **Fixture content** — once Sanity has real content, the finished copy replaces the fixtures on
+   its own. Unfinished fields are *not* visible on the live site: the content layer strips every
+   `[NEEDS SKO]` / `[EXAMPLE]` marker before render and the build fails if one reaches the HTML
+   (`src/lib/content/placeholders.ts`, `scripts/check-build.mjs`), so a gap shows up as a section
+   that is simply absent. To see what SKO still owes, run `node scripts/content-review.mjs` and open
+   `SKO-content-review.html` — that reads the source, not the rendered site, and lists every gap.
 
 ---
 

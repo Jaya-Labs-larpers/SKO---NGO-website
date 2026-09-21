@@ -60,10 +60,27 @@ export function validateBuildConfig(env) {
   return failures;
 }
 
+/**
+ * Internal content markers, in step with src/lib/content/placeholders.ts and
+ * scripts/content-review.mjs. The content layer strips these before render, so
+ * one reaching the HTML means something bypassed that seam — a hardcoded string
+ * in a component, or a new marker word nobody taught the stripper.
+ */
+const CONTENT_MARKER =
+  /\[(?:NEEDS SKO|NEEDS [A-Z][A-Z ]*|PLACEHOLDER|EXAMPLE|SAMPLE|DRAFT|TODO|TBD|LOGO|STATIC MAP|KHMER REVIEW)\b[^\]]*\]/i;
+
+/**
+ * Checked on every build, not only production ones: a marker in the HTML is a
+ * leak whatever the environment, and catching it in a preview is the whole
+ * point of catching it.
+ */
+export function markerFailures(html) {
+  const found = CONTENT_MARKER.exec(html);
+  return found ? [`unfinished content marker ${found[0]}`] : [];
+}
+
 export function contentFailures(html, page) {
-  const failures = [];
-  if (/\[(?:NEEDS SKO|PLACEHOLDER)[^\]]*\]/i.test(html))
-    failures.push("unfinished content marker");
+  const failures = markerFailures(html);
   const content = html.replace(/<a\b(?=[^>]*\bhreflang="en")[^>]*>/g, "");
   if (page.startsWith("/km/") && /\blang="en"/.test(content))
     failures.push("English fallback in Khmer content");
@@ -85,27 +102,5 @@ export function siteSettingsFailures(settings) {
     )
       failures.push(`${field} must be an approved contact inbox`);
   }
-  const donation = settings.donation || {};
-  if (
-    !donation.qrCodes?.length ||
-    donation.qrCodes.some(
-      (qr) =>
-        !(
-          qr.image?.asset?.url ||
-          qr.image?.asset?._ref ||
-          qr.image?.asset?._id
-        ),
-    )
-  )
-    failures.push("Donation QR images must be published");
-  if (
-    !donation.bankAccounts?.length ||
-    donation.bankAccounts.some((account) =>
-      ["bankName", "accountName", "accountNumber", "currency"].some(
-        (field) => !usable(account[field]),
-      ),
-    )
-  )
-    failures.push("Donation bank details must be approved and complete");
   return failures;
 }

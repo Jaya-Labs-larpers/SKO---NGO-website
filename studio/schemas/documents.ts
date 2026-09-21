@@ -469,58 +469,6 @@ export const orgChart = defineType({
   preview: { prepare: () => ({ title: 'Organizational structure' }) },
 });
 
-export const jobPost = defineType({
-  name: 'jobPost',
-  title: 'Job post',
-  type: 'document',
-  fields: [
-    defineField({ name: 'title', title: 'Title', type: 'localeString', validation: (r) => r.required() }),
-    defineField({
-      name: 'slug',
-      title: 'URL slug',
-      type: 'slug',
-      options: { source: 'title.en', maxLength: 96 },
-      validation: (r) => r.required(),
-    }),
-    defineField({
-      name: 'employmentType',
-      title: 'Type',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Full time', value: 'full-time' },
-          { title: 'Part time', value: 'part-time' },
-          { title: 'Consultant', value: 'consultant' },
-          { title: 'Internship', value: 'internship' },
-        ],
-      },
-      initialValue: 'full-time',
-    }),
-    defineField({ name: 'location', title: 'Location', type: 'localeString' }),
-    defineField({ name: 'description', title: 'Description', type: 'localeBlock' }),
-    defineField({
-      name: 'howToApply',
-      title: 'How to apply',
-      type: 'localeBlock',
-      description:
-        'Give an email address. The website deliberately does not accept CV uploads — that would mean storing applicants’ personal data.',
-    }),
-    defineField({
-      name: 'deadline',
-      title: 'Closing date',
-      type: 'date',
-      description: 'The post disappears from the website automatically after this date.',
-    }),
-    defineField({
-      name: 'publishedAt',
-      title: 'Posted on',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
-    }),
-  ],
-  preview: { select: { title: 'title.en', subtitle: 'deadline' } },
-});
-
 export const impactStat = defineType({
   name: 'impactStat',
   title: 'Impact statistic',
