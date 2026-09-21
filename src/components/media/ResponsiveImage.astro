@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import type { CmsImage } from '~/lib/content/types';
+import type { DeferStrategy } from '~/lib/lazy';
 import { text } from '~/lib/i18n/utils';
 import { hasImage, imageDimensions, imageSrcSet, imageUrl } from '~/lib/sanity/image';
 
@@ -14,6 +15,15 @@ interface Props {
   aspect?: string;
   /** Above-the-fold images only — skips lazy loading and raises priority. */
   eager?: boolean;
+  /**
+   * Hold the bytes back until JavaScript says so, for the cases where
+   * `loading="lazy"` would fetch anyway: an image stacked inside the viewport
+   * but not yet shown ('idle'), one far enough down that the browser's own
+   * threshold is too eager ('visible'), or one behind a control that may never
+   * be used ('manual' — the owning component calls loadDeferredImage).
+   * Ignored when `eager` is set. No-JS visitors get the plain image.
+   */
+  defer?: DeferStrategy | false;
   class?: string;
 }
 
@@ -24,6 +34,7 @@ const {
   sizes = '(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw',
   aspect = '3/2',
   eager = false,
+  defer = false,
   class: className = '',
 } = Astro.props;
 
@@ -40,23 +51,62 @@ const { width, height } = imageDimensions(image);
 const src = present && image ? imageUrl(image, { width: 1200 }) : null;
 const srcset = present && image ? imageSrcSet(image) : null;
 const lqip = image?.lqip ?? null;
+
+const deferred = defer && !eager ? defer : null;
+const imageClass = ['block w-full h-full object-cover', className];
+/** The LQIP stands in for the photo while a deferred image waits its turn. */
+const lqipStyle = lqip
+  ? `background-image:url(${lqip});background-size:cover;background-position:center`
+  : undefined;
 ---
 
 {
   present && src ? (
-    <img
-      src={src}
-      srcset={srcset ?? undefined}
-      sizes={sizes}
-      width={width}
-      height={height}
-      alt={altText}
-      loading={eager ? 'eager' : 'lazy'}
-      decoding={eager ? 'sync' : 'async'}
-      fetchpriority={eager ? 'high' : undefined}
-      class:list={['block w-full h-full object-cover', className]}
-      style={lqip ? `background-image:url(${lqip});background-size:cover;background-position:center` : undefined}
-    />
+    deferred ? (
+      <>
+        <img
+          data-lazy={deferred}
+          data-lazy-src={src}
+          data-lazy-srcset={srcset ?? undefined}
+          sizes={sizes}
+          width={width}
+          height={height}
+          alt={altText}
+          loading="lazy"
+          decoding="async"
+          class:list={imageClass}
+          style={lqipStyle}
+        />
+        <noscript>
+          <img
+            src={src}
+            srcset={srcset ?? undefined}
+            sizes={sizes}
+            width={width}
+            height={height}
+            alt={altText}
+            loading="lazy"
+            decoding="async"
+            class:list={imageClass}
+            style={lqipStyle}
+          />
+        </noscript>
+      </>
+    ) : (
+      <img
+        src={src}
+        srcset={srcset ?? undefined}
+        sizes={sizes}
+        width={width}
+        height={height}
+        alt={altText}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding={eager ? 'sync' : 'async'}
+        fetchpriority={eager ? 'high' : undefined}
+        class:list={imageClass}
+        style={lqipStyle}
+      />
+    )
   ) : (
     <div
       class:list={['media-placeholder w-full h-full', className]}
@@ -65,3 +115,9 @@ const lqip = image?.lqip ?? null;
     />
   )
 }
+
+<script>
+  import { hydrateDeferredImages } from '~/lib/lazy';
+
+  hydrateDeferredImages();
+</script>

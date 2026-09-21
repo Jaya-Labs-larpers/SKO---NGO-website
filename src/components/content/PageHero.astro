@@ -22,13 +22,13 @@ const { lang, title, intro, introLang, eyebrow, trail } = Astro.props;
     {trail && <Breadcrumbs lang={lang} trail={trail} />}
     {eyebrow && <p class="eyebrow mt-4">{eyebrow}</p>}
     <h1
-      class="mt-3.5 max-w-[18ch] text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]"
+      class="mt-3.5 text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]"
     >
       {title}
     </h1>
     {
       intro && (
-        <p class="mt-4 max-w-[60ch] text-[length:var(--text-lead)] text-[color:var(--color-ink-400)]" lang={introLang}>
+        <p class="mt-4 text-[length:var(--text-lead)] text-[color:var(--color-ink-400)]" lang={introLang}>
           {intro}
         </p>
       )

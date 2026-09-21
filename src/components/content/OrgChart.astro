@@ -126,19 +126,45 @@ const hasTextVersion = Object.values(chart.textVersion ?? {}).some(
       <Icon name="x-mark" size={20} />
     </button>
   </div>
+  {/*
+    A closed <dialog> is display:none, which does not stop an <img> from being
+    fetched — the 2400px chart would land on every visitor who never opens it.
+    The URL waits in a data attribute until the dialog is asked for.
+  */}
   <div class="overflow-auto p-3" style="touch-action: pinch-zoom;">
-    <img src={fullUrl!} alt={altText} class="mx-auto block h-auto max-w-none" style="max-width:100%" />
+    <img
+      id="orgchart-full"
+      data-lazy-src={fullUrl!}
+      alt={altText}
+      class="mx-auto block h-auto max-w-none"
+      style="max-width:100%"
+    />
+    <noscript>
+      <img src={fullUrl!} alt={altText} class="mx-auto block h-auto max-w-none" style="max-width:100%" />
+    </noscript>
   </div>
 </dialog>
 )}
 
 <script>
+  import { loadDeferredImage } from '~/lib/lazy';
+
   const trigger = document.getElementById('orgchart-open') as HTMLButtonElement | null;
   const dialog = document.getElementById('orgchart-dialog') as HTMLDialogElement | null;
   const closeButton = document.getElementById('orgchart-close');
+  const full = document.getElementById('orgchart-full') as HTMLImageElement | null;
 
   if (trigger && dialog && closeButton) {
-    trigger.addEventListener('click', () => dialog.showModal());
+    /* Start the download on the intent rather than the click, so the dialog
+       opens onto a picture instead of a blank box. */
+    const load = () => full && loadDeferredImage(full);
+    trigger.addEventListener('pointerenter', load, { once: true });
+    trigger.addEventListener('focus', load, { once: true });
+
+    trigger.addEventListener('click', () => {
+      load();
+      dialog.showModal();
+    });
     closeButton.addEventListener('click', () => dialog.close());
     // Click on the backdrop closes it; clicks inside the panel do not.
     dialog.addEventListener('click', (event) => {

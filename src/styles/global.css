@@ -19,6 +19,32 @@
 }
 
 /* ============================================================================
+   TEXT MEASURE
+   ----------------------------------------------------------------------------
+   Every text element inside <main> is capped at one shared width and anchored
+   to the left edge of its .wrap, so running text starts and ends on the same
+   two vertical lines on every page — the same box, page after page. The header
+   and footer sit outside <main> and are deliberately untouched: their job is to
+   span the full width.
+
+   Written with :where() so the rule carries ZERO specificity. It is a default,
+   not a decree — any max-w-* utility in the markup still wins the cascade, so a
+   wide table, a card grid or a full-bleed figure opts out with `max-w-none`
+   without an !important anywhere.
+
+   Responsive behaviour comes for free: a max-width is a cap, not a width, so
+   below ~44rem every one of these elements is simply as wide as its column, and
+   .wrap's fluid --spacing-gutter keeps the side margins identical at every
+   breakpoint. The Khmer value arrives through --measure (theme.css), which the
+   language cascade sets.
+   ========================================================================= */
+@layer base {
+  main :where(p, h1, h2, h3, h4, h5, h6, blockquote, dl, figcaption) {
+    max-width: var(--measure);
+  }
+}
+
+/* ============================================================================
    MOTION
    ----------------------------------------------------------------------------
    Every animation here is a *continuity transition* or *feedback* — it orients
@@ -234,6 +260,19 @@ details[open] > summary > .disclosure-icon {
 
   .section {
     padding-block: var(--spacing-section);
+  }
+
+  /*
+   * The same cap, as a class, for the containers the element rule cannot name:
+   * a <ul> or a <div> that holds text but is also a layout box (a report list,
+   * an article column). Left-anchored explicitly so it never drifts to centre
+   * inside a parent that centres its children.
+   */
+  .measure {
+    max-width: var(--measure);
+    margin-inline-start: 0;
+    margin-inline-end: auto;
+    min-width: 0;
   }
 
   /* --- Buttons ----------------------------------------------------------- */
@@ -686,11 +725,8 @@ details[open] > summary > .disclosure-icon {
 
   /* --- Long-form content -------------------------------------------------- */
   .prose {
-    max-width: var(--container-prose);
+    max-width: var(--measure);
     color: var(--color-ink-600);
-  }
-  .prose:lang(km) {
-    max-width: var(--container-prose-km);
   }
   .prose > * + * {
     margin-top: 1.0625rem;

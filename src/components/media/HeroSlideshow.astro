@@ -26,9 +26,13 @@ const count = slides.length;
  * negative delay so they take turns. That means no timer, no state, nothing to
  * get out of sync, and nothing to load.
  *
- * Costs: only the first photo is eager — it is the LCP element. The rest lazy-
- * load after the page is interactive, so a visitor on mobile data sees the page
- * long before photos 2–4 arrive, and pays for them only once they are idle.
+ * Costs: only the first photo is eager — it is the LCP element. The rest are
+ * held back by hand. `loading="lazy"` would not hold them: the slides are
+ * stacked on the first one and so are inside the viewport from the start, and
+ * a lazy image in the viewport is fetched immediately. Deferring them to the
+ * browser's first idle moment after load means a visitor on mobile data sees
+ * the hero long before photos 2–4 arrive, and the first crossfade is a whole
+ * hold away regardless.
  *
  * A changing background is exactly what prefers-reduced-motion is for, so under
  * that setting the animation is dropped entirely and the first photo simply
@@ -74,6 +78,7 @@ const fadedEnd = pct(2 * fade + hold);
             aspect="16/9"
             sizes="100vw"
             eager={index === 0}
+            defer={index === 0 ? false : 'idle'}
             class="h-full"
           />
         </div>

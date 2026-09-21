@@ -30,19 +30,21 @@ const heading = t(lang, 'pageReports');
     trail={[{ label: heading }]}
   />
   <section class="section">
-    <div class="wrap max-w-[900px]">
-      {
-        reports.length === 0 ? (
-          <EmptyState message={t(lang, 'emptyReports')} />
-        ) : (
-          years.map((year) => (
-            <div class="mb-9">
-              <h2 class="mb-4 text-[length:var(--text-h3)]">{year || '—'}</h2>
-              <ReportList lang={lang} reports={reports.filter((report) => (report.year ?? 0) === year)} />
-            </div>
-          ))
-        )
-      }
+    <div class="wrap">
+      <div class="measure">
+        {
+          reports.length === 0 ? (
+            <EmptyState message={t(lang, 'emptyReports')} />
+          ) : (
+            years.map((year) => (
+              <div class="mb-9">
+                <h2 class="mb-4 text-[length:var(--text-h3)]">{year || '—'}</h2>
+                <ReportList lang={lang} reports={reports.filter((report) => (report.year ?? 0) === year)} />
+              </div>
+            ))
+          )
+        }
+      </div>
     </div>
   </section>
 </BaseLayout>

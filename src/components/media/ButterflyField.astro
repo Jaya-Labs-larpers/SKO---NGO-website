@@ -29,6 +29,7 @@ const { class: className = '' } = Astro.props;
 </div>
 
 <script>
+  import { whenIdle } from '~/lib/lazy';
   import {
     createSwarm,
     drawSwarm,
@@ -204,17 +205,8 @@ const { class: className = '' } = Astro.props;
   }
 
   /* The hero card is the page's largest paint and should never wait on this.
-     Mounting is deferred to the browser's first idle moment (or the next tick
-     where requestIdleCallback is missing) so the swarm starts just after the
-     page is on screen rather than competing with it. */
-  function whenIdle(work: () => void) {
-    if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(work, { timeout: 500 });
-    } else {
-      setTimeout(work, 1);
-    }
-  }
-
+     Mounting is deferred to the browser's first idle moment so the swarm
+     starts just after the page is on screen rather than competing with it. */
   whenIdle(() => {
     document.querySelectorAll<HTMLElement>('.butterfly-field').forEach(mount);
   });

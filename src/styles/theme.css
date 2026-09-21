@@ -196,6 +196,23 @@
    */
   :root {
     --header-h: 68px;
+
+    /*
+     * THE MEASURE — one column width for every piece of running text on the
+     * site, so a paragraph on /about ends on the same vertical line as a
+     * paragraph on /impact. Applied as a zero-specificity default to the text
+     * elements inside <main> (see global.css); the header and footer are
+     * outside it and keep their own widths.
+     *
+     * A custom property rather than a literal max-width because Khmer needs a
+     * narrower box for the same read length — and as a property it follows the
+     * language wherever it appears, including a Khmer block inside an English
+     * page, which a `.prose:lang(km)` rule could not reach.
+     */
+    --measure: var(--container-prose);
+  }
+  :lang(km) {
+    --measure: var(--container-prose-km);
   }
   @media (width >= 64rem) {
     :root {
