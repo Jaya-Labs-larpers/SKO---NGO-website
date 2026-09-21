@@ -73,30 +73,63 @@ jobs:
       # Mobile profile — that is the one that matters for this audience.
       # Thresholds match the definition of done, not Lighthouse's defaults.
       #
+      # Each URL is audited RUNS times and the median score per category is
+      # what gets compared to the floor. A single run on a shared GitHub runner
+      # is noisy: the performance score depends on observed CPU timings, and a
+      # busy neighbour on the host has dropped an otherwise-99 homepage to 76 on
+      # a docs-only PR. Median-of-three is Lighthouse's own recommendation for
+      # CI (https://github.com/GoogleChrome/lighthouse/blob/main/docs/variability.md).
+      #
       # is-crawlable is skipped on purpose: CI builds with fixture content, which
       # deliberately ships noindex (src/lib/config.ts, preventIndexing), so that
       # one audit is always red here and dragged SEO to 66. Remove the flag when
       # PUBLIC_CONTENT_SOURCE=sanity content goes live and production must index.
       - name: Lighthouse (English and Khmer homepages)
+        env:
+          RUNS: 3
         run: |
+          mkdir -p lighthouse-reports
           for url in http://127.0.0.1:4321/ http://127.0.0.1:4321/km/; do
-            npx --yes lighthouse@12 "$url" \
-              --quiet --chrome-flags="--headless=new --no-sandbox" \
-              --skip-audits=is-crawlable \
-              --output=json --output-path=./report.json
+            slug=$(echo "$url" | sed -E 's#https?://[^/]+/##; s#/$##; s#/#-#g')
+            slug=${slug:-home}
+            for i in $(seq 1 "$RUNS"); do
+              npx --yes lighthouse@12 "$url" \
+                --quiet --chrome-flags="--headless=new --no-sandbox" \
+                --skip-audits=is-crawlable \
+                --output=json --output-path="./lighthouse-reports/${slug}-${i}.json"
+            done
             node -e '
-              const r = require("./report.json");
+              const fs = require("fs");
+              const [slug, runs] = process.argv.slice(1);
+              const reports = Array.from({ length: Number(runs) }, (_, i) =>
+                JSON.parse(fs.readFileSync(`./lighthouse-reports/${slug}-${i + 1}.json`, "utf8")));
               const floors = { performance: 90, accessibility: 95, "best-practices": 95, seo: 95 };
+              const median = (xs) => {
+                const s = [...xs].sort((a, b) => a - b);
+                const m = s.length >> 1;
+                return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+              };
               let failed = false;
+              console.log(`${reports[0].finalDisplayedUrl}  (median of ${reports.length} runs)`);
               for (const [key, floor] of Object.entries(floors)) {
-                const score = Math.round(r.categories[key].score * 100);
+                const scores = reports.map((r) => Math.round(r.categories[key].score * 100));
+                const score = Math.round(median(scores));
                 const ok = score >= floor;
                 if (!ok) failed = true;
-                console.log(`${ok ? "PASS" : "FAIL"}  ${key.padEnd(16)} ${score} (floor ${floor})`);
+                console.log(`${ok ? "PASS" : "FAIL"}  ${key.padEnd(16)} ${score} (floor ${floor})  runs: ${scores.join(" ")}`);
               }
               if (failed) process.exit(1);
-            '
+            ' "$slug" "$RUNS"
           done
+
+      # Keep the raw reports so a red run can be diagnosed, not just re-run.
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: lighthouse-reports/
+          retention-days: 14
 
   studio:
     runs-on: ubuntu-latest
