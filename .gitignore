@@ -12,10 +12,12 @@ dist/
 .wrangler/
 studio/dist/
 studio/.sanity/
+video/out/
 
 # Dependencies
 node_modules/
 studio/node_modules/
+video/node_modules/
 
 # OS / editor
 .DS_Store

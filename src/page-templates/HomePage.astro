@@ -49,14 +49,18 @@ const story = stories[0];
   headerOverlay
 >
   {/*
-    Hero: the logo's butterflies behind, white card in front. It starts at the
-    top of the window, under a header that has gone transparent, so the
-    butterflies are what fills that band. From lg the field is a background
-    layer, so the section pays the header's height back as padding to keep the
-    card where it was; below lg the field is a block in the flow and already
-    starts high enough.
+    Hero: a swarm of the logo's butterflies behind, white card in front. It
+    starts at the top of the window, under a header that has gone transparent,
+    so the butterflies are what fills that band. From lg the field is a
+    background layer, so the section pays the header's height back as padding
+    to keep the card where it was; below lg the field is a block in the flow and
+    already starts high enough.
+
+    The section is the pointer host: hovering anywhere over it (except the card)
+    gathers the nearby butterflies around the cursor.
   */}
   <section
+    data-butterfly-host
     class="hero-overlap relative border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] lg:pt-[var(--header-h)]"
   >
     {/*
@@ -69,6 +73,7 @@ const story = stories[0];
 
     <div class="wrap relative flex min-h-0 items-center lg:min-h-[520px]">
       <div
+        data-butterfly-shelter
         class="-mt-10 mb-0 w-full max-w-[588px] rounded-[var(--radius-xl)] border border-[color:var(--color-line)] bg-white p-6 shadow-[var(--shadow-lg)] sm:p-11 lg:my-14 lg:-mt-0"
       >
         <p class="eyebrow">Phnom Penh, Cambodia · Since 2007</p>
