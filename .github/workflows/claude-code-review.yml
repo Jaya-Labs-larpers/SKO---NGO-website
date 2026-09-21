@@ -10,10 +10,12 @@ on:
     #   - "src/**/*.js"
     #   - "src/**/*.jsx"
 
-# Every third-party reference below is pinned to a commit SHA. Mutable tags
-# (`@v1`, a marketplace `main` branch) would let an upstream change run with
-# this job's OAuth token and OIDC identity without any change in this repo.
-# Bump the SHAs deliberately; the trailing comment records the tag they came from.
+# Every third-party action below is pinned to a commit SHA. Mutable tags
+# (`@v1`) would let an upstream change run with this job's OAuth token and
+# OIDC identity without any change in this repo. Bump the SHAs deliberately;
+# the trailing comment records the tag they came from. The plugin marketplace
+# is the one exception and cannot be pinned -- see the note on
+# `plugin_marketplaces` below.
 jobs:
   claude-review:
     # Only PRs from branches in this repository, opened by people with write
@@ -37,27 +39,21 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      # The code-review plugin is installed from a local checkout pinned to a
-      # commit instead of the mutable marketplace URL, so the reviewer's prompts
-      # and tools cannot change underneath this workflow.
-      - name: Checkout pinned plugin marketplace
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
-        with:
-          repository: anthropics/claude-code
-          ref: 68ac8bbf0245b615b41517bf8f2b2f35af1ae31d # main, 2026-09-17
-          path: .claude-plugin-marketplace
-          fetch-depth: 1
-          persist-credentials: false
-          sparse-checkout: |
-            .claude-plugin
-            plugins/code-review
-
       - name: Run Claude Code Review
         id: claude-review
         uses: anthropics/claude-code-action@3b8197d3d486006dd4af54613517f21ac6ac625e # v1.0.227
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          plugin_marketplaces: './.claude-plugin-marketplace'
+          # The `claude-code-plugins` name is reserved by Claude Code for
+          # official Anthropic marketplaces and is only granted to GitHub
+          # sources under the `anthropics` org, so a local checkout cannot
+          # supply it. This action version accepts only a local path or an
+          # `https://...git` URL (base-action/src/install-plugins.ts), and
+          # `claude plugin marketplace add` has no ref/commit option, so the
+          # marketplace itself cannot be SHA-pinned here; a `#<ref>` suffix is
+          # read as a branch and is rejected by the action's URL check anyway.
+          # Every other third-party reference in this file stays SHA-pinned.
+          plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
           plugins: 'code-review@claude-code-plugins'
           prompt: '/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
