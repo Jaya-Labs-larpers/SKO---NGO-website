@@ -1,0 +1,79 @@
+name: Deploy
+
+# Production deploys happen here and nowhere else. A push to main that passes
+# the one command (tests, typecheck, build with CSP and structural checks) is
+# deployed to the sko-website-production Worker, then checked live.
+#
+# Until CLOUDFLARE_API_TOKEN exists as a repository secret the deploy steps are
+# skipped and the job still goes green, so main is never red for a missing
+# credential. Create the token from the "Edit Cloudflare Workers" template with
+# the sko-samatapheapkhnom.org zone included, and store it with
+# `gh secret set CLOUDFLARE_API_TOKEN`. Never the Global API Key.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time, in order. A second push waits rather than racing.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://www.sko-samatapheapkhnom.org
+    env:
+      PUBLIC_DEPLOYMENT_ENV: production
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+      PUBLIC_CONTENT_SOURCE: ${{ vars.PUBLIC_CONTENT_SOURCE }}
+      PUBLIC_CONTACT_ENABLED: ${{ vars.PUBLIC_CONTACT_ENABLED }}
+      PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+      PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
+      PUBLIC_SANITY_PROJECT_ID: ${{ vars.PUBLIC_SANITY_PROJECT_ID }}
+      PUBLIC_SANITY_DATASET: ${{ vars.PUBLIC_SANITY_DATASET }}
+      PUBLIC_SANITY_API_VERSION: ${{ vars.PUBLIC_SANITY_API_VERSION }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install (locked)
+        run: npm ci
+
+      - name: The one command
+        run: npm run check
+
+      - name: Deploy credentials present?
+        id: creds
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -n "$TOKEN" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::CLOUDFLARE_API_TOKEN is not set; build verified, deploy skipped."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to Cloudflare Workers (production)
+        if: steps.creds.outputs.ready == 'true'
+        run: npx wrangler deploy --env production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Live checks against production
+        if: steps.creds.outputs.ready == 'true'
+        run: npm run check:edge -- https://www.sko-samatapheapkhnom.org

@@ -10,7 +10,6 @@
 dist/
 .astro/
 .wrangler/
-.vercel/
 studio/dist/
 studio/.sanity/
 
