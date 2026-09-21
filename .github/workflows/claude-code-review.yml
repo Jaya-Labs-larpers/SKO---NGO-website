@@ -37,19 +37,30 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      # The code-review plugin is installed from a local checkout pinned to a
-      # commit instead of the mutable marketplace URL, so the reviewer's prompts
-      # and tools cannot change underneath this workflow.
-      - name: Checkout pinned plugin marketplace
+      # The official code-review plugin is loaded from a checkout of
+      # anthropics/claude-code pinned to a commit, so the reviewer's prompts and
+      # tools cannot change underneath this workflow.
+      #
+      # It is passed to Claude Code with `--plugin-dir` rather than through the
+      # action's `plugin_marketplaces`/`plugins` inputs, because no marketplace
+      # route can be pinned to a commit:
+      #   - a local-path marketplace is rejected: the upstream marketplace.json
+      #     is named `claude-code-plugins`, which Claude Code reserves for
+      #     GitHub sources under the `anthropics` org;
+      #   - a GitHub-source marketplace only accepts a branch or tag as its ref
+      #     (`owner/repo#ref`), not a commit SHA, and the action only accepts
+      #     `https://...git` marketplace URLs with no ref at all.
+      # `--plugin-dir` loads the plugin for this session only; the command it
+      # registers is still `/code-review:code-review`.
+      - name: Checkout pinned code-review plugin
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           repository: anthropics/claude-code
           ref: 68ac8bbf0245b615b41517bf8f2b2f35af1ae31d # main, 2026-09-17
-          path: .claude-plugin-marketplace
+          path: .claude-plugins-pinned
           fetch-depth: 1
           persist-credentials: false
           sparse-checkout: |
-            .claude-plugin
             plugins/code-review
 
       - name: Run Claude Code Review
@@ -57,8 +68,7 @@ jobs:
         uses: anthropics/claude-code-action@3b8197d3d486006dd4af54613517f21ac6ac625e # v1.0.227
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          plugin_marketplaces: './.claude-plugin-marketplace'
-          plugins: 'code-review@claude-code-plugins'
+          claude_args: '--plugin-dir ${{ github.workspace }}/.claude-plugins-pinned/plugins/code-review'
           prompt: '/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
