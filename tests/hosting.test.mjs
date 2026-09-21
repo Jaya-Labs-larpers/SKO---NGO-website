@@ -115,3 +115,18 @@ test("the Khmer 404 page is copied to where the nearest-404 lookup finds it", as
     copyLocalizedNotFound(await mkdtemp(join(tmpdir(), "sko-empty-"))),
   );
 });
+
+test("Vercel is told not to deploy this repository from Git", async () => {
+  // The site moved to Cloudflare Workers. Until the Vercel projects are deleted,
+  // their GitHub integration still sees every push; without a build command it
+  // fails noisily, and with one it could overwrite production. Neither is wanted.
+  const vercel = JSON.parse(
+    await readFile(new URL("vercel.json", root), "utf8"),
+  );
+  assert.equal(vercel.git?.deploymentEnabled, false);
+  assert.deepEqual(
+    Object.keys(vercel).filter((key) => key !== "$schema"),
+    ["git"],
+    "routing, headers and functions must not come back into vercel.json",
+  );
+});
