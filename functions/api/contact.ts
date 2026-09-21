@@ -1,8 +1,8 @@
 /**
  * POST /api/contact — the only runtime code on this site.
  *
- * Cloudflare Pages picks this up from the repo root independently of Astro
- * (ADR-001), so the site itself stays fully static.
+ * worker/index.ts routes POST /api/contact here and nothing else (ADR-001),
+ * so the site itself stays fully static.
  *
  * Order of checks is cheapest-rejection-first:
  *   1. honeypot            — no network calls, no email

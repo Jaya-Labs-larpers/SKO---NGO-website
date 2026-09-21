@@ -72,11 +72,17 @@ jobs:
 
       # Mobile profile — that is the one that matters for this audience.
       # Thresholds match the definition of done, not Lighthouse's defaults.
+      #
+      # is-crawlable is skipped on purpose: CI builds with fixture content, which
+      # deliberately ships noindex (src/lib/config.ts, preventIndexing), so that
+      # one audit is always red here and dragged SEO to 66. Remove the flag when
+      # PUBLIC_CONTENT_SOURCE=sanity content goes live and production must index.
       - name: Lighthouse (English and Khmer homepages)
         run: |
           for url in http://127.0.0.1:4321/ http://127.0.0.1:4321/km/; do
             npx --yes lighthouse@12 "$url" \
               --quiet --chrome-flags="--headless=new --no-sandbox" \
+              --skip-audits=is-crawlable \
               --output=json --output-path=./report.json
             node -e '
               const r = require("./report.json");

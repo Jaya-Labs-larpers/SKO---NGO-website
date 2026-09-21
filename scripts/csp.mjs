@@ -19,7 +19,7 @@
  * that page's exact policy into its `<meta http-equiv>` tag. Cost per response:
  * nothing. Scales to any number of activity posts.
  *
- * `frame-ancestors` cannot be set via meta, so it stays in `vercel.json`
+ * `frame-ancestors` cannot be set via meta, so it stays in `public/_headers`
  * alongside the other security headers.
  */
 

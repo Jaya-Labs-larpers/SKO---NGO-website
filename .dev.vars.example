@@ -1,0 +1,23 @@
+# Runtime settings for the Worker under `wrangler dev`. Copy to .dev.vars
+# (git-ignored). In production the same names are set with
+# `npx wrangler secret put NAME --env production`, never in wrangler.jsonc.
+#
+# Astro's build-time PUBLIC_* values stay in .env. Nothing here is ever
+# inlined into the browser bundle.
+#
+# If .dev.vars does not exist, `wrangler dev` reads .env and .env.local
+# instead, so any real keys in your .env become visible to the local Worker.
+# Keep CONTACT_ENABLED=false there too.
+
+# Runtime kill switch for POST /api/contact. Also set in wrangler.jsonc vars.
+CONTACT_ENABLED=false
+
+# Cloudflare Turnstile secret key (server-only). Test key for local dev:
+# https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+
+# Email delivery (Resend) — server only. Leave delivery disabled locally.
+RESEND_API_KEY=
+MAIL_FROM=noreply@example.org
+CONTACT_TO_EMAIL=
+PARTNER_TO_EMAIL=

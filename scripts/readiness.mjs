@@ -1,18 +1,9 @@
 export function deploymentEnvironment(env) {
-  const requested = env.PUBLIC_DEPLOYMENT_ENV?.trim();
-  const hosted =
-    env.VERCEL_ENV ||
-    (env.CF_PAGES === "1"
-      ? env.CF_PAGES_BRANCH === "main"
-        ? "production"
-        : "preview"
-      : undefined);
-  if (hosted && requested && requested !== hosted) {
-    throw new Error(
-      "[readiness] PUBLIC_DEPLOYMENT_ENV conflicts with the hosting environment",
-    );
-  }
-  const mode = hosted || requested || "development";
+  // Set explicitly wherever the site is built: `preview` for the workers.dev
+  // rehearsal and pull requests, `production` in the deploy workflow. There is
+  // no host-supplied value to fall back on, so a missing value means a
+  // developer machine.
+  const mode = env.PUBLIC_DEPLOYMENT_ENV?.trim() || "development";
   if (!["production", "preview", "development"].includes(mode)) {
     throw new Error("[readiness] Invalid PUBLIC_DEPLOYMENT_ENV");
   }
@@ -46,7 +37,9 @@ export function validateBuildConfig(env) {
   }
   if (env.PUBLIC_CONTENT_SOURCE === "fixtures") {
     if (env.PUBLIC_CONTACT_ENABLED !== "false")
-      failures.push("PUBLIC_CONTACT_ENABLED must be false for local content in production");
+      failures.push(
+        "PUBLIC_CONTACT_ENABLED must be false for local content in production",
+      );
     return failures;
   }
   if (env.PUBLIC_CONTENT_SOURCE !== "sanity")

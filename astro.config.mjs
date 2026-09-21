@@ -15,10 +15,10 @@ const env = {
 const failures = validateBuildConfig(env);
 if (failures.length) throw new Error(`[readiness]\n${failures.join("\n")}`);
 process.env.PUBLIC_DEPLOYMENT_ENV = deploymentEnvironment(env);
-const SITE = (
-  env.PUBLIC_SITE_URL?.trim() ||
-  (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "http://localhost:4321")
-).replace(/\/+$/, "");
+const SITE = (env.PUBLIC_SITE_URL?.trim() || "http://localhost:4321").replace(
+  /\/+$/,
+  "",
+);
 process.env.PUBLIC_SITE_URL = SITE;
 
 export default defineConfig({

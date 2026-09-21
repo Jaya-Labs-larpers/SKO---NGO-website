@@ -8,7 +8,7 @@
  *    component or fixture even when no matching env var is set locally.
  *
  * 2. `findEnvLeaks(text, entries)` — the literal value of every secret-looking
- *    environment variable. Catches the case that matters most on Vercel: a
+ *    environment variable. Catches the case that matters most in a hosted build: a
  *    server-only variable reaching the browser through `import.meta.env`,
  *    whatever its format. Runs against the real values during the hosted
  *    build, so it proves the deployed artifact is clean, not just a local one.
