@@ -115,3 +115,37 @@ test("the Khmer 404 page is copied to where the nearest-404 lookup finds it", as
     copyLocalizedNotFound(await mkdtemp(join(tmpdir(), "sko-empty-"))),
   );
 });
+
+test("_redirects sends the retired donate and careers URLs to contact with a 301", async () => {
+  const text = await readFile(new URL("public/_redirects", root), "utf8");
+  const rules = new Map();
+  for (const raw of text.split("\n")) {
+    const line = raw.replace(/#.*$/, "").trim();
+    if (!line) continue;
+    const [from, to, status] = line.split(/\s+/);
+    rules.set(from, { to, status: Number(status) });
+  }
+  for (const [from, to] of [
+    ["/donate", "/contact/"],
+    ["/donate/", "/contact/"],
+    ["/km/donate", "/km/contact/"],
+    ["/km/donate/", "/km/contact/"],
+    ["/careers", "/contact/"],
+    ["/careers/*", "/contact/"],
+    ["/km/careers", "/km/contact/"],
+    ["/km/careers/*", "/km/contact/"],
+  ]) {
+    assert.deepEqual(rules.get(from), { to, status: 301 }, from);
+  }
+  for (const [from, { to }] of rules) {
+    assert.match(
+      to,
+      /^\/(km\/)?contact\/$/,
+      `${from} must land on a contact page`,
+    );
+    assert.ok(
+      from.startsWith("/km/") === to.startsWith("/km/"),
+      `${from} must keep its language`,
+    );
+  }
+});

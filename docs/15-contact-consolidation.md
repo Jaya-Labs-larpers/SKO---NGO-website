@@ -49,7 +49,7 @@ Rebuilding `/donate` as a second inquiry page would have produced:
 
 | Suspected | Verdict |
 |---|---|
-| `api/contact.ts` vs `functions/api/contact.ts` | **Not a duplicate.** `api/contact.ts` is a 42-line Vercel adapter that imports and delegates to the 445-line Cloudflare Pages function. One implementation, two host entry points (ADR-001). |
+| `api/contact.ts` vs `functions/api/contact.ts` | **Resolved by the Cloudflare cutover.** `api/contact.ts` was a thin Vercel adapter over the Cloudflare function; it was deleted with Vercel, leaving `functions/api/contact.ts` (fronted by `worker/index.ts`) as the single implementation. |
 | `navContact` in both footer columns | **Avoided.** `navContact` already sits in the *Organisation* column, so the retired `navDonate` entry in *Get involved* was removed rather than replaced with a second contact link. |
 | Contact details on `/contact` | Single source: `getSiteSettings()`. Not repeated elsewhere. |
 
@@ -63,14 +63,19 @@ Rebuilding `/donate` as a second inquiry page would have produced:
 - `src/pages/donate.astro`
 - `src/pages/km/donate.astro`
 
-### Redirects — `vercel.json`
+### Redirects — `public/_redirects`
 
-Added ahead of `{ "handle": "filesystem" }`:
+Applied by Cloudflare Workers ahead of the static asset lookup (these began
+life in `vercel.json` and moved with the Cloudflare cutover):
 
 ```
-/km/donate  ->  301  /km/contact/
-/donate     ->  301  /contact/
+/donate, /donate/          ->  301  /contact/
+/km/donate, /km/donate/    ->  301  /km/contact/
+/careers, /careers/*       ->  301  /contact/
+/km/careers, /km/careers/* ->  301  /km/contact/
 ```
+
+`tests/hosting.test.mjs` pins every rule.
 
 ### CTAs repointed to `/contact`
 
@@ -161,5 +166,7 @@ in `public/icons/sprite.svg` — a shared static asset, not dead source.
 - `npm run typecheck` — 3 errors in `src/components/Icon.astro` and
   `src/components/Logo.astro`. Neither was edited here.
 
-Both block `npm run build:vercel` (which chains `test && typecheck && build`)
-and need fixing separately before a Vercel production deploy.
+Both blocked `npm run check` (which chains `test && typecheck && build`) and
+were fixed on this branch: the form tests in the consolidation commit, the
+`Logo`/`Icon` types in *Type the Logo variant map and escape its interpolated
+props*.

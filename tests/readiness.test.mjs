@@ -62,36 +62,43 @@ test("production content rejects unfinished markers and untranslated Khmer", asy
   assert.deepEqual(
     contentFailures(
       '<html lang="km"><a hreflang="en" lang="en" href="/about/">EN</a></html>',
-      '/km/about/',
+      "/km/about/",
     ),
     [],
   );
-  assert.ok(contentFailures('<p>[NEEDS SKO]</p>', '/about/').length);
-  assert.ok(contentFailures('<p>[PLACEHOLDER MAP]</p>', '/contact/').length);
-  assert.ok(contentFailures('<h3>[EXAMPLE] A training day</h3>', '/activities/').length);
-  assert.ok(contentFailures('<div>[LOGO]</div>', '/partners/').length);
+  assert.ok(contentFailures("<p>[NEEDS SKO]</p>", "/about/").length);
+  assert.ok(contentFailures("<p>[PLACEHOLDER MAP]</p>", "/contact/").length);
   assert.ok(
-    contentFailures('<html lang="km"><p lang="en">Fallback</p></html>', '/km/about/').length,
+    contentFailures("<h3>[EXAMPLE] A training day</h3>", "/activities/").length,
+  );
+  assert.ok(contentFailures("<div>[LOGO]</div>", "/partners/").length);
+  assert.ok(
+    contentFailures(
+      '<html lang="km"><p lang="en">Fallback</p></html>',
+      "/km/about/",
+    ).length,
   );
 });
 
-test('production readiness requires approved contact inboxes', async () => {
-  const { siteSettingsFailures } = await import('../scripts/readiness.mjs');
+test("production readiness requires approved contact inboxes", async () => {
+  const { siteSettingsFailures } = await import("../scripts/readiness.mjs");
   assert.ok(siteSettingsFailures({}).length);
   assert.deepEqual(
     siteSettingsFailures({
-      email: 'info@ngo.org',
-      partnerEmail: 'partners@ngo.org',
+      email: "info@ngo.org",
+      partnerEmail: "partners@ngo.org",
     }),
     [],
   );
   assert.ok(
     siteSettingsFailures({
-      email: 'info@example.com',
-      partnerEmail: 'partners@ngo.org',
+      email: "info@example.com",
+      partnerEmail: "partners@ngo.org",
     }).length,
   );
-  assert.ok(siteSettingsFailures({ email: 'info@ngo.org', partnerEmail: 'TBD' }).length);
+  assert.ok(
+    siteSettingsFailures({ email: "info@ngo.org", partnerEmail: "TBD" }).length,
+  );
 });
 
 test("explicit fixture previews do not query a configured CMS project", async () => {
@@ -169,9 +176,14 @@ test("explicit local production content needs a real domain and disabled forms, 
   assert.equal(config.preventIndexing, true);
 });
 
-test('the marker check runs outside production, where the Khmer rule does not', async () => {
-  const { markerFailures } = await import('../scripts/readiness.mjs');
-  assert.deepEqual(markerFailures('<p>Finished copy.</p>'), []);
-  assert.ok(markerFailures('<p>[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]</p>').length);
-  assert.deepEqual(markerFailures('<html lang="km"><p lang="en">Fallback</p></html>'), []);
+test("the marker check runs outside production, where the Khmer rule does not", async () => {
+  const { markerFailures } = await import("../scripts/readiness.mjs");
+  assert.deepEqual(markerFailures("<p>Finished copy.</p>"), []);
+  assert.ok(
+    markerFailures("<p>[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]</p>").length,
+  );
+  assert.deepEqual(
+    markerFailures('<html lang="km"><p lang="en">Fallback</p></html>'),
+    [],
+  );
 });
