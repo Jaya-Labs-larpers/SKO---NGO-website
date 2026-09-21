@@ -107,3 +107,21 @@ each lands in the right inbox and not in spam.
 - Nightly rebuild at 02:00 Asia/Phnom_Penh so expired job posts drop off (Actions cron).
 - Uptime check on `/`, `/km/` and `/donate/`, alerting a named person.
 - Move the zone and Worker to an SKO-owned Cloudflare account if they are not there already.
+
+## Launch record
+
+|                      |                                                                                                                                                    |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cut over             | 21 September 2026, about 13:45 Asia/Phnom_Penh                                                                                                     |
+| Source               | `main` at merge commit 445d403 (PR #5)                                                                                                             |
+| Worker version       | `f1938c64-3155-4870-9ec4-89dffff0fa2e` on `sko-website-production`                                                                                 |
+| Deployed by          | Kimchhun, from a laptop, because CI deploys are not set up yet                                                                                     |
+| Verified             | `check:edge` 28/28 against `https://www.sko-samatapheapkhnom.org`; apex → www is one 301 with path and query preserved; HTTP → HTTPS on both hosts |
+| State                | Fixture content, `noindex`, forms disabled. Identical posture to the Vercel site it replaced.                                                      |
+| Accepted limitations | Cloudflare account is a personal one, not SKO's; no CI deploy; no uptime check; rollback not yet rehearsed (only one version exists)               |
+| Review by            | 21 October 2026, or at the first content launch, whichever comes first                                                                             |
+
+Still open after launch, in order: remove the domain from the Vercel project and delete both Vercel
+projects; decide where the CI deploy token lives and add `deploy.yml`; rehearse a rollback once a
+second version exists; add the production hostname to the Turnstile widget; set the five production
+secrets; add an uptime check with a named recipient.
