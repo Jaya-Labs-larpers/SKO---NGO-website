@@ -1,15 +1,15 @@
 ---
 /**
- * The site-wide flock: three logo butterflies of one size, on a fixed layer
- * over every page. The motion lives in ~/lib/butterflies/flight.
+ * The home page's flock: three logo butterflies of one size, on a fixed layer
+ * over the home page only (BaseLayout renders it nowhere else, in either
+ * language). The motion lives in ~/lib/butterflies/flight.
  *
  * They belong to the window, not the page. Each flies on its own; while the
  * mouse moves they trail it, and after it has been still for IDLE_MS they
  * drift back to the edges. Scrolling carries them along the side edges.
- * Changing URL leaves every one of them exactly where it was: the flock is
- * saved on the way out and redrawn by the inline script below before the next
- * page's first paint, and each butterfly carries its own view-transition name
- * so the page swap slides content under them without touching them. The hero card ([data-butterfly-shelter]) is a
+ * Leaving the home page, they fade out with it; no other page has them.
+ * Coming back, they are exactly where they were: the flock is saved on the way
+ * out and redrawn by the inline script below before first paint. The hero card ([data-butterfly-shelter]) is a
  * no-follow zone, so they never crowd its headline or buttons.
  *
  * On phones they shrink to the page gutters and simply drift there. Under

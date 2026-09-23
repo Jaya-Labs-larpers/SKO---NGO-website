@@ -2,7 +2,7 @@
 import "~/styles/global.css";
 
 import { htmlLang, type Locale } from "~/lib/i18n/config";
-import { t } from "~/lib/i18n/utils";
+import { parsePath, t } from "~/lib/i18n/utils";
 import { getSiteSettings } from "~/lib/content";
 import type { CmsImage } from "~/lib/content/types";
 import Header from "~/components/layout/Header.astro";
@@ -40,6 +40,8 @@ const {
 
 const settings = await getSiteSettings();
 const pathname = Astro.url.pathname;
+/** The butterflies belong to the home page alone, in either language. */
+const isHome = parsePath(pathname).path === "/";
 ---
 
 <!doctype html>
@@ -101,7 +103,7 @@ const pathname = Astro.url.pathname;
       {t(lang, "skipToContent")}
     </a>
 
-    <ButterflyField />
+    {isHome && <ButterflyField />}
 
     <Header
       lang={lang}
