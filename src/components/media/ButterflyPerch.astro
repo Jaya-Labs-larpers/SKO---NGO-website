@@ -1,0 +1,43 @@
+---
+/**
+ * Where the home page's butterfly lands on every other page. It shares the
+ * `butterfly` view-transition name with the hero butterfly, so navigating
+ * morphs one into the other: it glides down from the hero into this perch,
+ * hops between perches as you move through the site, and flies back up when
+ * you return home.
+ *
+ * The perch is picked by section, in menu order, so neighbouring pages in the
+ * menu never share a spot and every hop between them is visible. Sections
+ * outside the menu fall back to a hash of the path. The Khmer page shares its
+ * English twin's perch so switching language does not move it, and paginated
+ * lists keep one perch across their pages. Every spot sits right of the 44rem
+ * text measure, clear of the title and lead at the narrowest width it shows (lg).
+ */
+import { mobileNav } from '~/lib/nav';
+import ButterflyGlyph from './ButterflyGlyph.astro';
+
+const SPOTS = [
+  { right: '2%', top: '10%', tilt: -10 },
+  { right: '13%', top: '40%', tilt: 8 },
+  { right: '6%', top: '62%', tilt: -4 },
+  { right: '10%', top: '4%', tilt: 12 },
+] as const;
+
+const path = Astro.url.pathname.replace(/^\/km(?=\/|$)/, '') || '/';
+const section = `/${path.split('/')[1] ?? ''}`;
+const inMenu = mobileNav.findIndex((item) => item.path === section);
+let index = inMenu;
+if (index < 0) {
+  index = 0;
+  for (const char of section) index = (index * 31 + char.charCodeAt(0)) >>> 0;
+}
+const spot = SPOTS[index % SPOTS.length]!;
+---
+
+<div
+  class="butterfly-perch"
+  style={`--perch-right:${spot.right};--perch-top:${spot.top};--perch-tilt:${spot.tilt}deg`}
+  aria-hidden="true"
+>
+  <ButterflyGlyph />
+</div>

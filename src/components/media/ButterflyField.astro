@@ -1,22 +1,30 @@
 ---
 /**
- * The butterfly from the SKO logo, many times over and small, set loose over
- * the hero.
+ * The butterfly from the SKO logo, drawn large and alone, gliding over the
+ * hero. On wide screens it keeps to the open space beside the card; where the
+ * field is a band above the card it hovers in the middle of it.
  *
- * A canvas fills whatever box it is placed in, so it drops into the same slot
- * as HeroSlideshow and always matches the window. The swarm itself lives in
- * ~/lib/butterflies/swarm — a deterministic simulation the Remotion project in
- * /video renders to a video with the very same code.
+ * It is an inline SVG rather than a canvas so it can carry the `butterfly`
+ * view-transition name: leaving the home page, it flies down into the perch
+ * every other page keeps for it (ButterflyPerch), and flies back up on return.
  *
- * Hovering over the field gathers the nearby butterflies into a loose cloud
- * around the cursor; move away and they drift home. The pointer is read from
- * the nearest [data-butterfly-host] ancestor (the hero section), so the canvas
- * itself never intercepts clicks. Hovering the card ([data-butterfly-shelter])
- * counts as leaving the field.
+ * Its resting place is pure CSS (.butterfly-home in global.css), so a page
+ * arriving by view transition already has it in place before any script runs.
+ * Motion comes from ~/lib/butterflies/swarm as a swarm of one — the same
+ * deterministic simulation the Remotion project in /video renders — and is
+ * applied as a transform on top of that resting place.
  *
- * Under prefers-reduced-motion one settled frame is drawn and nothing moves.
+ * Hovering over the field draws the butterfly into a slow circle around the
+ * cursor; move away and it glides home. The pointer is read from the nearest
+ * [data-butterfly-host] ancestor (the hero section), so the field itself never
+ * intercepts clicks. Hovering the card ([data-butterfly-shelter]) counts as
+ * leaving the field.
+ *
+ * Under prefers-reduced-motion one settled frame is shown and nothing moves.
  * The loop also stops while the field is off screen or the tab is hidden.
  */
+import ButterflyGlyph from './ButterflyGlyph.astro';
+
 interface Props {
   class?: string;
 }
@@ -25,18 +33,20 @@ const { class: className = '' } = Astro.props;
 ---
 
 <div class:list={['butterfly-field', className]} aria-hidden="true">
-  <canvas class="butterfly-canvas"></canvas>
+  <div class="butterfly-home">
+    <ButterflyGlyph class="butterfly-flyer" />
+  </div>
 </div>
 
 <script>
   import { whenIdle } from '~/lib/lazy';
   import {
     createSwarm,
-    drawSwarm,
     resizeSwarm,
     stepSwarm,
     type Pointer,
     type Swarm,
+    type SwarmOptions,
   } from '~/lib/butterflies/swarm';
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -44,72 +54,83 @@ const { class: className = '' } = Astro.props;
   const saveData =
     (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
 
-  /* Butterflies are small, so 1.5× is visually indistinguishable from 2× on
-     a phone but clears and composites 44% fewer pixels every frame. */
-  const MAX_DPR = 1.5;
-  /* If frames keep taking longer than this, step and draw every other one.
-     Motion stays smooth because dt doubles; the machine gets half the work. */
-  const SLOW_FRAME_MS = 22;
+  const SOLO: Partial<SwarmOptions> = {
+    minCount: 1,
+    maxCount: 1,
+    // A big wing beats slowly; a small one's 2–3 Hz reads as a flutter here.
+    minFlapHz: 0.9,
+    maxFlapHz: 1.2,
+    gatherRadius: 420,
+    releaseRadius: 560,
+    // Circles the cursor rather than landing on it.
+    minRingRadius: 120,
+    maxRingRadius: 170,
+  };
+  /** How far the wings close on each beat, as a fraction of their span. */
+  const FLAP_MIN = 0.4;
 
   function mount(field: HTMLElement) {
-    const maybeCanvas = field.querySelector<HTMLCanvasElement>('canvas');
-    const maybeCtx = maybeCanvas?.getContext('2d', { alpha: true, desynchronized: true });
-    if (!maybeCanvas || !maybeCtx) return;
+    const home = field.querySelector<HTMLElement>('.butterfly-home');
+    const flyer = field.querySelector<SVGSVGElement>('.butterfly-flyer');
+    const wings = flyer?.querySelector<SVGGElement>('.butterfly-wings');
+    if (!home || !flyer || !wings) return;
     // Rebound as consts so the closures below see them as non-null.
-    const canvas: HTMLCanvasElement = maybeCanvas;
-    const ctx: CanvasRenderingContext2D = maybeCtx;
+    const homeEl: HTMLElement = home;
+    const flyerEl: SVGSVGElement = flyer;
+    const wingsEl: SVGGElement = wings;
 
     const host = field.closest<HTMLElement>('[data-butterfly-host]') ?? field;
 
     let swarm: Swarm | null = null;
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
+    let homeX = 0;
+    let homeY = 0;
     let pointer: Pointer | null = null;
     let raf = 0;
     let last = 0;
     let visible = true;
-    let frameCost = 0; // exponential moving average of frame time, ms
-    let skipNext = false;
 
     function fit() {
-      const rect = field.getBoundingClientRect();
-      width = Math.max(1, Math.round(rect.width));
-      height = Math.max(1, Math.round(rect.height));
-      dpr = Math.min(MAX_DPR, window.devicePixelRatio || 1);
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
+      const bounds = field.getBoundingClientRect();
+      const width = Math.max(1, Math.round(bounds.width));
+      const height = Math.max(1, Math.round(bounds.height));
+      const spot = homeEl.getBoundingClientRect();
+      homeX = spot.left - bounds.left;
+      homeY = spot.top - bounds.top;
+      const span = parseFloat(getComputedStyle(flyerEl).width) || 200;
+
+      const fresh = !swarm;
       if (swarm) resizeSwarm(swarm, width, height);
-      else swarm = createSwarm(width, height);
+      else swarm = createSwarm(width, height, SOLO);
+
+      const butterfly = swarm.butterflies[0]!;
+      butterfly.hx = homeX / width;
+      butterfly.hy = homeY / height;
+      // The simulation keeps a butterfly `size` px from each wall, so half the
+      // span keeps the wingtips inside the field without pushing it off its spot.
+      butterfly.size = span / 2;
+      butterfly.drift = span * 0.25;
+      if (fresh) {
+        butterfly.x = homeX;
+        butterfly.y = homeY;
+      }
     }
 
     function render() {
-      if (!swarm) return;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, width, height);
-      drawSwarm(ctx, swarm, { pixelRatio: dpr });
+      const butterfly = swarm?.butterflies[0];
+      if (!butterfly) return;
+      flyerEl.style.transform = `translate(${butterfly.x - homeX}px, ${butterfly.y - homeY}px) rotate(${butterfly.tilt}rad)`;
+      const flap = 1 - (1 - FLAP_MIN) * (0.5 - 0.5 * Math.cos(butterfly.phase));
+      wingsEl.style.transform = `scaleX(${flap})`;
     }
 
     function frame(now: number) {
       raf = 0;
       if (!swarm) return;
-      if (skipNext) {
-        // Half-rate mode: let this frame go by, the next one covers both.
-        skipNext = false;
-        if (running()) raf = requestAnimationFrame(frame);
-        return;
-      }
       // Clamp so a background tab coming back does not lurch.
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
       last = now;
-      const began = performance.now();
       stepSwarm(swarm, dt, pointer);
       render();
-      const cost = performance.now() - began;
-      frameCost = frameCost ? frameCost * 0.9 + cost * 0.1 : cost;
-      skipNext = frameCost > SLOW_FRAME_MS;
       if (running()) raf = requestAnimationFrame(frame);
     }
 
@@ -128,7 +149,7 @@ const { class: className = '' } = Astro.props;
       raf = 0;
     }
 
-    /** Without motion, show the swarm already settled rather than stacked at home. */
+    /** Without motion, show the butterfly settled at home. */
     function still() {
       if (!swarm) return;
       for (let i = 0; i < 90; i++) stepSwarm(swarm, 1 / 60, null);
@@ -205,8 +226,8 @@ const { class: className = '' } = Astro.props;
   }
 
   /* The hero card is the page's largest paint and should never wait on this.
-     Mounting is deferred to the browser's first idle moment so the swarm
-     starts just after the page is on screen rather than competing with it. */
+     Mounting is deferred to the browser's first idle moment; until then the
+     butterfly simply rests where the CSS puts it. */
   whenIdle(() => {
     document.querySelectorAll<HTMLElement>('.butterfly-field').forEach(mount);
   });
@@ -218,11 +239,5 @@ const { class: className = '' } = Astro.props;
     inset: 0;
     overflow: hidden;
     pointer-events: none;
-  }
-
-  .butterfly-canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
   }
 </style>

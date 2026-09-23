@@ -7,7 +7,7 @@ import PageHero from '~/components/content/PageHero.astro';
 import ActivityCard from '~/components/content/ActivityCard.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
 import Pagination from '~/components/content/Pagination.astro';
-import { cardGridCols } from '~/lib/grid';
+import { cardGridCols, cardImageSizes } from '~/lib/grid';
 
 interface Props {
   lang: Locale;
@@ -38,7 +38,7 @@ const hrefFor = (page: number) =>
         ) : (
           <div class={cardGridCols(activities.length)}>
             {activities.map((activity) => (
-              <ActivityCard lang={lang} activity={activity} />
+              <ActivityCard lang={lang} activity={activity} sizes={cardImageSizes(activities.length)} />
             ))}
           </div>
         )

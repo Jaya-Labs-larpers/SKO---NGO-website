@@ -40,7 +40,7 @@ const { lang, partners, columns = 5 } = Astro.props;
             */}
             {hasImage(partner.logo) ? (
               <div class="grid h-full w-full place-items-center [&_img]:object-contain [&_img]:grayscale [&_img]:transition [&_img]:hover:grayscale-0">
-                <ResponsiveImage image={partner.logo} lang={lang} alt="" aspect="5/3" sizes="180px" />
+                <ResponsiveImage image={partner.logo} lang={lang} alt="" aspect="5/3" sizes="180px" blurUp={false} />
               </div>
             ) : (
               <span

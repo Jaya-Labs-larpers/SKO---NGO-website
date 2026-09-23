@@ -18,7 +18,7 @@ import ActivityCard from '~/components/content/ActivityCard.astro';
 import PartnerWall from '~/components/content/PartnerWall.astro';
 import StoryQuote from '~/components/content/StoryQuote.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
-import { cardGridCols } from '~/lib/grid';
+import { cardGridCols, cardImageSizes } from '~/lib/grid';
 
 interface Props {
   lang: Locale;
@@ -49,15 +49,15 @@ const story = stories[0];
   headerOverlay
 >
   {/*
-    Hero: a swarm of the logo's butterflies behind, white card in front. It
-    starts at the top of the window, under a header that has gone transparent,
-    so the butterflies are what fills that band. From lg the field is a
+    Hero: one large logo butterfly behind, white card in front. It starts at
+    the top of the window, under a header that has gone transparent, so the
+    butterfly's field is what fills that band. From lg the field is a
     background layer, so the section pays the header's height back as padding
     to keep the card where it was; below lg the field is a block in the flow and
     already starts high enough.
 
     The section is the pointer host: hovering anywhere over it (except the card)
-    gathers the nearby butterflies around the cursor.
+    draws the butterfly into a circle around the cursor.
   */}
   <section
     data-butterfly-host
@@ -127,7 +127,7 @@ const story = stories[0];
           <SectionHeading title={t(lang, 'whatWeDo')} />
           <div class={`mt-8.5 ${cardGridCols(programs.length)}`}>
             {programs.map((program) => (
-              <ProgramCard lang={lang} program={program} />
+              <ProgramCard lang={lang} program={program} sizes={cardImageSizes(programs.length)} />
             ))}
           </div>
         </div>
@@ -150,7 +150,7 @@ const story = stories[0];
           </div>
           <div class={`mt-7.5 ${cardGridCols(activities.length)}`}>
             {activities.map((activity) => (
-              <ActivityCard lang={lang} activity={activity} />
+              <ActivityCard lang={lang} activity={activity} sizes={cardImageSizes(activities.length)} />
             ))}
           </div>
         </div>

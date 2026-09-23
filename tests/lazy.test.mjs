@@ -135,3 +135,51 @@ test("without IntersectionObserver a visible image simply loads", () => {
   lazy.hydrateDeferredImages();
   assert.deepEqual(image.order, [["src", "/visible"]]);
 });
+
+function fakeFrame({ complete, src }) {
+  const listeners = {};
+  const image = {
+    complete,
+    getAttribute: (name) => (name === "src" ? src : null),
+    addEventListener: (type, handler) => (listeners[type] = handler),
+  };
+  const frame = { dataset: {}, querySelector: () => image };
+  return { frame, fire: (type) => listeners[type]?.() };
+}
+
+const rootOf = (...frames) => ({ querySelectorAll: () => frames });
+
+test("a blur-up photo stays hidden until it loads, then fades in", () => {
+  const { lazy } = load();
+  const { frame, fire } = fakeFrame({ complete: false, src: "/photo" });
+  lazy.revealWhenLoaded(rootOf(frame));
+  assert.equal(frame.dataset.loaded, undefined);
+  fire("load");
+  assert.equal(frame.dataset.loaded, "");
+  assert.equal(frame.dataset.instant, undefined, "a real load fades");
+});
+
+test("a cached blur-up photo is shown at once, without the fade", () => {
+  const { lazy } = load();
+  const { frame } = fakeFrame({ complete: true, src: "/photo" });
+  lazy.revealWhenLoaded(rootOf(frame));
+  assert.equal(frame.dataset.loaded, "");
+  assert.equal(frame.dataset.instant, "");
+});
+
+test("a deferred photo with no src yet is not mistaken for a cached one", () => {
+  const { lazy } = load();
+  const { frame, fire } = fakeFrame({ complete: true, src: null });
+  lazy.revealWhenLoaded(rootOf(frame));
+  assert.equal(frame.dataset.loaded, undefined);
+  fire("load");
+  assert.equal(frame.dataset.loaded, "");
+});
+
+test("a photo that fails still lifts the blur", () => {
+  const { lazy } = load();
+  const { frame, fire } = fakeFrame({ complete: false, src: "/missing" });
+  lazy.revealWhenLoaded(rootOf(frame));
+  fire("error");
+  assert.equal(frame.dataset.loaded, "");
+});

@@ -8,9 +8,11 @@ import Icon from '~/components/Icon.astro';
 interface Props {
   lang: Locale;
   activity: Activity;
+  /** Must match the grid the card sits in; see cardImageSizes. */
+  sizes?: string;
 }
 
-const { lang, activity } = Astro.props;
+const { lang, activity, sizes } = Astro.props;
 
 const title = pick(activity.title, lang);
 const excerpt = pick(activity.excerpt, lang);
@@ -26,7 +28,9 @@ const category = activity.category ? categoryLabels[activity.category]?.[lang] :
 ---
 
 <article class="card group relative">
-  <ResponsiveImage image={activity.coverImage} lang={lang} alt="" aspect="3/2" />
+  <div class="card-media">
+    <ResponsiveImage image={activity.coverImage} lang={lang} alt="" aspect="3/2" sizes={sizes} />
+  </div>
   <div class="flex flex-1 flex-col gap-2.5 p-5.5 pb-6">
     {
       category && (
@@ -61,7 +65,7 @@ const category = activity.category ? categoryLabels[activity.category]?.[lang] :
     {
       excerpt.value && (
         <p
-          class="text-[15px] leading-[1.6] text-[color:var(--color-ink-400)]"
+          class="line-clamp-3 text-[15px] leading-[1.6] text-[color:var(--color-ink-400)]"
           lang={excerpt.isFallback ? excerpt.lang : undefined}
         >
           {excerpt.value}
@@ -74,3 +78,7 @@ const category = activity.category ? categoryLabels[activity.category]?.[lang] :
     </span>
   </div>
 </article>
+
+<script>
+  import '~/lib/card-morph';
+</script>

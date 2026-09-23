@@ -35,7 +35,7 @@ const seo = resolveSeo(program.seo, lang, {
   ogImage={seo.ogImage}
   noindex={seo.noindex}
 >
-  <div class="border-b border-[color:var(--color-line-subtle)]">
+  <div class="border-b border-[color:var(--color-line-subtle)] [view-transition-name:card-media]" data-morph-hero>
     <ResponsiveImage image={program.image} lang={lang} alt="" aspect="21/9" eager sizes="100vw" />
   </div>
 
@@ -71,3 +71,7 @@ const seo = resolveSeo(program.seo, lang, {
 
   <CtaBand lang={lang} title={t(lang, 'ctaProgramTitle')} />
 </BaseLayout>
+
+<script>
+  import '~/lib/card-morph';
+</script>

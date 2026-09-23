@@ -7,7 +7,7 @@ import PageHero from '~/components/content/PageHero.astro';
 import ProgramCard from '~/components/content/ProgramCard.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
-import { cardGridCols } from '~/lib/grid';
+import { cardGridCols, cardImageSizes } from '~/lib/grid';
 
 interface Props {
   lang: Locale;
@@ -33,7 +33,7 @@ const heading = t(lang, 'pagePrograms');
         ) : (
           <div class={cardGridCols(programs.length)}>
             {programs.map((program) => (
-              <ProgramCard lang={lang} program={program} />
+              <ProgramCard lang={lang} program={program} sizes={cardImageSizes(programs.length)} />
             ))}
           </div>
         )

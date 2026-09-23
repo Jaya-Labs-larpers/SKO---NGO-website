@@ -24,6 +24,11 @@ interface Props {
    * Ignored when `eager` is set. No-JS visitors get the plain image.
    */
   defer?: DeferStrategy | false;
+  /**
+   * Blur-up placeholder while the photo loads. Off for images with transparent
+   * areas (logos), where the blurred LQIP would show through.
+   */
+  blurUp?: boolean;
   class?: string;
 }
 
@@ -35,6 +40,7 @@ const {
   aspect = '3/2',
   eager = false,
   defer = false,
+  blurUp = true,
   class: className = '',
 } = Astro.props;
 
@@ -54,45 +60,21 @@ const lqip = image?.lqip ?? null;
 
 const deferred = defer && !eager ? defer : null;
 const imageClass = ['block w-full h-full object-cover', className];
-/** The LQIP stands in for the photo while a deferred image waits its turn. */
+/**
+ * Eager images are the LCP and must paint the moment they arrive, so they keep
+ * the plain LQIP background and never fade. Everything else is blur-up: the
+ * LQIP, blurred, fills the frame until the photo loads and fades in over it
+ * (see .blur-up in global.css and revealWhenLoaded in ~/lib/lazy).
+ */
 const lqipStyle = lqip
   ? `background-image:url(${lqip});background-size:cover;background-position:center`
   : undefined;
+const frameStyle = lqip ? `--lqip:url(${lqip})` : undefined;
 ---
 
 {
   present && src ? (
-    deferred ? (
-      <>
-        <img
-          data-lazy={deferred}
-          data-lazy-src={src}
-          data-lazy-srcset={srcset ?? undefined}
-          sizes={sizes}
-          width={width}
-          height={height}
-          alt={altText}
-          loading="lazy"
-          decoding="async"
-          class:list={imageClass}
-          style={lqipStyle}
-        />
-        <noscript>
-          <img
-            src={src}
-            srcset={srcset ?? undefined}
-            sizes={sizes}
-            width={width}
-            height={height}
-            alt={altText}
-            loading="lazy"
-            decoding="async"
-            class:list={imageClass}
-            style={lqipStyle}
-          />
-        </noscript>
-      </>
-    ) : (
+    eager || !blurUp ? (
       <img
         src={src}
         srcset={srcset ?? undefined}
@@ -104,8 +86,52 @@ const lqipStyle = lqip
         decoding={eager ? 'sync' : 'async'}
         fetchpriority={eager ? 'high' : undefined}
         class:list={imageClass}
-        style={lqipStyle}
+        style={eager ? lqipStyle : undefined}
       />
+    ) : (
+      <span class="blur-up" data-blur-up style={frameStyle}>
+        {deferred ? (
+          <>
+            <img
+              data-lazy={deferred}
+              data-lazy-src={src}
+              data-lazy-srcset={srcset ?? undefined}
+              sizes={sizes}
+              width={width}
+              height={height}
+              alt={altText}
+              loading="lazy"
+              decoding="async"
+              class:list={imageClass}
+            />
+            <noscript>
+              <img
+                src={src}
+                srcset={srcset ?? undefined}
+                sizes={sizes}
+                width={width}
+                height={height}
+                alt={altText}
+                loading="lazy"
+                decoding="async"
+                class:list={imageClass}
+              />
+            </noscript>
+          </>
+        ) : (
+          <img
+            src={src}
+            srcset={srcset ?? undefined}
+            sizes={sizes}
+            width={width}
+            height={height}
+            alt={altText}
+            loading="lazy"
+            decoding="async"
+            class:list={imageClass}
+          />
+        )}
+      </span>
     )
   ) : (
     <div
@@ -117,7 +143,8 @@ const lqipStyle = lqip
 }
 
 <script>
-  import { hydrateDeferredImages } from '~/lib/lazy';
+  import { hydrateDeferredImages, revealWhenLoaded } from '~/lib/lazy';
 
+  revealWhenLoaded();
   hydrateDeferredImages();
 </script>

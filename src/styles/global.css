@@ -55,8 +55,10 @@
    scroll reads as marketing; a figure that is simply there reads as a fact,
    and that distinction is the whole job of this site.
 
-   Total cost: zero additional JavaScript. Page transitions are the native
-   cross-document API, so unsupported browsers navigate exactly as before.
+   Script cost: one pageswap listener (card-morph.ts) that names the clicked
+   card's photo, and the home hero's butterfly loop. The butterfly's flight
+   between pages and every perch are CSS. Page transitions are the native cross-document API, so
+   unsupported browsers navigate exactly as before.
    ========================================================================= */
 
 /* Lets the accordion transition between 0 and `auto` height. */
@@ -153,6 +155,32 @@ main {
 }
 ::view-transition-new(page-content) {
   animation: page-enter 260ms var(--ease-out-soft) both;
+}
+
+/*
+ * A clicked card's photo grows into the detail page's hero (see card-morph.ts).
+ * The two crops differ, so both snapshots cover the group rather than stretch.
+ */
+::view-transition-group(card-media) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease-out-soft);
+}
+::view-transition-old(card-media),
+::view-transition-new(card-media) {
+  height: 100%;
+  object-fit: cover;
+}
+
+/*
+ * The travelling butterfly: the home hero's butterfly and every page's perch
+ * share one name, so each navigation flies it from where it was to where it
+ * lands. It takes longer than the page swap on purpose — the content settles
+ * first and the butterfly arrives after it, which is what makes it read as
+ * flight rather than a crossfade.
+ */
+::view-transition-group(butterfly) {
+  animation-duration: 560ms;
+  animation-timing-function: cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
 /* --- Mobile navigation panel ---------------------------------------------- */
@@ -430,11 +458,39 @@ details[open] > summary > .disclosure-icon {
       border-color var(--duration-fast) var(--ease-out-soft),
       box-shadow var(--duration-fast) var(--ease-out-soft),
       transform var(--duration-fast) var(--ease-out-soft);
+    /*
+     * Off-screen cards skip layout and paint until they approach the viewport.
+     * `auto` remembers the real height once rendered, so the scrollbar settles
+     * after the first pass instead of jumping on every scroll.
+     */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 28rem;
   }
-  .card:hover {
+  /*
+   * The frame, not the photo, sets the shape: a portrait upload would
+   * otherwise stretch its card and break the row.
+   */
+  .card-media {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+  .card-media img {
+    transition: transform var(--duration-slow) var(--ease-out-soft);
+  }
+  /* Keyboard focus earns the same lift as hover; touch never sticks in it. */
+  .card:has(a:focus-visible) {
     border-color: var(--color-blue-200);
     box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card:hover {
+      border-color: var(--color-blue-200);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .card:hover .card-media img {
+      transform: scale(1.03);
+    }
   }
 
   .eyebrow {
@@ -803,4 +859,142 @@ details[open] > summary > .disclosure-icon {
     var(--color-surface-subtle) 0%,
     var(--color-surface-sunken) 100%
   );
+}
+
+/*
+ * Blur-up: the ~20px LQIP Sanity ships with every photo, blurred and scaled
+ * past its own soft edge, holds the frame until the photo fades in over it.
+ * Without an LQIP the frame shows the sunken paper instead. Both are dropped
+ * once the fade is over, so nothing lingers behind a photo's transparent edges.
+ *
+ * Hidden only where scripting runs, because only script can say the photo has
+ * loaded — a no-JS visitor gets the photo directly, never a stuck blur.
+ *
+ * Layered so utilities passed to ResponsiveImage still win, and the image's
+ * transition lists every property a caller animates (the card zoom, a
+ * grayscale hover) so the fade never cancels them. A cached photo skips only
+ * the fade, via --blur-fade.
+ */
+@layer components {
+  .blur-up {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--color-surface-sunken);
+  }
+  .blur-up::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--lqip, none) center / cover;
+    filter: blur(14px);
+    transform: scale(1.15);
+  }
+  .blur-up[data-loaded] {
+    background: transparent;
+    transition: background-color 0s 420ms;
+  }
+  .blur-up[data-loaded]::before {
+    opacity: 0;
+    transition: opacity 0s 420ms;
+  }
+  .blur-up > img {
+    position: relative;
+    transition:
+      opacity var(--blur-fade, 420ms) var(--ease-out-soft),
+      transform var(--duration-slow) var(--ease-out-soft),
+      filter var(--duration-fast) var(--ease-out-soft);
+  }
+  .blur-up[data-instant] {
+    --blur-fade: 0s;
+  }
+  @media (scripting: enabled) {
+    .blur-up > img {
+      opacity: 0;
+    }
+    .blur-up[data-loaded] > img {
+      opacity: 1;
+    }
+  }
+}
+
+
+/* --- The logo butterfly ---------------------------------------------------
+   One drawing (ButterflyGlyph) in two places: flying over the home hero and
+   perched on every page hero. The wings group hinges on the body line, which
+   sits at x=45 of the drawing's 100-unit width. */
+.butterfly-glyph {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.butterfly-wings {
+  transform-box: view-box;
+  transform-origin: 45px 20.5px;
+}
+
+/* Where the hero butterfly rests: the middle of the open space beside the
+   card from lg (the card is 588px wide at the wrap's left edge), the middle of
+   the band above the card below that. Pure CSS so the spot is known before any
+   script runs — a view transition into the home page lands here. */
+.butterfly-home {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 0;
+  height: 0;
+}
+.butterfly-flyer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(140px, 45vw, 300px);
+  translate: -50% -50%;
+  view-transition-name: butterfly;
+}
+@media (min-width: 64rem) {
+  .butterfly-home {
+    left: calc(
+      (max(0px, (100% - 75rem) / 2) + var(--spacing-gutter) + 588px + 100%) / 2
+    );
+    top: 50%;
+  }
+  .butterfly-flyer {
+    width: clamp(200px, 24vw, 400px);
+  }
+}
+
+/* The perch only exists where there is room beside the page title (lg up).
+   Below that no element carries the name, and the butterfly simply fades with
+   the page it left. */
+.butterfly-perch {
+  display: none;
+}
+@media (min-width: 64rem) {
+  .butterfly-perch {
+    display: block;
+    position: absolute;
+    right: var(--perch-right);
+    top: var(--perch-top);
+    width: 96px;
+    rotate: var(--perch-tilt);
+    view-transition-name: butterfly;
+    animation: perch-bob 4.8s ease-in-out infinite;
+  }
+  .butterfly-perch .butterfly-wings {
+    animation: wing-beat 1.4s ease-in-out infinite;
+  }
+}
+@keyframes perch-bob {
+  50% {
+    translate: 0 -6px;
+  }
+}
+@keyframes wing-beat {
+  50% {
+    transform: scaleX(0.45);
+  }
 }

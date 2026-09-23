@@ -120,7 +120,7 @@ const programTitle = pick(activity.program?.title, lang);
           }
         </p>
 
-        <div class="mt-6.5 overflow-hidden rounded-[var(--radius-lg)]">
+        <div class="mt-6.5 overflow-hidden rounded-[var(--radius-lg)] [view-transition-name:card-media]" data-morph-hero>
           <ResponsiveImage
             image={activity.coverImage}
             lang={lang}
@@ -169,3 +169,7 @@ const programTitle = pick(activity.program?.title, lang);
     </div>
   </article>
 </BaseLayout>
+
+<script>
+  import '~/lib/card-morph';
+</script>

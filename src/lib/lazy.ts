@@ -117,3 +117,34 @@ export function hydrateDeferredImages(root: ParentNode = document): void {
       whenVisible(image, () => loadDeferredImage(image));
   }
 }
+
+/**
+ * Fade each blur-up frame's photo in over its blurred placeholder once the
+ * photo has actually arrived, so the visitor sees the picture sharpen rather
+ * than pop in line by line.
+ *
+ * A photo that is already complete when this runs came from cache and is
+ * shown at once — fading in something that was never missing reads as lag.
+ * Errors reveal too, so a failed photo leaves its alt text rather than a
+ * permanent blur.
+ */
+export function revealWhenLoaded(root: ParentNode = document): void {
+  for (const frame of Array.from(
+    root.querySelectorAll<HTMLElement>("[data-blur-up]"),
+  )) {
+    const image = frame.querySelector("img");
+    if (!image) continue;
+    const reveal = () => {
+      frame.dataset.loaded = "";
+    };
+    // An <img> with no src yet also reports `complete`: that is a deferred
+    // image still waiting for its turn, not a cached one.
+    if (image.complete && image.getAttribute("src")) {
+      frame.dataset.instant = "";
+      reveal();
+      continue;
+    }
+    image.addEventListener("load", reveal, { once: true });
+    image.addEventListener("error", reveal, { once: true });
+  }
+}
