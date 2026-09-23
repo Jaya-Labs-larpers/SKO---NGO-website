@@ -20,7 +20,7 @@ const flight = module.exports;
 
 const desktop = { width: 1440, height: 900 };
 const phone = { width: 390, height: 844 };
-const still = { pointer: null, scrolled: 0 };
+const still = { pointer: null };
 
 function run(flock, seconds, input = still) {
   for (let i = 0; i < seconds * 60; i++) flight.stepFlock(flock, 1 / 60, input);
@@ -43,39 +43,33 @@ test("on a phone they are small and keep to the edges", () => {
   }
 });
 
-test("scrolling carries them along the edges", () => {
+test("they stay inside the hero, however far a pointer pulls them", () => {
   const flock = flight.createFlock(desktop);
-  const before = flock.flyers.map((f) => f.hy);
-  flight.stepFlock(flock, 1 / 60, { pointer: null, scrolled: 100 });
-  flock.flyers.forEach((f, i) => assert.ok(f.hy > before[i]));
-});
-
-test("one flown off the bottom comes back in at the top", () => {
-  const flock = flight.createFlock(desktop);
-  for (let i = 0; i < 60; i++) {
-    flight.stepFlock(flock, 1 / 60, { pointer: null, scrolled: 120 });
-  }
+  run(flock, 6, { pointer: { x: 700, y: desktop.height + 600 } });
   for (const f of flock.flyers) {
-    assert.ok(f.hy >= -300 && f.hy <= desktop.height + 300);
+    assert.ok(f.y <= desktop.height + f.size * 0.2);
   }
 });
 
 test("they follow a moving mouse from anywhere, each keeping its own place", () => {
   const flock = flight.createFlock(desktop);
   const pointer = { x: 300, y: 700 };
-  run(flock, 6, { pointer, scrolled: 0 });
+  run(flock, 6, { pointer });
   for (const f of flock.flyers) {
     assert.ok(f.following);
     const d = Math.hypot(f.x - pointer.x, f.y - pointer.y);
     assert.ok(d < f.size * 2, `${Math.round(d)}px from the pointer`);
   }
   const [a, b] = flock.flyers;
-  assert.ok(Math.hypot(a.x - b.x, a.y - b.y) > a.size * 0.5, "they do not stack");
+  assert.ok(
+    Math.hypot(a.x - b.x, a.y - b.y) > a.size * 0.5,
+    "they do not stack",
+  );
 });
 
 test("with no mouse to follow they fly back to the edges", () => {
   const flock = flight.createFlock(desktop);
-  run(flock, 4, { pointer: { x: 700, y: 450 }, scrolled: 0 });
+  run(flock, 4, { pointer: { x: 700, y: 450 } });
   run(flock, 10);
   for (const f of flock.flyers) {
     assert.ok(!f.following);
@@ -85,13 +79,13 @@ test("with no mouse to follow they fly back to the edges", () => {
 
 test("on a phone the mouse is ignored", () => {
   const small = flight.createFlock(phone);
-  run(small, 1, { pointer: { x: 200, y: 400 }, scrolled: 0 });
+  run(small, 1, { pointer: { x: 200, y: 400 } });
   assert.ok(small.flyers.every((f) => !f.following));
 });
 
 test("a saved flock comes back exactly where it was", () => {
   const flock = flight.createFlock(desktop);
-  run(flock, 2, { pointer: { x: 700, y: 400 }, scrolled: 0 });
+  run(flock, 2, { pointer: { x: 700, y: 400 } });
   const saved = JSON.parse(JSON.stringify(flight.saveFlock(flock)));
   const restored = flight.restoreFlock(saved, desktop);
   restored.flyers.forEach((f, i) => {
@@ -103,7 +97,11 @@ test("a saved flock comes back exactly where it was", () => {
 test("a malformed or older-shaped save is ignored rather than trusted", () => {
   assert.equal(flight.parseSavedFlock("{nope"), null);
   assert.equal(flight.parseSavedFlock('{"w":1,"h":1,"f":[]}'), null);
-  const four = { w: 1, h: 1, f: Array.from({ length: 4 }, () => ({ x: 0, y: 0 })) };
+  const four = {
+    w: 1,
+    h: 1,
+    f: Array.from({ length: 4 }, () => ({ x: 0, y: 0 })),
+  };
   assert.equal(flight.parseSavedFlock(JSON.stringify(four)), null);
   assert.equal(flight.parseSavedFlock(null), null);
 });

@@ -174,9 +174,8 @@ main {
 }
 
 /*
- * The flock stays put across a page change: each butterfly has its own name,
- * sits in the same viewport spot on both pages (see ButterflyField), and so
- * the content slides in underneath while they carry on.
+ * Each butterfly has its own name, so leaving the home page fades it out on
+ * its own instead of sliding it with the page content.
  */
 .flock-bird:nth-child(1) {
   view-transition-name: flock-0;
@@ -966,14 +965,18 @@ details[open] > summary > .disclosure-icon {
   transform-origin: 45px 20.5px;
 }
 
-/* The flock's layer: fixed to the window, above the page and the sticky
-   header, below the mobile menu and dialogs, and never in the way of a click. */
+/* The flock's layer: fills the home hero and scrolls away with it, above the
+   hero picture but below the hero card, and never in the way of a click. */
 .butterfly-flock {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: 30;
+  z-index: 1;
   overflow: hidden;
   pointer-events: none;
+}
+[data-butterfly-shelter] {
+  position: relative;
+  z-index: 2;
 }
 .butterfly-flock[data-pending] {
   visibility: hidden;

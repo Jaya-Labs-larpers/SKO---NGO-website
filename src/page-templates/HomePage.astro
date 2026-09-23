@@ -17,6 +17,7 @@ import ActivityCard from '~/components/content/ActivityCard.astro';
 import PartnerWall from '~/components/content/PartnerWall.astro';
 import StoryQuote from '~/components/content/StoryQuote.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
+import ButterflyField from '~/components/media/ButterflyField.astro';
 import { cardGridCols, cardImageSizes } from '~/lib/grid';
 
 interface Props {
@@ -50,13 +51,13 @@ const story = stories[0];
   {/*
     Hero: white card on the hero band. It starts at the top of the window,
     under a header that has gone transparent, so the section pays the header's
-    height back as padding. The site-wide butterflies (ButterflyField, in the
-    layout) rest in the open space to the right; the card is a no-pull zone for
-    them.
+    height back as padding. The butterflies (ButterflyField) fly inside this
+    section only, behind the card, and exist on no other page.
   */}
   <section
     class="hero-overlap relative border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] pt-[var(--header-h)]"
   >
+    <ButterflyField />
     <div class="wrap relative flex min-h-0 items-center lg:min-h-[520px]">
       <div
         data-butterfly-shelter

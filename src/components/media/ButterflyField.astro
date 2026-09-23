@@ -1,19 +1,20 @@
 ---
 /**
- * The home page's flock: three logo butterflies of one size, on a fixed layer
- * over the home page only (BaseLayout renders it nowhere else, in either
- * language). The motion lives in ~/lib/butterflies/flight.
+ * The home hero's flock: three logo butterflies of one size, flying inside
+ * the hero picture. Place it as a direct child of the hero section; it fills
+ * that box, scrolls away with it, and exists on no other page. The motion
+ * lives in ~/lib/butterflies/flight.
  *
- * They belong to the window, not the page. Each flies on its own; while the
- * mouse moves they trail it, and after it has been still for IDLE_MS they
- * drift back to the edges. Scrolling carries them along the side edges.
- * Leaving the home page, they fade out with it; no other page has them.
- * Coming back, they are exactly where they were: the flock is saved on the way
- * out and redrawn by the inline script below before first paint. The hero card ([data-butterfly-shelter]) is a
- * no-follow zone, so they never crowd its headline or buttons.
+ * Each flies on its own; while the mouse moves over the hero they trail it,
+ * and after it has been still for IDLE_MS, or has left the hero, they drift
+ * back to the edges. They fly behind the hero card ([data-butterfly-shelter]),
+ * which is also a no-follow zone. Leaving the page they fade out with it;
+ * coming back, they are where they were — the flock is saved on the way out
+ * and redrawn by the inline script below before first paint.
  *
- * On phones they shrink to the page gutters and simply drift there. Under
+ * On phones they are small and keep to the edges. Under
  * prefers-reduced-motion or data saver they rest in place and never move.
+ * The loop stops while the hero is off screen or the tab is hidden.
  */
 import ButterflyGlyph from './ButterflyGlyph.astro';
 ---
@@ -31,9 +32,8 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     try {
       var saved = JSON.parse(sessionStorage.getItem('sko-flock'));
       if (!saved || !saved.f || saved.f.length !== layer.children.length) return;
-      var root = document.documentElement;
-      var sx = root.clientWidth / saved.w;
-      var sy = root.clientHeight / saved.h;
+      var sx = layer.clientWidth / saved.w;
+      var sy = layer.clientHeight / saved.h;
       saved.f.forEach(function (f, i) {
         var bird = layer.children[i];
         if (!bird) return;
@@ -70,9 +70,8 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
   /** After this long without the mouse moving, they stop following and fly free. */
   const IDLE_MS = 4000;
 
-  function viewport() {
-    const root = document.documentElement;
-    return { width: root.clientWidth, height: root.clientHeight };
+  function viewport(layer: HTMLElement) {
+    return { width: layer.clientWidth, height: layer.clientHeight };
   }
 
   function readSaved() {
@@ -88,13 +87,13 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     const wings = birds.map((bird) => bird.querySelector<SVGGElement>('.butterfly-wings'));
 
     const saved = readSaved();
-    const flock: Flock = saved ? restoreFlock(saved, viewport()) : createFlock(viewport());
+    const flock: Flock = saved ? restoreFlock(saved, viewport(layer)) : createFlock(viewport(layer));
 
     let pointer: Pointer | null = null;
     let pointerMovedAt = 0;
-    let lastScroll = window.scrollY;
     let raf = 0;
     let last = 0;
+    let visible = true;
 
     function render() {
       flock.flyers.forEach((flyer, i) => {
@@ -108,7 +107,7 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     }
 
     function running() {
-      return !document.hidden && !reducedMotion.matches && !saveData;
+      return visible && !document.hidden && !reducedMotion.matches && !saveData;
     }
 
     function frame(now: number) {
@@ -116,10 +115,8 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
       // Clamp so a tab coming back from the background does not lurch.
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
       last = now;
-      const scroll = window.scrollY;
       const company = pointer && now - pointerMovedAt < IDLE_MS ? pointer : null;
-      stepFlock(flock, dt, { pointer: company, scrolled: scroll - lastScroll });
-      lastScroll = scroll;
+      stepFlock(flock, dt, { pointer: company });
       render();
       if (running()) raf = requestAnimationFrame(frame);
     }
@@ -127,7 +124,6 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     function start() {
       if (raf || !running()) return;
       last = 0;
-      lastScroll = window.scrollY;
       raf = requestAnimationFrame(frame);
     }
 
@@ -151,7 +147,11 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
         if (event.pointerType === 'touch') return;
         const target = event.target;
         const sheltered = target instanceof Element && target.closest('[data-butterfly-shelter]') !== null;
-        pointer = sheltered ? null : { x: event.clientX, y: event.clientY };
+        const box = layer.getBoundingClientRect();
+        const x = event.clientX - box.left;
+        const y = event.clientY - box.top;
+        const inside = x >= 0 && y >= 0 && x <= box.width && y <= box.height;
+        pointer = inside && !sheltered ? { x, y } : null;
         pointerMovedAt = event.timeStamp;
       },
       passive,
@@ -159,10 +159,15 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     document.documentElement.addEventListener('mouseleave', () => (pointer = null), passive);
     window.addEventListener('blur', () => (pointer = null));
 
-    window.addEventListener('resize', () => {
-      resizeFlock(flock, viewport());
+    new ResizeObserver(() => {
+      resizeFlock(flock, viewport(layer));
       if (!running()) render();
-    });
+    }).observe(layer);
+    new IntersectionObserver(([entry]) => {
+      visible = entry?.isIntersecting ?? true;
+      if (visible) start();
+      else stop();
+    }).observe(layer);
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) stop();
       else start();

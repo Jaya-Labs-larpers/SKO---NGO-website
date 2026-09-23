@@ -1,16 +1,13 @@
 /**
- * The site-wide flock: three logo butterflies of one size that live in the
- * viewport rather than on a page, so they stay put when the URL changes and
- * ride along when the page scrolls.
+ * The home hero's flock: three logo butterflies of one size that live inside
+ * the hero picture.
  *
  * Each flies on its own — its own resting spot, wandering loop, wing beat and
  * pace — and together they keep the visitor company: while the mouse is
  * moving they trail it, each holding its own slowly turning place around it,
  * and once it has been still for a while they drift back out to the edges.
- * Scrolling carries them along the side edges, slipping off one end and back
- * in at the other.
  *
- * Positions are viewport pixels. Framework-free and deterministic for a given
+ * Positions are pixels within the hero; the "viewport" here is the hero's box. Framework-free and deterministic for a given
  * input sequence, so it can be unit-tested and its state serialised across
  * page loads.
  */
@@ -30,7 +27,7 @@ export interface Flyer {
   side: "left" | "right";
   /** Width in CSS px. */
   size: number;
-  /** Resting spot; `hy` is carried along by scrolling. */
+  /** Resting spot. */
   hx: number;
   hy: number;
   x: number;
@@ -66,9 +63,6 @@ export const COMPACT_BELOW = 768;
 const TAU = Math.PI * 2;
 const clamp = (v: number, lo: number, hi: number) =>
   Math.min(hi, Math.max(lo, v));
-
-/** How far they travel along the edges, as a share of the scroll distance. */
-const SCROLL_CARRY = 0.3;
 
 interface Slot {
   side: "left" | "right";
@@ -198,12 +192,11 @@ export function resizeFlock(flock: Flock, viewport: Viewport): void {
 
 export interface StepInput {
   /**
-   * Where to keep the visitor company, in viewport px, or null to fly free.
-   * The caller passes null once the mouse has been still for a while.
+   * Where to keep the visitor company, in hero px, or null to fly free.
+   * The caller passes null once the mouse has been still for a while, or has
+   * left the hero.
    */
   pointer: Pointer | null;
-  /** Page scroll since the last step, px; positive is down. */
-  scrolled: number;
 }
 
 export function stepFlock(flock: Flock, dt: number, input: StepInput): void {
@@ -212,23 +205,8 @@ export function stepFlock(flock: Flock, dt: number, input: StepInput): void {
   const { width, height } = flock.viewport;
   const compact = isCompact(flock.viewport);
   const pointer = compact ? null : input.pointer;
-  const wrap = height * 0.1 + 80;
 
   for (const f of flock.flyers) {
-    if (input.scrolled !== 0) {
-      f.hy += input.scrolled * SCROLL_CARRY;
-      const span = height + wrap * 2;
-      // Off one end, back in at the other; the flyer jumps with its home so
-      // the wrap happens out of sight.
-      if (f.hy > height + wrap) {
-        f.hy -= span;
-        f.y -= span;
-      } else if (f.hy < -wrap) {
-        f.hy += span;
-        f.y += span;
-      }
-    }
-
     f.following = pointer !== null;
 
     let tx: number;
@@ -288,8 +266,9 @@ export function stepFlock(flock: Flock, dt: number, input: StepInput): void {
   for (const f of flyers) {
     f.x += f.vx * dt;
     f.y += f.vy * dt;
-    // Never lost off the sides; top and bottom are how they wrap.
+    // Never lost outside the hero.
     f.x = clamp(f.x, -f.size * 0.4, width + f.size * 0.4);
+    f.y = clamp(f.y, -f.size * 0.2, height + f.size * 0.2);
     const lean = clamp(f.vx * 0.003, -0.3, 0.3);
     f.tilt += (lean - f.tilt) * Math.min(1, dt * 4);
     const effort = Math.hypot(f.vx, f.vy) / 300;
