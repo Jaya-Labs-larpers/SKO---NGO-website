@@ -4,17 +4,21 @@ import type { Story } from '~/lib/content/types';
 import { pick } from '~/lib/i18n/utils';
 import { hasImage } from '~/lib/sanity/image';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
+import RichText from '~/components/content/RichText.astro';
 
 interface Props {
   lang: Locale;
   story: Story;
   /** Show the person's avatar alongside the attribution. */
   showAvatar?: boolean;
+  /** Set large, in white, for the navy story band on the home page. */
+  inverse?: boolean;
 }
 
-const { lang, story, showAvatar = false } = Astro.props;
+const { lang, story, showAvatar = false, inverse = false } = Astro.props;
 
 const quote = pick(story.quote, lang);
+const hasBody = Object.values(story.body ?? {}).some((value) => Array.isArray(value) && value.length > 0);
 const role = pick(story.personRole, lang);
 
 /**
@@ -24,22 +28,42 @@ const role = pick(story.personRole, lang);
  */
 const usePhoto = !story.useSilhouette && hasImage(story.photo);
 
-const quoteClass =
-  lang === 'km'
+const quoteClass = inverse
+  ? lang === 'km'
+    ? 'font-[family-name:var(--font-khmer)] text-[length:var(--text-quote-km)] leading-[1.75] font-semibold'
+    : 'font-[family-name:var(--font-display)] text-[length:var(--text-quote)] leading-[1.25] tracking-[-0.02em] font-semibold'
+  : lang === 'km'
     ? 'font-[family-name:var(--font-khmer)] text-[22px] leading-[1.8] font-semibold'
     : 'font-[family-name:var(--font-display)] text-[27px] leading-[1.4] font-semibold';
 ---
 
 <figure class="m-0">
-  <div class="rule-accent"></div>
-  <blockquote
-    class:list={['mt-4.5 text-[color:var(--color-ink-900)]', quoteClass]}
-    lang={quote.isFallback ? quote.lang : undefined}
-  >
-    {quote.value}
-  </blockquote>
+  <div class:list={['rule-accent', inverse && 'bg-[color:var(--color-sky-400)]']}></div>
+  {
+    hasBody ? (
+      <blockquote class:list={['mt-4.5 text-[length:var(--text-lead)] leading-[1.7]', inverse && 'text-white']}>
+        <RichText blocks={story.body} lang={lang} />
+      </blockquote>
+    ) : (
+      <blockquote
+        class:list={[
+          'mt-4.5',
+          inverse ? 'mt-7 max-w-[26ch] text-white' : 'text-[color:var(--color-ink-900)]',
+          quoteClass,
+        ]}
+        lang={quote.isFallback ? quote.lang : undefined}
+      >
+        {quote.value}
+      </blockquote>
+    )
+  }
 
-  <figcaption class="mt-4.5 flex items-center gap-3 text-[15px] text-[color:var(--color-ink-400)]">
+  <figcaption
+    class:list={[
+      'flex items-center gap-3 text-[15px]',
+      inverse ? 'mt-8 text-white/70' : 'mt-4.5 text-[color:var(--color-ink-400)]',
+    ]}
+  >
     {
       showAvatar &&
         (usePhoto ? (

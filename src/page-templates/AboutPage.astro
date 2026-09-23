@@ -5,11 +5,11 @@ import { pick, t } from '~/lib/i18n/utils';
 import { resolveSeo } from '~/lib/seo';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
-import RichText from '~/components/content/RichText.astro';
+import AboutBody from '~/components/content/AboutBody.astro';
 import SectionHeading from '~/components/content/SectionHeading.astro';
 import DirectorMessage from '~/components/content/DirectorMessage.astro';
 import OrgChart from '~/components/content/OrgChart.astro';
-import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
+import TeamStructure from '~/components/content/TeamStructure.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
 import FaqSection from '~/components/content/FaqSection.astro';
 
@@ -45,7 +45,7 @@ const seo = resolveSeo(page?.seo, lang, {
 });
 ---
 
-<BaseLayout
+<BaseLayout headerOverlay
   lang={lang}
   title={seo.title}
   description={seo.description}
@@ -60,14 +60,12 @@ const seo = resolveSeo(page?.seo, lang, {
     trail={[{ label: heading }]}
   />
 
-  <section class="section">
-    <div class="wrap">
-      <RichText blocks={page?.body} lang={lang} />
-    </div>
-  </section>
+  <div class="bg-white pb-[var(--spacing-section)]">
+    <AboutBody lang={lang} body={page?.body} />
+  </div>
 
-  <section class="section bg-[color:var(--color-surface-subtle)] pt-0">
-    <div class="wrap pt-[var(--spacing-section)]">
+  <section class="section bg-[color:var(--color-surface-sunken)]">
+    <div class="wrap">
       <SectionHeading title={t(lang, 'directorMessage')} />
       <div class="mt-8"><DirectorMessage lang={lang} director={director} /></div>
     </div>
@@ -75,7 +73,7 @@ const seo = resolveSeo(page?.seo, lang, {
 
   {
     hasOrgChart && (
-      <section class="section">
+      <section class="section bg-white">
         <div class="wrap">
           <SectionHeading title={t(lang, 'orgStructure')} />
           <div class="mt-6.5">
@@ -88,34 +86,13 @@ const seo = resolveSeo(page?.seo, lang, {
 
   {
     team.length > 0 && (
-      <section class="section pt-0">
+      <section class:list={['section bg-white', hasOrgChart && 'pt-0']}>
         <div class="wrap">
           <SectionHeading title={t(lang, 'ourTeam')} />
-          <ul class="mt-8 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4">
-            {team.map((member) => {
-              const name = pick(member.name, lang);
-              const role = pick(member.role, lang);
-              return (
-                <li>
-                  <div class="overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)]">
-                    <ResponsiveImage image={member.photo} lang={lang} alt="" aspect="4/5" sizes="280px" />
-                  </div>
-                  <b
-                    class="mt-3.5 block text-[16px] text-[color:var(--color-ink-900)]"
-                    lang={name.isFallback ? name.lang : undefined}
-                  >
-                    {name.value}
-                  </b>
-                  <span
-                    class="mt-0.5 block text-[14px] text-[color:var(--color-ink-400)]"
-                    lang={role.isFallback ? role.lang : undefined}
-                  >
-                    {role.value}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
+          <h3 class="mt-6 text-[length:var(--text-h3)] text-[color:var(--color-ink-900)]">{t(lang, 'orgStructure')}</h3>
+          <div class="mt-8">
+            <TeamStructure lang={lang} team={team} />
+          </div>
         </div>
       </section>
     )

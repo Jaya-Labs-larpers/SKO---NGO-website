@@ -65,64 +65,70 @@ const programTitle = pick(activity.program?.title, lang);
   jsonLd={articleJsonLd}
 >
   <article class="section">
-    <div class="wrap max-w-[760px]">
-      <Breadcrumbs
-        lang={lang}
-        trail={[{ label: t(lang, 'pageActivities'), path: '/activities' }, { label: heading }]}
-      />
-
-      {
-        category && (
-          <span class="chip mt-4">
-            <Icon name="tag" size={16} />
-            {category}
-          </span>
-        )
-      }
-
-      <h1
-        class="mt-3.5 text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]"
-        lang={title.isFallback ? title.lang : undefined}
-      >
-        {heading}
-      </h1>
-
-      <p class="mt-3.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-[13px] text-[color:var(--color-ink-400)]">
-        <span class="flex items-center gap-1.5">
-          <Icon name="calendar-days" size={16} />
-          <time datetime={activity.publishedAt ?? undefined}>{formatDate(activity.publishedAt, lang)}</time>
-        </span>
-        {
-          activity.author && (
-            <span class="flex items-center gap-1.5">
-              <Icon name="user" size={16} />
-              {activity.author}
-            </span>
-          )
-        }
-        {
-          activity.program && programTitle.value && (
-            <span>
-              <a
-                href={localizePath(`/programs/${activity.program.slug}`, lang)}
-                class="text-[color:var(--color-blue-800)]"
-              >
-                {programTitle.value}
-              </a>
-            </span>
-          )
-        }
-      </p>
-
-      <div class="mt-6.5 overflow-hidden rounded-[var(--radius-lg)]">
-        <ResponsiveImage
-          image={activity.coverImage}
+    <div class="wrap">
+      <!--
+        One measured column for the whole article — breadcrumbs, headline, cover
+        image and body all share the site-wide text box, so the piece lines up
+        with every other page instead of sitting in a centred column of its own.
+      -->
+      <div class="measure">
+        <Breadcrumbs
           lang={lang}
-          alt=""
-          aspect="16/9"
-          eager
-          sizes="(min-width: 48rem) 760px, 100vw"
+          trail={[{ label: t(lang, 'pageActivities'), path: '/activities' }, { label: heading }]}
         />
+
+        {
+          category && (
+            <span class="chip mt-4">
+              <Icon name="tag" size={16} />
+              {category}
+            </span>
+          )
+        }
+
+        <h1
+          class="mt-3.5 text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]"
+          lang={title.isFallback ? title.lang : undefined}
+        >
+          {heading}
+        </h1>
+
+        <p class="mt-3.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-[13px] text-[color:var(--color-ink-400)]">
+          <span class="flex items-center gap-1.5">
+            <Icon name="calendar-days" size={16} />
+            <time datetime={activity.publishedAt ?? undefined}>{formatDate(activity.publishedAt, lang)}</time>
+          </span>
+          {
+            activity.author && (
+              <span class="flex items-center gap-1.5">
+                <Icon name="user" size={16} />
+                {activity.author}
+              </span>
+            )
+          }
+          {
+            activity.program && programTitle.value && (
+              <span>
+                <a
+                  href={localizePath(`/programs/${activity.program.slug}`, lang)}
+                  class="text-[color:var(--color-blue-800)]"
+                >
+                  {programTitle.value}
+                </a>
+              </span>
+            )
+          }
+        </p>
+
+        <div class="mt-6.5 overflow-hidden rounded-[var(--radius-lg)] [view-transition-name:card-media]" data-morph-hero>
+          <ResponsiveImage
+            image={activity.coverImage}
+            lang={lang}
+            alt=""
+            aspect="16/9"
+            eager
+            sizes="(min-width: 48rem) 44rem, 100vw"
+          />
       </div>
 
       {
@@ -159,6 +165,11 @@ const programTitle = pick(activity.program?.title, lang);
           )
         }
       </nav>
+      </div>
     </div>
   </article>
 </BaseLayout>
+
+<script>
+  import '~/lib/card-morph';
+</script>

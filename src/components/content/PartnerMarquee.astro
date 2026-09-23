@@ -1,0 +1,136 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { Partner } from '~/lib/content/types';
+import { hasImage, imageDimensions, imageSrcSet, imageUrl } from '~/lib/sanity/image';
+
+interface Props {
+  lang: Locale;
+  partners: Partner[];
+}
+
+const { partners } = Astro.props;
+
+const logos = partners
+  .filter((partner) => hasImage(partner.logo))
+  .map((partner) => {
+    const { width, height } = imageDimensions(partner.logo);
+    // Equal visual area rather than equal height: a long wordmark and a square
+    // badge then read as the same size.
+    const scale = Math.sqrt(2 / (width / height)).toFixed(3);
+    return {
+      scale,
+      partner,
+      src: imageUrl(partner.logo!, { width: 640 }),
+      srcset: imageSrcSet(partner.logo!),
+      width,
+      height,
+      sizes: `${Math.round((136 * Number(scale) * width) / height)}px`,
+    };
+  });
+
+/*
+  Each half of the track repeats the logos enough times to outrun a wide
+  screen, so the loop never shows a gap; the animation moves the track by
+  exactly one half.
+*/
+const repeats = Math.max(1, Math.ceil(8 / Math.max(logos.length, 1)));
+const half = Array.from({ length: repeats }, () => logos).flat();
+const seconds = half.length * 5;
+---
+
+{
+  logos.length > 0 && (
+    <div class="partner-marquee" style={`--marquee-duration:${seconds}s`}>
+      <ul class="partner-marquee__track">
+        {[0, 1].map((copy) =>
+          half.map(({ partner, scale, src, srcset, width, height, sizes }, index) => {
+            const hidden = copy === 1 || index >= logos.length;
+            const Tag = partner.url ? 'a' : 'span';
+            return (
+              <li class="partner-marquee__item" aria-hidden={hidden ? 'true' : undefined}>
+                <Tag
+                  {...(partner.url
+                    ? { href: partner.url, rel: 'noopener noreferrer', target: '_blank', tabindex: hidden ? -1 : undefined }
+                    : {})}
+                  class="partner-marquee__logo"
+                  style={`--logo-scale:${scale}`}
+                >
+                  <img
+                    src={src}
+                    srcset={srcset ?? undefined}
+                    sizes={sizes}
+                    width={width}
+                    height={height}
+                    alt={hidden ? '' : partner.name}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </Tag>
+              </li>
+            );
+          }),
+        )}
+      </ul>
+    </div>
+  )
+}
+
+<style>
+  .partner-marquee {
+    --logo-size: clamp(5.5rem, 4rem + 4vw, 8.5rem);
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+  .partner-marquee__track {
+    display: flex;
+    width: max-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    animation: partner-marquee var(--marquee-duration, 30s) linear infinite;
+  }
+  .partner-marquee:hover .partner-marquee__track,
+  .partner-marquee:focus-within .partner-marquee__track {
+    animation-play-state: paused;
+  }
+  .partner-marquee__item {
+    flex: none;
+    display: flex;
+    align-items: center;
+    height: calc(var(--logo-size) * 1.1);
+    padding-inline: clamp(0.75rem, 0.25rem + 1.2vw, 1.75rem);
+  }
+  .partner-marquee__logo {
+    display: block;
+  }
+  .partner-marquee__logo img {
+    display: block;
+    height: calc(var(--logo-size) * var(--logo-scale, 1));
+    width: auto;
+  }
+
+  @keyframes partner-marquee {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .partner-marquee {
+      mask-image: none;
+    }
+    .partner-marquee__track {
+      animation: none;
+      width: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 1.5rem;
+    }
+    .partner-marquee__item[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

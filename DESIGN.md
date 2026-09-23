@@ -217,7 +217,7 @@ The site is one editorial plane, not a stack of marketing bands. Field work and 
 
 The voice is a grotesk. Hanken Grotesk carries English display, navigation and body; Kantumruy Pro carries all Khmer with its own leading and no tracking; IBM Plex Mono is reserved for evidence metadata (years, dates, the permit line, document type/language/size, index numbers, category tags). Every action and link is one institutional indigo. One dark terracotta appears only as editorial emphasis (index numbers, category tags, closing-soon dates, the pull-quote rule) and is never the sole carrier of meaning.
 
-The build explicitly refused the category arrangement of hero → stat band → three identical cards → CTA band, and the cream-serif-terracotta rendition of an NGO site. Motion is continuity only: the native cross-document view transition holds header and footer still while the page content slides in 6px; nothing reveals on scroll, nothing counts up, nothing parallaxes.
+The build explicitly refused the category arrangement of hero → stat band → three identical cards → CTA band, and the cream-serif-terracotta rendition of an NGO site. Motion is continuity plus one signature: the native cross-document view transition holds header and footer still while the page content slides in 6px, and on the home page alone, three logo butterflies of one size live on a fixed layer: they fly along the side edges as the page scrolls, trail the mouse while it moves, and never follow the visitor to another URL. Photos blur up from their LQIP, and content boxes rise into place from below as they come into view. Nothing counts up, nothing parallaxes.
 
 **Key Characteristics:**
 - Ruled rows and numbered indexes instead of cards, tiles and bands.
@@ -225,7 +225,7 @@ The build explicitly refused the category arrangement of hero → stat band → 
 - Hanken Grotesk display and body; Kantumruy Pro leads its own Khmer stack; Plex Mono for evidence metadata only.
 - Indigo is the only action colour; terracotta is editorial emphasis, never the only signal.
 - Corners 1–3px, one shadow for true overlays, no gradients.
-- Motion is a native view transition plus panel/dialog/details continuity, all off under reduced motion.
+- Motion is a native view transition plus panel/dialog/details continuity, the butterfly flock, the pointer butterfly, header feedback (rolling nav labels, the Contact fill, a header that steps aside while reading down), and blur-up photos, all off under reduced motion.
 - Bilingual EN/KM with equal authority; placeholders are visible, labelled neutral frames.
 
 ## Colors
@@ -363,13 +363,15 @@ Empty state: a ruled band (hairline above and below), 2.5rem block padding, 15px
 - **Do** set Khmer by `lang="km"` so Kantumruy Pro, 1.9 leading, 1.5 heading leading, no tracking and the 1.0625em bump follow it; stamp `lang="en"` on English fallbacks.
 - **Do** keep touch targets at 2.75rem, focus rings 2px solid indigo at 3px offset (paper on inverse), and colour contrast at or above the 5.0:1 ink-400 floor for text.
 - **Do** show placeholders as sunken-paper frames with a bracketed mono label at the real aspect ratio.
-- **Do** keep motion to continuity: 240ms page-content enter (6px), 110ms exit, 200/140ms mobile panel, 220ms dialog and details, 140ms hover state, all `cubic-bezier(0.22, 0.61, 0.36, 1)` and all off under `prefers-reduced-motion`.
+- **Do** keep motion to continuity: 240ms page-content enter (6px), 110ms exit, 200/140ms mobile panel, 220ms dialog and details, 140ms hover state, all `cubic-bezier(0.22, 0.61, 0.36, 1)` and all off under `prefers-reduced-motion`. The exceptions are named: the butterfly flock (continuous, off under reduced motion; tiny and confined to the gutters on phones), a list photo growing into its detail hero (320ms), a photo sharpening in over its blurred LQIP (800ms; never on an eager, above-the-fold image), the pointer butterfly (mouse only, off under reduced motion; flies 34px ahead of the pointer, grows with a translated label over program and activity cards, steps aside over text fields and modals), rolling nav labels (480ms), the Contact button fill (380ms, `cubic-bezier(0.4, 0, 0, 1)`), the header sliding away on downward scroll and back on any upward scroll (320ms), a card photo easing to 1.05 on hover (700ms), and partner-wall cells arriving 35ms apart inside the wall's own reveal.
 
 ### Don't:
 - **Don't** use cards, bordered tiles, pills, chips, gradients, washes or a second page tone; structure is hairlines on one paper.
 - **Don't** add shadows anywhere except the submenu and the org-chart dialog.
 - **Don't** use terracotta for buttons, links, status, fills or as the only signal of a state.
-- **Don't** add scroll-reveal, parallax, carousels, slideshows or count-up figures; a figure that animates reads as marketing.
+- **Don't** add parallax, carousels, slideshows or count-up figures; a figure that animates reads as marketing. The one scroll effect is the box reveal (`.reveal`): 900ms, `cubic-bezier(0.16, 1, 0.3, 1)`, 90ms stagger, boxes only — never headings or running text, and never a box that was already on screen.
+- **Don't** grow the flock past three butterflies, or add a butterfly beyond the flock and the one at the pointer; they are the site's only decorative motion.
+- **Don't** animate the butterflies inside the logo itself; the brand guideline forbids moving them (see `Logo.astro`).
 - **Don't** set text below 0.8125rem, use ink-300 for text, or track, uppercase or hyphenate Khmer.
 - **Don't** italicise Khmer or use Plex Mono for Khmer; Khmer metadata re-sets in Kantumruy at 0.875rem.
 - **Don't** use the `label` style as an eyebrow or kicker above a heading; it is wayfinding (breadcrumbs, column and group headings, "On this page") only.

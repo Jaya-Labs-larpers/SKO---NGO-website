@@ -7,28 +7,29 @@ import Icon from "~/components/Icon.astro";
 
 interface Props {
   lang: Locale;
-  variant?: "general" | "partner" | "volunteer";
+  /** The form's id. The topic radios on the page point at it with form="…". */
+  id: string;
   /** Extra classes on the panel — used by pages to make it stick on desktop. */
   class?: string;
 }
 
-const { lang, variant = "general", class: className } = Astro.props;
+const { lang, id, class: className } = Astro.props;
 
-const id = `form-${variant}`;
-const showOrganization = variant === "partner";
-const showCountry = variant === "partner";
-const submitLabel =
-  variant === "partner" ? t(lang, "formSendInquiry") : t(lang, "formSend");
+const topics = [
+  { value: "general", label: "topicGeneral" },
+  { value: "partner", label: "topicPartner" },
+  { value: "volunteer", label: "topicVolunteer" },
+  { value: "media", label: "topicMedia" },
+  { value: "safeguarding", label: "topicSafeguarding" },
+] as const;
 
-/** The panel's own heading, so the box is a complete thing wherever it lands. */
-const panelTitle = t(
-  lang,
-  variant === "partner"
-    ? "formPanelTitlePartner"
-    : variant === "volunteer"
-      ? "formPanelTitleVolunteer"
-      : "formPanelTitleGeneral",
-);
+const partnershipTypes = [
+  "partnershipFunding",
+  "partnershipTechnical",
+  "partnershipReferrals",
+  "partnershipCorporate",
+  "partnershipOther",
+] as const;
 
 /**
  * Where to point people when the form itself cannot deliver. The API returns
@@ -56,25 +57,36 @@ const strings = {
 
 <div class:list={["form-panel", className]}>
   <div class="form-panel-head">
-    <h2 class="form-panel-title">{panelTitle}</h2>
+    <h2 class="form-panel-title">{t(lang, "formPanelTitleGeneral")}</h2>
   </div>
 
   <form
     id={id}
     novalidate
-    data-form-type={variant}
+    data-form-type="general"
     data-endpoint="/api/contact"
     data-enabled={contactEnabled ? "true" : "false"}
     data-strings={JSON.stringify(strings)}
   >
     <div class="form-panel-body form-grid">
+      <div class="form-field form-field--reason">
+        <label class="form-label" for={`${id}-formType`}>
+          {t(lang, "contactHelpTitle")}
+          <span class="form-label-req" aria-hidden="true">*</span>
+        </label>
+        <div class="form-control">
+          <select class="field" id={`${id}-formType`} name="formType">
+            {topics.map((topic) => <option value={topic.value}>{t(lang, topic.label)}</option>)}
+          </select>
+        </div>
+      </div>
+
       <div class="form-field">
         <label class="form-label" for={`${id}-name`}>
           {t(lang, "formName")}
           <span class="form-label-req" aria-hidden="true">*</span>
         </label>
         <div class="form-control">
-          <Icon name="user" size={16} />
           <input
             class="field"
             id={`${id}-name`}
@@ -87,30 +99,6 @@ const strings = {
         </div>
       </div>
 
-      {
-        showOrganization && (
-          <div class="form-field">
-            <label class="form-label" for={`${id}-organization`}>
-              {t(lang, "formOrganization")}
-              <span class="form-label-req" aria-hidden="true">
-                *
-              </span>
-            </label>
-            <div class="form-control">
-              <Icon name="building-office-2" size={16} />
-              <input
-                class="field"
-                id={`${id}-organization`}
-                name="organization"
-                type="text"
-                autocomplete="organization"
-                required
-                maxlength="160"
-              />
-            </div>
-          </div>
-        )
-      }
 
       {/*
         Email and phone share a row once the panel itself is wide enough. Both
@@ -124,7 +112,6 @@ const strings = {
             <span class="form-label-req" aria-hidden="true">*</span>
           </label>
           <div class="form-control">
-            <Icon name="envelope" size={16} />
             <input
               class="field"
               id={`${id}-email`}
@@ -142,7 +129,6 @@ const strings = {
             {t(lang, "formPhone")}
           </label>
           <div class="form-control">
-            <Icon name="phone" size={16} />
             <input
               class="field"
               id={`${id}-phone`}
@@ -151,32 +137,101 @@ const strings = {
               inputmode="tel"
               autocomplete="tel"
               maxlength="32"
-              placeholder="+855 12 345 678"
             />
           </div>
         </div>
       </div>
 
-      {
-        showCountry && (
+
+      <fieldset class="form-choice">
+        <legend class="form-label">{t(lang, "formPreferred")}</legend>
+        <div class="form-choice__options">
+          <label><input type="radio" name="preferredContact" value="email" checked /> {t(lang, "formPreferEmail")}</label>
+          <label><input type="radio" name="preferredContact" value="phone" /> {t(lang, "formPreferPhone")}</label>
+        </div>
+      </fieldset>
+
+      {/*
+        Each topic's extra questions. The page shows only the group matching the
+        chosen topic (CSS, in global.css), and the script sends only that group,
+        so a visitor who switches topics never submits the answers they left.
+      */}
+      <div class="form-topic" data-topic-fields="partner">
+        <div class="form-field">
+          <label class="form-label" for={`${id}-organization`}>
+            {t(lang, "formOrganization")}
+            <span class="form-label-req" aria-hidden="true">*</span>
+          </label>
+          <div class="form-control">
+            <input class="field" id={`${id}-organization`} name="organization" type="text" autocomplete="organization" maxlength="160" />
+          </div>
+        </div>
+        <div class="form-pair">
           <div class="form-field">
-            <label class="form-label" for={`${id}-country`}>
-              {t(lang, "formCountry")}
-            </label>
+            <label class="form-label" for={`${id}-role`}>{t(lang, "formRole")}</label>
             <div class="form-control">
-              <Icon name="globe-alt" size={16} />
-              <input
-                class="field"
-                id={`${id}-country`}
-                name="country"
-                type="text"
-                autocomplete="country-name"
-                maxlength="80"
-              />
+              <input class="field" id={`${id}-role`} name="role" type="text" autocomplete="organization-title" maxlength="120" />
             </div>
           </div>
-        )
-      }
+          <div class="form-field">
+            <label class="form-label" for={`${id}-country`}>{t(lang, "formCountry")}</label>
+            <div class="form-control">
+              <input class="field" id={`${id}-country`} name="country" type="text" autocomplete="country-name" maxlength="80" />
+            </div>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for={`${id}-partnershipType`}>{t(lang, "formPartnershipType")}</label>
+          <div class="form-control">
+            <select class="field" id={`${id}-partnershipType`} name="partnershipType">
+              <option value=""></option>
+              {partnershipTypes.map((key) => <option value={t("en", key)}>{t(lang, key)}</option>)}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-topic" data-topic-fields="volunteer">
+        <fieldset class="form-choice">
+          <legend class="form-label">{t(lang, "formVolunteerType")}</legend>
+          <div class="form-choice__options">
+            <label><input type="radio" name="volunteerType" value="Volunteer" checked /> {t(lang, "volunteerTypeVolunteer")}</label>
+            <label><input type="radio" name="volunteerType" value="Internship" /> {t(lang, "volunteerTypeIntern")}</label>
+          </div>
+        </fieldset>
+        <div class="form-pair">
+          <div class="form-field">
+            <label class="form-label" for={`${id}-availability`}>{t(lang, "formAvailability")}</label>
+            <div class="form-control">
+              <input class="field" id={`${id}-availability`} name="availability" type="text" maxlength="200" placeholder={t(lang, "formAvailabilityHint")} />
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for={`${id}-languages`}>{t(lang, "formLanguages")}</label>
+            <div class="form-control">
+              <input class="field" id={`${id}-languages`} name="languages" type="text" maxlength="120" />
+            </div>
+          </div>
+        </div>
+        <p class="form-note">{t(lang, "formVolunteerNote")}</p>
+      </div>
+
+      <div class="form-topic" data-topic-fields="media">
+        <div class="form-pair">
+          <div class="form-field">
+            <label class="form-label" for={`${id}-outlet`}>{t(lang, "formOutlet")}</label>
+            <div class="form-control">
+              <input class="field" id={`${id}-outlet`} name="outlet" type="text" autocomplete="organization" maxlength="160" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for={`${id}-deadline`}>{t(lang, "formDeadline")}</label>
+            <div class="form-control">
+              <input class="field" id={`${id}-deadline`} name="deadline" type="text" maxlength="40" />
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="form-field">
         <label class="form-label" for={`${id}-message`}>
@@ -184,12 +239,12 @@ const strings = {
           <span class="form-label-req" aria-hidden="true">*</span>
         </label>
         <div class="form-control">
-          <Icon name="chat-bubble-left" size={16} />
           <textarea
             class="field"
             id={`${id}-message`}
             name="message"
             rows="5"
+            placeholder={t(lang, "formMessageHint")}
             required
             maxlength="5000"></textarea>
         </div>
@@ -209,10 +264,12 @@ const strings = {
           autocomplete="off"
         />
       </div>
+    </div>
 
+    <div class="form-panel-foot">
       {
         turnstileSiteKey && (
-          <div class="form-field">
+          <div class="form-field mb-4">
             <span class="form-label">{t(lang, "formVerifyLabel")}</span>
             <div
               class="cf-turnstile"
@@ -224,12 +281,8 @@ const strings = {
           </div>
         )
       }
-    </div>
-
-    <div class="form-panel-foot">
       <button type="submit" class="btn btn-primary btn-block">
-        <span>{submitLabel}</span>
-        <Icon name="paper-airplane" size={16} class="arrow" />
+        <span>{t(lang, "formSend")}</span>
       </button>
       {/*
         Submission problems land here. role="alert" so a screen reader hears
@@ -282,13 +335,20 @@ const strings = {
     document.head.append(script);
   }
 
+  function isUnchosen(field: HTMLInputElement): boolean {
+    return (field.type === "radio" || field.type === "checkbox") && !field.checked;
+  }
+
+  /** Only the chosen topic's extra questions are sent. */
   function fieldValues(form: HTMLFormElement): Record<string, string> {
-    const body: Record<string, string> = {
-      formType: form.dataset.formType ?? "general",
-    };
-    for (const element of Array.from(form.elements)) {
-      const field = element as HTMLInputElement;
-      if (!field.name || field.disabled) continue;
+    const elements = Array.from(form.elements) as HTMLInputElement[];
+    const chosen = form.elements.namedItem("formType") as HTMLSelectElement | null;
+    const topic = chosen?.value || form.dataset.formType || "general";
+    const body: Record<string, string> = { formType: topic };
+    for (const field of elements) {
+      if (!field.name || field.disabled || field.name === "formType" || isUnchosen(field)) continue;
+      const group = field.closest?.<HTMLElement>("[data-topic-fields]");
+      if (group && group.dataset.topicFields !== topic) continue;
       body[field.name] = field.value;
     }
     return body;

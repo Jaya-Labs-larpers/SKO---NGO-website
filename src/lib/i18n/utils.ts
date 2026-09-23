@@ -8,10 +8,12 @@ import { ui, type UIKey } from './strings';
  *   localizePath('/', 'km')      -> '/km/'
  */
 export function localizePath(path: string, lang: Locale): string {
-  const trimmed = path.replace(/^\/+|\/+$/g, '');
+  const [pathname = '', query] = path.split('?');
+  const trimmed = pathname.replace(/^\/+|\/+$/g, '');
   const base = trimmed === '' ? '/' : `/${trimmed}/`;
-  if (lang === defaultLocale) return base;
-  return base === '/' ? `/${lang}/` : `/${lang}${base}`;
+  const search = query ? `?${query}` : '';
+  if (lang === defaultLocale) return base + search;
+  return (base === '/' ? `/${lang}/` : `/${lang}${base}`) + search;
 }
 
 /** Split a pathname into its locale and its locale-free path. */

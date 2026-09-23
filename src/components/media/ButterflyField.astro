@@ -1,119 +1,124 @@
 ---
 /**
- * The butterfly from the SKO logo, many times over and small, set loose over
- * the hero.
+ * The home hero's flock: three logo butterflies of one size, flying inside
+ * the hero picture. Place it as a direct child of the hero section; it fills
+ * that box, scrolls away with it, and exists on no other page. The motion
+ * lives in ~/lib/butterflies/flight.
  *
- * A canvas fills whatever box it is placed in, so it drops into the same slot
- * as HeroSlideshow and always matches the window. The swarm itself lives in
- * ~/lib/butterflies/swarm — a deterministic simulation the Remotion project in
- * /video renders to a video with the very same code.
+ * Each flies on its own; while the mouse moves over the hero they trail it,
+ * and after it has been still for IDLE_MS, or has left the hero, they drift
+ * back to the edges. They fly behind the hero card ([data-butterfly-shelter]),
+ * which is also a no-follow zone. Leaving the page they fade out with it;
+ * coming back, they are where they were — the flock is saved on the way out
+ * and redrawn by the inline script below before first paint.
  *
- * Hovering over the field gathers the nearby butterflies into a loose cloud
- * around the cursor; move away and they drift home. The pointer is read from
- * the nearest [data-butterfly-host] ancestor (the hero section), so the canvas
- * itself never intercepts clicks. Hovering the card ([data-butterfly-shelter])
- * counts as leaving the field.
- *
- * Under prefers-reduced-motion one settled frame is drawn and nothing moves.
- * The loop also stops while the field is off screen or the tab is hidden.
+ * On phones they are small and keep to the edges. Under
+ * prefers-reduced-motion or data saver they rest in place and never move.
+ * The loop stops while the hero is off screen or the tab is hidden.
  */
-interface Props {
-  class?: string;
-}
-
-const { class: className = '' } = Astro.props;
+import ButterflyGlyph from './ButterflyGlyph.astro';
 ---
 
-<div class:list={['butterfly-field', className]} aria-hidden="true">
-  <canvas class="butterfly-canvas"></canvas>
+<div class="butterfly-flock" data-pending aria-hidden="true">
+  <ButterflyGlyph class="flock-bird" />
+  <ButterflyGlyph class="flock-bird" />
+  <ButterflyGlyph class="flock-bird" />
 </div>
+<script is:inline>
+  // Restores the flock where the previous page left it, before first paint.
+  // Reads the SavedFlock shape from ~/lib/butterflies/flight; keep in step.
+  (function () {
+    var layer = document.currentScript.previousElementSibling;
+    try {
+      var saved = JSON.parse(sessionStorage.getItem('sko-flock'));
+      if (!saved || !saved.f || saved.f.length !== layer.children.length) return;
+      var sx = layer.clientWidth / saved.w;
+      var sy = layer.clientHeight / saved.h;
+      saved.f.forEach(function (f, i) {
+        var bird = layer.children[i];
+        if (!bird) return;
+        bird.style.width = f.s + 'px';
+        bird.style.transform =
+          'translate(' + f.x * sx + 'px,' + f.y * sy + 'px) translate(-50%,-50%) rotate(' + f.r + 'rad)';
+        var wings = bird.querySelector('.butterfly-wings');
+        if (wings) wings.style.transform = 'scaleX(' + f.k + ')';
+      });
+      layer.removeAttribute('data-pending');
+    } catch (error) {}
+  })();
+</script>
 
 <script>
   import {
-    createSwarm,
-    drawSwarm,
-    resizeSwarm,
-    stepSwarm,
+    STORAGE_KEY,
+    createFlock,
+    parseSavedFlock,
+    resizeFlock,
+    restoreFlock,
+    saveFlock,
+    stepFlock,
+    wingSpan,
+    type Flock,
     type Pointer,
-    type Swarm,
-  } from '~/lib/butterflies/swarm';
+  } from '~/lib/butterflies/flight';
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  /** A metered connection is treated like reduced motion: one still frame. */
+  /** A metered connection is treated like reduced motion: the flock rests. */
   const saveData =
     (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
 
-  /* Butterflies are small, so 1.5× is visually indistinguishable from 2× on
-     a phone but clears and composites 44% fewer pixels every frame. */
-  const MAX_DPR = 1.5;
-  /* If frames keep taking longer than this, step and draw every other one.
-     Motion stays smooth because dt doubles; the machine gets half the work. */
-  const SLOW_FRAME_MS = 22;
+  /** After this long without the mouse moving, they stop following and fly free. */
+  const IDLE_MS = 4000;
 
-  function mount(field: HTMLElement) {
-    const maybeCanvas = field.querySelector<HTMLCanvasElement>('canvas');
-    const maybeCtx = maybeCanvas?.getContext('2d', { alpha: true, desynchronized: true });
-    if (!maybeCanvas || !maybeCtx) return;
-    // Rebound as consts so the closures below see them as non-null.
-    const canvas: HTMLCanvasElement = maybeCanvas;
-    const ctx: CanvasRenderingContext2D = maybeCtx;
+  function viewport(layer: HTMLElement) {
+    return { width: layer.clientWidth, height: layer.clientHeight };
+  }
 
-    const host = field.closest<HTMLElement>('[data-butterfly-host]') ?? field;
+  function readSaved() {
+    try {
+      return parseSavedFlock(sessionStorage.getItem(STORAGE_KEY));
+    } catch {
+      return null;
+    }
+  }
 
-    let swarm: Swarm | null = null;
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
+  function mount(layer: HTMLElement) {
+    const birds = Array.from(layer.querySelectorAll<SVGSVGElement>('.flock-bird'));
+    const wings = birds.map((bird) => bird.querySelector<SVGGElement>('.butterfly-wings'));
+
+    const saved = readSaved();
+    const flock: Flock = saved ? restoreFlock(saved, viewport(layer)) : createFlock(viewport(layer));
+
     let pointer: Pointer | null = null;
+    let pointerMovedAt = 0;
     let raf = 0;
     let last = 0;
     let visible = true;
-    let frameCost = 0; // exponential moving average of frame time, ms
-    let skipNext = false;
-
-    function fit() {
-      const rect = field.getBoundingClientRect();
-      width = Math.max(1, Math.round(rect.width));
-      height = Math.max(1, Math.round(rect.height));
-      dpr = Math.min(MAX_DPR, window.devicePixelRatio || 1);
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      if (swarm) resizeSwarm(swarm, width, height);
-      else swarm = createSwarm(width, height);
-    }
 
     function render() {
-      if (!swarm) return;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, width, height);
-      drawSwarm(ctx, swarm, { pixelRatio: dpr });
-    }
-
-    function frame(now: number) {
-      raf = 0;
-      if (!swarm) return;
-      if (skipNext) {
-        // Half-rate mode: let this frame go by, the next one covers both.
-        skipNext = false;
-        if (running()) raf = requestAnimationFrame(frame);
-        return;
-      }
-      // Clamp so a background tab coming back does not lurch.
-      const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
-      last = now;
-      const began = performance.now();
-      stepSwarm(swarm, dt, pointer);
-      render();
-      const cost = performance.now() - began;
-      frameCost = frameCost ? frameCost * 0.9 + cost * 0.1 : cost;
-      skipNext = frameCost > SLOW_FRAME_MS;
-      if (running()) raf = requestAnimationFrame(frame);
+      flock.flyers.forEach((flyer, i) => {
+        const bird = birds[i];
+        if (!bird) return;
+        bird.style.width = `${flyer.size}px`;
+        bird.style.transform = `translate(${flyer.x}px, ${flyer.y}px) translate(-50%, -50%) rotate(${flyer.tilt}rad)`;
+        const wing = wings[i];
+        if (wing) wing.style.transform = `scaleX(${wingSpan(flyer)})`;
+      });
     }
 
     function running() {
       return visible && !document.hidden && !reducedMotion.matches && !saveData;
+    }
+
+    function frame(now: number) {
+      raf = 0;
+      // Clamp so a tab coming back from the background does not lurch.
+      const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
+      last = now;
+      const company = pointer && now - pointerMovedAt < IDLE_MS ? pointer : null;
+      stepFlock(flock, dt, { pointer: company });
+      render();
+      if (running()) raf = requestAnimationFrame(frame);
     }
 
     function start() {
@@ -127,110 +132,65 @@ const { class: className = '' } = Astro.props;
       raf = 0;
     }
 
-    /** Without motion, show the swarm already settled rather than stacked at home. */
-    function still() {
-      if (!swarm) return;
-      for (let i = 0; i < 90; i++) stepSwarm(swarm, 1 / 60, null);
-      render();
-    }
-
-    function toField(event: PointerEvent): Pointer {
-      const rect = field.getBoundingClientRect();
-      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
-    }
-
-    function sheltered(event: PointerEvent): boolean {
-      const target = event.target;
-      return target instanceof Element && target.closest('[data-butterfly-shelter]') !== null;
+    function save() {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(saveFlock(flock)));
+      } catch {
+        // Private mode or a full quota: the next page simply starts fresh.
+      }
     }
 
     const passive = { passive: true } as const;
-    host.addEventListener(
+    window.addEventListener(
       'pointermove',
       (event) => {
-        pointer = sheltered(event) ? null : toField(event);
+        if (event.pointerType === 'touch') return;
+        const target = event.target;
+        const sheltered = target instanceof Element && target.closest('[data-butterfly-shelter]') !== null;
+        const box = layer.getBoundingClientRect();
+        const x = event.clientX - box.left;
+        const y = event.clientY - box.top;
+        const inside = x >= 0 && y >= 0 && x <= box.width && y <= box.height;
+        pointer = inside && !sheltered ? { x, y } : null;
+        pointerMovedAt = event.timeStamp;
       },
       passive,
     );
-    host.addEventListener(
-      'pointerdown',
-      (event) => {
-        pointer = sheltered(event) ? null : toField(event);
-      },
-      passive,
-    );
-    host.addEventListener('pointerleave', () => (pointer = null), passive);
-    host.addEventListener('pointercancel', () => (pointer = null), passive);
-    host.addEventListener(
-      'pointerup',
-      (event) => {
-        // A finger lifting off is the touch equivalent of the mouse leaving.
-        if (event.pointerType !== 'mouse') pointer = null;
-      },
-      passive,
-    );
+    document.documentElement.addEventListener('mouseleave', () => (pointer = null), passive);
+    window.addEventListener('blur', () => (pointer = null));
 
     new ResizeObserver(() => {
-      fit();
-      if (!running()) still();
-    }).observe(field);
-
-    new IntersectionObserver(
-      (entries) => {
-        visible = entries.some((entry) => entry.isIntersecting);
-        if (visible) start();
-        else stop();
-      },
-      { rootMargin: '64px' },
-    ).observe(field);
-
+      resizeFlock(flock, viewport(layer));
+      if (!running()) render();
+    }).observe(layer);
+    new IntersectionObserver(([entry]) => {
+      visible = entry?.isIntersecting ?? true;
+      if (visible) start();
+      else stop();
+    }).observe(layer);
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) stop();
       else start();
     });
-
     reducedMotion.addEventListener('change', () => {
-      if (reducedMotion.matches) {
-        stop();
-        still();
-      } else {
-        start();
-      }
+      if (reducedMotion.matches) stop();
+      else start();
     });
 
-    fit();
-    if (running()) start();
-    else still();
-  }
+    // pageswap fires before the view transition captures this page; pagehide
+    // covers browsers without it.
+    window.addEventListener('pageswap', save);
+    window.addEventListener('pagehide', save);
 
-  /* The hero card is the page's largest paint and should never wait on this.
-     Mounting is deferred to the browser's first idle moment (or the next tick
-     where requestIdleCallback is missing) so the swarm starts just after the
-     page is on screen rather than competing with it. */
-  function whenIdle(work: () => void) {
-    if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(work, { timeout: 500 });
-    } else {
-      setTimeout(work, 1);
+    render();
+    if (layer.hasAttribute('data-pending')) {
+      // First page of the visit: nothing to restore, so the flock fades in.
+      layer.setAttribute('data-arriving', '');
+      layer.removeAttribute('data-pending');
     }
+    start();
   }
 
-  whenIdle(() => {
-    document.querySelectorAll<HTMLElement>('.butterfly-field').forEach(mount);
-  });
+  const layer = document.querySelector<HTMLElement>('.butterfly-flock');
+  if (layer) mount(layer);
 </script>
-
-<style>
-  .butterfly-field {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .butterfly-canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-</style>

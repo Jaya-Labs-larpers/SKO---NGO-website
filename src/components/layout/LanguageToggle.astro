@@ -27,12 +27,18 @@ const label = otherLocale === 'km' ? t(lang, 'switchToKhmer') : t(lang, 'switchT
     full && 'w-full justify-center py-3',
   ]}
 >
-  <img
-    src={`/flags/${otherLocale}.svg`}
-    width="20"
-    height="14"
-    alt=""
-    class="rounded-[2px] ring-1 ring-black/10"
-  />
+  {
+    otherLocale === 'km' ? (
+      <span lang="en" class="leading-[14px] tracking-[0.04em]">KH</span>
+    ) : (
+      <img
+        src={`/flags/${otherLocale}.svg`}
+        width="20"
+        height="14"
+        alt=""
+        class="rounded-[2px] ring-1 ring-black/10"
+      />
+    )
+  }
   {full && <span>{localeName[otherLocale]}</span>}
 </a>

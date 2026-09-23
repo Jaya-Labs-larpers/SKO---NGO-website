@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import type { SiteSettings } from '~/lib/content/types';
-import { localizePath, pick, t, text } from '~/lib/i18n/utils';
+import { localizePath, parsePath, pick, t, text } from '~/lib/i18n/utils';
 import { footerNav } from '~/lib/nav';
 import Icon from '~/components/Icon.astro';
 import Logo from '~/components/Logo.astro';
@@ -9,9 +9,13 @@ import Logo from '~/components/Logo.astro';
 interface Props {
   lang: Locale;
   settings: SiteSettings;
+  pathname: string;
 }
 
-const { lang, settings } = Astro.props;
+const { lang, settings, pathname } = Astro.props;
+
+/** The contact page is the invitation already; closing on it again would repeat the page. */
+const showClosing = parsePath(pathname).path.replace(/\/$/, '') !== '/contact';
 
 const orgName = text(settings.orgName, lang);
 const address = pick(settings.address, lang);
@@ -32,6 +36,34 @@ function iconForPlatform(platform: string): string {
   class="site-footer on-inverse bg-[color:var(--color-blue-900)] pt-[60px] pb-7 text-[14.5px] text-white/70"
 >
   <div class="wrap">
+    {/*
+      Closing line: the invitation and the two direct ways to reach SKO, set
+      as display type, so contact is the last thing every page says.
+    */}
+    {
+      showClosing && (
+        <div class="footer-closing">
+          <p class="footer-closing__title">{t(lang, 'contactUs')}</p>
+          <div class="footer-closing__links">
+            {settings.email && (
+              <a href={`mailto:${settings.email}`} class="footer-closing__link">
+                <span class="roll">
+                  <span class="roll__text" data-text={settings.email}>{settings.email}</span>
+                </span>
+              </a>
+            )}
+            {settings.phone && (
+              <a href={`tel:${settings.phone.replace(/[^+\d]/g, '')}`} class="footer-closing__link">
+                <span class="roll">
+                  <span class="roll__text" data-text={settings.phone}>{settings.phone}</span>
+                </span>
+              </a>
+            )}
+          </div>
+        </div>
+      )
+    }
+
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
       <div>
         <Logo variant="reversed" width={220} />

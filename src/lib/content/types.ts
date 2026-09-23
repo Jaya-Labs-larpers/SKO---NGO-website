@@ -141,6 +141,8 @@ export interface SiteSettings {
   email?: string | null;
   partnerEmail?: string | null;
   safeguardingContact?: LocaleString | null;
+  /** Direct line for safeguarding concerns, offered instead of the form. */
+  safeguardingEmail?: string | null;
   officeHours?: LocaleString | null;
   socials?: SocialLink[] | null;
   /** Questions shown on the Donate page and emitted as FAQPage structured data. */
@@ -182,6 +184,8 @@ export interface Program {
   summary?: LocaleString | null;
   body?: LocaleBlocks | null;
   image?: CmsImage | null;
+  /** The photo on the programme's card in listings; falls back to `image`. */
+  cardImage?: CmsImage | null;
   order?: number | null;
   impactStats?: ImpactStat[] | null;
   seo?: Seo | null;
@@ -205,6 +209,8 @@ export interface Activity {
 export interface Story {
   _id: string;
   quote?: LocaleString | null;
+  /** The story in full. When present it is shown instead of the pull quote. */
+  body?: LocaleBlocks | null;
   personName?: string | null;
   personRole?: LocaleString | null;
   photo?: CmsImage | null;
@@ -237,6 +243,10 @@ export interface TeamMember {
   role?: LocaleString | null;
   photo?: CmsImage | null;
   group?: 'leadership' | 'board' | 'staff' | null;
+  /** The _id of the person this member reports to, for the structure chart. */
+  reportsTo?: string | null;
+  /** A vacant seat shown in the chart, such as "Volunteer / Internship". */
+  vacancy?: boolean | null;
   order?: number | null;
 }
 
@@ -260,7 +270,9 @@ export interface ImpactStat {
   label?: LocaleString | null;
   value?: number | null;
   displayValue?: string | null;
+  prefix?: LocaleString | null;
   suffix?: LocaleString | null;
   context?: LocaleString | null;
+  countUp?: boolean | null;
   order?: number | null;
 }

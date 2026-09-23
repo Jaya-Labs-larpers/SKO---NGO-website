@@ -87,6 +87,14 @@ export const siteSettings = defineType({
       description: 'Where the partner inquiry form is delivered.',
     }),
     defineField({
+      name: 'safeguardingEmail',
+      title: 'Safeguarding email',
+      type: 'string',
+      group: 'contact',
+      description: 'Offered on the contact page when a visitor chooses “Safeguarding concern”, instead of the form.',
+      validation: (r) => r.email(),
+    }),
+    defineField({
       name: 'safeguardingContact',
       title: 'Safeguarding contact note',
       type: 'localeText',
@@ -188,6 +196,12 @@ export const program = defineType({
     defineField({ name: 'body', title: 'Body', type: 'localeBlock' }),
     defineField({ name: 'image', title: 'Image', type: 'imageWithAlt' }),
     defineField({
+      name: 'cardImage',
+      title: 'Card image',
+      type: 'imageWithAlt',
+      description: 'Shown on the programme card on the homepage and programme list. Leave empty to reuse the main image.',
+    }),
+    defineField({
       name: 'impactStats',
       title: 'Impact statistics',
       type: 'array',
@@ -276,25 +290,22 @@ export const story = defineType({
   name: 'story',
   title: 'Story / testimonial',
   type: 'document',
-  description: 'Pseudonyms and initials only. Never a beneficiary’s real name.',
   fields: [
     defineField({ name: 'quote', title: 'Quote', type: 'localeText', validation: (r) => r.required() }),
     defineField({
       name: 'personName',
       title: 'Name shown',
       type: 'string',
-      description:
-        'Pseudonym or initials only. Never publish the real name of a beneficiary or a child.',
       validation: (r) => r.required(),
     }),
-    defineField({ name: 'personRole', title: 'Role', type: 'localeString' }),
     defineField({
-      name: 'photo',
-      title: 'Photo (optional)',
-      type: 'imageWithAlt',
-      description:
-        'Only use a photo that is consented and non-identifying. If in doubt, leave this empty and tick the silhouette option below.',
+      name: 'body',
+      title: 'Full story (optional)',
+      type: 'localeBlock',
+      description: 'The story in full. When filled in, it is shown instead of the quote.',
     }),
+    defineField({ name: 'personRole', title: 'Role', type: 'localeString' }),
+    defineField({ name: 'photo', title: 'Photo (optional)', type: 'imageWithAlt' }),
     defineField({
       name: 'useSilhouette',
       title: 'Use an illustrated avatar instead of a photo',
@@ -308,7 +319,7 @@ export const story = defineType({
       type: 'boolean',
       initialValue: false,
       description:
-        'Tick only when documented consent exists for publishing this story, and it contains no identifying details. This story will not appear on the website until this is ticked.',
+        'Tick only when documented consent exists for publishing this story. This story will not appear on the website until this is ticked.',
       validation: (r) =>
         r.custom((value) =>
           value === true ? true : 'Consent must be confirmed before this story can be published.',
@@ -408,6 +419,20 @@ export const teamMember = defineType({
     defineField({ name: 'photo', title: 'Photo', type: 'imageWithAlt' }),
     defineField({ name: 'bio', title: 'Short bio', type: 'localeText' }),
     defineField({
+      name: 'reportsTo',
+      title: 'Reports to',
+      type: 'reference',
+      to: [{ type: 'teamMember' }],
+      description: 'Places this person under their manager in the structure chart on the About page.',
+    }),
+    defineField({
+      name: 'vacancy',
+      title: 'Vacant seat',
+      type: 'boolean',
+      description: 'An open position shown in the chart, such as “Volunteer / Internship”. Put the position in Name.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'group',
       title: 'Group',
       type: 'string',
@@ -489,6 +514,12 @@ export const impactStat = defineType({
         'What visitors actually see. Use this for "10,000+", "96%" or Khmer numerals. Leave blank to show the raw number formatted for the language.',
     }),
     defineField({ name: 'label', title: 'Label', type: 'localeString', validation: (r) => r.required() }),
+    defineField({
+      name: 'prefix',
+      title: 'Prefix (optional)',
+      type: 'localeString',
+      description: 'A qualifier set small before the figure, such as “Nearly”.',
+    }),
     defineField({ name: 'suffix', title: 'Suffix (optional)', type: 'localeString' }),
     defineField({
       name: 'context',
@@ -497,6 +528,13 @@ export const impactStat = defineType({
       description:
         'The line underneath, e.g. "since 2007" or "2025 cohort". A number without context reads as marketing; a number with it reads as evidence. Please always fill this in.',
       validation: (r) => r.warning('A statistic without context is much less credible to a funder.'),
+    }),
+    defineField({
+      name: 'countUp',
+      title: 'Count up when it comes into view',
+      type: 'boolean',
+      description: 'Rolls the figure up from zero over about two seconds. Leave off for years.',
+      initialValue: false,
     }),
     defineField({ name: 'order', title: 'Order', type: 'number', initialValue: 10 }),
   ],

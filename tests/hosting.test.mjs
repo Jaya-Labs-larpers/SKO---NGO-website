@@ -116,7 +116,7 @@ test("the Khmer 404 page is copied to where the nearest-404 lookup finds it", as
   );
 });
 
-test("_redirects sends the retired donate and careers URLs to contact with a 301", async () => {
+test("_redirects sends the retired donate, careers, partner and volunteer URLs to contact with a 301", async () => {
   const text = await readFile(new URL("public/_redirects", root), "utf8");
   const rules = new Map();
   for (const raw of text.split("\n")) {
@@ -134,13 +134,21 @@ test("_redirects sends the retired donate and careers URLs to contact with a 301
     ["/careers/*", "/contact/"],
     ["/km/careers", "/km/contact/"],
     ["/km/careers/*", "/km/contact/"],
+    ["/partner-with-us", "/contact/?topic=partner"],
+    ["/partner-with-us/", "/contact/?topic=partner"],
+    ["/km/partner-with-us", "/km/contact/?topic=partner"],
+    ["/km/partner-with-us/", "/km/contact/?topic=partner"],
+    ["/volunteer", "/contact/?topic=volunteer"],
+    ["/volunteer/", "/contact/?topic=volunteer"],
+    ["/km/volunteer", "/km/contact/?topic=volunteer"],
+    ["/km/volunteer/", "/km/contact/?topic=volunteer"],
   ]) {
     assert.deepEqual(rules.get(from), { to, status: 301 }, from);
   }
   for (const [from, { to }] of rules) {
     assert.match(
       to,
-      /^\/(km\/)?contact\/$/,
+      /^\/(km\/)?contact\/(\?topic=[a-z]+)?$/,
       `${from} must land on a contact page`,
     );
     assert.ok(

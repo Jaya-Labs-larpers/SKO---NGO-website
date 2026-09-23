@@ -1,0 +1,175 @@
+---
+/**
+ * The logo butterfly flying just ahead of the mouse pointer, on every page.
+ * The system pointer stays visible and does the aiming; the butterfly keeps a
+ * little way out in front, along the direction of travel, and rests past the
+ * arrow's tip. The motion lives in ~/lib/butterflies/cursor.
+ *
+ * Only for a mouse: touch, pen, and anyone asking for reduced motion never see
+ * it. It steps aside over text fields, where it would sit on what is being
+ * typed, and while a modal is open, since the top layer covers it.
+ *
+ * Anything carrying data-cursor-label (the program and activity cards) makes
+ * it grow and show that word beside it, already translated by the page.
+ */
+import ButterflyGlyph from './ButterflyGlyph.astro';
+---
+
+<div class="butterfly-cursor" data-state="hidden" aria-hidden="true">
+  <ButterflyGlyph class="butterfly-cursor__glyph" />
+  <span class="butterfly-cursor__label"></span>
+</div>
+<script is:inline>
+  // Draws the butterfly where the previous page left the pointer, before first
+  // paint. Reads the shape parseSavedCursor in ~/lib/butterflies/cursor checks,
+  // and places it at restingPoint from the same file; keep both in step.
+  (function () {
+    var query = '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)';
+    if (!window.matchMedia(query).matches) return;
+    document.documentElement.setAttribute('data-butterfly-cursor', '');
+    try {
+      var saved = JSON.parse(sessionStorage.getItem('sko-cursor'));
+      if (!saved || typeof saved.x !== 'number' || typeof saved.y !== 'number') return;
+      if (saved.x < 0 || saved.y < 0 || saved.x > innerWidth || saved.y > innerHeight) return;
+      var el = document.currentScript.previousElementSibling;
+      el.style.transform = 'translate3d(' + (saved.x - 26) + 'px,' + (saved.y - 22) + 'px,0)';
+      el.setAttribute('data-state', 'idle');
+    } catch (error) {}
+  })();
+</script>
+
+<script>
+  import {
+    CURSOR_STORAGE_KEY,
+    createCursorFlight,
+    cursorWingSpan,
+    isSettled,
+    notePointerMove,
+    parseSavedCursor,
+    stepCursorFlight,
+    type Point,
+  } from '~/lib/butterflies/cursor';
+
+  const QUERY = '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)';
+  const INTERACTIVE = 'a[href], button, [role="button"], summary, label, select, [data-cursor="link"]';
+  const TEXT_ENTRY = 'input:not([type="checkbox"], [type="radio"], [type="button"], [type="submit"], [type="reset"]), textarea, [contenteditable]';
+
+  type State = 'hidden' | 'idle' | 'link' | 'label' | 'text';
+
+  function start(element: HTMLElement) {
+    const wings = element.querySelector<SVGGElement>('.butterfly-wings');
+    const labelSlot = element.querySelector<HTMLElement>('.butterfly-cursor__label');
+    const root = document.documentElement;
+    const media = window.matchMedia(QUERY);
+
+    const saved = parseSavedCursor(sessionStorage.getItem(CURSOR_STORAGE_KEY), {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    const pointer: Point = saved ?? { x: -100, y: -100 };
+    let flight = createCursorFlight(pointer);
+    let lastMoveTime = 0;
+    let state: State = saved ? 'idle' : 'hidden';
+    let frameId = 0;
+    let lastTime = 0;
+
+    const setState = (next: State) => {
+      if (next === state) return;
+      state = next;
+      element.dataset.state = next;
+    };
+
+    const draw = () => {
+      element.style.transform = `translate3d(${flight.x}px, ${flight.y}px, 0) rotate(${flight.tilt}rad)`;
+      if (wings) wings.style.transform = `scaleX(${cursorWingSpan(flight)})`;
+    };
+
+    const frame = (time: number) => {
+      const dt = lastTime ? Math.min((time - lastTime) / 1000, 1 / 20) : 1 / 60;
+      lastTime = time;
+      stepCursorFlight(flight, pointer, dt, state === 'link' || state === 'label');
+      draw();
+      if (isSettled(flight) && state !== 'link' && state !== 'label') {
+        frameId = 0;
+        lastTime = 0;
+        return;
+      }
+      frameId = requestAnimationFrame(frame);
+    };
+
+    const wake = () => {
+      if (!frameId && !document.hidden) frameId = requestAnimationFrame(frame);
+    };
+
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse') {
+        setState('hidden');
+        return;
+      }
+      const arriving = state === 'hidden';
+      if (!arriving) {
+        const seconds = lastMoveTime ? (event.timeStamp - lastMoveTime) / 1000 : 1 / 60;
+        notePointerMove(flight, event.clientX - pointer.x, event.clientY - pointer.y, seconds);
+      }
+      lastMoveTime = event.timeStamp;
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      if (arriving) flight = createCursorFlight(pointer);
+      const under = event.target instanceof Element ? event.target : null;
+      const labelled = under?.closest<HTMLElement>('[data-cursor-label]');
+      if (under?.closest(TEXT_ENTRY)) setState('text');
+      else if (labelled?.dataset.cursorLabel) {
+        if (labelSlot && labelSlot.textContent !== labelled.dataset.cursorLabel) {
+          labelSlot.textContent = labelled.dataset.cursorLabel;
+          labelSlot.lang = labelled.closest<HTMLElement>('[lang]')?.lang ?? '';
+        }
+        setState('label');
+      } else if (under?.closest(INTERACTIVE)) setState('link');
+      else setState('idle');
+      wake();
+    };
+
+    const onDown = () => element.setAttribute('data-pressed', '');
+    const onUp = () => element.removeAttribute('data-pressed');
+    const onOut = (event: MouseEvent) => {
+      if (!event.relatedTarget) setState('hidden');
+    };
+    const onVisibility = () => {
+      if (document.hidden && frameId) {
+        cancelAnimationFrame(frameId);
+        frameId = 0;
+        lastTime = 0;
+      }
+    };
+    const onHide = () => {
+      if (state === 'hidden') {
+        sessionStorage.removeItem(CURSOR_STORAGE_KEY);
+        return;
+      }
+      try {
+        sessionStorage.setItem(CURSOR_STORAGE_KEY, JSON.stringify({ x: Math.round(pointer.x), y: Math.round(pointer.y) }));
+      } catch {
+        /* storage full or blocked: the next page just waits for the mouse */
+      }
+    };
+    const onMediaChange = () => {
+      if (media.matches) root.setAttribute('data-butterfly-cursor', '');
+      else {
+        root.removeAttribute('data-butterfly-cursor');
+        setState('hidden');
+      }
+    };
+
+    draw();
+    window.addEventListener('pointermove', onMove, { passive: true });
+    window.addEventListener('pointerdown', onDown, { passive: true });
+    window.addEventListener('pointerup', onUp, { passive: true });
+    document.addEventListener('mouseout', onOut);
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('pagehide', onHide);
+    media.addEventListener('change', onMediaChange);
+  }
+
+  const element = document.querySelector<HTMLElement>('.butterfly-cursor');
+  if (element && window.matchMedia(QUERY).matches) start(element);
+</script>

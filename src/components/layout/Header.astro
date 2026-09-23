@@ -3,7 +3,6 @@ import type { Locale } from '~/lib/i18n/config';
 import type { SiteSettings } from '~/lib/content/types';
 import { localizePath, t, text } from '~/lib/i18n/utils';
 import { mainNav, mobileNav } from '~/lib/nav';
-import { hasImage, imageDimensions, imageUrl } from '~/lib/sanity/image';
 import LanguageToggle from './LanguageToggle.astro';
 import Icon from '~/components/Icon.astro';
 import Logo from '~/components/Logo.astro';
@@ -20,15 +19,6 @@ const { lang, pathname, settings, overlay = false } = Astro.props;
 
 const orgName = text(settings.orgName, lang);
 
-/**
- * The real logo the moment it is uploaded in the CMS. Until then a small mark
- * drawn from the logo's own elements — the triangle and a butterfly — rather
- * than an "SKO" tile, which was placeholder styling pretending to be identity.
- */
-const hasLogo = hasImage(settings.logo);
-const logoSrc = hasLogo && settings.logo ? imageUrl(settings.logo, { width: 320 }) : null;
-const { width: logoWidth, height: logoHeight } = imageDimensions(settings.logo, 3 / 1);
-
 function isCurrent(path: string): boolean {
   const target = localizePath(path, lang);
   return pathname === target || pathname.startsWith(target);
@@ -41,39 +31,8 @@ function isCurrent(path: string): boolean {
   data-at-top={overlay ? '' : undefined}
 >
   <div class="flex h-[var(--header-h)] w-full items-center gap-6 px-[var(--spacing-gutter)]">
-    <a href={localizePath('/', lang)} class="flex flex-none items-center gap-3 no-underline">
-      {
-        hasLogo && logoSrc ? (
-          <img
-            src={logoSrc}
-            alt={orgName}
-            width={logoWidth}
-            height={logoHeight}
-            class="h-10 w-auto lg:h-11"
-            decoding="sync"
-          />
-        ) : (
-          <>
-            <Logo variant="emblem" height={32} class="lg:h-[36px] lg:w-auto" />
-            <span class="flex flex-col leading-[1.15]">
-              <span class="text-[14px] font-bold tracking-[-0.01em] text-[color:var(--color-ink-900)] lg:text-[15px]">
-                {orgName}
-              </span>
-              {
-                lang === 'km' ? (
-                  <span class="hidden text-[11px] text-[color:var(--color-ink-400)] sm:block">
-                    Samatapheap Khnom Organization
-                  </span>
-                ) : (
-                  <span lang="km" class="hidden text-[12px] text-[color:var(--color-ink-400)] sm:block font-khmer">
-                    អង្គការសមត្ថភាពខ្ញុំ
-                  </span>
-                )
-              }
-            </span>
-          </>
-        )
-      }
+    <a href={localizePath('/', lang)} class="flex flex-none items-center no-underline">
+      <Logo variant="full" height={92} title={orgName} class="w-auto lg:h-[118px]" />
     </a>
 
     <nav class="ml-auto hidden lg:flex lg:gap-0.5" aria-label={t(lang, 'mainNavLabel')}>
@@ -84,7 +43,11 @@ function isCurrent(path: string): boolean {
             aria-current={isCurrent(item.path) ? 'page' : undefined}
             class="nav-link"
           >
-            {t(lang, item.key)}
+            <span class="roll">
+              <span class="roll__text" data-text={t(lang, item.key)}>
+                {t(lang, item.key)}
+              </span>
+            </span>
           </a>
         ))
       }
@@ -94,9 +57,14 @@ function isCurrent(path: string): boolean {
       class="ml-auto flex items-center gap-3 lg:ml-0 lg:border-l lg:border-[color:var(--color-line)] lg:pl-3.5"
     >
       <LanguageToggle lang={lang} pathname={pathname} />
-      <a href={localizePath('/contact', lang)} class="btn btn-primary btn-sm hidden sm:inline-flex">
-        <Icon name="envelope" size={16} inline />
-        {t(lang, 'contactUs')}
+      <a
+        href={localizePath('/contact', lang)}
+        class="btn btn-primary btn-fill hidden sm:inline-flex"
+      >
+        <span class="btn-fill__blob" aria-hidden="true"></span>
+        <span class="roll">
+          <span class="roll__text" data-text={t(lang, 'contactUs')}>{t(lang, 'contactUs')}</span>
+        </span>
       </a>
       <button
         type="button"
@@ -126,7 +94,7 @@ function isCurrent(path: string): boolean {
   aria-modal="true"
   aria-label={t(lang, 'menu')}
 >
-  <div class="wrap flex h-[68px] flex-none items-center border-b border-[color:var(--color-line-subtle)]">
+  <div class="wrap flex h-[var(--header-h)] flex-none items-center border-b border-[color:var(--color-line-subtle)]">
     <span class="text-[14px] font-bold text-[color:var(--color-ink-900)]">{orgName}</span>
     <button
       type="button"
@@ -134,7 +102,7 @@ function isCurrent(path: string): boolean {
       class="ml-auto grid h-11 w-11 place-items-center rounded-[var(--radius-md)] border border-[color:var(--color-line-strong)] bg-white text-[color:var(--color-ink-900)]"
       aria-label={t(lang, 'closeMenu')}
     >
-      <Icon name="x-mark" size={20} inline />
+      <span class="menu-x" aria-hidden="true"><span></span><span></span></span>
     </button>
   </div>
 
@@ -157,7 +125,7 @@ function isCurrent(path: string): boolean {
     <a href={localizePath('/contact', lang)} class="btn btn-primary btn-block mt-6 py-4">
       {t(lang, 'contactUs')}
     </a>
-    <a href={localizePath('/volunteer', lang)} class="btn btn-secondary btn-block mt-2.5 py-4">
+    <a href={localizePath('/contact?topic=volunteer', lang)} class="btn btn-secondary btn-block mt-2.5 py-4">
       {t(lang, 'navVolunteer')}
     </a>
 
@@ -186,6 +154,67 @@ function isCurrent(path: string): boolean {
       if (!entry) return;
       overlayHeader.toggleAttribute('data-at-top', entry.isIntersecting);
     }).observe(sentinel);
+  }
+
+  /**
+   * The header steps out of the way while the visitor reads downward and comes
+   * back on any upward scroll, keyboard focus, or near the top of the page.
+   *
+   * Distances are measured from the last turning point, not frame to frame, so
+   * a slow scroll still registers. Hiding takes a deliberate scroll; showing
+   * takes only a small one — the visitor reaching for the menu should not have
+   * to work for it. Rubber-band overscroll at either end is ignored, or the
+   * bounce at the bottom of a page on iOS would pull the header back in.
+   */
+  const header = document.querySelector<HTMLElement>('header.site-header');
+  const menuPanel = document.getElementById('mobile-nav');
+
+  if (header) {
+    const HIDE_AFTER = 24;
+    const SHOW_AFTER = 6;
+    let turnY = window.scrollY;
+    let ticking = false;
+
+    const setHidden = (hidden: boolean) => {
+      if (header.hasAttribute('data-hidden') !== hidden) header.toggleAttribute('data-hidden', hidden);
+    };
+
+    const update = () => {
+      ticking = false;
+      const maxY = document.documentElement.scrollHeight - window.innerHeight;
+      const y = Math.min(Math.max(window.scrollY, 0), maxY);
+      const hidden = header.hasAttribute('data-hidden');
+      header.toggleAttribute('data-scrolled', y > header.offsetHeight);
+
+      const nearTop = y < header.offsetHeight * 2;
+      const menuOpen = menuPanel ? !menuPanel.hidden : false;
+      if (nearTop || menuOpen || header.contains(document.activeElement)) {
+        setHidden(false);
+        turnY = y;
+        return;
+      }
+
+      if (hidden ? y > turnY : y < turnY) turnY = y;
+      const travelled = y - turnY;
+      if (!hidden && travelled > HIDE_AFTER) {
+        setHidden(true);
+        turnY = y;
+      } else if (hidden && travelled < -SHOW_AFTER) {
+        setHidden(false);
+        turnY = y;
+      }
+    };
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+      },
+      { passive: true },
+    );
+    header.addEventListener('focusin', () => header.removeAttribute('data-hidden'));
   }
 
   const toggle = document.getElementById('menu-toggle');

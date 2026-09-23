@@ -32,7 +32,7 @@ const seo = resolveSeo(page?.seo, lang, {
 });
 ---
 
-<BaseLayout
+<BaseLayout headerOverlay
   lang={lang}
   title={seo.title}
   description={seo.description}
@@ -47,7 +47,7 @@ const seo = resolveSeo(page?.seo, lang, {
     trail={trail ?? [{ label: heading }]}
   />
 
-  <section class="section">
+  <section class:list={['section', page?.faqs?.length && 'bg-white']}>
     <div class="wrap">
       <RichText blocks={page?.body} lang={lang} />
       <slot />

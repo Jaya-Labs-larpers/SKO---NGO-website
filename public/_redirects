@@ -12,3 +12,14 @@
 /careers/*         /contact/     301
 /km/careers        /km/contact/  301
 /km/careers/*      /km/contact/  301
+
+# The partner and volunteer forms were folded into the one contact form; the
+# topic parameter opens it on the matching choice.
+/partner-with-us      /contact/?topic=partner       301
+/partner-with-us/     /contact/?topic=partner       301
+/km/partner-with-us   /km/contact/?topic=partner    301
+/km/partner-with-us/  /km/contact/?topic=partner    301
+/volunteer            /contact/?topic=volunteer     301
+/volunteer/           /contact/?topic=volunteer     301
+/km/volunteer         /km/contact/?topic=volunteer  301
+/km/volunteer/        /km/contact/?topic=volunteer  301

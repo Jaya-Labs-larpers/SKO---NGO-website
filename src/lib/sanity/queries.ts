@@ -26,13 +26,13 @@ const SEO = `{ title, description, noindex, image ${IMAGE} }`;
 
 const FAQ = `{ question, answer }`;
 
-const IMPACT_STAT = `{ _id, label, value, displayValue, suffix, context, order }`;
+const IMPACT_STAT = `{ _id, label, value, displayValue, prefix, suffix, context, countUp, order }`;
 
 const PROGRAM_REF = `{ "slug": slug.current, title }`;
 
 export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   orgName, orgShortName, tagline, registration, address, mapUrl, geo,
-  phone, email, partnerEmail, safeguardingContact, officeHours, socials,
+  phone, email, partnerEmail, safeguardingContact, safeguardingEmail, officeHours, socials,
   logo ${IMAGE},
   ogImage ${IMAGE},
   homeHero[]${IMAGE},
@@ -55,7 +55,8 @@ export const pageBySlugQuery = `*[_type == "page" && slug.current == $slug][0]{
 
 export const programsQuery = `*[_type == "program"] | order(order asc, _createdAt asc){
   _id, "slug": slug.current, title, summary, order,
-  image ${IMAGE}
+  image ${IMAGE},
+  cardImage ${IMAGE}
 }`;
 
 export const programBySlugQuery = `*[_type == "program" && slug.current == $slug][0]{
@@ -79,7 +80,7 @@ export const activityBySlugQuery = `*[_type == "activity" && slug.current == $sl
 }`;
 
 export const storiesQuery = `*[_type == "story" && consentConfirmed == true] | order(_createdAt desc){
-  _id, quote, personName, personRole, useSilhouette,
+  _id, quote, body, personName, personRole, useSilhouette,
   photo ${IMAGE},
   program->${PROGRAM_REF}
 }`;
@@ -96,7 +97,8 @@ export const reportsQuery = `*[_type == "report"] | order(year desc, _createdAt 
 }`;
 
 export const teamQuery = `*[_type == "teamMember"] | order(order asc, _createdAt asc){
-  _id, name, role, group, order,
+  _id, name, role, group, order, vacancy,
+  "reportsTo": reportsTo._ref,
   photo ${IMAGE}
 }`;
 
