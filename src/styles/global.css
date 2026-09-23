@@ -172,15 +172,21 @@ main {
 }
 
 /*
- * The travelling butterfly: the home hero's butterfly and every page's perch
- * share one name, so each navigation flies it from where it was to where it
- * lands. It takes longer than the page swap on purpose — the content settles
- * first and the butterfly arrives after it, which is what makes it read as
- * flight rather than a crossfade.
+ * The flock stays put across a page change: each butterfly has its own name,
+ * sits in the same viewport spot on both pages (see ButterflyField), and so
+ * the content slides in underneath while they carry on.
  */
-::view-transition-group(butterfly) {
-  animation-duration: 560ms;
-  animation-timing-function: cubic-bezier(0.45, 0.05, 0.25, 1);
+.flock-bird:nth-child(1) {
+  view-transition-name: flock-0;
+}
+.flock-bird:nth-child(2) {
+  view-transition-name: flock-1;
+}
+.flock-bird:nth-child(3) {
+  view-transition-name: flock-2;
+}
+.flock-bird:nth-child(4) {
+  view-transition-name: flock-3;
 }
 
 /* --- Mobile navigation panel ---------------------------------------------- */
@@ -936,65 +942,35 @@ details[open] > summary > .disclosure-icon {
   transform-origin: 45px 20.5px;
 }
 
-/* Where the hero butterfly rests: the middle of the open space beside the
-   card from lg (the card is 588px wide at the wrap's left edge), the middle of
-   the band above the card below that. Pure CSS so the spot is known before any
-   script runs — a view transition into the home page lands here. */
-.butterfly-home {
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  width: 0;
-  height: 0;
+/* The flock's layer: fixed to the window, above the page and the sticky
+   header, below the mobile menu and dialogs, and never in the way of a click. */
+.butterfly-flock {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow: hidden;
+  pointer-events: none;
 }
-.butterfly-flyer {
+.butterfly-flock[data-pending] {
+  visibility: hidden;
+}
+.butterfly-flock[data-arriving] {
+  animation: flock-arrive 700ms var(--ease-out-soft) both;
+}
+@keyframes flock-arrive {
+  from {
+    opacity: 0;
+  }
+}
+.flock-bird {
   position: absolute;
   left: 0;
   top: 0;
-  width: clamp(140px, 45vw, 300px);
-  translate: -50% -50%;
-  view-transition-name: butterfly;
+  width: 40px;
+  will-change: transform;
 }
-@media (min-width: 64rem) {
-  .butterfly-home {
-    left: calc(
-      (max(0px, (100% - 75rem) / 2) + var(--spacing-gutter) + 588px + 100%) / 2
-    );
-    top: 50%;
-  }
-  .butterfly-flyer {
-    width: clamp(200px, 24vw, 400px);
-  }
-}
-
-/* The perch only exists where there is room beside the page title (lg up).
-   Below that no element carries the name, and the butterfly simply fades with
-   the page it left. */
-.butterfly-perch {
-  display: none;
-}
-@media (min-width: 64rem) {
-  .butterfly-perch {
-    display: block;
-    position: absolute;
-    right: var(--perch-right);
-    top: var(--perch-top);
-    width: 96px;
-    rotate: var(--perch-tilt);
-    view-transition-name: butterfly;
-    animation: perch-bob 4.8s ease-in-out infinite;
-  }
-  .butterfly-perch .butterfly-wings {
-    animation: wing-beat 1.4s ease-in-out infinite;
-  }
-}
-@keyframes perch-bob {
-  50% {
-    translate: 0 -6px;
-  }
-}
-@keyframes wing-beat {
-  50% {
-    transform: scaleX(0.45);
+@media print {
+  .butterfly-flock {
+    display: none;
   }
 }

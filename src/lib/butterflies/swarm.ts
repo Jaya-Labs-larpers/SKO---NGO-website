@@ -33,12 +33,6 @@ export interface SwarmOptions {
   gatherRadius: number;
   /** Pointer distance (px) at which a gathered butterfly lets go again. */
   releaseRadius: number;
-  /** Resting wing beats per second. Big butterflies read calmer when slower. */
-  minFlapHz: number;
-  maxFlapHz: number;
-  /** Radius range (px) of the ring a gathered butterfly holds around the pointer. */
-  minRingRadius: number;
-  maxRingRadius: number;
 }
 
 export const DEFAULT_SWARM_OPTIONS: SwarmOptions = {
@@ -50,10 +44,6 @@ export const DEFAULT_SWARM_OPTIONS: SwarmOptions = {
   maxSize: 30,
   gatherRadius: 280,
   releaseRadius: 380,
-  minFlapHz: 2.2,
-  maxFlapHz: 3.2,
-  minRingRadius: 30,
-  maxRingRadius: 100,
 };
 
 export interface Pointer {
@@ -84,8 +74,6 @@ export interface Butterfly {
   ring: number;
   ringR: number;
   gathered: boolean;
-  /** Radius (px) of the wandering loop around home; derived from size when unset. */
-  drift?: number;
   /** Lean into horizontal movement, radians. */
   tilt: number;
 }
@@ -166,7 +154,7 @@ function makeButterfly(swarm: Swarm): Butterfly {
   const { hx, hy } = pickHome(swarm.butterflies, next);
   // Skew toward the small end so the field feels like many, with a few larger.
   const size = lerp(options.minSize, options.maxSize, next() ** 1.6);
-  const ringR = lerp(options.minRingRadius, options.maxRingRadius, next());
+  const ringR = lerp(30, 100, next());
   return {
     hx,
     hy,
@@ -176,7 +164,7 @@ function makeButterfly(swarm: Swarm): Butterfly {
     vy: 0,
     size,
     phase: next() * TAU,
-    flapHz: lerp(options.minFlapHz, options.maxFlapHz, next()),
+    flapHz: lerp(2.2, 3.2, next()),
     w1: lerp(0.35, 0.7, next()),
     w2: lerp(0.5, 1.1, next()),
     p1: next() * TAU,
@@ -252,7 +240,7 @@ export function stepSwarm(
     // Where this butterfly wants to be.
     let tx: number;
     let ty: number;
-    const drift = b.drift ?? 14 + b.size * 0.8;
+    const drift = 14 + b.size * 0.8;
 
     if (pointer) {
       const dx = pointer.x - b.x;

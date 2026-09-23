@@ -10,7 +10,6 @@ import {
   getStories,
 } from '~/lib/content';
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import ButterflyField from '~/components/media/ButterflyField.astro';
 import ImpactStats from '~/components/content/ImpactStats.astro';
 import SectionHeading from '~/components/content/SectionHeading.astro';
 import ProgramCard from '~/components/content/ProgramCard.astro';
@@ -49,32 +48,19 @@ const story = stories[0];
   headerOverlay
 >
   {/*
-    Hero: one large logo butterfly behind, white card in front. It starts at
-    the top of the window, under a header that has gone transparent, so the
-    butterfly's field is what fills that band. From lg the field is a
-    background layer, so the section pays the header's height back as padding
-    to keep the card where it was; below lg the field is a block in the flow and
-    already starts high enough.
-
-    The section is the pointer host: hovering anywhere over it (except the card)
-    draws the butterfly into a circle around the cursor.
+    Hero: white card on the hero band. It starts at the top of the window,
+    under a header that has gone transparent, so the section pays the header's
+    height back as padding. The site-wide butterflies (ButterflyField, in the
+    layout) rest in the open space to the right; the card is a no-pull zone for
+    them.
   */}
   <section
-    data-butterfly-host
-    class="hero-overlap relative border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] lg:pt-[var(--header-h)]"
+    class="hero-overlap relative border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] pt-[var(--header-h)]"
   >
-    {/*
-      One instance, placed differently by breakpoint: a 4:3 block above the card
-      on phones, full-bleed behind it from lg up.
-    */}
-    <div class="relative aspect-4/3 lg:absolute lg:inset-0 lg:aspect-auto">
-      <ButterflyField />
-    </div>
-
     <div class="wrap relative flex min-h-0 items-center lg:min-h-[520px]">
       <div
         data-butterfly-shelter
-        class="-mt-10 mb-0 w-full max-w-[588px] rounded-[var(--radius-xl)] border border-[color:var(--color-line)] bg-white p-6 shadow-[var(--shadow-lg)] sm:p-11 lg:my-14 lg:-mt-0"
+        class="my-8 w-full max-w-[588px] rounded-[var(--radius-xl)] border border-[color:var(--color-line)] bg-white p-6 shadow-[var(--shadow-lg)] sm:p-11 lg:my-14"
       >
         <p class="eyebrow">Phnom Penh, Cambodia · Since 2007</p>
         <h1

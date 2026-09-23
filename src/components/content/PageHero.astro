@@ -1,7 +1,6 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
-import ButterflyPerch from '~/components/media/ButterflyPerch.astro';
 import type { Crumb } from '~/lib/breadcrumbs';
 
 interface Props {
@@ -19,8 +18,7 @@ const { lang, title, intro, introLang, eyebrow, trail } = Astro.props;
 <section
   class="border-b border-[color:var(--color-line-subtle)] bg-[linear-gradient(180deg,var(--color-sky-50)_0%,#fff_100%)] pt-14 pb-13"
 >
-  <div class="wrap relative">
-    <ButterflyPerch />
+  <div class="wrap">
     {trail && <Breadcrumbs lang={lang} trail={trail} />}
     {eyebrow && <p class="eyebrow mt-4">{eyebrow}</p>}
     <h1

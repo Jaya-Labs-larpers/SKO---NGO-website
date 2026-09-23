@@ -1,146 +1,128 @@
 ---
 /**
- * The butterfly from the SKO logo, drawn large and alone, gliding over the
- * hero. On wide screens it keeps to the open space beside the card; where the
- * field is a band above the card it hovers in the middle of it.
+ * The site-wide flock: one larger logo butterfly and three smaller ones, on a
+ * fixed layer over every page. The motion lives in ~/lib/butterflies/flight.
  *
- * It is an inline SVG rather than a canvas so it can carry the `butterfly`
- * view-transition name: leaving the home page, it flies down into the perch
- * every other page keeps for it (ButterflyPerch), and flies back up on return.
+ * They belong to the window, not the page. Scrolling carries the three small
+ * ones along the side edges; changing URL leaves every one of them exactly
+ * where it was, because the flock is saved on the way out and redrawn by the
+ * inline script below before the next page's first paint, and each butterfly
+ * carries its own view-transition name so the page swap slides content under
+ * them without touching them. A mouse within reach draws them to it; the hero
+ * card ([data-butterfly-shelter]) is a no-pull zone.
  *
- * Its resting place is pure CSS (.butterfly-home in global.css), so a page
- * arriving by view transition already has it in place before any script runs.
- * Motion comes from ~/lib/butterflies/swarm as a swarm of one — the same
- * deterministic simulation the Remotion project in /video renders — and is
- * applied as a transform on top of that resting place.
- *
- * Hovering over the field draws the butterfly into a slow circle around the
- * cursor; move away and it glides home. The pointer is read from the nearest
- * [data-butterfly-host] ancestor (the hero section), so the field itself never
- * intercepts clicks. Hovering the card ([data-butterfly-shelter]) counts as
- * leaving the field.
- *
- * Under prefers-reduced-motion one settled frame is shown and nothing moves.
- * The loop also stops while the field is off screen or the tab is hidden.
+ * On phones they shrink to the page gutters and simply drift there. Under
+ * prefers-reduced-motion or data saver they rest in place and never move.
  */
 import ButterflyGlyph from './ButterflyGlyph.astro';
-
-interface Props {
-  class?: string;
-}
-
-const { class: className = '' } = Astro.props;
 ---
 
-<div class:list={['butterfly-field', className]} aria-hidden="true">
-  <div class="butterfly-home">
-    <ButterflyGlyph class="butterfly-flyer" />
-  </div>
+<div class="butterfly-flock" data-pending aria-hidden="true">
+  <ButterflyGlyph class="flock-bird" />
+  <ButterflyGlyph class="flock-bird" />
+  <ButterflyGlyph class="flock-bird" />
+  <ButterflyGlyph class="flock-bird" />
 </div>
+<script is:inline>
+  // Restores the flock where the previous page left it, before first paint.
+  // Reads the SavedFlock shape from ~/lib/butterflies/flight; keep in step.
+  (function () {
+    var layer = document.currentScript.previousElementSibling;
+    try {
+      var saved = JSON.parse(sessionStorage.getItem('sko-flock'));
+      if (!saved || !saved.f) return;
+      var root = document.documentElement;
+      var sx = root.clientWidth / saved.w;
+      var sy = root.clientHeight / saved.h;
+      saved.f.forEach(function (f, i) {
+        var bird = layer.children[i];
+        if (!bird) return;
+        bird.style.width = f.s + 'px';
+        bird.style.transform =
+          'translate(' + f.x * sx + 'px,' + f.y * sy + 'px) translate(-50%,-50%) rotate(' + f.r + 'rad)';
+        var wings = bird.querySelector('.butterfly-wings');
+        if (wings) wings.style.transform = 'scaleX(' + f.k + ')';
+      });
+      layer.removeAttribute('data-pending');
+    } catch (error) {}
+  })();
+</script>
 
 <script>
-  import { whenIdle } from '~/lib/lazy';
   import {
-    createSwarm,
-    resizeSwarm,
-    stepSwarm,
+    STORAGE_KEY,
+    createFlock,
+    parseSavedFlock,
+    resizeFlock,
+    restoreFlock,
+    saveFlock,
+    stepFlock,
+    wingSpan,
+    type Flock,
     type Pointer,
-    type Swarm,
-    type SwarmOptions,
-  } from '~/lib/butterflies/swarm';
+  } from '~/lib/butterflies/flight';
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  /** A metered connection is treated like reduced motion: one still frame. */
+  /** A metered connection is treated like reduced motion: the flock rests. */
   const saveData =
     (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
 
-  const SOLO: Partial<SwarmOptions> = {
-    minCount: 1,
-    maxCount: 1,
-    // A big wing beats slowly; a small one's 2–3 Hz reads as a flutter here.
-    minFlapHz: 0.9,
-    maxFlapHz: 1.2,
-    gatherRadius: 420,
-    releaseRadius: 560,
-    // Circles the cursor rather than landing on it.
-    minRingRadius: 120,
-    maxRingRadius: 170,
-  };
-  /** How far the wings close on each beat, as a fraction of their span. */
-  const FLAP_MIN = 0.4;
+  function viewport() {
+    const root = document.documentElement;
+    return { width: root.clientWidth, height: root.clientHeight };
+  }
 
-  function mount(field: HTMLElement) {
-    const home = field.querySelector<HTMLElement>('.butterfly-home');
-    const flyer = field.querySelector<SVGSVGElement>('.butterfly-flyer');
-    const wings = flyer?.querySelector<SVGGElement>('.butterfly-wings');
-    if (!home || !flyer || !wings) return;
-    // Rebound as consts so the closures below see them as non-null.
-    const homeEl: HTMLElement = home;
-    const flyerEl: SVGSVGElement = flyer;
-    const wingsEl: SVGGElement = wings;
+  function readSaved() {
+    try {
+      return parseSavedFlock(sessionStorage.getItem(STORAGE_KEY));
+    } catch {
+      return null;
+    }
+  }
 
-    const host = field.closest<HTMLElement>('[data-butterfly-host]') ?? field;
+  function mount(layer: HTMLElement) {
+    const birds = Array.from(layer.querySelectorAll<SVGSVGElement>('.flock-bird'));
+    const wings = birds.map((bird) => bird.querySelector<SVGGElement>('.butterfly-wings'));
 
-    let swarm: Swarm | null = null;
-    let homeX = 0;
-    let homeY = 0;
+    const saved = readSaved();
+    const flock: Flock = saved ? restoreFlock(saved, viewport()) : createFlock(viewport());
+
     let pointer: Pointer | null = null;
+    let lastScroll = window.scrollY;
     let raf = 0;
     let last = 0;
-    let visible = true;
-
-    function fit() {
-      const bounds = field.getBoundingClientRect();
-      const width = Math.max(1, Math.round(bounds.width));
-      const height = Math.max(1, Math.round(bounds.height));
-      const spot = homeEl.getBoundingClientRect();
-      homeX = spot.left - bounds.left;
-      homeY = spot.top - bounds.top;
-      const span = parseFloat(getComputedStyle(flyerEl).width) || 200;
-
-      const fresh = !swarm;
-      if (swarm) resizeSwarm(swarm, width, height);
-      else swarm = createSwarm(width, height, SOLO);
-
-      const butterfly = swarm.butterflies[0]!;
-      butterfly.hx = homeX / width;
-      butterfly.hy = homeY / height;
-      // The simulation keeps a butterfly `size` px from each wall, so half the
-      // span keeps the wingtips inside the field without pushing it off its spot.
-      butterfly.size = span / 2;
-      butterfly.drift = span * 0.25;
-      if (fresh) {
-        butterfly.x = homeX;
-        butterfly.y = homeY;
-      }
-    }
 
     function render() {
-      const butterfly = swarm?.butterflies[0];
-      if (!butterfly) return;
-      flyerEl.style.transform = `translate(${butterfly.x - homeX}px, ${butterfly.y - homeY}px) rotate(${butterfly.tilt}rad)`;
-      const flap = 1 - (1 - FLAP_MIN) * (0.5 - 0.5 * Math.cos(butterfly.phase));
-      wingsEl.style.transform = `scaleX(${flap})`;
+      flock.flyers.forEach((flyer, i) => {
+        const bird = birds[i];
+        if (!bird) return;
+        bird.style.width = `${flyer.size}px`;
+        bird.style.transform = `translate(${flyer.x}px, ${flyer.y}px) translate(-50%, -50%) rotate(${flyer.tilt}rad)`;
+        const wing = wings[i];
+        if (wing) wing.style.transform = `scaleX(${wingSpan(flyer)})`;
+      });
+    }
+
+    function running() {
+      return !document.hidden && !reducedMotion.matches && !saveData;
     }
 
     function frame(now: number) {
       raf = 0;
-      if (!swarm) return;
-      // Clamp so a background tab coming back does not lurch.
+      // Clamp so a tab coming back from the background does not lurch.
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
       last = now;
-      stepSwarm(swarm, dt, pointer);
+      const scroll = window.scrollY;
+      stepFlock(flock, dt, { pointer, scrolled: scroll - lastScroll });
+      lastScroll = scroll;
       render();
       if (running()) raf = requestAnimationFrame(frame);
-    }
-
-    function running() {
-      return visible && !document.hidden && !reducedMotion.matches && !saveData;
     }
 
     function start() {
       if (raf || !running()) return;
       last = 0;
+      lastScroll = window.scrollY;
       raf = requestAnimationFrame(frame);
     }
 
@@ -149,95 +131,55 @@ const { class: className = '' } = Astro.props;
       raf = 0;
     }
 
-    /** Without motion, show the butterfly settled at home. */
-    function still() {
-      if (!swarm) return;
-      for (let i = 0; i < 90; i++) stepSwarm(swarm, 1 / 60, null);
-      render();
-    }
-
-    function toField(event: PointerEvent): Pointer {
-      const rect = field.getBoundingClientRect();
-      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
-    }
-
-    function sheltered(event: PointerEvent): boolean {
-      const target = event.target;
-      return target instanceof Element && target.closest('[data-butterfly-shelter]') !== null;
+    function save() {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(saveFlock(flock)));
+      } catch {
+        // Private mode or a full quota: the next page simply starts fresh.
+      }
     }
 
     const passive = { passive: true } as const;
-    host.addEventListener(
+    window.addEventListener(
       'pointermove',
       (event) => {
-        pointer = sheltered(event) ? null : toField(event);
+        if (event.pointerType === 'touch') return;
+        const target = event.target;
+        const sheltered = target instanceof Element && target.closest('[data-butterfly-shelter]') !== null;
+        pointer = sheltered ? null : { x: event.clientX, y: event.clientY };
       },
       passive,
     );
-    host.addEventListener(
-      'pointerdown',
-      (event) => {
-        pointer = sheltered(event) ? null : toField(event);
-      },
-      passive,
-    );
-    host.addEventListener('pointerleave', () => (pointer = null), passive);
-    host.addEventListener('pointercancel', () => (pointer = null), passive);
-    host.addEventListener(
-      'pointerup',
-      (event) => {
-        // A finger lifting off is the touch equivalent of the mouse leaving.
-        if (event.pointerType !== 'mouse') pointer = null;
-      },
-      passive,
-    );
+    document.documentElement.addEventListener('mouseleave', () => (pointer = null), passive);
+    window.addEventListener('blur', () => (pointer = null));
 
-    new ResizeObserver(() => {
-      fit();
-      if (!running()) still();
-    }).observe(field);
-
-    new IntersectionObserver(
-      (entries) => {
-        visible = entries.some((entry) => entry.isIntersecting);
-        if (visible) start();
-        else stop();
-      },
-      { rootMargin: '64px' },
-    ).observe(field);
-
+    window.addEventListener('resize', () => {
+      resizeFlock(flock, viewport());
+      if (!running()) render();
+    });
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) stop();
       else start();
     });
-
     reducedMotion.addEventListener('change', () => {
-      if (reducedMotion.matches) {
-        stop();
-        still();
-      } else {
-        start();
-      }
+      if (reducedMotion.matches) stop();
+      else start();
     });
 
-    fit();
-    if (running()) start();
-    else still();
+    // pageswap fires before the view transition captures this page; pagehide
+    // covers browsers without it.
+    window.addEventListener('pageswap', save);
+    window.addEventListener('pagehide', save);
+
+    render();
+    if (layer.hasAttribute('data-pending')) {
+      // First page of the visit: nothing to restore, so the flock fades in.
+      layer.setAttribute('data-arriving', '');
+      layer.removeAttribute('data-pending');
+    }
+    start();
   }
 
-  /* The hero card is the page's largest paint and should never wait on this.
-     Mounting is deferred to the browser's first idle moment; until then the
-     butterfly simply rests where the CSS puts it. */
-  whenIdle(() => {
-    document.querySelectorAll<HTMLElement>('.butterfly-field').forEach(mount);
-  });
+  const layer = document.querySelector<HTMLElement>('.butterfly-flock');
+  if (layer) mount(layer);
 </script>
-
-<style>
-  .butterfly-field {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-</style>
