@@ -1,16 +1,15 @@
 /**
- * Content boxes (.reveal) fade up out of a soft blur the first time they come
- * into view.
+ * Content boxes (.reveal) rise into place from below as they come into view,
+ * and again every time the visitor scrolls back down to them.
  *
  * Time-based rather than scroll-linked: a mouse wheel scrolls in steps, and an
  * animation tied to scroll position steps with it. A fixed-length transition
  * started on entry is smooth whatever the input.
  *
- * Nothing is ever hidden that the visitor could already see. Only boxes still
- * below the fold when this runs are set aside, and setting them aside is
- * invisible because they are off screen. Boxes already in view, or above it on
- * a restored scroll position, are left alone. Without IntersectionObserver, or
- * under reduced motion, nothing is touched at all.
+ * A box is only ever set aside while it is fully below the bottom edge of the
+ * window, so the visitor never watches one disappear. Boxes already in view at
+ * load are left alone until they have scrolled off the bottom once. Without
+ * IntersectionObserver, or under reduced motion, nothing is touched at all.
  */
 
 /** Must match the transition length in global.css (.reveal[data-reveal]). */
@@ -32,28 +31,33 @@ export function revealOnEntry({
 }: Options = {}): void {
   if (reducedMotion || typeof IntersectionObserver !== "function") return;
 
-  const waiting = Array.from(
-    root.querySelectorAll<HTMLElement>(".reveal"),
-  ).filter((box) => box.getBoundingClientRect().top > viewportHeight);
-  if (waiting.length === 0) return;
+  const boxes = Array.from(root.querySelectorAll<HTMLElement>(".reveal"));
+  if (boxes.length === 0) return;
 
-  const observer = new IntersectionObserver(
+  const handBack = new Map<HTMLElement, ReturnType<typeof setTimeout>>();
+
+  const arrival = new IntersectionObserver(
     (entries) => {
       const arriving = entries.filter((entry) => entry.isIntersecting);
       arriving.forEach((entry, index) => {
         const box = entry.target as HTMLElement;
-        observer.unobserve(box);
+        arrival.unobserve(box);
         const delay = Math.min(index, STAGGER_CAP) * STAGGER_MS;
+        const length = Number(box.dataset.revealMs) || REVEAL_MS;
         box.style.setProperty("--reveal-delay", `${delay}ms`);
         box.dataset.reveal = "shown";
         // Hand the box back to its own styles afterwards, so a card's hover
         // transitions are not overridden by the reveal's.
-        setTimeout(
-          () => {
-            delete box.dataset.reveal;
-            box.style.removeProperty("--reveal-delay");
-          },
-          delay + REVEAL_MS + 50,
+        handBack.set(
+          box,
+          setTimeout(
+            () => {
+              handBack.delete(box);
+              delete box.dataset.reveal;
+              box.style.removeProperty("--reveal-delay");
+            },
+            delay + length + 50,
+          ),
         );
       });
     },
@@ -62,8 +66,24 @@ export function revealOnEntry({
     { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
   );
 
-  for (const box of waiting) {
+  const setAside = (box: HTMLElement) => {
+    clearTimeout(handBack.get(box));
+    handBack.delete(box);
+    box.style.removeProperty("--reveal-delay");
     box.dataset.reveal = "pending";
-    observer.observe(box);
+    arrival.observe(box);
+  };
+
+  const departure = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) continue;
+      const bottom = entry.rootBounds?.bottom ?? window.innerHeight;
+      if (entry.boundingClientRect.top >= bottom) setAside(entry.target as HTMLElement);
+    }
+  });
+
+  for (const box of boxes) {
+    if (box.getBoundingClientRect().top > viewportHeight) setAside(box);
+    departure.observe(box);
   }
 }

@@ -38,9 +38,10 @@ const fullTitle = title === orgName ? title : `${title} · ${orgName}`;
 const canonical = new URL(pathname, siteUrl).href;
 
 const shareImage = ogImage ?? settings.ogImage ?? null;
-const shareImageUrl = shareImage && hasImage(shareImage)
+const shareImagePath = shareImage && hasImage(shareImage)
   ? imageUrl(shareImage, { width: 1200, height: 630 })
   : null;
+const shareImageUrl = shareImagePath ? new URL(shareImagePath, siteUrl).href : null;
 
 /**
  * Organization node.

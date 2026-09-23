@@ -27,7 +27,7 @@ const categoryLabels: Record<string, Record<Locale, string>> = {
 const category = activity.category ? categoryLabels[activity.category]?.[lang] : null;
 ---
 
-<article class="card reveal group relative">
+<article class="card reveal group relative" data-cursor-label={t(lang, 'readMore')}>
   <div class="card-media">
     <ResponsiveImage image={activity.coverImage} lang={lang} alt="" aspect="3/2" sizes={sizes} />
   </div>

@@ -1,0 +1,124 @@
+/**
+ * Splits a long CMS body into its "## " sections so a page can lay each one
+ * out on its own, while staff keep editing a single body in Sanity.
+ *
+ * The layout is chosen from the shape of a section, never from its wording,
+ * so it works the same for the Khmer body and survives staff renaming a
+ * heading. Nothing here writes or rewrites copy: every word shown still comes
+ * from the CMS block it was typed into.
+ */
+import type { PortableBlock, PortableTextBlock } from './types';
+
+/**
+ * - statement: one short paragraph, set large beside its heading
+ * - terms: three or more paragraphs that each open "Term. …", as numbered rows
+ * - points: three or more bullets that each open "Term: …", as numbered rows
+ * - facts: nothing but bullets, set as ruled lines
+ * - prose: anything else, as running text beside a sticky heading
+ */
+export type SectionLayout = 'statement' | 'terms' | 'points' | 'facts' | 'prose';
+
+export interface BodySection {
+  heading: string;
+  blocks: PortableBlock[];
+  layout: SectionLayout;
+}
+
+export interface SplitBody {
+  /** Blocks before the first heading. */
+  lead: PortableBlock[];
+  sections: BodySection[];
+}
+
+/** A statement longer than this reads as a paragraph, not a line to set large. */
+export const STATEMENT_MAX_CHARS = 240;
+const TERM_MAX_CHARS = 40;
+const TERM_MAX_WORDS = 3;
+
+function isTextBlock(block: PortableBlock): block is PortableTextBlock {
+  return block._type === 'block';
+}
+
+export function blockText(block: PortableBlock): string {
+  return isTextBlock(block) ? (block.children ?? []).map((child) => child.text).join('') : '';
+}
+
+function isPlain(block: PortableBlock): boolean {
+  return (
+    isTextBlock(block) &&
+    (block.children ?? []).every((child) => !child.marks || child.marks.length === 0)
+  );
+}
+
+/**
+ * "Integrity. We are honest…" → { term: "Integrity", rest: "We are honest…" }.
+ * Accepts the Khmer full stop (។) as well as ".". Returns null when the
+ * opening sentence is longer than a short term, so ordinary prose never splits.
+ */
+export function splitLeadIn(text: string): { term: string; rest: string } | null {
+  const match = /^([^.។]+)[.។]\s*([\s\S]+)$/.exec(text.trim());
+  if (!match) return null;
+  const term = match[1]!.trim();
+  const rest = match[2]!.trim();
+  if (!term || !rest || term.length > TERM_MAX_CHARS) return null;
+  if (term.split(/\s+/).length > TERM_MAX_WORDS) return null;
+  return { term, rest };
+}
+
+const POINT_MAX_CHARS = 60;
+const POINT_MAX_WORDS = 6;
+
+/**
+ * "Integrated support: Responds to…" → { term: "Integrated support", rest: "Responds to…" }.
+ * A bullet's lead-in runs longer than a value's name, so it gets a colon and
+ * more room; a longer opening is ordinary prose and does not split.
+ */
+export function splitPoint(text: string): { term: string; rest: string } | null {
+  const match = /^([^:：]+)[:：]\s*([\s\S]+)$/.exec(text.trim());
+  if (!match) return null;
+  const term = match[1]!.trim();
+  const rest = match[2]!.trim();
+  if (!term || !rest || term.length > POINT_MAX_CHARS) return null;
+  if (term.split(/\s+/).length > POINT_MAX_WORDS) return null;
+  return { term, rest };
+}
+
+export function layoutFor(blocks: PortableBlock[]): SectionLayout {
+  if (blocks.length === 0 || !blocks.every(isTextBlock)) return 'prose';
+  const text = blocks as PortableTextBlock[];
+  if (
+    text.length >= 3 &&
+    text.every((block) => block.listItem && isPlain(block) && splitPoint(blockText(block)))
+  ) {
+    return 'points';
+  }
+  if (text.every((block) => block.listItem)) return 'facts';
+  if (text.some((block) => block.listItem || (block.style && block.style !== 'normal'))) return 'prose';
+  if (text.length === 1 && blockText(text[0]!).length <= STATEMENT_MAX_CHARS) return 'statement';
+  if (text.length >= 3 && text.every((block) => isPlain(block) && splitLeadIn(blockText(block)))) {
+    return 'terms';
+  }
+  return 'prose';
+}
+
+export function splitBody(blocks: PortableBlock[] | null | undefined): SplitBody {
+  const lead: PortableBlock[] = [];
+  const sections: Omit<BodySection, 'layout'>[] = [];
+
+  for (const block of blocks ?? []) {
+    if (isTextBlock(block) && block.style === 'h2') {
+      sections.push({ heading: blockText(block), blocks: [] });
+    } else if (sections.length > 0) {
+      sections[sections.length - 1]!.blocks.push(block);
+    } else {
+      lead.push(block);
+    }
+  }
+
+  return {
+    lead,
+    sections: sections
+      .filter((section) => section.heading.trim() || section.blocks.length > 0)
+      .map((section) => ({ ...section, layout: layoutFor(section.blocks) })),
+  };
+}

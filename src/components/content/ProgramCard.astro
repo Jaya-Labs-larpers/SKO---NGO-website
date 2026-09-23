@@ -17,9 +17,9 @@ const summary = pick(program.summary, lang);
 const href = localizePath(`/programs/${program.slug}`, lang);
 ---
 
-<article class="card reveal group relative">
+<article class="card reveal group relative" data-cursor-label={t(lang, 'learnMore')}>
   <div class="card-media">
-    <ResponsiveImage image={program.image} lang={lang} alt="" aspect="3/2" sizes={sizes} />
+    <ResponsiveImage image={program.cardImage ?? program.image} lang={lang} alt="" aspect="3/2" sizes={sizes} />
   </div>
   <div class="flex flex-1 flex-col gap-2.5 p-5.5 pb-6">
     <h3

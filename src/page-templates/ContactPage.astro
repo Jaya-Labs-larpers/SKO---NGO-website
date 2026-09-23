@@ -1,11 +1,11 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
+import type { UIKey } from '~/lib/i18n/strings';
 import { getSiteSettings } from '~/lib/content';
 import { pick, t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
 import ContactForm from '~/components/forms/ContactForm.astro';
-import Icon from '~/components/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -18,102 +18,127 @@ const address = pick(settings.address, lang);
 const hours = pick(settings.officeHours, lang);
 const safeguarding = pick(settings.safeguardingContact, lang);
 const heading = t(lang, 'pageContact');
+const formId = 'form-contact';
+const tel = (phone: string) => `tel:${phone.replace(/[^+\d]/g, '')}`;
+const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
 ---
 
-<BaseLayout lang={lang} title={heading} description={t(lang, 'introContact')}>
-  <PageHero lang={lang} title={heading} trail={[{ label: heading }]} />
+<BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introContact')}>
+  <PageHero lang={lang} title={heading} intro={t(lang, 'introContact')} trail={[{ label: heading }]} />
 
-  <section class="section">
-    <!--
-      Information first, form second — in the DOM as well as on screen. On a
-      phone the grid collapses to one column in source order, so a visitor
-      reads the address, phone and email before being asked to type anything.
-      On desktop the form takes the right-hand column and sticks there while
-      the contact details scroll past it.
-    -->
-    {
-      safeguarding.value && (
-        <div class="wrap">
-          <p
-            class="mb-8 rounded-[var(--radius-md)] bg-[color:var(--color-blue-200)] px-4.5 py-4 text-[14.5px] text-[color:var(--color-ink-700)]"
-            lang={safeguarding.isFallback ? safeguarding.lang : undefined}
-          >
-            {safeguarding.value}
-          </p>
-        </div>
-      )
-    }
-
-    <div class="wrap grid items-start gap-9 lg:grid-cols-[1fr_minmax(0,29rem)] lg:gap-12">
-      <div>
-        {/*
-          There is no static map image, and there was never going to be one
-          without a maps API key. What stood here was an empty framed box
-          reading "[STATIC MAP IMAGE → LINKS TO GOOGLE MAPS]" — a note to the
-          build team wrapped in a link. The address below and the Google Maps
-          link are the part that actually gets someone to the office.
-        */}
-        {
-          settings.mapUrl && (
-            <a
-              href={settings.mapUrl}
-              rel="noopener noreferrer"
-              target="_blank"
-              class="link-arrow inline-flex"
-            >
-              {t(lang, 'viewOnGoogleMaps')}
-              <Icon name="arrow-top-right-on-square" size={16} class="arrow" />
-            </a>
-          )
-        }
-
-        <div class="mt-3.5 flex flex-col gap-3 text-[15px] text-[color:var(--color-blue-700)]">
-          {
-            address.value && (
-              <p class="whitespace-pre-line" lang={address.isFallback ? address.lang : undefined}>
-                <span class="text-[color:var(--color-ink-600)]">
-                  <b class="mb-1 block text-[color:var(--color-ink-900)]">
-                    {t(lang, 'footerContactHeading')}
-                  </b>
-                  {address.value}
-                </span>
-              </p>
-            )
-          }
-          {
-            settings.phone && (
-              <p>
-                <span class="text-[color:var(--color-ink-600)]">{settings.phone}</span>
-              </p>
-            )
-          }
-          {
-            settings.email && (
-              <p>
-                <a href={`mailto:${settings.email}`} class="text-[color:var(--color-blue-800)]">
-                  {settings.email}
-                </a>
-              </p>
-            )
-          }
-          {
-            hours.value && (
-              <p>
-                <span class="text-[color:var(--color-ink-400)]" lang={hours.isFallback ? hours.lang : undefined}>
+  <section class="section pb-0">
+    <div class="wrap">
+    <dl class="contact-details max-w-none">
+      {
+        settings.phone && (
+          <div>
+            <dt>{t(lang, 'contactCall')}</dt>
+            <dd>
+              <a href={tel(settings.phone)}>{settings.phone}</a>
+              {hours.value && (
+                <span class="contact-details__meta" lang={hours.isFallback ? hours.lang : undefined}>
                   {hours.value}
                 </span>
-              </p>
+              )}
+            </dd>
+          </div>
+        )
+      }
+      {
+        settings.email && (
+          <div>
+            <dt>{t(lang, 'contactEmail')}</dt>
+            <dd>
+              <a href={`mailto:${settings.email}`} class="break-all">{settings.email}</a>
+            </dd>
+          </div>
+        )
+      }
+      {
+        address.value && (
+          <div>
+            <dt>{t(lang, 'contactVisit')}</dt>
+            <dd>
+              <span class="whitespace-pre-line" lang={address.isFallback ? address.lang : undefined}>
+                {address.value}
+              </span>
+              {settings.mapUrl && (
+                <a href={settings.mapUrl} rel="noopener noreferrer" target="_blank" class="contact-details__meta">
+                  {t(lang, 'viewOnGoogleMaps')}
+                </a>
+              )}
+            </dd>
+          </div>
+        )
+      }
+    </dl>
+    </div>
+  </section>
+
+  {/*
+    Which extra questions show — and whether the form gives way to the
+    safeguarding panel — follows the reason chosen in the form, in pure CSS on
+    :has(), so the page works before (and without) any script.
+  */}
+  <section class="section contact-desk pt-10 lg:pt-12">
+    <div class="wrap">
+      <div class="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10">
+        <div>
+          <ContactForm lang={lang} id={formId} />
+
+          <div class="safeguarding-panel" role="region" aria-label={t(lang, 'safeguardingPanelTitle')}>
+            <h2 class="safeguarding-panel__title">{t(lang, 'safeguardingPanelTitle')}</h2>
+            {
+              safeguarding.value && (
+                <p class="safeguarding-panel__body" lang={safeguarding.isFallback ? safeguarding.lang : undefined}>
+                  {safeguarding.value}
+                </p>
+              )
+            }
+            <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              {
+                settings.phone && (
+                  <a href={tel(settings.phone)} class="btn btn-primary">
+                    {settings.phone}
+                  </a>
+                )
+              }
+              {
+                settings.safeguardingEmail && (
+                  <a href={`mailto:${settings.safeguardingEmail}`} class="btn btn-secondary break-all">
+                    {settings.safeguardingEmail}
+                  </a>
+                )
+              }
+            </div>
+          </div>
+        </div>
+
+        <aside class="contact-next lg:sticky lg:top-[calc(var(--header-offset)+1.5rem)]">
+          <h2 class="contact-next__title">{t(lang, 'nextTitle')}</h2>
+          <ol class="contact-next__steps">
+            {nextSteps.map((step) => <li>{t(lang, step)}</li>)}
+          </ol>
+          {
+            hours.value && (
+              <div class="contact-next__block">
+                <b>{t(lang, 'nextHours')}</b>
+                <span lang={hours.isFallback ? hours.lang : undefined}>{hours.value}</span>
+              </div>
             )
           }
-        </div>
+          <p class="contact-next__block contact-next__privacy">{t(lang, 'nextPrivacy')}</p>
+        </aside>
       </div>
-
-      <ContactForm
-        lang={lang}
-        variant="general"
-        class="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]"
-      />
     </div>
-
   </section>
 </BaseLayout>
+
+{/* Links from elsewhere on the site arrive as /contact/?topic=partner and so on. */}
+<script>
+  const topic = new URLSearchParams(window.location.search).get('topic');
+  if (topic) {
+    const reason = document.querySelector<HTMLSelectElement>('select[name="formType"]');
+    if (reason && Array.from(reason.options).some((option) => option.value === topic)) reason.value = topic;
+  }
+</script>

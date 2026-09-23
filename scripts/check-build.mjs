@@ -105,7 +105,7 @@ for await (const file of htmlFiles(DIST)) {
   check(/<main[^>]*id="main"/.test(html), page, 'no <main id="main">');
 
   // No image without an alt attribute
-  const imgsWithoutAlt = (html.match(/<img(?![^>]*\salt=)[^>]*>/g) ?? []).length;
+  const imgsWithoutAlt = (html.match(/<img(?![^>]*\salt(?:=|[\s/>]))[^>]*>/g) ?? []).length;
   check(imgsWithoutAlt === 0, page, `${imgsWithoutAlt} <img> without alt`);
 }
 

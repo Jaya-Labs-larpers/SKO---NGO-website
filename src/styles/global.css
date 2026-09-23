@@ -42,6 +42,12 @@
   main :where(p, h1, h2, h3, h4, h5, h6, blockquote, dl, figcaption) {
     max-width: var(--measure);
   }
+
+  /* Every page but the home page sits on the home hero's cool tint. Long pages
+     band their sections white and --color-surface-sunken in the templates. */
+  main:not(:has(> .hero-overlap)) {
+    background: var(--color-surface-subtle);
+  }
 }
 
 /* ============================================================================
@@ -50,12 +56,10 @@
    Every animation here is a *continuity transition* or *feedback* — it orients
    the visitor or confirms their action. Nothing decorates.
 
-   Deliberately still absent, and it should stay that way: parallax, and
-   count-up on the impact numbers. A figure that ticks up reads as marketing;
-   a figure that is simply there reads as a fact, and that distinction is the
-   whole job of this site. Content boxes do fade up out of a blur as they
-   first come into view (.reveal), but only boxes, and never one that was
-   already on screen.
+   Deliberately still absent: parallax. Content boxes rise into place from below
+   as they come into view (.reveal), and chosen impact figures count up
+   (~/lib/count-up); both replay whenever the visitor scrolls back down to
+   them, and neither ever hides something already on screen.
 
    Script cost: one pageswap listener (card-morph.ts) that names the clicked
    card's photo, and the home hero's butterfly loop. The butterfly's flight
@@ -84,7 +88,43 @@ header.site-header {
   border-bottom: 1px solid var(--color-line-subtle);
   transition:
     background-color var(--duration-base) var(--ease-out-soft),
-    border-color var(--duration-base) var(--ease-out-soft);
+    border-color var(--duration-base) var(--ease-out-soft),
+    box-shadow var(--duration-base) var(--ease-out-soft),
+    translate 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: translate;
+}
+
+/* Down the page, a returning header needs a lift to separate it from the text
+   it now sits over. */
+header.site-header[data-scrolled] {
+  box-shadow: var(--shadow-md);
+}
+
+/* Scrolled away while reading down; any upward scroll brings it straight back
+   (the script in Header.astro). Leaving is a touch slower and eases in, so it
+   slides off rather than snapping; returning is quick, because the visitor
+   asked for it. */
+header.site-header[data-hidden] {
+  translate: 0 -100%;
+  box-shadow: none;
+  transition-timing-function: var(--ease-out-soft), var(--ease-out-soft), var(--ease-out-soft), cubic-bezier(0.4, 0, 1, 1);
+  transition-duration: var(--duration-base), var(--duration-base), var(--duration-base), 360ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header.site-header,
+  header.site-header[data-hidden] {
+    transition-duration: 0s;
+  }
+}
+
+/* How much of the top of the window the header covers right now: sticky
+   columns sit this far down, and close the gap when the header scrolls away. */
+:root {
+  --header-offset: var(--header-h);
+}
+:root:has(header.site-header[data-hidden]) {
+  --header-offset: 0px;
 }
 
 /*
@@ -101,6 +141,7 @@ header.site-header {
 header.site-header[data-overlay][data-at-top] {
   background: transparent;
   border-bottom-color: transparent;
+  box-shadow: none;
 }
 
 /*
@@ -189,24 +230,53 @@ main {
 
 /* --- Box reveal ----------------------------------------------------------
  * Content boxes (cards, lists, stat and quote panels, the call-to-action
- * band) fade up out of a soft blur the first time they come into view. The
- * script (~/lib/reveal) only ever sets aside boxes that start below the fold,
- * so nothing already visible is hidden, and it does nothing at all under
- * reduced motion. `translate` rather than `transform`, so a card's hover
+ * band) rise into place from below as they come into view, and again each time
+ * the visitor scrolls back down to them. The script (~/lib/reveal) only sets a
+ * box aside while it is fully below the window, so nothing visible is hidden,
+ * and it does nothing at all under reduced motion. `translate` rather than `transform`, so a card's hover
  * lift is untouched; the transition is removed again once it has played. */
 :root {
   --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-pop: cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 .reveal[data-reveal="pending"] {
   opacity: 0;
-  filter: blur(10px);
-  translate: 0 24px;
+  translate: 0 48px;
 }
 .reveal[data-reveal="shown"] {
   transition:
-    opacity 900ms var(--ease-reveal) var(--reveal-delay, 0ms),
-    filter 900ms var(--ease-reveal) var(--reveal-delay, 0ms),
-    translate 900ms var(--ease-reveal) var(--reveal-delay, 0ms);
+    opacity 700ms var(--ease-reveal) var(--reveal-delay, 0ms),
+    translate 900ms var(--ease-pop) var(--reveal-delay, 0ms);
+}
+
+/* A revealed grid whose cells then arrive one after another (the partner
+   wall). Each cell carries its place as --i, capped so the whole cascade ends
+   inside the box's own 900ms, before reveal.ts hands the box back. */
+.reveal-cascade[data-reveal="pending"] > li > * {
+  opacity: 0;
+  translate: 0 10px;
+}
+.reveal-cascade[data-reveal="shown"] > li > * {
+  transition:
+    opacity 420ms var(--ease-reveal),
+    translate 420ms var(--ease-pop);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 120ms + min(var(--i, 0), 10) * 35ms);
+}
+
+/* The unhurried cascade: rows rise one by one from below, each row's text
+   a beat after its name. The box carries data-reveal-ms long enough for the
+   last row to finish before reveal.ts hands it back. */
+.reveal-cascade--slow[data-reveal="pending"] > li > * {
+  translate: 0 24px;
+}
+.reveal-cascade--slow[data-reveal="shown"] > li > * {
+  transition:
+    opacity 800ms var(--ease-reveal),
+    translate 800ms var(--ease-pop);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 200ms + min(var(--i, 0), 10) * 160ms);
+}
+.reveal-cascade--slow[data-reveal="shown"] > li > :last-child {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 320ms + min(var(--i, 0), 10) * 160ms);
 }
 
 /* --- Mobile navigation panel ---------------------------------------------- */
@@ -228,6 +298,56 @@ main {
 }
 #mobile-nav[data-closing] {
   animation: panel-exit 160ms ease-in both;
+}
+
+/* The close button's cross starts as two parallel bars, where the menu icon
+   was, then closes up and turns, so opening reads as the icon becoming an X.
+   Open only: the panel's close listens for its own animationend, and a child
+   animation finishing during the exit would end it early. */
+.menu-x {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.menu-x > span {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  top: calc(50% - 0.75px);
+  height: 1.5px;
+  border-radius: 1px;
+  background: currentColor;
+  rotate: 45deg;
+}
+.menu-x > span:last-child {
+  rotate: -45deg;
+}
+#mobile-nav:not([hidden], [data-closing]) .menu-x > span {
+  animation: menu-x-first 420ms var(--ease-reveal) both;
+}
+#mobile-nav:not([hidden], [data-closing]) .menu-x > span:last-child {
+  animation-name: menu-x-last;
+}
+@keyframes menu-x-first {
+  0% {
+    translate: 0 -4px;
+    rotate: 0deg;
+  }
+  40% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+}
+@keyframes menu-x-last {
+  0% {
+    translate: 0 4px;
+    rotate: 0deg;
+  }
+  40% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
 }
 
 /* --- Dialogs -------------------------------------------------------------- */
@@ -428,6 +548,283 @@ details[open] > summary > .disclosure-icon {
     transform: translateX(3px);
   }
 
+  /* --- Program rows (home) ---------------------------------------------- *
+   * Ruled rows on the paper: index, title and summary, a small photo, an
+   * arrow. The photo and arrow only join on wide screens; on a phone a row is
+   * index plus text. */
+  .program-rows {
+    border-top: 1px solid var(--color-line);
+  }
+  .program-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: 0.75rem 1.5rem;
+    align-items: start;
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--color-line);
+    transition: background-color var(--duration-base) var(--ease-out-soft);
+  }
+  .program-row__index {
+    padding-top: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-blue-700);
+  }
+  .program-row__title {
+    font-size: clamp(1.375rem, 1.1rem + 1.1vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    transition: color var(--duration-fast) var(--ease-out-soft);
+  }
+  .program-row__summary {
+    margin-top: 0.625rem;
+    max-width: 58ch;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-ink-400);
+  }
+  .program-row__media,
+  .program-row__arrow {
+    display: none;
+  }
+  @media (min-width: 64rem) {
+    /* A compact thumbnail sets every row's height; the summary is clamped so
+     * no program can stretch its row past it. */
+    .program-row {
+      grid-template-columns: 4.5rem minmax(0, 1fr) 16rem 2rem;
+      grid-template-rows: 12rem;
+      align-items: center;
+      gap: 0 2.5rem;
+      padding-block: 1.5rem;
+    }
+    .program-row__index {
+      align-self: start;
+      padding-top: 0.5rem;
+    }
+    .program-row__summary {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+    }
+    .program-row__media.card-media {
+      display: block;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: auto;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+    }
+    .program-row__arrow {
+      display: block;
+      font-size: 1.5rem;
+      color: var(--color-blue-700);
+      transition: translate 480ms var(--ease-reveal);
+    }
+  }
+  .program-row:has(a:focus-visible) {
+    background: var(--color-blue-50);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .program-row:hover {
+      background: var(--color-blue-50);
+    }
+    .program-row:hover .program-row__title {
+      color: var(--color-blue-800);
+    }
+    .program-row:hover .program-row__arrow {
+      translate: 6px 0;
+    }
+    .program-row:hover .card-media img {
+      transform: scale(1.05);
+    }
+  }
+
+  /* --- Activities, editorial (home) -------------------------------------- *
+   * Two columns with the right one dropped, so the latest reports read as a
+   * sequence rather than a product grid. One column on phones. */
+  .activity-editorial {
+    display: grid;
+    gap: 2rem;
+  }
+  @media (min-width: 48rem) {
+    .activity-editorial {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(1.5rem, 4vw, 4rem);
+      row-gap: 3rem;
+    }
+    .activity-editorial > :nth-child(even) {
+      margin-top: clamp(3rem, 8vw, 7.5rem);
+    }
+  }
+
+  /* --- About page body (AboutBody) -------------------------------------- *
+   * Each "## " section of the CMS body gets a label column and a content
+   * column, divided by a hairline. The label sticks beside long prose so the
+   * visitor always knows which part they are reading. */
+  .about-lead {
+    font-size: var(--text-lead);
+    line-height: 1.7;
+    color: var(--color-ink-900);
+  }
+  .about-section {
+    padding-top: clamp(2.5rem, 2rem + 3vw, 5rem);
+  }
+  .about-section__grid {
+    display: grid;
+    gap: 1rem;
+    padding-top: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+    border-top: 1px solid var(--color-line);
+  }
+  @media (min-width: 64rem) {
+    .about-section__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2.6fr);
+      gap: 3rem;
+    }
+    .about-section--prose .about-section__label {
+      position: sticky;
+      top: calc(var(--header-offset) + 1.5rem);
+      align-self: start;
+      transition: top 320ms var(--ease-out-soft);
+    }
+  }
+  .about-section__label {
+    padding-top: 0.4rem;
+  }
+
+  .about-statement p {
+    max-width: 30ch;
+    font-size: var(--text-statement);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--color-ink-900);
+    text-align: start;
+    hyphens: manual;
+  }
+  .about-statement:lang(km) p {
+    max-width: 36ch;
+    font-size: var(--text-lead);
+    line-height: 1.9;
+    letter-spacing: normal;
+  }
+
+  .about-terms {
+    border-top: 1px solid var(--color-line);
+  }
+  .about-term {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: 0.25rem 1rem;
+    padding: 1.25rem 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    transition: background-color var(--duration-base) var(--ease-out-soft);
+  }
+  .about-term__index {
+    grid-row: span 2;
+    padding-top: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-blue-700);
+  }
+  .about-term__name {
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--color-ink-900);
+  }
+  .about-term__text {
+    max-width: 60ch;
+    font-size: 0.9688rem;
+    line-height: 1.6;
+    color: var(--color-ink-600);
+  }
+  @media (min-width: 48rem) {
+    .about-term {
+      grid-template-columns: 3.5rem minmax(10rem, 0.8fr) minmax(0, 2fr);
+      align-items: baseline;
+      gap: 1.5rem;
+    }
+    .about-term__index {
+      grid-row: auto;
+    }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .about-term:hover {
+      background: var(--color-blue-50);
+    }
+  }
+
+  .about-facts ul {
+    padding-left: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-line);
+  }
+  .about-facts li {
+    margin: 0;
+    padding-block: 1.125rem;
+    border-bottom: 1px solid var(--color-line);
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+    line-height: 1.4;
+    color: var(--color-ink-900);
+    text-align: start;
+  }
+  .prose.about-facts li + li {
+    margin-top: 0;
+  }
+
+  /* --- Footer closing line --------------------------------------------- */
+  .footer-closing {
+    display: grid;
+    gap: 1.25rem;
+    padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  }
+  .footer-closing__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 1.3rem + 4vw, 4.75rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+  .footer-closing__title:lang(km) {
+    font-family: var(--font-khmer);
+    font-size: clamp(1.875rem, 1.2rem + 2.8vw, 3.5rem);
+    line-height: 1.45;
+    letter-spacing: normal;
+  }
+  .footer-closing__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2.5rem;
+  }
+  .footer-closing__link {
+    font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.625rem);
+    font-weight: 500;
+    color: var(--color-sky-200);
+    text-decoration: none;
+  }
+  .footer-closing__link:hover {
+    color: #fff;
+  }
+
+  /* --- Story band (home) -------------------------------------------------- *
+   * The page's one change of pace: navy, rounded at the top where it meets
+   * the paper, and static. */
+  .story-band {
+    background: var(--color-blue-900);
+    color: #fff;
+    border-radius: clamp(1.5rem, 4vw, 3.5rem) clamp(1.5rem, 4vw, 3.5rem) 0 0;
+    padding-block: clamp(4.5rem, 3rem + 6vw, 9rem);
+  }
+
   /* Press feedback — a small scale-down so a tap feels physical. */
   .btn:active:not([aria-disabled="true"]):not(:disabled) {
     transform: scale(0.98);
@@ -441,8 +838,8 @@ details[open] > summary > .disclosure-icon {
   .nav-link {
     position: relative;
     border-radius: var(--radius-sm);
-    padding: 0.625rem 0.8125rem;
-    font-size: 0.90625rem;
+    padding: 0.75rem 0.9375rem;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 1;
     text-decoration: none;
@@ -452,7 +849,7 @@ details[open] > summary > .disclosure-icon {
   .nav-link::after {
     content: "";
     position: absolute;
-    inset-inline: 0.8125rem;
+    inset-inline: 0.9375rem;
     bottom: 0.25rem;
     height: 2px;
     border-radius: 2px;
@@ -470,6 +867,59 @@ details[open] > summary > .disclosure-icon {
   }
   .nav-link[aria-current] {
     color: var(--color-blue-800);
+  }
+
+  /* A label that rolls up to an identical copy on hover. The copy sits one
+     line plus a gap below, clipped; the extra block padding leaves room for
+     Khmer vowel marks above and below the line. `/ ""` keeps the copy out of
+     the accessibility tree so the label is announced once. */
+  .roll {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-block: 0.3em;
+    margin-block: -0.3em;
+  }
+  .roll__text {
+    position: relative;
+    display: inline-block;
+    transition: translate 480ms var(--ease-reveal);
+  }
+  .roll__text::after {
+    content: attr(data-text) / "";
+    position: absolute;
+    left: 0;
+    top: calc(100% + 0.6em);
+    white-space: nowrap;
+  }
+  :is(a, button):is(:hover, :focus-visible) .roll__text {
+    translate: 0 calc(-100% - 0.6em);
+  }
+
+  /* Contact: a rounded fill rises from below and flattens as it covers the
+     button. The blob sits under the content, which is lifted above it. */
+  .btn-fill {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .btn-fill > :not(.btn-fill__blob) {
+    position: relative;
+  }
+  .btn-fill__blob {
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    background: var(--color-blue-900);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    translate: 0 101%;
+    transition:
+      translate 380ms cubic-bezier(0.4, 0, 0, 1),
+      border-radius 380ms cubic-bezier(0.4, 0, 0, 1);
+  }
+  .btn-fill:is(:hover, :focus-visible) .btn-fill__blob {
+    translate: 0 0;
+    border-radius: 0;
   }
 
   /* --- Surfaces ----------------------------------------------------------- */
@@ -501,7 +951,7 @@ details[open] > summary > .disclosure-icon {
     overflow: hidden;
   }
   .card-media img {
-    transition: transform var(--duration-slow) var(--ease-out-soft);
+    transition: transform 700ms var(--ease-reveal);
   }
   /* Keyboard focus earns the same lift as hover; touch never sticks in it. */
   .card:has(a:focus-visible) {
@@ -515,7 +965,7 @@ details[open] > summary > .disclosure-icon {
       transform: translateY(-2px);
     }
     .card:hover .card-media img {
-      transform: scale(1.03);
+      transform: scale(1.05);
     }
   }
 
@@ -763,26 +1213,6 @@ details[open] > summary > .disclosure-icon {
   .form-control {
     position: relative;
   }
-  .form-control > .icon {
-    position: absolute;
-    left: 0.8125rem;
-    top: 0.8125rem;
-    color: var(--color-ink-300);
-    pointer-events: none;
-    transition: color var(--duration-fast) var(--ease-out-soft);
-  }
-  .form-control > .field {
-    padding-left: 2.375rem;
-  }
-  /* The icon picks up the brand blue while the field has focus — the cheapest
-     possible "you are here" on a form with seven rows. */
-  .form-control:focus-within > .icon {
-    color: var(--color-blue-700);
-  }
-  .form-control > .field[aria-invalid="true"] ~ .icon,
-  .form-control:has(.field[aria-invalid="true"]) > .icon {
-    color: var(--color-danger-700);
-  }
 
   /* Paired fields stack by default and share a row once the PANEL (not the
      window) is wide enough. The base rule has to carry the gap too, or the two
@@ -805,6 +1235,197 @@ details[open] > summary > .disclosure-icon {
     }
   }
 
+  /* Radio rows inside the form ("Best way to reach you", volunteer or intern). */
+  .form-choice {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .form-choice__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.9375rem;
+    color: var(--color-ink-700);
+  }
+  .form-choice__options label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+  .form-choice__options input {
+    accent-color: var(--color-blue-700);
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+  .form-note {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-ink-400);
+  }
+
+  /* --- Contact page --------------------------------------------------------- */
+  /* A panel spanning exactly the width of the form and aside below it, so all
+     three share the same left and right edges; each detail is centred in its
+     third, with a hairline between them. */
+  .contact-details {
+    display: grid;
+    margin: 0;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-subtle);
+    text-align: center;
+  }
+  .contact-details > div {
+    padding: 1.5rem 0.5rem;
+  }
+  .contact-details > div + div {
+    border-top: 1px solid var(--color-line);
+  }
+  @media (width >= 48rem) {
+    .contact-details {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      padding: 0.5rem 0;
+    }
+    .contact-details > div {
+      padding: 1.75rem 2rem;
+    }
+    .contact-details > div + div {
+      border-top: 0;
+      border-left: 1px solid var(--color-line);
+    }
+  }
+  .contact-details dt {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-ink-400);
+  }
+  .contact-details dd {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: center;
+    margin: 0.25rem 0 0;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    color: var(--color-ink-900);
+  }
+  .contact-details dd > a:first-child {
+    color: var(--color-ink-900);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .contact-details__meta {
+    font-size: 0.875rem;
+    color: var(--color-ink-400);
+  }
+  a.contact-details__meta {
+    color: var(--color-blue-700);
+  }
+
+  /* Only the chosen topic's questions show; safeguarding swaps the form for
+     the direct-contact panel. */
+  .contact-desk .form-topic,
+  .contact-desk .safeguarding-panel {
+    display: none;
+  }
+  .form-topic {
+    gap: 1.125rem;
+  }
+  .contact-desk:has([name="formType"] > option[value="partner"]:checked) [data-topic-fields="partner"],
+  .contact-desk:has([name="formType"] > option[value="volunteer"]:checked) [data-topic-fields="volunteer"],
+  .contact-desk:has([name="formType"] > option[value="media"]:checked) [data-topic-fields="media"] {
+    display: grid;
+  }
+  /* The reason field stays, so the visitor can still change their mind. */
+  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-panel-body > :not(.form-field--reason),
+  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-panel-foot {
+    display: none;
+  }
+  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .safeguarding-panel {
+    display: block;
+    margin-top: 1.5rem;
+  }
+  .safeguarding-panel {
+    padding: 1.75rem;
+    border: 1.5px solid var(--color-danger-700);
+    border-radius: var(--radius-lg);
+    background: var(--color-danger-50);
+  }
+  .safeguarding-panel__icon {
+    color: var(--color-danger-700);
+  }
+  .safeguarding-panel__title {
+    margin-top: 0.75rem;
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    color: var(--color-ink-900);
+  }
+  .safeguarding-panel__body {
+    margin-top: 0.625rem;
+    color: var(--color-ink-700);
+  }
+
+  .contact-next {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-subtle);
+    border: 1px solid var(--color-line);
+  }
+  .contact-next__title {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    color: var(--color-ink-900);
+  }
+  .contact-next__steps {
+    counter-reset: step;
+    display: grid;
+    gap: 0.875rem;
+    margin-top: 1rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-ink-700);
+  }
+  .contact-next__steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    gap: 0.625rem;
+  }
+  .contact-next__steps li::before {
+    content: counter(step);
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    background: var(--color-blue-700);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+  .contact-next__block {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-line);
+    font-size: 0.875rem;
+    color: var(--color-ink-600);
+  }
+  .contact-next__block b {
+    color: var(--color-ink-900);
+  }
+  .contact-next__privacy {
+    color: var(--color-ink-400);
+  }
+
   /* --- Long-form content -------------------------------------------------- */
   .prose {
     max-width: var(--measure);
@@ -812,6 +1433,13 @@ details[open] > summary > .disclosure-icon {
   }
   .prose > * + * {
     margin-top: 1.0625rem;
+  }
+  /* SKO's documents set body copy justified, edge to edge. */
+  .prose p,
+  .prose li,
+  .justify {
+    text-align: justify;
+    hyphens: auto;
   }
   .prose h2 {
     font-size: var(--text-h2);
@@ -996,8 +1624,74 @@ details[open] > summary > .disclosure-icon {
   width: 40px;
   will-change: transform;
 }
+/* The butterfly that trails the pointer (ButterflyCursor). The outer box sits
+   on its flight point and rotates about it; the glyph is centred on its body
+   line so it banks around its own middle. */
+.butterfly-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2147483647;
+  width: 34px;
+  pointer-events: none;
+  transform-origin: 0 0;
+  will-change: transform;
+  view-transition-name: butterfly-cursor;
+}
+.butterfly-cursor__glyph {
+  translate: -45% -50%;
+  transform-origin: 45% 50%;
+  filter: drop-shadow(0 1px 1.5px rgb(10 10 10 / 0.25));
+  transition:
+    opacity var(--duration-fast) var(--ease-out-soft),
+    scale 220ms var(--ease-out-soft);
+}
+.butterfly-cursor[data-state="link"] .butterfly-cursor__glyph {
+  scale: 1.3;
+}
+.butterfly-cursor[data-state="label"] .butterfly-cursor__glyph {
+  scale: 1.45;
+}
+/* The word beside the butterfly over a card ("Read more"), hung below its
+   body so it never covers the pointer. */
+.butterfly-cursor__label {
+  position: absolute;
+  left: 0;
+  top: 18px;
+  translate: -50% 0;
+  padding: 0.3125rem 0.625rem;
+  border-radius: 999px;
+  background: var(--color-blue-900);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.6;
+  transform-origin: 50% 0;
+  transition:
+    opacity var(--duration-fast) var(--ease-out-soft),
+    scale 260ms var(--ease-reveal);
+}
+.butterfly-cursor[data-state="label"] .butterfly-cursor__label {
+  opacity: 1;
+  scale: 1;
+}
+.butterfly-cursor[data-pressed] .butterfly-cursor__glyph {
+  scale: 0.85;
+}
+.butterfly-cursor:is([data-state="hidden"], [data-state="text"]) .butterfly-cursor__glyph {
+  opacity: 0;
+}
+html:not([data-butterfly-cursor]) .butterfly-cursor,
+html:has(:modal, :popover-open) .butterfly-cursor {
+  display: none;
+}
+
 @media print {
-  .butterfly-flock {
+  .butterfly-flock,
+  .butterfly-cursor {
     display: none;
   }
 }

@@ -1,0 +1,135 @@
+---
+import type { Locale } from '~/lib/i18n/config';
+import type { TeamMember } from '~/lib/content/types';
+import { pick } from '~/lib/i18n/utils';
+import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
+
+interface Props {
+  lang: Locale;
+  team: TeamMember[];
+}
+
+const { lang, team } = Astro.props;
+
+const ids = new Set(team.map((member) => member._id));
+const reportsOf = (id: string) => team.filter((member) => member.reportsTo === id);
+const roots = team.filter((member) => !member.reportsTo || !ids.has(member.reportsTo));
+const [head] = roots.length === 1 ? roots : [];
+const columns = head ? reportsOf(head._id) : roots;
+
+const label = (member: TeamMember) => ({ name: pick(member.name, lang), role: pick(member.role, lang) });
+const headLabel = head ? label(head) : null;
+---
+
+{/*
+  The chart reads top to bottom as a nested list, so a screen reader hears who
+  reports to whom without the drawing.
+*/}
+<div class="team-structure">
+  {
+    head && headLabel && (
+      <figure class="m-0 mx-auto w-40 text-center">
+        <div class="aspect-4/5 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-blue-700)]">
+          <ResponsiveImage image={head.photo} lang={lang} alt="" aspect="4/5" sizes="160px" />
+        </div>
+        <figcaption class="mt-3">
+          <b
+            class="block text-[16px] text-[color:var(--color-ink-900)]"
+            lang={headLabel.name.isFallback ? headLabel.name.lang : undefined}
+          >
+            {headLabel.name.value}
+          </b>
+          <span
+            class="mt-0.5 block text-[14px] text-[color:var(--color-ink-400)]"
+            lang={headLabel.role.isFallback ? headLabel.role.lang : undefined}
+          >
+            {headLabel.role.value}
+          </span>
+        </figcaption>
+      </figure>
+    )
+  }
+
+  <ul class:list={['m-0 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4', head && 'team-structure__branches mt-10 pt-10']}>
+    {
+      columns.map((lead) => {
+        const leadLabel = label(lead);
+        const staff = reportsOf(lead._id);
+        return (
+          <li>
+            <div class="w-28 aspect-4/5 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-blue-700)]">
+              <ResponsiveImage image={lead.photo} lang={lang} alt="" aspect="4/5" sizes="112px" />
+            </div>
+            <b
+              class="mt-3 block text-[16px] text-[color:var(--color-ink-900)]"
+              lang={leadLabel.name.isFallback ? leadLabel.name.lang : undefined}
+            >
+              {leadLabel.name.value}
+            </b>
+            <span
+              class="mt-0.5 block text-[14px] text-[color:var(--color-ink-400)]"
+              lang={leadLabel.role.isFallback ? leadLabel.role.lang : undefined}
+            >
+              {leadLabel.role.value}
+            </span>
+            {staff.length > 0 && (
+              <ul class="m-0 mt-5 grid list-none gap-4 border-t border-[color:var(--color-line)] p-0 pt-5">
+                {staff.map((member) => {
+                  const { name, role } = label(member);
+                  return (
+                    <li class="flex items-center gap-3">
+                      {member.vacancy ? (
+                        <span
+                          class="h-21 w-21 flex-none rounded-full border border-dashed border-[color:var(--color-ink-400)] bg-[color:var(--color-surface-subtle)]"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <span class="h-21 w-21 flex-none overflow-hidden rounded-full border border-[color:var(--color-line)]">
+                          <ResponsiveImage image={member.photo} lang={lang} alt="" aspect="1/1" sizes="84px" class="object-[50%_15%]" />
+                        </span>
+                      )}
+                      <span class="min-w-0">
+                        <b
+                          class:list={[
+                            'block text-[15px] leading-snug',
+                            member.vacancy ? 'text-[color:var(--color-ink-400)]' : 'text-[color:var(--color-ink-900)]',
+                          ]}
+                          lang={name.isFallback ? name.lang : undefined}
+                        >
+                          {name.value}
+                        </b>
+                        {role.value && (
+                          <span
+                            class="block text-[13px] leading-snug text-[color:var(--color-ink-400)]"
+                            lang={role.isFallback ? role.lang : undefined}
+                          >
+                            {role.value}
+                          </span>
+                        )}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</div>
+
+<style>
+  .team-structure__branches {
+    border-top: 1px solid var(--color-line);
+    position: relative;
+  }
+  .team-structure__branches::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -2.5rem;
+    height: 2.5rem;
+    border-left: 1px solid var(--color-line);
+  }
+</style>

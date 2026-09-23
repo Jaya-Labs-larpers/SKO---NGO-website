@@ -29,10 +29,10 @@ window.addEventListener("pageswap", (event) => {
 
   const path = new URL(target).pathname;
   const link = Array.from(
-    document.querySelectorAll<HTMLAnchorElement>(".card a[href]"),
+    document.querySelectorAll<HTMLAnchorElement>(":is(.card, .program-row) a[href]"),
   ).find((anchor) => new URL(anchor.href).pathname === path);
   const media = link
-    ?.closest(".card")
+    ?.closest(".card, .program-row")
     ?.querySelector<HTMLElement>(".card-media");
   if (media) media.style.viewTransitionName = NAME;
 });

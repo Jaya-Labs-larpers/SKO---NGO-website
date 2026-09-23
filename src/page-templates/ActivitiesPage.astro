@@ -23,7 +23,7 @@ const hrefFor = (page: number) =>
   page === 1 ? localizePath('/activities', lang) : localizePath(`/activities/page/${page}`, lang);
 ---
 
-<BaseLayout
+<BaseLayout headerOverlay
   lang={lang}
   title={heading}
   description={t(lang, 'introActivities')}

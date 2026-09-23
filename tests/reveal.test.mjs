@@ -24,6 +24,7 @@ function load({ observer = true } = {}) {
     window: { innerHeight: 800, matchMedia: () => ({ matches: false }) },
     document: {},
     setTimeout: (work) => timers.push(work),
+    clearTimeout: (id) => id && (timers[id - 1] = () => {}),
     IntersectionObserver: observer
       ? class {
           constructor(callback) {
@@ -40,6 +41,16 @@ function load({ observer = true } = {}) {
           enter(...boxes) {
             this.callback(
               boxes.map((target) => ({ target, isIntersecting: true })),
+            );
+          }
+          leave(top, ...boxes) {
+            this.callback(
+              boxes.map((target) => ({
+                target,
+                isIntersecting: false,
+                boundingClientRect: { top },
+                rootBounds: { bottom: 800 },
+              })),
             );
           }
         }
@@ -97,9 +108,40 @@ test("a box shows on entry, staggered with its row, then hands its styles back",
     boxes.map((b) => b.props["--reveal-delay"]),
     ["0ms", "90ms", "180ms"],
   );
-  assert.equal(observers[0].watching.size, 0, "each box reveals only once");
+  assert.equal(observers[0].watching.size, 0, "a shown box stops waiting to arrive");
   timers.forEach((run) => run());
   assert.ok(boxes.every((b) => b.dataset.reveal === undefined));
+});
+
+test("a box that scrolls off the bottom is set aside and reveals again", () => {
+  const { reveal, observers } = load();
+  const onScreen = box(300);
+  reveal.revealOnEntry({
+    root: rootOf(onScreen),
+    viewportHeight: 800,
+    reducedMotion: false,
+  });
+  const [arrival, departure] = observers;
+  assert.equal(onScreen.dataset.reveal, undefined);
+
+  departure.leave(900, onScreen);
+  assert.equal(onScreen.dataset.reveal, "pending");
+  assert.ok(arrival.watching.has(onScreen));
+
+  arrival.enter(onScreen);
+  assert.equal(onScreen.dataset.reveal, "shown");
+});
+
+test("a box that scrolls off the top stays as it is", () => {
+  const { reveal, observers } = load();
+  const onScreen = box(300);
+  reveal.revealOnEntry({
+    root: rootOf(onScreen),
+    viewportHeight: 800,
+    reducedMotion: false,
+  });
+  observers[1].leave(-400, onScreen);
+  assert.equal(onScreen.dataset.reveal, undefined);
 });
 
 test("reduced motion, or no IntersectionObserver, leaves every box alone", () => {

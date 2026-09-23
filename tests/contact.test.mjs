@@ -112,13 +112,51 @@ test('valid partner enquiry preserves routing, escaping and reply-to', async (t)
     return Response.json({ id: 'mail-id' });
   });
   const response = await onRequest({
-    request: request(JSON.stringify({ ...valid, formType: 'partner', name: '<Test Person>' })),
+    request: request(
+      JSON.stringify({
+        ...valid,
+        formType: 'partner',
+        name: '<Test Person>',
+        organization: 'Example Fund',
+        partnershipType: 'Funding',
+      }),
+    ),
     env,
   });
   assert.equal(response.status, 200);
   assert.deepEqual(mail.to, ['partners@example.com']);
   assert.equal(mail.reply_to, 'test@example.com');
   assert.match(mail.html, /&lt;Test Person&gt;/);
+  assert.match(mail.html, /Example Fund/);
+  assert.match(mail.html, /Funding/);
+});
+
+test('a partner enquiry without an organisation is rejected on that field', async () => {
+  const response = await onRequest({
+    request: request(JSON.stringify({ ...valid, formType: 'partner' })),
+    env,
+  });
+  assert.equal(response.status, 400);
+  assert.deepEqual((await response.json()).fieldErrors, { organization: 'required' });
+});
+
+test('media details reach the general inbox', async (t) => {
+  let mail;
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    if (String(url).includes('siteverify')) return Response.json({ success: true });
+    mail = JSON.parse(options.body);
+    return Response.json({ id: 'mail-id' });
+  });
+  const response = await onRequest({
+    request: request(
+      JSON.stringify({ ...valid, formType: 'media', outlet: 'Phnom Penh Post', deadline: 'Friday' }),
+    ),
+    env,
+  });
+  assert.equal(response.status, 200);
+  assert.deepEqual(mail.to, ['inbox@example.com']);
+  assert.match(mail.html, /Phnom Penh Post/);
+  assert.match(mail.subject, /media inquiry/);
 });
 
 test('invalid JSON, media type, fields and methods preserve rejection contracts', async () => {

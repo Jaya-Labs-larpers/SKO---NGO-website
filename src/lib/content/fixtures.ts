@@ -8,16 +8,16 @@
  * CONTENT STATUS
  * --------------
  * English copy comes from "SKO (Website) 14 August 2026 Last review by ED.docx" —
- * the content document signed off by SKO's Executive Director. Programs are the
+ * the content document signed off by SKO's Executive Director — as revised by
+ * the September 2026 "website info" documents (cover, About, and one per
+ * programme), which also supplied every photo in public/images. Programs are the
  * four funded projects the document describes: HALI, Children's Active
  * Citizenship (TFCF1), Promoting Children's Education and Health through FDP
  * (TFCF2), and Resilient City and Migration Dynamics (RCMD).
  *
  * Anything still bracketed as [NEEDS SKO] is a fact the document does not supply
  * and this file does not invent — see docs/FAQ-for-team.md for the full list
- * (donation bank/QR details and allocation %, ED name confirmation, partner name
- * confirmation for TFCF, consent confirmation for the Kim Hein story, volunteer
- * roles, privacy retention line, first real news posts, and the actual report
+ * (donation bank/QR details and allocation %, volunteer roles, privacy retention line, first real news posts, and the actual report
  * PDFs).
  *
  * Khmer: titles, summaries, values, statistic labels and the FAQ answers are
@@ -25,6 +25,7 @@
  * now and falls back with lang="en"; it needs a Khmer-speaking staff writer.
  */
 
+import { localCmsImage } from '../sanity/image';
 import type {
   Activity,
   DirectorMessage,
@@ -42,16 +43,20 @@ import type {
   TeamMember,
 } from './types';
 
-/** Compact Portable Text builder. A paragraph beginning "## " becomes an h2. */
+/** Compact Portable Text builder. A paragraph beginning "## " becomes an h2, "- " a bullet. */
 function blocks(en: string[], km: string[]): LocaleBlocks {
   const build = (paragraphs: string[]): PortableBlock[] =>
     paragraphs.map((raw, index) => {
       const isHeading = raw.startsWith('## ');
+      const isBullet = raw.startsWith('- ');
       return {
         _type: 'block' as const,
         _key: `b${index}`,
         style: isHeading ? ('h2' as const) : ('normal' as const),
-        children: [{ _type: 'span' as const, text: isHeading ? raw.slice(3) : raw }],
+        ...(isBullet ? { listItem: 'bullet' as const, level: 1 } : {}),
+        children: [
+          { _type: 'span' as const, text: isHeading ? raw.slice(3) : isBullet ? raw.slice(2) : raw },
+        ],
       };
     });
   return { en: build(en), km: build(km) };
@@ -61,6 +66,16 @@ function blocks(en: string[], km: string[]): LocaleBlocks {
 function enOnly(en: string[]): LocaleBlocks {
   return blocks(en, []);
 }
+
+/** Sok Vanny's account, told on the homepage and on the RCMD programme page. */
+const sokVannyStory = [
+  'My name is Sok Vanny. I am a 57-year-old widow living in the Andoung 6 community, Sangkat Kouk Roka, Khan Prek Pnov. I am the primary caregiver for my two young grandchildren, who were left in my care after being abandoned by their parents.',
+  'In the past, my family faced severe financial hardship and emotional distress. My only source of income came from harvesting wild vegetables and collecting snails to sell, earning barely 7,000 to 10,000 KHR per day. This was hardly enough to cover our basic daily meals, and on days I could not gather anything, we simply had no money for food.',
+  'My life began to change for the better after receiving dedicated guidance, encouragement, and support from the Samatapheap Khnom Organization (SKO) team. They helped me understand the far-reaching impacts of living in hardship, particularly the risks of lacking proper legal documentation. SKO supported and facilitated the process of obtaining a Cambodian National ID Card for me and birth certificates for my grandchildren.',
+  'These documents have been life-changing “Having birth certificates has made it significantly easier to access medical check-ups and healthcare for my grandchildren. They also allowed me to formally enroll them in school and secure vital nutrition assistance from the Voice Cambodia Organization. While having National ID Card, possessing official identification gives peace of mind, simplifies job applications, and allows to access legal micro-loans safely.',
+  'This experience restored my strength and motivated me to keep moving forward. Inspired by this transformation, I now advocate within my village, helping my neighbors understand the importance of legal identity documents.',
+  'Currently, I am gathering the necessary paperwork to apply for a Residence Book (Family Book), as the lack of this document still presents daily administrative challenges. Once my file is complete, I will seek further consultation and support from Mrs. Chhay Lim to complete the application process.',
+];
 
 /**
  * Donation FAQs — rendered on the Donate page and emitted as FAQPage
@@ -101,6 +116,12 @@ export const siteSettings: SiteSettings = {
   donationFaqs,
   orgName: { en: 'Samatapheap Khnom Organization', km: 'អង្គការសមត្ថភាពខ្ញុំ' },
   orgShortName: 'SKO',
+  homeHero: [
+    localCmsImage('home-hero', {
+      en: 'The SKO team in Phnom Penh',
+      km: 'ក្រុមការងារ SKO នៅរាជធានីភ្នំពេញ',
+    }),
+  ],
   tagline: {
     en: 'Families with the strength to change their own lives.',
     km: 'គ្រួសារដែលមានកម្លាំងផ្លាស់ប្តូរជីវិតរបស់ខ្លួនឯង។',
@@ -117,10 +138,11 @@ export const siteSettings: SiteSettings = {
     en: 'Monday–Friday, 8:00–17:00 (ICT)',
     km: 'ថ្ងៃចន្ទ–សុក្រ ម៉ោង ៨:០០–១៧:០០',
   },
-  mapUrl: 'https://www.google.com/maps/search/?api=1&query=Street+138+Sangkat+Veal+Vong+Khan+7+Makara+Phnom+Penh',
+  mapUrl: 'https://maps.app.goo.gl/hoZXXxgpDqWuKs6J8',
   phone: '+855 12 781 203',
   email: 'info@samatapheapkhnom.org',
   partnerEmail: 'info@samatapheapkhnom.org',
+  safeguardingEmail: 'stlhali@samatapheapkhnom.org',
   safeguardingContact: {
     en: 'To report a safeguarding concern, please contact Soraksmey Heng, Senior Team Leader, directly at stlhali@samatapheapkhnom.org or +855 12 781 203 rather than using the form below. Concerns are treated confidentially.',
     km: 'ដើម្បីរាយការណ៍អំពីកង្វល់ការពារកុមារ សូមទាក់ទង សូរក្សមី ហេង នាយកក្រុមជាន់ខ្ពស់ ដោយផ្ទាល់តាមអ៊ីមែល stlhali@samatapheapkhnom.org ឬលេខទូរស័ព្ទ +855 12 781 203 ជាជាងប្រើទម្រង់ខាងក្រោម។ រាល់កង្វល់ត្រូវបានរក្សាការសម្ងាត់។',
@@ -169,11 +191,8 @@ export const siteSettings: SiteSettings = {
 /* -------------------------------------------------------------------------
    Impact statistics (site-wide — Home and Impact pages).
 
-   The programme-level figures live on each programme page. This is the
-   organisation-wide reach: registration age, area covered, and the one
-   family-level figure the document actually gives (HALI's 200 households),
-   scoped honestly to the project it comes from rather than stated as an
-   org-wide total.
+   The programme-level figures live on each programme page. These are the
+   organisation-wide figures from the September 2026 cover document.
    ------------------------------------------------------------------------- */
 export const impactStats: ImpactStat[] = [
   {
@@ -189,35 +208,33 @@ export const impactStats: ImpactStat[] = [
   },
   {
     _id: 'stat-khans',
-    value: 5,
-    displayValue: '5',
+    value: 14,
+    displayValue: '14',
     label: { en: 'Khans of Phnom Penh', km: 'ខណ្ឌនៃរាជធានីភ្នំពេញ' },
-    context: {
-      en: 'Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo',
-      km: 'ច្បារអំពៅ មានជ័យ ដង្កោ ព្រែកព្នៅ និងឫស្សីកែវ',
-    },
+    countUp: true,
     order: 2,
   },
   {
     _id: 'stat-sangkats',
-    value: 26,
-    displayValue: '26',
+    value: 105,
+    displayValue: '105',
     label: { en: 'Sangkats reached', km: 'សង្កាត់ដែលបានទៅដល់' },
     context: {
       en: 'Urban poor communities across the capital',
       km: 'សហគមន៍ក្រីក្រតាមទីក្រុងទូទាំងរាជធានី',
     },
+    countUp: true,
     order: 3,
   },
   {
     _id: 'stat-families',
-    value: 200,
-    displayValue: '200',
-    label: { en: 'Households receiving family counselling', km: 'គ្រួសារដែលទទួលការប្រឹក្សាគ្រួសារ' },
-    context: {
-      en: 'HALI project, Phnom Penh',
-      km: 'គម្រោង HALI រាជធានីភ្នំពេញ',
+    value: 2000,
+    displayValue: '~2000',
+    label: {
+      en: 'Families receiving Support Services and Intervention',
+      km: 'គ្រួសារទទួលបានសេវាគាំទ្រ និងអន្តរាគមន៍',
     },
+    countUp: true,
     order: 4,
   },
 ];
@@ -234,6 +251,8 @@ export const impactStats: ImpactStat[] = [
 export const programs: Program[] = [
   {
     _id: 'program-hali',
+    image: localCmsImage('hali-cover'),
+    cardImage: localCmsImage('hali-card'),
     slug: 'housing-and-living-conditions-hali',
     order: 1,
     title: {
@@ -299,6 +318,8 @@ export const programs: Program[] = [
   },
   {
     _id: 'program-tfcf1',
+    image: localCmsImage('tfcf1-cover'),
+    cardImage: localCmsImage('tfcf1-card'),
     slug: 'childrens-active-citizenship',
     order: 2,
     title: { en: "Children's Active Citizenship", km: 'សកម្មភាពពលរដ្ឋកុមារ' },
@@ -310,9 +331,9 @@ export const programs: Program[] = [
       '## Impact and results',
       'The project made meaningful progress in strengthening vulnerable families and improving the well-being, education, health, and protection of children across the three target Sangkats. Through close collaboration with local authorities, schools, health centers, Family Development Volunteers (FDVs), parents, and community stakeholders, the project reached children, families, and community members with practical and integrated support.',
       'Under education and child protection, children demonstrated increased awareness of their rights, child protection, online safety, and the risks of drug use. Mobile library activities strengthened children’s reading, listening, communication, and learning engagement, while also improving their knowledge of road safety. The distribution of school materials to 410 children reduced financial pressure on vulnerable families and helped children remain motivated and better equipped for school. School Support Committee meetings also strengthened cooperation among schools, parents, volunteers, and local authorities, enabling stakeholders to identify children at risk of dropping out and develop practical solutions to support their continued education.',
-      'Under health, hygiene, and family well-being, the project improved access to basic healthcare for vulnerable families through 13 medical check-up sessions reaching 656 people, including children and elderly community members. Additional ear health services reached 159 people, particularly children, while health education promoted better sanitation, disease prevention, and awareness of available social protection and healthcare services. Environment Day activities engaged 289 participants in practical hygiene and environmental actions, strengthening community responsibility for cleaner and healthier living environments.',
-      'The project also provided important food and emergency assistance to vulnerable families. A total of 6,782.9 kg of rice was distributed to 313 families supporting 410 children, while an additional 1,900 kg of emergency rice supported 189 families. These interventions helped reduce immediate household financial pressure and food insecurity, allowing parents to better focus on supporting their children’s education and well-being. Community contributions in Sangkat Chbar Ampov further demonstrated local solidarity and strengthened community ownership.',
-      'Under positive parenting and family development, community meetings strengthened parents’ knowledge and practices related to children’s education, health, stress management, legal documentation, communication, and positive parenting. The Child Progress Report covered 398 of 410 children, providing updated information on their education and health and helping the project monitor their progress and respond to emerging needs. The FDV exchange workshop also strengthened volunteers’ knowledge, practical skills, and collaboration across project areas, contributing to more sustainable community-based support.',
+      'Under health, hygiene, and family well-being, the project improved access to basic healthcare for vulnerable families through 52 medical check-up sessions reaching 656 people within 2,624 indirect reaches, including children and elderly community members. Additional ear health services reached 159 people, particularly children, while health education promoted better sanitation, disease prevention, and awareness of available social protection and healthcare services. Environment Day activities engaged 289 direct reaches 1,156 indirect reaches and in practical hygiene and environmental actions, strengthening community responsibility for cleaner and healthier living environments.',
+      'The project also provided important food and emergency assistance to vulnerable families. A total of 33,910 kg of rice was distributed to 313 families supporting 410 children, while an additional 1,900 kg of emergency rice supported 189 families. These interventions helped reduce immediate household financial pressure and food insecurity, allowing parents to better focus on supporting their children’s education and well-being. Community contributions in Sangkat Chbar Ampov further demonstrated local solidarity and strengthened community ownership.',
+      'Under positive parenting and family development, community meetings strengthened parents’ knowledge and practices related to children’s education, health, stress management, legal documentation, communication, and positive parenting.',
       'Overall, the project contributed to a more supportive and protective environment for vulnerable children and families, strengthening local ownership alongside schools, volunteers, parents and authorities.',
       'This project shares its partner and highlight activities with its sister project, Promoting Children’s Education and Health through FDP. See that programme page for the full activity list.',
     ]),
@@ -322,34 +343,58 @@ export const programs: Program[] = [
         value: 410,
         displayValue: '410',
         label: { en: 'Children received school materials', km: 'កុមារទទួលបានសម្ភារៈសិក្សា' },
+        context: { en: '1,640 packages of school material', km: 'សម្ភារៈសិក្សាចំនួន ១,៦៤០ កញ្ចប់' },
         order: 1,
       },
       {
         _id: 'tfcf1-medical',
         value: 656,
         displayValue: '656',
-        label: { en: 'People reached through medical check-ups', km: 'អ្នកទទួលការពិនិត្យសុខភាព' },
-        context: { en: '13 sessions', km: '១៣ សម័យ' },
+        label: { en: 'Direct reaches, 2,624 indirect reaches', km: 'អ្នកទទួលផលផ្ទាល់ និង ២,៦២៤ នាក់ទទួលផលប្រយោល' },
+        context: {
+          en: 'Through medical check-ups and awareness raising on health issues',
+          km: 'តាមរយៈការពិនិត្យសុខភាព និងការលើកកម្ពស់ការយល់ដឹងអំពីបញ្ហាសុខភាព',
+        },
         order: 2,
       },
       {
         _id: 'tfcf1-rice',
-        value: 6782.9,
-        displayValue: '6,782.9 kg',
+        value: 33910,
+        displayValue: '33,910 kg',
         label: { en: 'Rice distributed to 313 families', km: 'អង្ករចែកចាយដល់គ្រួសារ ៣១៣' },
         order: 3,
       },
       {
-        _id: 'tfcf1-environment-day',
+        _id: 'tfcf1-hygiene',
         value: 289,
         displayValue: '289',
-        label: { en: 'Environment Day participants', km: 'អ្នកចូលរួមថ្ងៃបរិស្ថាន' },
+        label: { en: 'Direct reaches, 1,156 indirect reaches', km: 'អ្នកទទួលផលផ្ទាល់ និង ១,១៥៦ នាក់ទទួលផលប្រយោល' },
+        context: {
+          en: 'Of hygiene and sanitation awareness',
+          km: 'នៃការលើកកម្ពស់ការយល់ដឹងអំពីអនាម័យ និងអនាម័យបរិស្ថាន',
+        },
         order: 4,
+      },
+      {
+        _id: 'tfcf1-mobile-library',
+        value: 298,
+        displayValue: '298',
+        label: {
+          en: 'Children from the urban poor families reach Mobile Library',
+          km: 'កុមារពីគ្រួសារក្រីក្រទីក្រុងបានចូលរួមបណ្ណាល័យចល័ត',
+        },
+        context: {
+          en: 'By removing barriers to literacy and fostering a positive relationship with education',
+          km: 'ដោយកាត់បន្ថយឧបសគ្គក្នុងការអាន និងជំរុញទំនាក់ទំនងវិជ្ជមានជាមួយការសិក្សា',
+        },
+        order: 5,
       },
     ],
   },
   {
     _id: 'program-tfcf2',
+    image: localCmsImage('tfcf2-cover'),
+    cardImage: localCmsImage('tfcf2-card'),
     slug: 'childrens-education-and-health',
     order: 3,
     title: {
@@ -365,7 +410,7 @@ export const programs: Program[] = [
       'Child Protection Training. Building children’s capacity to understand and respond to different forms of violence (emotional, sexual, physical, neglect, exploitation).',
       'Leadership and Management Training for youth and young people. Promotes knowledge, capacity and skill, and a positive, results-oriented attitude, so young people can lead and manage their daily work and living conditions, starting young and carrying into their careers.',
       'Mobile Library. Improving reading skills, promoting education, and teaching safety practices such as traffic awareness.',
-      'Distribution of School Materials & Emergency Support. Providing essential supplies to vulnerable children, encouraging school attendance, and mobilising resources from charities and NGOs.',
+      'Distribution of School Materials & Emergency Support. Providing essential supplies to vulnerable children, encouraging school attendance, and mobilizing resources from charities and NGOs.',
       'School Support Committee Meetings. Collaboration with CCWC, SSC, local authorities and teachers to monitor student progress and address challenges.',
       'Medical Checkups. Health services for vulnerable children and families in partnership with health centres.',
       'Environment & Hygiene Campaigns. Promoting sanitation, hygiene and community clean-up activities as role models for children and families.',
@@ -374,9 +419,8 @@ export const programs: Program[] = [
       'Family Fund for Children Organization.',
       '## Impact and results',
       'The Community Development Project, implemented through SKO’s Family Development Approach, contributed to improving the education, health, protection, and overall well-being of 390 vulnerable children (204 girls and 186 boys) and their families in Sangkat Prey Veng, Prey Sar, and Dangkor of Khan Dangkor. The project combined direct support to children with family strengthening, community engagement, health services, and collaboration with local authorities, schools, health centers, and Family Development Volunteers (FDVs).',
-      'Under Objective 1, the project strengthened children’s access to education, learning opportunities, and protection. Four Children’s Clubs provided safe and structured spaces for children to learn, interact, develop life skills, and participate in positive activities. Children’s Club meetings reached 237 children, increasing their awareness of child rights, protection, online safety, and drug prevention. Ten mobile library sessions reached 182 children, promoting reading, creativity, peer learning, nutrition, hygiene, and road safety. School materials were provided to all 390 target children from 322 families, reducing financial pressure on vulnerable households and helping children remain prepared and engaged in school. Six School Support Committee meetings further strengthened collaboration among schools, parents, FDVs, and local authorities to address challenges such as absenteeism and e-cigarette use and to improve monitoring of children’s education.',
-      'Under Objective 2, the project improved access to basic healthcare, hygiene awareness, environmental protection, and essential food support. Ten community medical outreach sessions helped children and adults access health services, identify health concerns early, and receive appropriate health information and follow-up. Environment Day activities strengthened awareness of hygiene, environmental protection, and the link between a clean environment and community health. In addition, 4,940.74 kg of rice was distributed to 247 vulnerable families supporting 304 children, while emergency rice assistance supported another 150 families facing financial difficulties.',
-      'Under Objective 3, the project strengthened positive parenting, family participation, and household resilience. Ten community meetings engaged 153 parents and caregivers, increasing their awareness of positive parenting, children’s education and health monitoring, civil registration, and communication with schools. The savings group also promoted financial discipline, trust, cooperation, and household planning among community members. Through the Child Progress Report process, 372 of 390 children were assessed, allowing staff, parents, volunteers, and local authorities to better monitor children’s education, health, and participation and identify children requiring additional support.',
+      'Under Objective 1, the project strengthened children’s access to education, learning opportunities, and protection. Four Children’s Clubs provided safe and structured spaces for children to learn, interact, develop life skills, and participate in positive activities. Children’s Club meetings 237 direct reached children and 474 indirect reaches children, increasing their awareness of child rights, protection, online safety, and drug prevention. 40 mobile library sessions reached 182 children, promoting reading, creativity, peer learning, nutrition, hygiene, and road safety. School materials were provided to all 390 target children from 322 families, reducing financial pressure on vulnerable households and helping children remain prepared and engaged in school. Six School Support Committee meetings further strengthened collaboration among schools, parents, FDVs, and local authorities to address challenges such as absenteeism and e-cigarette use and to improve monitoring of children’s education.',
+      'In addition, 24,700 kg of rice was distributed to 247 vulnerable families supporting 304 children, while emergency rice assistance supported another 150 families.',
       'Overall, the project strengthened the capacity of vulnerable families to better support their children’s education, health, protection, and development, with stronger collaboration among parents, schools, FDVs, health centers, and local authorities.',
     ]),
     impactStats: [
@@ -399,13 +443,14 @@ export const programs: Program[] = [
         _id: 'tfcf2-clubs',
         value: 237,
         displayValue: '237',
-        label: { en: 'Children reached through Children’s Clubs', km: 'កុមារចូលរួមក្នុងក្លឹបកុមារ' },
+        label: { en: 'Direct reaches, 474 indirect reaches', km: 'អ្នកទទួលផលផ្ទាល់ និង ៤៧៤ នាក់ទទួលផលប្រយោល' },
+        context: { en: 'Children through Children’s Clubs', km: 'កុមារតាមរយៈក្លឹបកុមារ' },
         order: 3,
       },
       {
         _id: 'tfcf2-rice',
-        value: 4940.74,
-        displayValue: '4,940.74 kg',
+        value: 24700,
+        displayValue: '24,700 kg',
         label: { en: 'Rice distributed to 247 families', km: 'អង្ករចែកចាយដល់គ្រួសារ ២៤៧' },
         order: 4,
       },
@@ -413,6 +458,8 @@ export const programs: Program[] = [
   },
   {
     _id: 'program-rcmd',
+    image: localCmsImage('rcmd-cover'),
+    cardImage: localCmsImage('rcmd-card'),
     slug: 'resilient-city-and-migration',
     order: 4,
     title: {
@@ -434,9 +481,9 @@ export const programs: Program[] = [
       '## Partner',
       'UNOPS (Cities Alliance), funded by the Swiss Agency for Development and Cooperation.',
       '## Impact and results',
-      'Through the direct implementation and dedicated efforts of SKO, a project helping migrants obtain identity cards is unlocking access to employment, healthcare, social services, and civic rights for low-income families in Phnom Penh. Funded by the Swiss Agency for Development and Cooperation, the initiative is improving the lives of families living in informal settlements, with a particular focus on supporting women and vulnerable households. Widow Mon Kim Hein takes a deep breath as she recalls the struggles she faced when starting over in Phnom Penh without formal identification. “Before I had a national ID card, my life was difficult. I wanted to find a job, but I couldn’t. I couldn’t borrow money to start a business, access healthcare, or buy insurance. And I couldn’t vote,” she says. Originally from Kampong Cham province in the Mekong River lowlands, Kim Hein moved to Phnom Penh in search of a better life. Like many internal migrant families, she faced difficulties proving her identity and accessing essential services in the city.',
-      'Through SKO’s direct support, counselling, community engagement, and facilitation with relevant authorities, families like Kim Hein’s are empowered to overcome these barriers and access the rights and services they need. This support is not only helping families obtain essential documentation but also strengthening their confidence, resilience, and ability to build a more secure future for themselves and their children. SKO’s contribution demonstrates that lasting change can begin with something as fundamental as an identity document, when families are empowered, supported, and connected to the services and opportunities available to them.',
-      'Urban poor communities, especially in informal settlements, face limited access to basic services, adequate housing, and legal documentation such as birth certificates or ID Poor registration, Cambodia’s national programme that identifies poor households for social protection support. These gaps restrict opportunities for formal employment, healthcare, education and civic participation. That is now beginning to change. This year, Kim Hein and her two children obtained Cambodian citizenship with the support of the Samatapheap Khnom Organization (SKO), a local non-profit and implementing partner in a project aimed at strengthening resilience and inclusion among Phnom Penh’s urban poor.',
+      ...sokVannyStory,
+      'Through SKO’s direct support, counselling, community engagement, and facilitation with relevant authorities, families like Sok Vanny are empowered to overcome these barriers and access the rights and services they need. This support is not only helping families obtain essential documentation but also strengthening their confidence, resilience, and ability to build a more secure future for themselves and their children. SKO’s contribution demonstrates that lasting change can begin with something as fundamental as an identity document, when families are empowered, supported, and connected to the services and opportunities available to them.',
+      'Urban poor communities, especially in informal settlements, face limited access to basic services, adequate housing, and legal documentation such as birth certificates or ID Poor registration, Cambodia’s national programme that identifies poor households for social protection support. These gaps restrict opportunities for formal employment, healthcare, education and civic participation. That is now beginning to change. This year, Sok Vanny obtained Cambodian citizenship with the support of the Samatapheap Khnom Organization (SKO), a local non-profit and implementing partner in a project aimed at strengthening resilience and inclusion among Phnom Penh’s urban poor.',
     ]),
   },
 ];
@@ -512,11 +559,9 @@ export const activities: Activity[] = [
 export const stories: Story[] = [
   {
     _id: 'story-1',
-    quote: {
-      en: '“Before I had a national ID card, my life was difficult. I wanted to find a job, but I couldn’t. I couldn’t borrow money to start a business, access healthcare, or buy insurance. And I couldn’t vote.”',
-      km: '“មុនពេលមានអត្តសញ្ញាណប័ណ្ណសញ្ជាតិ ជីវិតរបស់ខ្ញុំពិបាកណាស់។ ខ្ញុំចង់រកការងារធ្វើ ប៉ុន្តែមិនអាចទេ។ ខ្ញុំមិនអាចខ្ចីលុយដើម្បីចាប់ផ្តើមអាជីវកម្ម ចូលទៅដល់សេវាសុខភាព ឬទិញធានារ៉ាប់រង។ ហើយខ្ញុំមិនអាចបោះឆ្នោតបានទេ។”',
-    },
-    personName: 'Mon Kim Hein',
+    quote: { en: sokVannyStory[0] },
+    body: enOnly(sokVannyStory),
+    personName: 'Sok Vanny',
     personRole: {
       en: 'Resilient City and Migration Dynamics project',
       km: 'គម្រោងភាពធន់ទីក្រុង និងសក្ដានុពលចំណាកស្រុក',
@@ -528,42 +573,32 @@ export const stories: Story[] = [
 
 export const partners: Partner[] = [
   {
-    _id: 'partner-moi',
-    name: 'Ministry of Interior',
-    category: 'government',
+    _id: 'partner-pead',
+    name: 'Planète Enfants & Développement',
+    logo: localCmsImage('logo-ped'),
+    category: 'ingo',
     order: 1,
   },
   {
-    _id: 'partner-mosvy',
-    name: 'Ministry of Social Affairs, Veterans and Youth Rehabilitation',
-    category: 'government',
-    order: 2,
-  },
-  {
-    _id: 'partner-pead',
-    name: 'Planète Enfants & Développement',
-    category: 'ingo',
-    order: 3,
-  },
-  {
-    // [NEEDS SKO] "TFCF" suggests Taiwan Fund for Children and Families —
-    // confirm the partner's full legal name before publishing.
     _id: 'partner-tfcf',
     name: 'Family Fund for Children Organization',
+    logo: localCmsImage('logo-tfcf'),
     category: 'foundation',
-    order: 4,
+    order: 2,
   },
   {
     _id: 'partner-unops',
     name: 'UNOPS / Cities Alliance',
+    logo: localCmsImage('logo-cities-alliance'),
     category: 'un-agency',
-    order: 5,
+    order: 3,
   },
   {
     _id: 'partner-sdc',
     name: 'Swiss Agency for Development and Cooperation',
+    logo: localCmsImage('logo-sdc'),
     category: 'government',
-    order: 6,
+    order: 4,
   },
 ];
 
@@ -597,20 +632,161 @@ export const reports: Report[] = [
 
 export const team: TeamMember[] = [
   {
-    _id: 'team-1',
-    name: { en: 'Samnang Moun', km: 'សំណាង មួន' },
+    _id: 'team-ed',
+    name: { en: 'Samnang Mourn', km: 'សំណាង មួន' },
     role: { en: 'Executive Director', km: 'នាយកប្រតិបត្តិ' },
+    photo: localCmsImage('team-samnang-mourn'),
     group: 'leadership',
     order: 1,
+  },
+  {
+    _id: 'team-sytha-hang',
+    name: { en: 'Sytha Hang' },
+    role: { en: 'Program Manager', km: 'ប្រធានកម្មវិធី' },
+    photo: localCmsImage('team-sytha-hang'),
+    group: 'leadership',
+    reportsTo: 'team-ed',
+    order: 2,
+  },
+  {
+    _id: 'team-kunthamith-kheang',
+    name: { en: 'Kunthamith Kheang' },
+    role: { en: 'Project Manager', km: 'ប្រធានគម្រោង' },
+    photo: localCmsImage('team-kunthamith-kheang'),
+    group: 'leadership',
+    reportsTo: 'team-ed',
+    order: 3,
+  },
+  {
+    _id: 'team-soraksmey-heng',
+    name: { en: 'Soraksmey Heng', km: 'សូរក្សមី ហេង' },
+    role: { en: 'Senior Team Leader', km: 'នាយកក្រុមជាន់ខ្ពស់' },
+    photo: localCmsImage('team-soraksmey-heng'),
+    group: 'leadership',
+    reportsTo: 'team-ed',
+    order: 4,
+  },
+  {
+    _id: 'team-rachana-chheang',
+    name: { en: 'Rachana Chheang' },
+    role: { en: 'Finance & Admin Manager', km: 'ប្រធានផ្នែកហិរញ្ញវត្ថុ និងរដ្ឋបាល' },
+    photo: localCmsImage('team-rachana-chheang'),
+    group: 'leadership',
+    reportsTo: 'team-ed',
+    order: 5,
+  },
+  {
+    _id: 'team-savy-run',
+    name: { en: 'Savy Run' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-savy-run'),
+    group: 'staff',
+    reportsTo: 'team-sytha-hang',
+    order: 6,
+  },
+  {
+    _id: 'team-sonutra-chhean',
+    name: { en: 'Sonutra Chhean' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-sonutra-chhean'),
+    group: 'staff',
+    reportsTo: 'team-sytha-hang',
+    order: 7,
+  },
+  {
+    _id: 'team-borey-sam',
+    name: { en: 'Borey Sam' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-borey-sam'),
+    group: 'staff',
+    reportsTo: 'team-sytha-hang',
+    order: 8,
+  },
+  {
+    _id: 'team-panhapich-ouk',
+    name: { en: 'Panhapich Ouk' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-panhapich-ouk'),
+    group: 'staff',
+    reportsTo: 'team-sytha-hang',
+    order: 9,
+  },
+  {
+    _id: 'team-chhaylim-sun',
+    name: { en: 'Chhaylim Sun' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-chhaylim-sun'),
+    group: 'staff',
+    reportsTo: 'team-kunthamith-kheang',
+    order: 10,
+  },
+  {
+    _id: 'team-yary-chhay',
+    name: { en: 'Yary Chhay' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-yary-chhay'),
+    group: 'staff',
+    reportsTo: 'team-kunthamith-kheang',
+    order: 11,
+  },
+  {
+    _id: 'team-vacancy-projects',
+    name: { en: 'Volunteer / Internship', km: 'អ្នកស្ម័គ្រចិត្ត / កម្មសិក្សា' },
+    group: 'staff',
+    reportsTo: 'team-kunthamith-kheang',
+    vacancy: true,
+    order: 12,
+  },
+  {
+    _id: 'team-vanndy-bin',
+    name: { en: 'Vanndy Bin' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-vanndy-bin'),
+    group: 'staff',
+    reportsTo: 'team-soraksmey-heng',
+    order: 13,
+  },
+  {
+    _id: 'team-sophorn-ros',
+    name: { en: 'Sophorn Ros' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-sophorn-ros'),
+    group: 'staff',
+    reportsTo: 'team-soraksmey-heng',
+    order: 14,
+  },
+  {
+    _id: 'team-meyoer-oeung',
+    name: { en: 'Meyoer Oeung' },
+    role: { en: 'Social Worker', km: 'បុគ្គលិកសង្គមកិច្ច' },
+    photo: localCmsImage('team-meyoer-oeung'),
+    group: 'staff',
+    reportsTo: 'team-soraksmey-heng',
+    order: 15,
+  },
+  {
+    _id: 'team-chetnileak-key',
+    name: { en: 'Chetnileak Key' },
+    role: { en: 'Finance & Admin Assistant', km: 'ជំនួយការហិរញ្ញវត្ថុ និងរដ្ឋបាល' },
+    photo: localCmsImage('team-chetnileak-key'),
+    group: 'staff',
+    reportsTo: 'team-rachana-chheang',
+    order: 16,
+  },
+  {
+    _id: 'team-vacancy-finance',
+    name: { en: 'Volunteer / Internship', km: 'អ្នកស្ម័គ្រចិត្ត / កម្មសិក្សា' },
+    group: 'staff',
+    reportsTo: 'team-rachana-chheang',
+    vacancy: true,
+    order: 17,
   },
 ];
 
 export const directorMessage: DirectorMessage = {
-  // [NEEDS SKO] The content document does not name the Director — confirmed
-  // here from earlier SKO material as Samnang Moun. Please confirm. Photo is
-  // a follow-up (Drive needs the user's account).
-  name: { en: 'Samnang Moun', km: 'សំណាង មួន' },
+  name: { en: 'Samnang Mourn', km: 'សំណាង មួន' },
   title: { en: 'Executive Director', km: 'នាយកប្រតិបត្តិ' },
+  photo: localCmsImage('director', { en: 'Samnang Mourn, Executive Director', km: 'សំណាង មួន នាយកប្រតិបត្តិ' }),
   pullQuote: {
     en: 'Our key message is to continue putting families and children at the heart of everything we do.',
     km: 'សារសំខាន់របស់យើងគឺបន្តដាក់គ្រួសារ និងកុមារជាចំណុចស្នូលនៃអ្វីគ្រប់យ៉ាងដែលយើងធ្វើ។',
@@ -655,16 +831,21 @@ export const pages: Page[] = [
       'Integrity. We are honest and transparent in all our actions and decisions.',
       'Respect. We value the dignity, choices, potential and contribution of staff, families, partners and donors.',
       'Responsibility. We accept personal and collective responsibility for our learning and our performance, to increase our impact.',
-      '## Our approach',
-      'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities. SKO focuses on promoting child rights and child protection, preventing and responding to violence against children and domestic violence, and strengthening families’ access to appropriate social and community services. Through direct implementation, social work, counselling, referrals, awareness raising, and close engagement with families and local stakeholders, SKO supports families to identify challenges, develop practical solutions, and strengthen their capacity to cope with difficulties. The overall approach aims to build family resilience, sustainable problem-solving capacity, and safer and more supportive environments for children and families.',
-      'Underpinning this is the Family Development Program (FDP) methodology: social workers visit families at home rather than asking them to travel to an office, carry out a full assessment, and agree the objectives the family sets for itself, working through them over a series of home visits until the case is ready for phase-out. A re-assessment follows six months later to confirm the progress has held.',
+      '## Key Approaches of FDP',
+      '- Family-centred approach: Focuses on the overall well-being of vulnerable families, children and youth.',
+      '- Strengths-based approach: Identifies family strengths, capacities, resources and resilience, alongside their needs and challenges.',
+      '- Family assessment and case management: Conducts family assessments, identifies root causes and priorities, develops appropriate support and follows up on progress.',
+      '- Counselling and psychosocial support: Provides counselling and emotional support to help families address personal, family and social challenges.',
+      '- Referral and service linkage: Connects families with appropriate government, NGO, health, legal, education and other services.',
+      '- Integrated support: Responds to different and interconnected needs, including child protection, education, health, legal documentation and economic support.',
+      '- Family empowerment and participation: Encourages families to participate in identifying solutions and building their own capacity and resilience.',
+      '- Partnership and community approach: Works closely with local authorities, communities, NGOs and other stakeholders to strengthen support for families.',
       '## Networking and partnership',
       'SKO recognizes that lasting change for children, families, and communities cannot be achieved by one organization alone. Networking and partnership are therefore an important part of SKO’s approach, enabling us to work together with government institutions, local authorities, NGOs, community groups, schools, service providers, development partners, and other stakeholders.',
       'Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions. By connecting people, services, and resources, SKO aims to strengthen family and community resilience and contribute to safer, more protective, and supportive environments for children and families.',
       '## Where we work',
-      'SKO works in the urban poor communities of Phnom Penh, across five khans and twenty-six sangkats. The khans are Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo.',
-      'They include Chbar Ampov 1, Chbar Ampov 2 and Prek Pra; Chak Angre Leu, Stung Meanchey 2, Stung Meanchey 3, Boeung Tumpun 1 and Boeung Tumpun 2; Dangkor, Prey Sar, Prey Veng and Choeung Ek; Kork Roka; and Svay Pak and Toul Sangke.',
-      'The target area can be extended to neighbouring communities at the request of the Department of Social Affairs, Veterans and Youth Rehabilitation.',
+      '- Phnom Penh, across 14 khans within 105 Sangkat (urban poor communities are selected)',
+      '- Some provinces will be selected for urban poor communities.',
     ]),
     faqs: [
       {
@@ -677,8 +858,8 @@ export const pages: Page[] = [
       {
         question: { en: 'Where does SKO work?', km: 'តើ SKO ធ្វើការនៅកន្លែងណា?' },
         answer: {
-          en: 'SKO works in the urban poor communities of Phnom Penh, Cambodia, across five khans (Chbar Ampov, Mean Chey, Dangkor, Prek Pnov and Russey Keo) and twenty-six sangkats.',
-          km: 'SKO ធ្វើការនៅសហគមន៍ក្រីក្រតាមទីក្រុងក្នុងរាជធានីភ្នំពេញ គ្របដណ្តប់ ៥ ខណ្ឌ (ច្បារអំពៅ មានជ័យ ដង្កោ ព្រែកព្នៅ និងឫស្សីកែវ) និង ២៦ សង្កាត់។',
+          en: 'SKO works in the urban poor communities of Phnom Penh, Cambodia, across 14 khans and 105 sangkats.',
+          km: 'SKO ធ្វើការនៅសហគមន៍ក្រីក្រតាមទីក្រុងក្នុងរាជធានីភ្នំពេញ គ្របដណ្តប់ ១៤ ខណ្ឌ និង ១០៥ សង្កាត់។',
         },
       },
       {
@@ -788,16 +969,6 @@ export const pages: Page[] = [
       },
       {
         question: {
-          en: 'Why does this website not show photographs of children?',
-          km: 'ហេតុអ្វីគេហទំព័រនេះមិនបង្ហាញរូបថតកុមារ?',
-        },
-        answer: {
-          en: 'Because a child’s safety outweighs a good photograph. Where we publish a story, names are changed and no detail that could identify a child is included. Photographs appear only where documented consent exists and the image is genuinely safe to publish.',
-          km: 'ព្រោះសុវត្ថិភាពរបស់កុមារសំខាន់ជាងរូបថតស្អាត។ នៅពេលយើងផ្សាយរឿងរ៉ាវ ឈ្មោះត្រូវបានផ្លាស់ប្តូរ ហើយគ្មានព័ត៌មានលម្អិតណាដែលអាចសម្គាល់អត្តសញ្ញាណកុមារត្រូវបានបញ្ចូលឡើយ។',
-        },
-      },
-      {
-        question: {
           en: 'How can my organisation partner with SKO?',
           km: 'តើអង្គការរបស់ខ្ញុំអាចក្លាយជាដៃគូជាមួយ SKO ដោយរបៀបណា?',
         },
@@ -807,38 +978,6 @@ export const pages: Page[] = [
         },
       },
     ],
-  },
-  {
-    _id: 'page-volunteer',
-    slug: 'volunteer',
-    title: { en: 'Volunteer', km: 'ស្ម័គ្រចិត្ត' },
-    intro: {
-      en: 'SKO works through Family Development Volunteers drawn from the communities we serve.',
-      km: 'SKO ធ្វើការតាមរយៈអ្នកស្ម័គ្រចិត្តអភិវឌ្ឍន៍គ្រួសារ ដែលមកពីសហគមន៍ដែលយើងបម្រើ។',
-    },
-    body: enOnly([
-      'Family Development Volunteers are trained in counselling and in the Family Development Approach, and work alongside SKO staff and local authorities in their own communities.',
-      '## Safeguarding screening',
-      'Everyone who may come into contact with children completes safeguarding screening and induction before starting. This is not optional and there are no exceptions.',
-      '[NEEDS SKO] Add the volunteer roles currently open, the time commitment expected, and who to contact.',
-    ]),
-  },
-  {
-    _id: 'page-partner-with-us',
-    slug: 'partner-with-us',
-    title: { en: 'Partner with us', km: 'ក្លាយជាដៃគូជាមួយយើង' },
-    intro: {
-      en: 'SKO works in partnership with government ministries, NGOs, private-sector partners and institutional funders.',
-      km: 'SKO ធ្វើការជាដៃគូជាមួយក្រសួង អង្គការក្រៅរដ្ឋាភិបាល ដៃគូវិស័យឯកជន និងម្ចាស់ជំនួយស្ថាប័ន។',
-    },
-    body: enOnly([
-      'Partnership is not incidental to how SKO works. It is the method. Cases are referred into networks of health, education, administrative and economic providers, and quarterly meetings with NGO and government partners work through shared challenges and practice.',
-      '## What we are looking for',
-      'Funders and partners interested in family strengthening, child protection, and the prevention of family separation in urban poor communities. We use OSCaR for monitoring and evaluation, so programme outcomes can be reported against.',
-      '## What happens next',
-      'Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions.',
-      'Email info@samatapheapkhnom.org to start a conversation.',
-    ]),
   },
   {
     _id: 'page-safeguarding',
@@ -851,7 +990,6 @@ export const pages: Page[] = [
     body: enOnly([
       '## Reporting a concern',
       'To report a safeguarding concern, please contact Soraksmey Heng, Senior Team Leader, directly at stlhali@samatapheapkhnom.org or +855 12 781 203 rather than using the form below. Concerns are treated confidentially.',
-      'This website deliberately publishes no information that could identify a child. Stories about families use pseudonyms, and photographs are only published where documented consent exists.',
       'The full policy is available under Reports & policies.',
     ]),
   },
@@ -882,13 +1020,11 @@ export const pages: Page[] = [
       [
         'This website sets no cookies. Analytics is provided by Cloudflare Web Analytics, which is cookieless and does not track individuals across sites. There is no advertising or tracking of any kind.',
         'When you send a message through a form on this site, the details you type are emailed to SKO and are not stored on the website or in any database. A Cloudflare Turnstile check runs to block automated spam. Your IP address is not stored; a hashed value is used briefly to limit repeated submissions.',
-        'This website publishes no personal information about the children, young people or families SKO works with.',
         '[NEEDS SKO] Add how long SKO keeps emailed enquiries, and who to contact about personal data.',
       ],
       [
         'គេហទំព័រនេះមិនប្រើខូគីទេ។ ការវិភាគស្ថិតិផ្តល់ដោយ Cloudflare Web Analytics ដែលមិនប្រើខូគី និងមិនតាមដានបុគ្គលឆ្លងកាត់គេហទំព័រផ្សេងៗ។ គ្មានការផ្សាយពាណិជ្ជកម្ម ឬការតាមដានណាមួយឡើយ។',
         'នៅពេលអ្នកផ្ញើសារតាមទម្រង់នៅលើគេហទំព័រនេះ ព័ត៌មានដែលអ្នកវាយបញ្ចូលត្រូវបានផ្ញើទៅ SKO តាមអ៊ីមែល ហើយមិនត្រូវបានរក្សាទុកនៅលើគេហទំព័រទេ។',
-        'គេហទំព័រនេះមិនផ្សាយព័ត៌មានផ្ទាល់ខ្លួនអំពីកុមារ យុវជន ឬគ្រួសារដែល SKO ធ្វើការជាមួយឡើយ។',
       ],
     ),
   },
