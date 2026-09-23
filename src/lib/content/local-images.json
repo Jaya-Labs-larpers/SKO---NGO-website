@@ -45,44 +45,52 @@
     "lqip": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAwAgCdASoQAAwAA4BaJYgCdH8AFxeQ7nqCYAD+8d3iRlLqqVBW3y6E83WSjunfEhBKOD0HPMAKe0MXaNLZ2xbQ5PPXr5nTHpfey/TyK2loQS6KHdl3+3MAAAA="
   },
   "logo-cities-alliance": {
-    "width": 573,
-    "height": 352,
-    "widths": [
-      400,
-      573
-    ],
-    "lqip": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAQCdASoQAAoAA4BaJbACdAEO/n+KLQAAzg0btNGuR4Y5YsCYpE8qKUkRMo+Xls9g/7fHBNjHfAvKAjrbpj5QugvZz3vWfBuRr8bv/ghW6Jr/anKYyH52g4n24AAA"
-  },
-  "logo-ped": {
-    "width": 881,
-    "height": 352,
+    "width": 1146,
+    "height": 704,
     "widths": [
       400,
       640,
       828,
-      881
+      1146
     ],
-    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADwAQCdASoQAAYAA4BaJZACdAD2N/f3JKgA/u4/LBHfCguro07d3sj6MC9/7IRY6Pe2xJfCRA3aP8Conm0duXL/IAA="
+    "lqip": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAQCdASoQAAoAA4BaJbACdAEO/n+KLQAAzg0btNGuR4Y5YsCYpE8qKUkRMo+Xls9g/7fHBNjHfAvKAjrbpj5QugvZz3vWfBuRr8bv/ghW6Jr/anKYyH52g4n24AAA"
   },
-  "logo-sdc": {
-    "width": 736,
-    "height": 352,
-    "widths": [
-      400,
-      640,
-      736
-    ],
-    "lqip": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAACQAQCdASoQAAgAA4BaJZwAAuVt3IAA/vCemYqmqaL4Dqr3yU2SJS1HMcHbzNpqpr8CxAAA"
-  },
-  "logo-tfcf": {
-    "width": 2388,
-    "height": 352,
+  "logo-ped": {
+    "width": 1762,
+    "height": 704,
     "widths": [
       400,
       640,
       828,
       1200,
-      1600
+      1600,
+      1762
+    ],
+    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADwAQCdASoQAAYAA4BaJZACdAD2N/f3JKgA/u4/LBHfCguro07d3sj6MC9/7IRY6Pe2xJfCRA3aP8Conm0duXL/IAA="
+  },
+  "logo-sdc": {
+    "width": 1472,
+    "height": 704,
+    "widths": [
+      400,
+      640,
+      828,
+      1200,
+      1472
+    ],
+    "lqip": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAACQAQCdASoQAAgAA4BaJZwAAuVt3IAA/vCemYqmqaL4Dqr3yU2SJS1HMcHbzNpqpr8CxAAA"
+  },
+  "logo-tfcf": {
+    "width": 3200,
+    "height": 472,
+    "widths": [
+      400,
+      640,
+      828,
+      1200,
+      1600,
+      2400,
+      3200
     ],
     "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAQCdASoQAAIAA4BaJZQAAvrePq2wAP7v3D4cuuMZOcRRoFXcyAAA"
   },

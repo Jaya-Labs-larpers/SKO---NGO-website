@@ -1,7 +1,6 @@
 /* ============================================================================
    SKO — design tokens
-   Tailwind v4 CSS-first config. In Phase 3 this file moves to
-   src/styles/theme.css and is imported by src/styles/global.css.
+   Tailwind v4 CSS-first config, imported by src/styles/global.css.
 
    Tailwind v4 replaced tailwind.config.js with @theme in CSS. Same thing the
    brief asked for ("design system as Tailwind config"), current file format.
@@ -102,22 +101,22 @@
   --text-display--letter-spacing: -0.025em;
   /* The text-led home hero: grows with the window, capped so a wide screen
      never turns the tagline into a poster. */
-  --text-hero: clamp(2.75rem, 1.4rem + 5.4vw, 5.75rem);
+  --text-hero: clamp(2.5rem, 1.4rem + 5.4vw, 5.75rem);
   --text-hero--line-height: 1.02;
   --text-hero--letter-spacing: -0.035em;
   /* Khmer's stacked vowels need a smaller size and far more leading. */
   --text-hero-km: clamp(2.125rem, 1.25rem + 3.6vw, 4rem);
   /* A single sentence set as a statement (the home "who we are" block). */
-  --text-statement: clamp(1.5rem, 1.05rem + 1.9vw, 2.625rem);
+  --text-statement: clamp(1.3125rem, 0.85rem + 2vw, 2.625rem);
   /* The story quote on its navy band; Khmer runs smaller for its taller glyphs. */
-  --text-quote: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
-  --text-quote-km: clamp(1.375rem, 1.05rem + 1.4vw, 2.125rem);
+  --text-quote: clamp(1.5rem, 0.95rem + 2.4vw, 3rem);
+  --text-quote-km: clamp(1.25rem, 0.95rem + 1.4vw, 2.125rem);
 
   --text-h1: clamp(2rem, 1.5rem + 2.2vw, 3rem);
   --text-h1--line-height: 1.12;
   --text-h1--letter-spacing: -0.02em;
 
-  --text-h2: clamp(1.5rem, 1.25rem + 1.15vw, 2.125rem);
+  --text-h2: clamp(1.375rem, 1.1rem + 1.25vw, 2.125rem);
   --text-h2--line-height: 1.2;
   --text-h2--letter-spacing: -0.015em;
 
@@ -128,7 +127,7 @@
   --text-h4: 1.125rem;
   --text-h4--line-height: 1.4;
 
-  --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --text-lead: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem);
   --text-lead--line-height: 1.6;
 
   --text-body: 1.0625rem;      /* 17px */
@@ -144,14 +143,14 @@
   --text-eyebrow--line-height: 1.2;
   --text-eyebrow--letter-spacing: 0.12em;
 
-  --text-stat: clamp(2.75rem, 2rem + 3vw, 4rem);
+  --text-stat: clamp(2.125rem, 1.4rem + 3vw, 4rem);
   --text-stat--line-height: 1;
   --text-stat--letter-spacing: -0.03em;
 
   /* ---------------------------------------------------------------------
      SPACING — Tailwind's 4px base, plus a section rhythm token
      --------------------------------------------------------------------- */
-  --spacing-section: clamp(3.5rem, 2rem + 6vw, 7rem);
+  --spacing-section: clamp(3rem, 1.5rem + 6vw, 7rem);
   --spacing-gutter: clamp(1.25rem, 0.75rem + 2vw, 2.5rem);
 
   /* Content widths */

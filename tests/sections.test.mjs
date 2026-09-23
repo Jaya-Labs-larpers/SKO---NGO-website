@@ -86,6 +86,15 @@ test("a lead-in term splits only when it is short", () => {
   assert.equal(sections.splitLeadIn("Trailing."), null);
 });
 
+test("activity limits let a longer lead-in name a row", () => {
+  const text = "Leadership and Management Training for youth and young people. Builds skills.";
+  assert.equal(sections.splitLeadIn(text), null);
+  assert.equal(sections.splitLeadIn(text, sections.ACTIVITY_LIMITS)?.term, "Leadership and Management Training for youth and young people");
+  const rows = blocks(["Home Counseling. One.", "Family Development Program Training. Two.", "Mobile Library. Three."]);
+  assert.equal(sections.layoutFor(rows), "prose");
+  assert.equal(sections.layoutFor(rows, sections.ACTIVITY_LIMITS), "terms");
+});
+
 test("the Khmer full stop also marks a lead-in term", () => {
   const split = sections.splitLeadIn("ក្តីសង្ឃឹម។ យើងជំរុញក្តីសង្ឃឹម");
   assert.equal(split?.term, "ក្តីសង្ឃឹម");

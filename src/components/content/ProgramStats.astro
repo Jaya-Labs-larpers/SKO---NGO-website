@@ -1,0 +1,81 @@
+---
+/**
+ * A programme's results as a bento of hairline-divided tiles. With an odd
+ * count the first figure is featured in a double-height tile, so five results
+ * make one tall tile and a 2×2 block instead of a row with a gap in it.
+ */
+import type { Locale } from '~/lib/i18n/config';
+import type { ImpactStat } from '~/lib/content/types';
+import { formatNumber, pick } from '~/lib/i18n/utils';
+
+interface Props {
+  lang: Locale;
+  stats: ImpactStat[];
+}
+
+const { lang, stats } = Astro.props;
+const featured = stats.length >= 3 && stats.length % 2 === 1;
+const columns = featured ? (stats.length + 1) / 2 : Math.min(stats.length, 4);
+
+/* Glyph widths of the stat font (Inter Bold, tabular figures, -0.03em
+   tracking), measured in the browser, so a figure can be sized to its tile. */
+const em = (text: string) =>
+  Array.from(text).reduce(
+    (width, char) =>
+      width +
+      (/\d/.test(char) ? 0.62 : /[\s,.]/.test(char) ? 0.24 : /[a-z]/i.test(char) ? 0.6 : char === '%' ? 1 : 0.75),
+    0,
+  );
+---
+
+{
+  stats.length > 0 && (
+    <div
+      class:list={['program-stats reveal reveal-cascade', featured && 'program-stats--featured']}
+      style={`--cols:${columns};--sm-cols:${Math.min(columns, 2)}`}
+    >
+      {stats.map((stat, index) => {
+        const label = pick(stat.label, lang);
+        const context = pick(stat.context, lang);
+        const prefix = pick(stat.prefix, lang);
+        const suffix = pick(stat.suffix, lang);
+        const display =
+          stat.displayValue ?? (typeof stat.value === 'number' ? formatNumber(stat.value, lang) : '');
+        const valueEm = Math.max(
+          1,
+          em(display) + (prefix.value ? 0.45 * em(prefix.value) + 0.1 : 0) + (suffix.value ? 0.6 * em(suffix.value) : 0),
+        );
+        return (
+          <div class="program-stat" style={`--i:${index};--value-em:${valueEm.toFixed(2)}`}>
+            <b class="program-stat__value">
+              {prefix.value && (
+                <span class="mr-1.5 text-[0.45em] tracking-normal" lang={prefix.isFallback ? prefix.lang : undefined}>
+                  {prefix.value}
+                </span>
+              )}
+              {stat.countUp && typeof stat.value === 'number' ? (
+                <span data-count-to={stat.value}>{display}</span>
+              ) : (
+                display
+              )}
+              {suffix.value && <span class="text-[0.6em]">{suffix.value}</span>}
+            </b>
+            <span class="program-stat__label" lang={label.isFallback ? label.lang : undefined}>
+              {label.value}
+            </span>
+            {context.value && (
+              <span class="program-stat__context" lang={context.isFallback ? context.lang : undefined}>
+                {context.value}
+              </span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )
+}
+
+<script>
+  import { countUpOnEntry } from '~/lib/count-up';
+  countUpOnEntry();
+</script>

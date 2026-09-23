@@ -28,7 +28,7 @@ const headLabel = head ? label(head) : null;
 <div class="team-structure">
   {
     head && headLabel && (
-      <figure class="m-0 mx-auto w-40 text-center">
+      <figure class="reveal m-0 mx-auto w-40 text-center">
         <div class="aspect-4/5 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-blue-700)]">
           <ResponsiveImage image={head.photo} lang={lang} alt="" aspect="4/5" sizes="160px" />
         </div>
@@ -50,13 +50,13 @@ const headLabel = head ? label(head) : null;
     )
   }
 
-  <ul class:list={['m-0 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4', head && 'team-structure__branches mt-10 pt-10']}>
+  <ul class:list={['reveal reveal-cascade m-0 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4', head && 'team-structure__branches mt-10 pt-10']}>
     {
-      columns.map((lead) => {
+      columns.map((lead, index) => {
         const leadLabel = label(lead);
         const staff = reportsOf(lead._id);
         return (
-          <li>
+          <li style={`--i:${index}`}>
             <div class="w-28 aspect-4/5 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-blue-700)]">
               <ResponsiveImage image={lead.photo} lang={lang} alt="" aspect="4/5" sizes="112px" />
             </div>

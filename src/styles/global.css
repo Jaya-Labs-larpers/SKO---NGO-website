@@ -45,7 +45,7 @@
 
   /* Every page but the home page sits on the home hero's cool tint. Long pages
      band their sections white and --color-surface-sunken in the templates. */
-  main:not(:has(> .hero-overlap)) {
+  main:not(:has(> [data-home-hero])) {
     background: var(--color-surface-subtle);
   }
 }
@@ -555,18 +555,19 @@ details[open] > summary > .disclosure-icon {
   .program-rows {
     border-top: 1px solid var(--color-line);
   }
+  /* On a phone the index sits above the title and the summary is cut to three
+     lines: the row is a signpost to the programme page, not the page itself. */
   .program-row {
     position: relative;
     display: grid;
-    grid-template-columns: 3.25rem minmax(0, 1fr);
-    gap: 0.75rem 1.5rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem 1.5rem;
     align-items: start;
-    padding-block: 1.75rem;
+    padding-block: 1.375rem;
     border-bottom: 1px solid var(--color-line);
     transition: background-color var(--duration-base) var(--ease-out-soft);
   }
   .program-row__index {
-    padding-top: 0.35rem;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
     font-weight: 600;
@@ -574,21 +575,40 @@ details[open] > summary > .disclosure-icon {
     color: var(--color-blue-700);
   }
   .program-row__title {
-    font-size: clamp(1.375rem, 1.1rem + 1.1vw, 2rem);
-    line-height: 1.15;
+    font-size: clamp(1.25rem, 1rem + 1.1vw, 2rem);
+    line-height: 1.2;
     letter-spacing: -0.02em;
     transition: color var(--duration-fast) var(--ease-out-soft);
   }
   .program-row__summary {
-    margin-top: 0.625rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    margin-top: 0.5rem;
     max-width: 58ch;
     font-size: 0.9375rem;
-    line-height: 1.6;
+    line-height: 1.55;
     color: var(--color-ink-400);
   }
   .program-row__media,
   .program-row__arrow {
     display: none;
+  }
+  @media (min-width: 48rem) {
+    .program-row {
+      grid-template-columns: 3.25rem minmax(0, 1fr);
+      gap: 0.75rem 1.5rem;
+      padding-block: 1.75rem;
+    }
+    .program-row__index {
+      padding-top: 0.35rem;
+    }
+    .program-row__summary {
+      -webkit-line-clamp: unset;
+      margin-top: 0.625rem;
+      line-height: 1.6;
+    }
   }
   @media (min-width: 64rem) {
     /* A compact thumbnail sets every row's height; the summary is clamped so
@@ -605,10 +625,7 @@ details[open] > summary > .disclosure-icon {
       padding-top: 0.5rem;
     }
     .program-row__summary {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
       -webkit-line-clamp: 4;
-      overflow: hidden;
     }
     .program-row__media.card-media {
       display: block;
@@ -661,7 +678,7 @@ details[open] > summary > .disclosure-icon {
     }
   }
 
-  /* --- About page body (AboutBody) -------------------------------------- *
+  /* --- About page body (SectionedBody) ---------------------------------- *
    * Each "## " section of the CMS body gets a label column and a content
    * column, divided by a hairline. The label sticks beside long prose so the
    * visitor always knows which part they are reading. */
@@ -695,7 +712,7 @@ details[open] > summary > .disclosure-icon {
     padding-top: 0.4rem;
   }
 
-  .about-statement p {
+  .prose.about-statement p {
     max-width: 30ch;
     font-size: var(--text-statement);
     line-height: 1.3;
@@ -704,7 +721,7 @@ details[open] > summary > .disclosure-icon {
     text-align: start;
     hyphens: manual;
   }
-  .about-statement:lang(km) p {
+  .prose.about-statement:lang(km) p {
     max-width: 36ch;
     font-size: var(--text-lead);
     line-height: 1.9;
@@ -746,7 +763,7 @@ details[open] > summary > .disclosure-icon {
   }
   @media (min-width: 48rem) {
     .about-term {
-      grid-template-columns: 3.5rem minmax(10rem, 0.8fr) minmax(0, 2fr);
+      grid-template-columns: 3.5rem minmax(12rem, 1fr) minmax(0, 1.8fr);
       align-items: baseline;
       gap: 1.5rem;
     }
@@ -776,6 +793,167 @@ details[open] > summary > .disclosure-icon {
   }
   .prose.about-facts li + li {
     margin-top: 0;
+  }
+
+  .about-prose--lead > p:first-child {
+    font-size: var(--text-lead);
+    line-height: 1.65;
+    color: var(--color-ink-900);
+  }
+
+  .statement-logos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .statement-logo {
+    display: grid;
+    place-items: center;
+    width: 10rem;
+    aspect-ratio: 5 / 3;
+    padding: 0.875rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    color: var(--color-ink-600);
+  }
+  .statement-logo img {
+    max-height: 100%;
+  }
+
+  /* --- Programme detail ---------------------------------------------------- *
+   * Hero: text and photo side by side on wide screens, photo first under the
+   * text on phones. The photo is the morph target for the card that opened it. */
+  /* The photo runs to the top of the window, under the transparent header, and
+     fades into the page tint wherever text or the nav sits on it. On a phone it
+     sits above the text; from 64rem it fills the whole band behind it. */
+  .program-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-surface-subtle);
+  }
+  .program-hero__media {
+    position: relative;
+    height: calc(var(--header-h) + 56vw);
+    max-height: 32rem;
+  }
+  .program-hero__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        180deg,
+        rgb(245 247 253 / 0.95) 0,
+        rgb(245 247 253 / 0.85) calc(var(--header-h) * 0.9),
+        rgb(245 247 253 / 0) calc(var(--header-h) * 1.6)
+      ),
+      linear-gradient(0deg, var(--color-surface-subtle) 0, rgb(245 247 253 / 0) 30%);
+  }
+  .program-hero__inner {
+    padding-block: 1rem 3rem;
+  }
+  @media (min-width: 64rem) {
+    .program-hero__media {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      height: auto;
+      max-height: none;
+    }
+    .program-hero__media::after {
+      background:
+        linear-gradient(180deg, rgb(245 247 253 / 0.85) 0, rgb(245 247 253 / 0) calc(var(--header-h) * 1.4)),
+        linear-gradient(90deg, var(--color-surface-subtle) 0, rgb(245 247 253 / 0.94) 38%, rgb(245 247 253 / 0.4) 62%, rgb(245 247 253 / 0) 80%);
+    }
+    .program-hero__inner {
+      display: flex;
+      align-items: center;
+      min-height: 36rem;
+      padding-block: calc(var(--header-h) + 3rem) 4rem;
+    }
+    .program-hero__text {
+      max-width: 34rem;
+    }
+  }
+
+  .program-stats {
+    display: grid;
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-line);
+  }
+  .program-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.75rem 1.5rem;
+    background: #fff;
+    container-type: inline-size;
+  }
+  /* A long figure such as "33,910 kg" shrinks to its tile rather than clipping
+     at the tile's edge. --value-em is the figure's width in em, estimated by
+     ProgramStats from the glyph widths of the stat font. */
+  .program-stat__value {
+    font-size: min(var(--text-stat), calc(100cqi / var(--value-em, 1)));
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: var(--text-stat--letter-spacing);
+    color: var(--color-blue-700);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .program-stat__label {
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-ink-900);
+  }
+  .program-stat__context {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-ink-400);
+  }
+  @media (min-width: 40rem) {
+    .program-stats {
+      grid-template-columns: repeat(var(--sm-cols), minmax(0, 1fr));
+    }
+    .program-stats--featured > :first-child {
+      grid-column: span 2;
+    }
+  }
+  @media (min-width: 64rem) {
+    .program-stats {
+      grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    }
+    .program-stats--featured > :first-child {
+      grid-column: auto;
+      grid-row: span 2;
+      justify-content: flex-end;
+      padding: 2.25rem 2rem;
+      background: var(--color-blue-900);
+    }
+    .program-stats--featured > :first-child .program-stat__value {
+      font-size: min(calc(var(--text-stat) * 1.6), calc(100cqi / var(--value-em, 1)));
+      color: #fff;
+    }
+    .program-stats--featured > :first-child .program-stat__label {
+      font-size: 1.125rem;
+      color: #fff;
+    }
+    .program-stats--featured > :first-child .program-stat__context {
+      color: var(--color-sky-200);
+    }
   }
 
   /* --- Footer closing line --------------------------------------------- */
@@ -822,7 +1000,22 @@ details[open] > summary > .disclosure-icon {
     background: var(--color-blue-900);
     color: #fff;
     border-radius: clamp(1.5rem, 4vw, 3.5rem) clamp(1.5rem, 4vw, 3.5rem) 0 0;
-    padding-block: clamp(4.5rem, 3rem + 6vw, 9rem);
+    padding-block: clamp(3.25rem, 2rem + 6vw, 9rem);
+  }
+  /* .prose paints ink on paper; on the navy band the story has to read in
+     white, ragged-right, since justified text on a phone column leaves rivers. */
+  .story-band .prose {
+    color: rgb(255 255 255 / 0.86);
+  }
+  .story-band .prose strong {
+    color: #fff;
+  }
+  .story-band .prose p {
+    text-align: start;
+    hyphens: manual;
+  }
+  .story-band .prose > * + * {
+    margin-top: 1.25em;
   }
 
   /* Press feedback — a small scale-down so a tap feels physical. */
@@ -1042,6 +1235,15 @@ details[open] > summary > .disclosure-icon {
   .field[aria-invalid="true"]:focus {
     box-shadow: 0 0 0 3px rgb(180 35 24 / 0.15);
   }
+  .field--select {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c6689' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m19.5 8.25-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    background-size: 1rem;
+    cursor: pointer;
+  }
 
   /* Honeypot. Off-screen rather than display:none so naive bots still fill it. */
   .honeypot {
@@ -1070,7 +1272,6 @@ details[open] > summary > .disclosure-icon {
     border: 1px solid var(--color-blue-200);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-md);
-    overflow: hidden;
     /* Fields inside respond to the PANEL's width, not the viewport's, so the
        same panel lays out correctly in a narrow column and a full-width one. */
     container-type: inline-size;
@@ -1083,6 +1284,8 @@ details[open] > summary > .disclosure-icon {
     display: block;
     height: 3px;
     flex: none;
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
     background: linear-gradient(
       90deg,
       var(--color-blue-700) 0%,
@@ -1092,9 +1295,8 @@ details[open] > summary > .disclosure-icon {
   }
 
   .form-panel-head {
-    padding: 1.375rem var(--form-panel-pad, 1.5rem) 1.25rem;
-    background: var(--color-blue-50);
-    border-bottom: 1px solid var(--color-blue-200);
+    padding: 1.5rem var(--form-panel-pad, 1.5rem) 1.375rem;
+    border-bottom: 1px solid var(--color-line);
   }
   .form-panel-title {
     margin: 0;
@@ -1112,7 +1314,34 @@ details[open] > summary > .disclosure-icon {
   }
 
   .form-panel-body {
-    padding: var(--form-panel-pad, 1.5rem);
+    padding: 0;
+  }
+
+  /* One group of questions per section, each parted from the next by a
+     hairline that runs the full width of the panel, as rows in a settings
+     list are. The eyebrow names the group; the label above each field then
+     only has to name the field. */
+  .form-section {
+    display: grid;
+    gap: 1.125rem;
+    padding: 1.5rem var(--form-panel-pad, 1.5rem);
+    border-top: 1px solid var(--color-line);
+  }
+  .form-section:first-child {
+    border-top: 0;
+  }
+  .form-section__label {
+    margin: 0 0 -0.25rem;
+    font-size: var(--text-eyebrow);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-400);
+  }
+  .form-section__label:lang(km) {
+    letter-spacing: normal;
+    text-transform: none;
   }
 
   /* The submit row sits on its own tinted band so the action never floats
@@ -1121,6 +1350,8 @@ details[open] > summary > .disclosure-icon {
     padding: 1.125rem var(--form-panel-pad, 1.5rem) 1.25rem;
     background: var(--color-surface-subtle);
     border-top: 1px solid var(--color-line);
+    border-end-start-radius: inherit;
+    border-end-end-radius: inherit;
   }
 
   /* Submission failures. Sits under the button so the eye lands on it after
@@ -1203,10 +1434,6 @@ details[open] > summary > .disclosure-icon {
     font-weight: 600;
     color: var(--color-ink-900);
   }
-  .form-label-req {
-    margin-left: 0.125rem;
-    color: var(--color-danger-700);
-  }
 
   /* Leading icon inside a field. --field-icon keeps the icon colour and the
      input's left padding tied to one another. */
@@ -1267,49 +1494,322 @@ details[open] > summary > .disclosure-icon {
     color: var(--color-ink-400);
   }
 
+  /* Two or three radios drawn as one sliding switch. The real inputs sit
+     invisibly over their labels, so the keyboard, the form and assistive
+     technology all see plain radio buttons. */
+  .segmented {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 2px;
+    width: max-content;
+    max-width: 100%;
+    padding: 3px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-sunken);
+  }
+  .segmented__item {
+    position: relative;
+  }
+  .segmented__item input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .segmented__item span {
+    display: block;
+    padding: 0.4375rem 1.125rem;
+    border-radius: calc(var(--radius-md) - 2px);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--color-ink-600);
+    transition:
+      background var(--duration-base) var(--ease-out-soft),
+      color var(--duration-base) var(--ease-out-soft),
+      box-shadow var(--duration-base) var(--ease-out-soft);
+  }
+  .segmented__item:hover input:not(:checked) + span {
+    color: var(--color-ink-900);
+  }
+  .segmented__item input:checked + span {
+    background: var(--color-surface);
+    color: var(--color-ink-900);
+    box-shadow: var(--shadow-sm);
+  }
+  .segmented__item input:focus-visible + span {
+    outline: 3px solid var(--color-blue-700);
+    outline-offset: 2px;
+  }
+
+  /* --- Topic picker -------------------------------------------------------
+     A native <select> holds the value; once the script runs, this listbox
+     stands in for it. Each row is an icon, a title and a hint, and the row
+     the visitor chose is what the closed control shows. */
+  .topic-picker {
+    position: relative;
+  }
+  .topic-picker[data-enhanced] > .topic-picker__native,
+  .topic-picker:not([data-enhanced]) > .topic-picker__menu {
+    display: none;
+  }
+  .topic-picker__trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    width: 100%;
+    padding: 0.6875rem 0.875rem 0.6875rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    color: var(--color-ink-900);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-out-soft),
+      box-shadow var(--duration-fast) var(--ease-out-soft);
+  }
+  .topic-picker__trigger:hover {
+    border-color: var(--color-ink-300);
+  }
+  .topic-picker__trigger:focus-visible,
+  .topic-picker__trigger[aria-expanded="true"] {
+    outline: 0;
+    border-color: var(--color-blue-700);
+    box-shadow: 0 0 0 3px var(--color-sky-200);
+  }
+  .topic-picker__faces {
+    flex: 1;
+    min-width: 0;
+  }
+  .topic-picker__face {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+  .topic-picker__text {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .topic-picker__label {
+    font-size: 1rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--color-ink-900);
+  }
+  .topic-picker__hint {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--color-ink-400);
+  }
+  [data-tone="danger"] > .topic-picker__text > .topic-picker__label {
+    color: var(--color-danger-700);
+  }
+  .topic-picker__affordance {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex: none;
+    color: var(--color-ink-400);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+  .topic-picker__change {
+    display: none;
+  }
+  @container (min-width: 26rem) {
+    .topic-picker__change {
+      display: inline;
+    }
+  }
+  .topic-picker__chevron {
+    transition: rotate var(--duration-base) var(--ease-out-soft);
+  }
+  .topic-picker__trigger[aria-expanded="true"] .topic-picker__chevron {
+    rotate: 180deg;
+  }
+  .topic-picker__menu {
+    position: absolute;
+    z-index: 30;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0.375rem;
+    list-style: none;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    transform-origin: top center;
+    opacity: 0;
+    translate: 0 -6px;
+    scale: 0.985;
+    transition:
+      opacity var(--duration-base) var(--ease-out-soft),
+      translate var(--duration-base) var(--ease-out-soft),
+      scale var(--duration-base) var(--ease-out-soft);
+  }
+  .topic-picker__menu.is-open {
+    opacity: 1;
+    translate: 0;
+    scale: 1;
+  }
+  .topic-picker__menu:focus {
+    outline: 0;
+  }
+  .topic-picker__option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.6875rem 0.875rem;
+    border-radius: var(--radius-md);
+    color: var(--color-ink-900);
+    cursor: pointer;
+  }
+  /* A hairline between rows, as in a grouped list on iOS; the safeguarding
+     row sits in its own group below a full one. */
+  .topic-picker__option + .topic-picker__option::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0.875rem;
+    right: 0.875rem;
+    height: 1px;
+    background: var(--color-line-subtle);
+  }
+  .topic-picker__option[data-tone="danger"] {
+    margin-top: 0.4375rem;
+  }
+  .topic-picker__option[data-tone="danger"]::before {
+    top: -0.25rem;
+    background: var(--color-line);
+  }
+  .topic-picker__option:hover,
+  .topic-picker__option:focus-visible {
+    outline: 0;
+    background: var(--color-blue-50);
+  }
+  .topic-picker__option[data-tone="danger"]:hover,
+  .topic-picker__option[data-tone="danger"]:focus-visible {
+    background: var(--color-danger-50);
+  }
+  .topic-picker__option:focus-visible::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 2px var(--color-blue-700);
+    pointer-events: none;
+  }
+  .topic-picker__check {
+    flex: none;
+    margin-left: auto;
+    color: var(--color-blue-700);
+    opacity: 0;
+    scale: 0.6;
+    transition:
+      opacity var(--duration-fast) var(--ease-out-soft),
+      scale var(--duration-base) var(--ease-pop);
+  }
+  .topic-picker__option[aria-selected="true"] .topic-picker__check {
+    opacity: 1;
+    scale: 1;
+  }
+  .topic-picker__option[data-tone="danger"] .topic-picker__check {
+    color: var(--color-danger-700);
+  }
+
   /* --- Contact page --------------------------------------------------------- */
+  /* Each box on the page arrives once it is on screen: a slow rise that
+     sharpens out of a blur, its rows following one after another inside the
+     same window (ContactPage.astro sets the timing). Only under scripting,
+     so a page with no script never hides anything. */
+  @media (scripting: enabled) {
+    .contact-enter[data-enter="pending"] {
+      opacity: 0;
+      translate: 0 36px;
+      filter: blur(14px);
+    }
+    .contact-enter[data-enter="shown"] {
+      transition:
+        opacity 2000ms var(--ease-reveal) var(--enter-delay, 0ms),
+        translate 2000ms var(--ease-pop) var(--enter-delay, 0ms),
+        filter 1600ms var(--ease-reveal) var(--enter-delay, 0ms);
+    }
+    .contact-enter[data-enter="pending"] .form-enter-row {
+      opacity: 0;
+      translate: 0 14px;
+    }
+    .contact-enter[data-enter="shown"] .form-enter-row {
+      transition:
+        opacity 900ms var(--ease-reveal),
+        translate 900ms var(--ease-pop);
+      transition-delay: calc(var(--enter-delay, 0ms) + 250ms + var(--i, 0) * 170ms);
+    }
+  }
+
   /* A panel spanning exactly the width of the form and aside below it, so all
      three share the same left and right edges; each detail is centred in its
      third, with a hairline between them. */
   .contact-details {
     display: grid;
     margin: 0;
-    padding: 0.5rem 1.5rem;
+    padding: 0;
     border: 1px solid var(--color-line);
-    border-radius: var(--radius-lg);
-    background: var(--color-surface-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
     text-align: center;
   }
-  .contact-details > div {
-    padding: 1.5rem 0.5rem;
+  .contact-details__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.75rem 1.5rem;
   }
-  .contact-details > div + div {
+  .contact-details__item + .contact-details__item {
     border-top: 1px solid var(--color-line);
   }
   @media (width >= 48rem) {
     .contact-details {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      padding: 0.5rem 0;
     }
-    .contact-details > div {
-      padding: 1.75rem 2rem;
+    .contact-details__item {
+      padding: 2rem 2rem 2.125rem;
     }
-    .contact-details > div + div {
+    .contact-details__item + .contact-details__item {
       border-top: 0;
       border-left: 1px solid var(--color-line);
     }
   }
   .contact-details dt {
-    font-size: 0.8125rem;
-    font-weight: 600;
+    font-size: var(--text-eyebrow);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--color-ink-400);
+  }
+  .contact-details dt:lang(km) {
+    letter-spacing: normal;
+    text-transform: none;
   }
   .contact-details dd {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
     align-items: center;
-    margin: 0.25rem 0 0;
+    margin: 0.5rem 0 0;
     font-size: 1.0625rem;
     line-height: 1.45;
     color: var(--color-ink-900);
@@ -1318,6 +1818,9 @@ details[open] > summary > .disclosure-icon {
     color: var(--color-ink-900);
     font-weight: 600;
     text-decoration: none;
+  }
+  .contact-details dd > a:first-child:hover {
+    color: var(--color-blue-700);
   }
   .contact-details__meta {
     font-size: 0.875rem;
@@ -1342,9 +1845,12 @@ details[open] > summary > .disclosure-icon {
     display: grid;
   }
   /* The reason field stays, so the visitor can still change their mind. */
-  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-panel-body > :not(.form-field--reason),
+  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-panel-body > :not(.form-section--reason),
   .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-panel-foot {
     display: none;
+  }
+  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-section--reason {
+    padding-bottom: 1.75rem;
   }
   .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .safeguarding-panel {
     display: block;
@@ -1352,15 +1858,12 @@ details[open] > summary > .disclosure-icon {
   }
   .safeguarding-panel {
     padding: 1.75rem;
-    border: 1.5px solid var(--color-danger-700);
-    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-danger-700);
+    border-radius: var(--radius-xl);
     background: var(--color-danger-50);
   }
-  .safeguarding-panel__icon {
-    color: var(--color-danger-700);
-  }
   .safeguarding-panel__title {
-    margin-top: 0.75rem;
+    margin-top: 0;
     font-size: var(--text-h3);
     line-height: var(--text-h3--line-height);
     color: var(--color-ink-900);
@@ -1372,20 +1875,21 @@ details[open] > summary > .disclosure-icon {
 
   .contact-next {
     padding: 1.5rem;
-    border-radius: var(--radius-lg);
-    background: var(--color-surface-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
     border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-sm);
   }
   .contact-next__title {
-    font-size: var(--text-h3);
-    line-height: var(--text-h3--line-height);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-line);
+    font-size: var(--text-h4);
+    line-height: var(--text-h4--line-height);
     color: var(--color-ink-900);
   }
   .contact-next__steps {
     counter-reset: step;
-    display: grid;
-    gap: 0.875rem;
-    margin-top: 1rem;
+    margin: 0;
     padding: 0;
     list-style: none;
     font-size: 0.9375rem;
@@ -1395,29 +1899,37 @@ details[open] > summary > .disclosure-icon {
   .contact-next__steps li {
     counter-increment: step;
     display: grid;
-    grid-template-columns: 1.75rem 1fr;
-    gap: 0.625rem;
+    grid-template-columns: 1.625rem 1fr;
+    gap: 0.75rem;
+    padding: 0.875rem 0;
+  }
+  .contact-next__steps li + li {
+    border-top: 1px solid var(--color-line-subtle);
   }
   .contact-next__steps li::before {
-    content: counter(step);
+    content: counter(step, decimal-leading-zero);
     display: grid;
     place-items: center;
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.625rem;
+    height: 1.625rem;
     border-radius: 999px;
-    background: var(--color-blue-700);
-    color: #fff;
-    font-size: 0.8125rem;
+    border: 1px solid var(--color-blue-200);
+    background: var(--color-blue-50);
+    color: var(--color-blue-700);
+    font-size: 0.75rem;
     font-weight: 700;
   }
   .contact-next__block {
     display: grid;
     gap: 0.25rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
+    margin: 0;
+    padding-top: 1rem;
     border-top: 1px solid var(--color-line);
     font-size: 0.875rem;
     color: var(--color-ink-600);
+  }
+  .contact-next__block + .contact-next__block {
+    margin-top: 1rem;
   }
   .contact-next__block b {
     color: var(--color-ink-900);
@@ -1434,12 +1946,15 @@ details[open] > summary > .disclosure-icon {
   .prose > * + * {
     margin-top: 1.0625rem;
   }
-  /* SKO's documents set body copy justified, edge to edge. */
-  .prose p,
-  .prose li,
-  .justify {
-    text-align: justify;
-    hyphens: auto;
+  /* SKO's documents set body copy justified, edge to edge. A phone column is
+     too narrow for it — word gaps open into rivers — so it starts at 40rem. */
+  @media (width >= 40rem) {
+    .prose p,
+    .prose li,
+    .justify {
+      text-align: justify;
+      hyphens: auto;
+    }
   }
   .prose h2 {
     font-size: var(--text-h2);
@@ -1459,8 +1974,27 @@ details[open] > summary > .disclosure-icon {
   .prose ul {
     list-style: disc;
   }
+  /* Ordered lists count 01, 02, 03 in the same hand as every numbered row on
+     the site (.about-term__index, programme rows). */
   .prose ol {
-    list-style: decimal;
+    list-style: none;
+    counter-reset: item;
+    padding-left: 2.5rem;
+  }
+  .prose ol > li {
+    position: relative;
+    counter-increment: item;
+  }
+  .prose ol > li::before {
+    content: counter(item, decimal-leading-zero);
+    position: absolute;
+    top: 0.3em;
+    left: -2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-blue-700);
   }
   .prose li + li {
     margin-top: 0.375rem;

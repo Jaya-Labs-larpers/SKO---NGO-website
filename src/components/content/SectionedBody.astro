@@ -1,0 +1,152 @@
+---
+/**
+ * A CMS body laid out section by section (About and every programme page).
+ * The text is exactly what staff typed into the body in Sanity;
+ * ~/lib/content/sections only decides where each "## " section breaks and
+ * which layout its shape suits. A Khmer body gets the same layouts; until one
+ * exists the English falls back with lang="en" on every section.
+ */
+import type { Locale } from '~/lib/i18n/config';
+import type { LocaleBlocks, Partner } from '~/lib/content/types';
+import { pick } from '~/lib/i18n/utils';
+import { hasImage } from '~/lib/sanity/image';
+import {
+  TERM_LIMITS,
+  blockText,
+  splitBody,
+  splitLeadIn,
+  splitPoint,
+  type TermLimits,
+} from '~/lib/content/sections';
+import RichText from './RichText.astro';
+import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
+
+interface Props {
+  lang: Locale;
+  body?: LocaleBlocks | null;
+  limits?: TermLimits;
+  /** Partners whose name a statement mentions get their logo set beneath it. */
+  partners?: Partner[];
+  /** Set the opening paragraph of running prose as a lead. */
+  leadProse?: boolean;
+}
+
+const { lang, body, limits = TERM_LIMITS, partners = [], leadProse = false } = Astro.props;
+
+const picked = pick(body, lang);
+const bodyLang = picked.lang;
+const fallbackLang = picked.isFallback ? bodyLang : undefined;
+const { lead, sections } = splitBody(picked.value, limits);
+
+/** RichText picks by locale, so each slice goes back in under the body's own language. */
+const asBlocks = (blocks: typeof lead): LocaleBlocks => ({ [bodyLang]: blocks });
+
+/** "UNOPS / Cities Alliance" is credited when either half is named. */
+function mentioned(text: string): Partner[] {
+  const haystack = text.toLowerCase();
+  return partners.filter((partner) =>
+    partner.name
+      .split('/')
+      .map((part) => part.trim().toLowerCase())
+      .some((part) => part.length >= 4 && haystack.includes(part)),
+  );
+}
+---
+
+{
+  lead.length > 0 && (
+    <section class="section pb-0">
+      <div class="wrap">
+        <RichText blocks={asBlocks(lead)} lang={lang} class="about-lead" />
+      </div>
+    </section>
+  )
+}
+
+{
+  sections.map((section) => {
+    const logos =
+      section.layout === 'statement' ? mentioned(section.blocks.map(blockText).join(' ')) : [];
+    return (
+      <section class:list={['about-section', `about-section--${section.layout}`]} lang={fallbackLang}>
+        <div class="wrap about-section__grid">
+          <h2 class:list={['about-section__label eyebrow', section.layout === 'points' && 'reveal']}>
+            {section.heading}
+          </h2>
+
+          {section.layout === 'statement' && (
+            <div>
+              <RichText blocks={asBlocks(section.blocks)} lang={lang} class="about-statement" />
+              {logos.length > 0 && (
+                <ul class="statement-logos reveal reveal-cascade list-none p-0">
+                  {logos.map((partner, index) => (
+                    <li class="statement-logo [&_img]:object-contain" style={`--i:${index}`}>
+                      {hasImage(partner.logo) ? (
+                        <ResponsiveImage
+                          image={partner.logo}
+                          lang={lang}
+                          alt={partner.name}
+                          aspect="5/3"
+                          sizes="160px"
+                          blurUp={false}
+                        />
+                      ) : (
+                        <span>{partner.name}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+
+          {section.layout === 'terms' && (
+            <ol class="about-terms reveal reveal-cascade list-none p-0">
+              {section.blocks.map((block, index) => {
+                const split = splitLeadIn(blockText(block), limits)!;
+                return (
+                  <li class="about-term" style={`--i:${index}`}>
+                    <span class="about-term__index" aria-hidden="true">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span class="about-term__name">{split.term}</span>
+                    <span class="about-term__text">{split.rest}</span>
+                  </li>
+                );
+              })}
+            </ol>
+          )}
+
+          {section.layout === 'points' && (
+            <ol class="about-terms reveal reveal-cascade reveal-cascade--slow list-none p-0" data-reveal-ms="2400">
+              {section.blocks.map((block, index) => {
+                const split = splitPoint(blockText(block))!;
+                return (
+                  <li class="about-term" style={`--i:${index}`}>
+                    <span class="about-term__index" aria-hidden="true">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span class="about-term__name">{split.term}</span>
+                    <span class="about-term__text">{split.rest}</span>
+                  </li>
+                );
+              })}
+            </ol>
+          )}
+
+          {section.layout === 'facts' && (
+            <RichText blocks={asBlocks(section.blocks)} lang={lang} class="about-facts" />
+          )}
+
+          {section.layout === 'prose' && (
+            <RichText
+              blocks={asBlocks(section.blocks)}
+              lang={lang}
+              class={leadProse ? 'about-prose about-prose--lead' : 'about-prose'}
+            />
+          )}
+        </div>
+      </section>
+    );
+  })
+}

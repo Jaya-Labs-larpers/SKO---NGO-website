@@ -4,6 +4,7 @@ import { t } from "~/lib/i18n/utils";
 import { contactEnabled, turnstileSiteKey } from "~/lib/config";
 import { getSiteSettings } from "~/lib/content";
 import Icon from "~/components/Icon.astro";
+import TopicPicker from "~/components/forms/TopicPicker.astro";
 
 interface Props {
   lang: Locale;
@@ -16,11 +17,11 @@ interface Props {
 const { lang, id, class: className } = Astro.props;
 
 const topics = [
-  { value: "general", label: "topicGeneral" },
-  { value: "partner", label: "topicPartner" },
-  { value: "volunteer", label: "topicVolunteer" },
-  { value: "media", label: "topicMedia" },
-  { value: "safeguarding", label: "topicSafeguarding" },
+  { value: "general", label: "topicGeneral", hint: "topicGeneralHint" },
+  { value: "partner", label: "topicPartner", hint: "topicPartnerHint" },
+  { value: "volunteer", label: "topicVolunteer", hint: "topicVolunteerHint" },
+  { value: "media", label: "topicMedia", hint: "topicMediaHint" },
+  { value: "safeguarding", label: "topicSafeguarding", hint: "topicSafeguardingHint", tone: "danger" },
 ] as const;
 
 const partnershipTypes = [
@@ -55,9 +56,10 @@ const strings = {
 };
 ---
 
-<div class:list={["form-panel", className]}>
-  <div class="form-panel-head">
+<div class:list={["form-panel", "contact-enter", className]} data-enter="pending">
+  <div class="form-panel-head form-enter-row" style="--i: 0">
     <h2 class="form-panel-title">{t(lang, "formPanelTitleGeneral")}</h2>
+    <p class="form-panel-note">{t(lang, "formPanelNoteGeneral")}</p>
   </div>
 
   <form
@@ -68,99 +70,99 @@ const strings = {
     data-enabled={contactEnabled ? "true" : "false"}
     data-strings={JSON.stringify(strings)}
   >
-    <div class="form-panel-body form-grid">
-      <div class="form-field form-field--reason">
-        <label class="form-label" for={`${id}-formType`}>
+    <div class="form-panel-body">
+      <section class="form-section form-section--reason form-enter-row" style="--i: 1">
+        <span class="form-label" id={`${id}-formType-label`}>
           {t(lang, "contactHelpTitle")}
-          <span class="form-label-req" aria-hidden="true">*</span>
-        </label>
-        <div class="form-control">
-          <select class="field" id={`${id}-formType`} name="formType">
-            {topics.map((topic) => <option value={topic.value}>{t(lang, topic.label)}</option>)}
-          </select>
-        </div>
-      </div>
+        </span>
+        <TopicPicker lang={lang} id={`${id}-formType`} name="formType" labelId={`${id}-formType-label`} topics={topics} />
+      </section>
 
-      <div class="form-field">
-        <label class="form-label" for={`${id}-name`}>
-          {t(lang, "formName")}
-          <span class="form-label-req" aria-hidden="true">*</span>
-        </label>
-        <div class="form-control">
-          <input
-            class="field"
-            id={`${id}-name`}
-            name="name"
-            type="text"
-            autocomplete="name"
-            required
-            maxlength="120"
-          />
-        </div>
-      </div>
-
-
-      {/*
-        Email and phone share a row once the panel itself is wide enough. Both
-        answer "how do we reach you", so they belong on one line where there is
-        room, and stack on a phone where there is not.
-      */}
-      <div class="form-pair">
+      <section class="form-section form-enter-row" style="--i: 2">
+        <h3 class="form-section__label">{t(lang, "formSectionYou")}</h3>
         <div class="form-field">
-          <label class="form-label" for={`${id}-email`}>
-            {t(lang, "formEmail")}
-            <span class="form-label-req" aria-hidden="true">*</span>
+          <label class="form-label" for={`${id}-name`}>
+            {t(lang, "formName")}
           </label>
           <div class="form-control">
             <input
               class="field"
-              id={`${id}-email`}
-              name="email"
-              type="email"
-              autocomplete="email"
+              id={`${id}-name`}
+              name="name"
+              type="text"
+              autocomplete="name"
               required
-              maxlength="200"
+              maxlength="120"
             />
           </div>
         </div>
 
-        <div class="form-field">
-          <label class="form-label" for={`${id}-phone`}>
-            {t(lang, "formPhone")}
-          </label>
-          <div class="form-control">
-            <input
-              class="field"
-              id={`${id}-phone`}
-              name="phone"
-              type="tel"
-              inputmode="tel"
-              autocomplete="tel"
-              maxlength="32"
-            />
+        {/*
+          Email and phone share a row once the panel itself is wide enough. Both
+          answer "how do we reach you", so they belong on one line where there is
+          room, and stack on a phone where there is not.
+        */}
+        <div class="form-pair">
+          <div class="form-field">
+            <label class="form-label" for={`${id}-email`}>
+              {t(lang, "formEmail")}
+            </label>
+            <div class="form-control">
+              <input
+                class="field"
+                id={`${id}-email`}
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                maxlength="200"
+              />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for={`${id}-phone`}>
+              {t(lang, "formPhone")}
+            </label>
+            <div class="form-control">
+              <input
+                class="field"
+                id={`${id}-phone`}
+                name="phone"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                maxlength="32"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-
-      <fieldset class="form-choice">
-        <legend class="form-label">{t(lang, "formPreferred")}</legend>
-        <div class="form-choice__options">
-          <label><input type="radio" name="preferredContact" value="email" checked /> {t(lang, "formPreferEmail")}</label>
-          <label><input type="radio" name="preferredContact" value="phone" /> {t(lang, "formPreferPhone")}</label>
-        </div>
-      </fieldset>
+        <fieldset class="form-choice">
+          <legend class="form-label">{t(lang, "formPreferred")}</legend>
+          <div class="segmented">
+            <label class="segmented__item">
+              <input type="radio" name="preferredContact" value="email" checked />
+              <span>{t(lang, "formPreferEmail")}</span>
+            </label>
+            <label class="segmented__item">
+              <input type="radio" name="preferredContact" value="phone" />
+              <span>{t(lang, "formPreferPhone")}</span>
+            </label>
+          </div>
+        </fieldset>
+      </section>
 
       {/*
         Each topic's extra questions. The page shows only the group matching the
         chosen topic (CSS, in global.css), and the script sends only that group,
         so a visitor who switches topics never submits the answers they left.
       */}
-      <div class="form-topic" data-topic-fields="partner">
+      <section class="form-section form-topic form-enter-row" data-topic-fields="partner" style="--i: 3">
+        <h3 class="form-section__label">{t(lang, "formSectionPartner")}</h3>
         <div class="form-field">
           <label class="form-label" for={`${id}-organization`}>
             {t(lang, "formOrganization")}
-            <span class="form-label-req" aria-hidden="true">*</span>
           </label>
           <div class="form-control">
             <input class="field" id={`${id}-organization`} name="organization" type="text" autocomplete="organization" maxlength="160" />
@@ -183,20 +185,27 @@ const strings = {
         <div class="form-field">
           <label class="form-label" for={`${id}-partnershipType`}>{t(lang, "formPartnershipType")}</label>
           <div class="form-control">
-            <select class="field" id={`${id}-partnershipType`} name="partnershipType">
+            <select class="field field--select" id={`${id}-partnershipType`} name="partnershipType">
               <option value=""></option>
               {partnershipTypes.map((key) => <option value={t("en", key)}>{t(lang, key)}</option>)}
             </select>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="form-topic" data-topic-fields="volunteer">
+      <section class="form-section form-topic form-enter-row" data-topic-fields="volunteer" style="--i: 3">
+        <h3 class="form-section__label">{t(lang, "formSectionVolunteer")}</h3>
         <fieldset class="form-choice">
           <legend class="form-label">{t(lang, "formVolunteerType")}</legend>
-          <div class="form-choice__options">
-            <label><input type="radio" name="volunteerType" value="Volunteer" checked /> {t(lang, "volunteerTypeVolunteer")}</label>
-            <label><input type="radio" name="volunteerType" value="Internship" /> {t(lang, "volunteerTypeIntern")}</label>
+          <div class="segmented">
+            <label class="segmented__item">
+              <input type="radio" name="volunteerType" value="Volunteer" checked />
+              <span>{t(lang, "volunteerTypeVolunteer")}</span>
+            </label>
+            <label class="segmented__item">
+              <input type="radio" name="volunteerType" value="Internship" />
+              <span>{t(lang, "volunteerTypeIntern")}</span>
+            </label>
           </div>
         </fieldset>
         <div class="form-pair">
@@ -214,9 +223,10 @@ const strings = {
           </div>
         </div>
         <p class="form-note">{t(lang, "formVolunteerNote")}</p>
-      </div>
+      </section>
 
-      <div class="form-topic" data-topic-fields="media">
+      <section class="form-section form-topic form-enter-row" data-topic-fields="media" style="--i: 3">
+        <h3 class="form-section__label">{t(lang, "formSectionMedia")}</h3>
         <div class="form-pair">
           <div class="form-field">
             <label class="form-label" for={`${id}-outlet`}>{t(lang, "formOutlet")}</label>
@@ -231,24 +241,26 @@ const strings = {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="form-field">
-        <label class="form-label" for={`${id}-message`}>
-          {t(lang, "formMessage")}
-          <span class="form-label-req" aria-hidden="true">*</span>
-        </label>
-        <div class="form-control">
-          <textarea
-            class="field"
-            id={`${id}-message`}
-            name="message"
-            rows="5"
-            placeholder={t(lang, "formMessageHint")}
-            required
-            maxlength="5000"></textarea>
+      <section class="form-section form-enter-row" style="--i: 4">
+        <h3 class="form-section__label">{t(lang, "formSectionMessage")}</h3>
+        <div class="form-field">
+          <label class="form-label" for={`${id}-message`}>
+            {t(lang, "formMessage")}
+          </label>
+          <div class="form-control">
+            <textarea
+              class="field"
+              id={`${id}-message`}
+              name="message"
+              rows="5"
+              placeholder={t(lang, "formMessageHint")}
+              required
+              maxlength="5000"></textarea>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/*
         Honeypot. Off-screen, not display:none, so a naive bot still fills it.
@@ -266,7 +278,7 @@ const strings = {
       </div>
     </div>
 
-    <div class="form-panel-foot">
+    <div class="form-panel-foot form-enter-row" style="--i: 5">
       {
         turnstileSiteKey && (
           <div class="form-field mb-4">
