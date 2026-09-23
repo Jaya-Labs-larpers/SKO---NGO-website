@@ -50,10 +50,12 @@
    Every animation here is a *continuity transition* or *feedback* — it orients
    the visitor or confirms their action. Nothing decorates.
 
-   Deliberately still absent, and it should stay that way: scroll reveals,
-   parallax, and count-up on the impact numbers. A figure that animates on
-   scroll reads as marketing; a figure that is simply there reads as a fact,
-   and that distinction is the whole job of this site.
+   Deliberately still absent, and it should stay that way: parallax, and
+   count-up on the impact numbers. A figure that ticks up reads as marketing;
+   a figure that is simply there reads as a fact, and that distinction is the
+   whole job of this site. Content boxes do sharpen into view (.reveal), but
+   only boxes, and only as a short scroll-linked blur that can never leave
+   them hidden.
 
    Script cost: one pageswap listener (card-morph.ts) that names the clicked
    card's photo, and the home hero's butterfly loop. The butterfly's flight
@@ -184,6 +186,36 @@ main {
 }
 .flock-bird:nth-child(3) {
   view-transition-name: flock-2;
+}
+
+/* --- Box reveal ----------------------------------------------------------
+ * Content boxes (cards, lists, stat and quote panels, the call-to-action
+ * band) sharpen from a soft blur as they come up the screen.
+ *
+ * Scroll-linked rather than triggered: the animation's progress *is* the
+ * scroll position, so a box is fully sharp whenever it is in view, one
+ * already on screen at load is never animated, and nothing can be left stuck
+ * half-revealed by a script that did not run. The range is a fixed 220px of
+ * travel, so a tall list clears as quickly as a small card.
+ *
+ * `translate` rather than `transform`, so a card's hover lift still works.
+ * Browsers without scroll timelines, and anyone preferring reduced motion,
+ * simply see the boxes. */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    translate: 0 16px;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in var(--ease-out-soft) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 220px;
+    }
+  }
 }
 
 /* --- Mobile navigation panel ---------------------------------------------- */

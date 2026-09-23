@@ -217,7 +217,7 @@ The site is one editorial plane, not a stack of marketing bands. Field work and 
 
 The voice is a grotesk. Hanken Grotesk carries English display, navigation and body; Kantumruy Pro carries all Khmer with its own leading and no tracking; IBM Plex Mono is reserved for evidence metadata (years, dates, the permit line, document type/language/size, index numbers, category tags). Every action and link is one institutional indigo. One dark terracotta appears only as editorial emphasis (index numbers, category tags, closing-soon dates, the pull-quote rule) and is never the sole carrier of meaning.
 
-The build explicitly refused the category arrangement of hero → stat band → three identical cards → CTA band, and the cream-serif-terracotta rendition of an NGO site. Motion is continuity plus one signature: the native cross-document view transition holds header and footer still while the page content slides in 6px, and three logo butterflies of one size live on a fixed layer over every page: they stay where they are when the URL changes, fly along the side edges as the page scrolls, and trail the mouse while it moves. Photos blur up from their LQIP. Nothing reveals on scroll, nothing counts up, nothing parallaxes.
+The build explicitly refused the category arrangement of hero → stat band → three identical cards → CTA band, and the cream-serif-terracotta rendition of an NGO site. Motion is continuity plus one signature: the native cross-document view transition holds header and footer still while the page content slides in 6px, and three logo butterflies of one size live on a fixed layer over every page: they stay where they are when the URL changes, fly along the side edges as the page scrolls, and trail the mouse while it moves. Photos blur up from their LQIP, and content boxes sharpen from a soft blur as they scroll into view. Nothing counts up, nothing parallaxes.
 
 **Key Characteristics:**
 - Ruled rows and numbered indexes instead of cards, tiles and bands.
@@ -369,7 +369,7 @@ Empty state: a ruled band (hairline above and below), 2.5rem block padding, 15px
 - **Don't** use cards, bordered tiles, pills, chips, gradients, washes or a second page tone; structure is hairlines on one paper.
 - **Don't** add shadows anywhere except the submenu and the org-chart dialog.
 - **Don't** use terracotta for buttons, links, status, fills or as the only signal of a state.
-- **Don't** add scroll-reveal, parallax, carousels, slideshows or count-up figures; a figure that animates reads as marketing.
+- **Don't** add parallax, carousels, slideshows or count-up figures; a figure that animates reads as marketing. The one scroll effect is the box reveal (`.reveal`): scroll-linked, 220px, boxes only — never headings or running text.
 - **Don't** grow the flock past three butterflies; it is the site's only decorative motion.
 - **Don't** set text below 0.8125rem, use ink-300 for text, or track, uppercase or hyphenate Khmer.
 - **Don't** italicise Khmer or use Plex Mono for Khmer; Khmer metadata re-sets in Kantumruy at 0.875rem.

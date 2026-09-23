@@ -12,8 +12,9 @@ interface Props {
 const { lang, stats, columns = 4 } = Astro.props;
 
 /**
- * No count-up animation. A figure that animates on scroll reads as marketing;
- * a figure that is simply there when the section arrives reads as a fact.
+ * No count-up animation. A figure that ticks up reads as marketing; a figure
+ * that is simply there reads as a fact. The box sharpens into view like every
+ * other box on the site (.reveal), but the numbers in it never change.
  */
 ---
 
@@ -21,7 +22,7 @@ const { lang, stats, columns = 4 } = Astro.props;
   stats.length > 0 && (
     <div
       class:list={[
-        'grid overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white',
+        'reveal grid overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white',
         'grid-cols-1 sm:grid-cols-2',
         columns === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3',
       ]}

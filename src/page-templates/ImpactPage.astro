@@ -47,7 +47,7 @@ const heading = t(lang, 'pageImpact');
         ) : (
           <ul class="grid list-none gap-11 p-0 lg:grid-cols-2">
             {stories.map((story) => (
-              <li class="rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white p-7">
+              <li class="reveal rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white p-7">
                 <StoryQuote lang={lang} story={story} showAvatar />
               </li>
             ))}
