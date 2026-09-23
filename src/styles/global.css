@@ -185,9 +185,6 @@ main {
 .flock-bird:nth-child(3) {
   view-transition-name: flock-2;
 }
-.flock-bird:nth-child(4) {
-  view-transition-name: flock-3;
-}
 
 /* --- Mobile navigation panel ---------------------------------------------- */
 @keyframes panel-enter {

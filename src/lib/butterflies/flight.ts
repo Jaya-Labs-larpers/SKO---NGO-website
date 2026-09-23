@@ -1,15 +1,18 @@
 /**
- * The site-wide flock: one larger logo butterfly and three smaller ones that
- * live in the viewport rather than on a page, so they stay put when the URL
- * changes and ride along when the page scrolls.
+ * The site-wide flock: three logo butterflies of one size that live in the
+ * viewport rather than on a page, so they stay put when the URL changes and
+ * ride along when the page scrolls.
  *
- * Positions are viewport pixels. The big one keeps to the right-hand side;
- * the three small ones keep to the side edges and fly along them as the page
- * scrolls, slipping off one end and back in at the other. A pointer within
- * reach draws any of them into a loose ring around it.
+ * Each flies on its own — its own resting spot, wandering loop, wing beat and
+ * pace — and together they keep the visitor company: while the mouse is
+ * moving they trail it, each holding its own slowly turning place around it,
+ * and once it has been still for a while they drift back out to the edges.
+ * Scrolling carries them along the side edges, slipping off one end and back
+ * in at the other.
  *
- * Framework-free and deterministic for a given input sequence, so it can be
- * unit-tested and its state serialised across page loads.
+ * Positions are viewport pixels. Framework-free and deterministic for a given
+ * input sequence, so it can be unit-tested and its state serialised across
+ * page loads.
  */
 
 export interface Viewport {
@@ -23,12 +26,11 @@ export interface Pointer {
 }
 
 export interface Flyer {
-  big: boolean;
-  /** Which edge a small one keeps to; the big one keeps to the right. */
+  /** Which edge it rests against. */
   side: "left" | "right";
   /** Width in CSS px. */
   size: number;
-  /** Resting spot. `hy` is carried along by scrolling for small ones. */
+  /** Resting spot; `hy` is carried along by scrolling. */
   hx: number;
   hy: number;
   x: number;
@@ -40,10 +42,11 @@ export interface Flyer {
   flapHz: number;
   /** Lean into horizontal movement, radians. */
   tilt: number;
-  /** Slot on the ring around the pointer, radians, and its radius. */
+  /** Its place around the pointer: starting angle, radius, and turn rate. */
   ring: number;
   ringR: number;
-  gathered: boolean;
+  orbit: number;
+  following: boolean;
   /** Two slow oscillators give each one its own wandering loop. */
   w1: number;
   w2: number;
@@ -57,81 +60,71 @@ export interface Flock {
   flyers: Flyer[];
 }
 
-/** Phones and small tablets: tiny, edge-hugging, and not pointer-driven. */
+/** Phones and small tablets: small, edge-hugging, and not pointer-driven. */
 export const COMPACT_BELOW = 768;
 
 const TAU = Math.PI * 2;
 const clamp = (v: number, lo: number, hi: number) =>
   Math.min(hi, Math.max(lo, v));
 
-/** How far the small ones travel, as a share of the scroll distance. */
-const SCROLL_CARRY = 0.45;
-/** Beyond this distance off-screen a small one wraps to the other end. */
-const WRAP_MARGIN = 80;
+/** How far they travel along the edges, as a share of the scroll distance. */
+const SCROLL_CARRY = 0.3;
 
 interface Slot {
-  big: boolean;
   side: "left" | "right";
   /** Resting height as a share of the viewport. */
   y: number;
   flapHz: number;
   ring: number;
+  /** Radius around the pointer, as a multiple of the butterfly's width. */
   ringR: number;
+  orbit: number;
   w1: number;
   w2: number;
   p1: number;
   p2: number;
 }
 
-/* Fixed rather than random: every visitor meets the same flock. */
+/*
+ * Fixed rather than random, so every visitor meets the same flock, but every
+ * number differs between the three so none of them moves in step with another.
+ */
 const SLOTS: readonly Slot[] = [
   {
-    big: true,
     side: "right",
     y: 0.3,
     flapHz: 1.0,
-    ring: 0.4,
-    ringR: 130,
+    ring: 0.3,
+    ringR: 0.95,
+    orbit: 0.35,
     w1: 0.42,
     w2: 0.7,
     p1: 0.3,
     p2: 1.9,
   },
   {
-    big: false,
     side: "left",
-    y: 0.28,
-    flapHz: 2.1,
-    ring: 2.1,
-    ringR: 70,
-    w1: 0.55,
-    w2: 0.9,
+    y: 0.5,
+    flapHz: 1.15,
+    ring: 2.4,
+    ringR: 1.2,
+    orbit: -0.28,
+    w1: 0.53,
+    w2: 0.61,
     p1: 2.2,
     p2: 0.8,
   },
   {
-    big: false,
     side: "right",
-    y: 0.66,
-    flapHz: 2.4,
-    ring: 4.2,
-    ringR: 85,
-    w1: 0.48,
-    w2: 1.0,
+    y: 0.76,
+    flapHz: 0.9,
+    ring: 4.4,
+    ringR: 1.05,
+    orbit: 0.22,
+    w1: 0.37,
+    w2: 0.83,
     p1: 4.1,
     p2: 3.0,
-  },
-  {
-    big: false,
-    side: "left",
-    y: 0.78,
-    flapHz: 2.2,
-    ring: 5.6,
-    ringR: 60,
-    w1: 0.6,
-    w2: 0.8,
-    p1: 5.0,
-    p2: 5.3,
   },
 ];
 
@@ -139,41 +132,31 @@ export function isCompact(viewport: Viewport): boolean {
   return viewport.width < COMPACT_BELOW;
 }
 
-/** Widths in CSS px. The three small ones always share one size. */
-export function sizes(viewport: Viewport): { big: number; small: number } {
-  if (isCompact(viewport)) return { big: 44, small: 22 };
-  return {
-    big: clamp(viewport.width * 0.11, 120, 180),
-    small: clamp(viewport.width * 0.03, 36, 48),
-  };
+/** Width in CSS px, shared by all three. */
+export function flyerSize(viewport: Viewport): number {
+  if (isCompact(viewport)) return 44;
+  return clamp(viewport.width * 0.11, 120, 180);
 }
 
 /**
- * The resting x for a flyer. On phones they hug the very edge — mostly inside
- * the page gutter, the big one peeking in from the right — so they never sit
- * over running text.
+ * The resting x. On phones they peek in from the very edge so they never sit
+ * over running text; on larger screens they rest just inside it.
  */
 function restingX(
-  flyer: Pick<Flyer, "big" | "side" | "size">,
+  side: "left" | "right",
+  size: number,
   viewport: Viewport,
 ): number {
-  const { width } = viewport;
-  if (isCompact(viewport)) {
-    const inset = flyer.big ? flyer.size * 0.35 : flyer.size * 0.55;
-    return flyer.side === "left" ? inset : width - inset;
-  }
-  const inset = (flyer.big ? 32 : 28) + flyer.size / 2;
-  return flyer.side === "left" ? inset : width - inset;
+  const inset = isCompact(viewport) ? size * 0.35 : 32 + size / 2;
+  return side === "left" ? inset : viewport.width - inset;
 }
 
 export function createFlock(viewport: Viewport): Flock {
-  const { big, small } = sizes(viewport);
+  const size = flyerSize(viewport);
   const flyers = SLOTS.map((slot): Flyer => {
-    const size = slot.big ? big : small;
-    const hx = restingX({ big: slot.big, side: slot.side, size }, viewport);
+    const hx = restingX(slot.side, size, viewport);
     const hy = slot.y * viewport.height;
     return {
-      big: slot.big,
       side: slot.side,
       size,
       hx,
@@ -187,7 +170,8 @@ export function createFlock(viewport: Viewport): Flock {
       tilt: 0,
       ring: slot.ring,
       ringR: slot.ringR,
-      gathered: false,
+      orbit: slot.orbit,
+      following: false,
       w1: slot.w1,
       w2: slot.w2,
       p1: slot.p1,
@@ -201,10 +185,10 @@ export function createFlock(viewport: Viewport): Flock {
 export function resizeFlock(flock: Flock, viewport: Viewport): void {
   const sx = viewport.width / (flock.viewport.width || viewport.width);
   const sy = viewport.height / (flock.viewport.height || viewport.height);
-  const { big, small } = sizes(viewport);
+  const size = flyerSize(viewport);
   for (const flyer of flock.flyers) {
-    flyer.size = flyer.big ? big : small;
-    flyer.hx = restingX(flyer, viewport);
+    flyer.size = size;
+    flyer.hx = restingX(flyer.side, size, viewport);
     flyer.hy *= sy;
     flyer.x *= sx;
     flyer.y *= sy;
@@ -213,7 +197,10 @@ export function resizeFlock(flock: Flock, viewport: Viewport): void {
 }
 
 export interface StepInput {
-  /** Pointer in viewport px, or null when there is none to follow. */
+  /**
+   * Where to keep the visitor company, in viewport px, or null to fly free.
+   * The caller passes null once the mouse has been still for a while.
+   */
   pointer: Pointer | null;
   /** Page scroll since the last step, px; positive is down. */
   scrolled: number;
@@ -225,51 +212,49 @@ export function stepFlock(flock: Flock, dt: number, input: StepInput): void {
   const { width, height } = flock.viewport;
   const compact = isCompact(flock.viewport);
   const pointer = compact ? null : input.pointer;
+  const wrap = height * 0.1 + 80;
 
   for (const f of flock.flyers) {
-    if (!f.big && input.scrolled !== 0) {
+    if (input.scrolled !== 0) {
       f.hy += input.scrolled * SCROLL_CARRY;
-      const span = height + WRAP_MARGIN * 2;
+      const span = height + wrap * 2;
       // Off one end, back in at the other; the flyer jumps with its home so
       // the wrap happens out of sight.
-      if (f.hy > height + WRAP_MARGIN) {
+      if (f.hy > height + wrap) {
         f.hy -= span;
         f.y -= span;
-      } else if (f.hy < -WRAP_MARGIN) {
+      } else if (f.hy < -wrap) {
         f.hy += span;
         f.y += span;
       }
     }
 
-    const reach = f.big ? 260 : 360;
-    if (pointer) {
-      const d = Math.hypot(pointer.x - f.x, pointer.y - f.y);
-      if (!f.gathered && d < reach) f.gathered = true;
-      else if (f.gathered && d > reach + 140) f.gathered = false;
-    } else {
-      f.gathered = false;
-    }
+    f.following = pointer !== null;
 
     let tx: number;
     let ty: number;
-    if (pointer && f.gathered) {
-      const a = f.ring + t * 0.6;
-      tx = pointer.x + Math.cos(a) * f.ringR;
-      ty = pointer.y + Math.sin(a) * f.ringR * 0.8;
+    if (pointer) {
+      // Its own place around the pointer, slowly turning, plus its own wobble,
+      // so the three trail the mouse like companions rather than a formation.
+      const a = f.ring + t * f.orbit;
+      const r = f.ringR * f.size;
+      tx = pointer.x + Math.cos(a) * r + Math.sin(t * f.w2 + f.p2) * 24;
+      ty = pointer.y + Math.sin(a) * r * 0.75 + Math.cos(t * f.w1 + f.p1) * 20;
     } else {
-      // Small ones wander along their edge more than away from it.
-      const across = compact ? 3 : f.big ? 22 : 12;
-      const along = compact ? 18 : f.big ? 26 : 40;
+      const across = compact ? 3 : 40;
+      const along = compact ? 18 : 70;
       tx = f.hx + Math.sin(t * f.w1 + f.p1) * across;
       ty = f.hy + Math.cos(t * f.w2 + f.p2) * along;
     }
 
-    const maxSpeed = f.gathered ? 340 : 160;
-    const maxForce = f.gathered ? 1200 : 420;
+    // Following is quicker but still lags, which is what makes it read as a
+    // butterfly catching up rather than a cursor decoration.
+    const maxSpeed = f.following ? 300 : 150;
+    const maxForce = f.following ? 650 : 380;
     const dx = tx - f.x;
     const dy = ty - f.y;
     const dist = Math.hypot(dx, dy) || 1;
-    const speed = Math.min(maxSpeed, dist * 2.4);
+    const speed = Math.min(maxSpeed, dist * 2);
     let ax = (dx / dist) * speed - f.vx;
     let ay = (dy / dist) * speed - f.vy;
     const a = Math.hypot(ax, ay);
@@ -281,18 +266,18 @@ export function stepFlock(flock: Flock, dt: number, input: StepInput): void {
     f.vy += ay * dt;
   }
 
-  // Keep them from stacking on one another around the pointer.
+  // Keep them from overlapping one another.
   const flyers = flock.flyers;
   for (let i = 0; i < flyers.length; i++) {
     for (let j = i + 1; j < flyers.length; j++) {
       const a = flyers[i]!;
       const b = flyers[j]!;
-      const gap = (a.size + b.size) * 0.4;
+      const gap = (a.size + b.size) * 0.45;
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const d = Math.hypot(dx, dy);
       if (d >= gap || d === 0) continue;
-      const push = ((gap - d) / gap) * 240 * dt;
+      const push = ((gap - d) / gap) * 260 * dt;
       a.vx -= (dx / d) * push;
       a.vy -= (dy / d) * push;
       b.vx += (dx / d) * push;
@@ -303,11 +288,11 @@ export function stepFlock(flock: Flock, dt: number, input: StepInput): void {
   for (const f of flyers) {
     f.x += f.vx * dt;
     f.y += f.vy * dt;
-    // Never lost off the sides; top and bottom are how small ones wrap.
+    // Never lost off the sides; top and bottom are how they wrap.
     f.x = clamp(f.x, -f.size * 0.4, width + f.size * 0.4);
     const lean = clamp(f.vx * 0.003, -0.3, 0.3);
     f.tilt += (lean - f.tilt) * Math.min(1, dt * 4);
-    const effort = Math.hypot(f.vx, f.vy) / 340;
+    const effort = Math.hypot(f.vx, f.vy) / 300;
     f.phase += TAU * f.flapHz * (1 + effort) * dt;
   }
 }
@@ -376,7 +361,7 @@ export function restoreFlock(saved: SavedFlock, viewport: Viewport): Flock {
     f.y = s.y;
     f.vx = s.vx;
     f.vy = s.vy;
-    if (!f.big) f.hy = s.hy;
+    f.hy = s.hy;
     f.phase = s.phase;
     f.tilt = s.r;
   });
@@ -384,6 +369,7 @@ export function restoreFlock(saved: SavedFlock, viewport: Viewport): Flock {
   return flock;
 }
 
+/** A saved flock of a different shape (an older build) is ignored. */
 export function parseSavedFlock(raw: string | null): SavedFlock | null {
   if (!raw) return null;
   try {

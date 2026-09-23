@@ -26,13 +26,12 @@ function run(flock, seconds, input = still) {
   for (let i = 0; i < seconds * 60; i++) flight.stepFlock(flock, 1 / 60, input);
 }
 
-test("one larger butterfly and three smaller ones of one size", () => {
+test("three butterflies, all one size", () => {
   const { flyers } = flight.createFlock(desktop);
-  const small = flyers.filter((f) => !f.big);
-  assert.equal(flyers.length, 4);
-  assert.equal(small.length, 3);
-  assert.equal(new Set(small.map((f) => f.size)).size, 1);
-  assert.ok(flyers.find((f) => f.big).size > small[0].size * 2);
+  assert.equal(flyers.length, 3);
+  assert.equal(new Set(flyers.map((f) => f.size)).size, 1);
+  assert.equal(flyers[0].size, flight.flyerSize(desktop));
+  assert.ok(flyers[0].size >= 120);
 });
 
 test("on a phone they are small and keep to the edges", () => {
@@ -44,37 +43,50 @@ test("on a phone they are small and keep to the edges", () => {
   }
 });
 
-test("scrolling carries the small ones along the edge, not the big one", () => {
+test("scrolling carries them along the edges", () => {
   const flock = flight.createFlock(desktop);
   const before = flock.flyers.map((f) => f.hy);
   flight.stepFlock(flock, 1 / 60, { pointer: null, scrolled: 100 });
-  flock.flyers.forEach((f, i) => {
-    if (f.big) assert.equal(f.hy, before[i]);
-    else assert.ok(f.hy > before[i]);
-  });
+  flock.flyers.forEach((f, i) => assert.ok(f.hy > before[i]));
 });
 
-test("a small one flown off the bottom comes back in at the top", () => {
+test("one flown off the bottom comes back in at the top", () => {
   const flock = flight.createFlock(desktop);
-  const flyer = flock.flyers.find((f) => !f.big);
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 60; i++) {
     flight.stepFlock(flock, 1 / 60, { pointer: null, scrolled: 120 });
   }
-  assert.ok(flyer.hy >= -100 && flyer.hy <= desktop.height + 100);
+  for (const f of flock.flyers) {
+    assert.ok(f.hy >= -300 && f.hy <= desktop.height + 300);
+  }
 });
 
-test("a nearby mouse draws them in; on a phone it does not", () => {
+test("they follow a moving mouse from anywhere, each keeping its own place", () => {
   const flock = flight.createFlock(desktop);
-  const flyer = flock.flyers[1];
-  const pointer = { x: flyer.x + 200, y: flyer.y };
-  run(flock, 3, { pointer, scrolled: 0 });
-  assert.ok(flyer.gathered);
-  assert.ok(Math.hypot(flyer.x - pointer.x, flyer.y - pointer.y) < 130);
+  const pointer = { x: 300, y: 700 };
+  run(flock, 6, { pointer, scrolled: 0 });
+  for (const f of flock.flyers) {
+    assert.ok(f.following);
+    const d = Math.hypot(f.x - pointer.x, f.y - pointer.y);
+    assert.ok(d < f.size * 2, `${Math.round(d)}px from the pointer`);
+  }
+  const [a, b] = flock.flyers;
+  assert.ok(Math.hypot(a.x - b.x, a.y - b.y) > a.size * 0.5, "they do not stack");
+});
 
+test("with no mouse to follow they fly back to the edges", () => {
+  const flock = flight.createFlock(desktop);
+  run(flock, 4, { pointer: { x: 700, y: 450 }, scrolled: 0 });
+  run(flock, 10);
+  for (const f of flock.flyers) {
+    assert.ok(!f.following);
+    assert.ok(Math.abs(f.x - f.hx) < 80);
+  }
+});
+
+test("on a phone the mouse is ignored", () => {
   const small = flight.createFlock(phone);
-  const p = { x: small.flyers[1].x + 100, y: small.flyers[1].y };
-  run(small, 1, { pointer: p, scrolled: 0 });
-  assert.ok(small.flyers.every((f) => !f.gathered));
+  run(small, 1, { pointer: { x: 200, y: 400 }, scrolled: 0 });
+  assert.ok(small.flyers.every((f) => !f.following));
 });
 
 test("a saved flock comes back exactly where it was", () => {
@@ -88,8 +100,10 @@ test("a saved flock comes back exactly where it was", () => {
   });
 });
 
-test("a malformed save is ignored rather than trusted", () => {
+test("a malformed or older-shaped save is ignored rather than trusted", () => {
   assert.equal(flight.parseSavedFlock("{nope"), null);
   assert.equal(flight.parseSavedFlock('{"w":1,"h":1,"f":[]}'), null);
+  const four = { w: 1, h: 1, f: Array.from({ length: 4 }, () => ({ x: 0, y: 0 })) };
+  assert.equal(flight.parseSavedFlock(JSON.stringify(four)), null);
   assert.equal(flight.parseSavedFlock(null), null);
 });

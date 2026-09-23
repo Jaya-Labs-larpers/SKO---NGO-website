@@ -1,15 +1,16 @@
 ---
 /**
- * The site-wide flock: one larger logo butterfly and three smaller ones, on a
- * fixed layer over every page. The motion lives in ~/lib/butterflies/flight.
+ * The site-wide flock: three logo butterflies of one size, on a fixed layer
+ * over every page. The motion lives in ~/lib/butterflies/flight.
  *
- * They belong to the window, not the page. Scrolling carries the three small
- * ones along the side edges; changing URL leaves every one of them exactly
- * where it was, because the flock is saved on the way out and redrawn by the
- * inline script below before the next page's first paint, and each butterfly
- * carries its own view-transition name so the page swap slides content under
- * them without touching them. A mouse within reach draws them to it; the hero
- * card ([data-butterfly-shelter]) is a no-pull zone.
+ * They belong to the window, not the page. Each flies on its own; while the
+ * mouse moves they trail it, and after it has been still for IDLE_MS they
+ * drift back to the edges. Scrolling carries them along the side edges.
+ * Changing URL leaves every one of them exactly where it was: the flock is
+ * saved on the way out and redrawn by the inline script below before the next
+ * page's first paint, and each butterfly carries its own view-transition name
+ * so the page swap slides content under them without touching them. The hero card ([data-butterfly-shelter]) is a
+ * no-follow zone, so they never crowd its headline or buttons.
  *
  * On phones they shrink to the page gutters and simply drift there. Under
  * prefers-reduced-motion or data saver they rest in place and never move.
@@ -21,7 +22,6 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
   <ButterflyGlyph class="flock-bird" />
   <ButterflyGlyph class="flock-bird" />
   <ButterflyGlyph class="flock-bird" />
-  <ButterflyGlyph class="flock-bird" />
 </div>
 <script is:inline>
   // Restores the flock where the previous page left it, before first paint.
@@ -30,7 +30,7 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     var layer = document.currentScript.previousElementSibling;
     try {
       var saved = JSON.parse(sessionStorage.getItem('sko-flock'));
-      if (!saved || !saved.f) return;
+      if (!saved || !saved.f || saved.f.length !== layer.children.length) return;
       var root = document.documentElement;
       var sx = root.clientWidth / saved.w;
       var sy = root.clientHeight / saved.h;
@@ -67,6 +67,9 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
   const saveData =
     (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
 
+  /** After this long without the mouse moving, they stop following and fly free. */
+  const IDLE_MS = 4000;
+
   function viewport() {
     const root = document.documentElement;
     return { width: root.clientWidth, height: root.clientHeight };
@@ -88,6 +91,7 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     const flock: Flock = saved ? restoreFlock(saved, viewport()) : createFlock(viewport());
 
     let pointer: Pointer | null = null;
+    let pointerMovedAt = 0;
     let lastScroll = window.scrollY;
     let raf = 0;
     let last = 0;
@@ -113,7 +117,8 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
       last = now;
       const scroll = window.scrollY;
-      stepFlock(flock, dt, { pointer, scrolled: scroll - lastScroll });
+      const company = pointer && now - pointerMovedAt < IDLE_MS ? pointer : null;
+      stepFlock(flock, dt, { pointer: company, scrolled: scroll - lastScroll });
       lastScroll = scroll;
       render();
       if (running()) raf = requestAnimationFrame(frame);
@@ -147,6 +152,7 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
         const target = event.target;
         const sheltered = target instanceof Element && target.closest('[data-butterfly-shelter]') !== null;
         pointer = sheltered ? null : { x: event.clientX, y: event.clientY };
+        pointerMovedAt = event.timeStamp;
       },
       passive,
     );
