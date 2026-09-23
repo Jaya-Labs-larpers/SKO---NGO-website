@@ -389,7 +389,20 @@ export const report = defineType({
       title: 'PDF (English)',
       type: 'file',
       options: { accept: '.pdf' },
-      validation: (r) => r.required(),
+      validation: (r) =>
+        r.custom((value, context) =>
+          value?.asset || (context.document as { link?: string } | undefined)?.link
+            ? true
+            : 'Upload the PDF, or add a link below.',
+        ),
+    }),
+    defineField({
+      name: 'link',
+      title: 'Link instead of a PDF (optional)',
+      type: 'url',
+      description:
+        'Where the report lives until the PDF is uploaded here, such as a shared folder. Ignored once a PDF is uploaded above.',
+      validation: (r) => r.uri({ scheme: ['https'] }),
     }),
     defineField({
       name: 'fileKm',

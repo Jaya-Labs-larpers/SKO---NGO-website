@@ -92,7 +92,7 @@ export const partnersQuery = `*[_type == "partner"] | order(order asc, name asc)
 
 export const reportsQuery = `*[_type == "report"] | order(year desc, _createdAt desc){
   _id, title, year, type, summary,
-  file ${FILE},
+  "file": select(defined(file.asset) => file ${FILE}, defined(link) => { "url": link }),
   fileKm ${FILE}
 }`;
 
@@ -113,4 +113,5 @@ export const orgChartQuery = `*[_type == "orgChart"][0]{
   image ${IMAGE}
 }`;
 
-export const impactStatsQuery = `*[_type == "impactStat"] | order(order asc, _createdAt asc)${IMPACT_STAT}`;
+/** Site-wide figures only: a statistic a program references belongs to that program's page. */
+export const impactStatsQuery = `*[_type == "impactStat" && !(_id in *[_type == "program"].impactStats[]._ref)] | order(order asc, _createdAt asc)${IMPACT_STAT}`;

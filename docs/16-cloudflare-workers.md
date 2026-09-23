@@ -86,6 +86,27 @@ After cutover nobody deploys from a laptop.
   `wrangler deploy --env production`, then `check:edge` against the live host. Pull requests run
   `check` only.
 
+## Publishing from the Studio
+
+The site reads Sanity at build time, so a publish reaches the live site only through a deploy. A
+Sanity webhook runs the Deploy workflow on every publish. A person sets it up once:
+
+- Token: GitHub → Settings → Developer settings → fine-grained token, resource owner
+  `Jaya-Labs-larpers`, only the `SKO---NGO-website` repository, one permission: **Actions: Read and
+  write**. Not Contents: the token lives in Sanity, and Actions cannot touch the code.
+- Webhook: sanity.io/manage → project `xm91vtfk` → API → Webhooks → Create.
+  - URL `https://api.github.com/repos/Jaya-Labs-larpers/SKO---NGO-website/actions/workflows/deploy.yml/dispatches`
+  - Dataset `production`; trigger on create, update and delete; drafts and versions off.
+  - Projection `{"ref": "main"}`; method POST.
+  - Headers `Authorization: Bearer <token>` and `Accept: application/vnd.github+json`.
+- Check: publish any small edit, and a Deploy run appears under Actions within seconds.
+
+Deploys queue one at a time and a newer pending run replaces an older one, so a burst of publishes
+builds once or twice, not once per edit. Until `PUBLIC_CONTENT_SOURCE` is `sanity` those runs
+still build from fixtures, harmlessly.
+
+To seed an empty dataset from the fixtures, see `scripts/sanity-seed.mjs`.
+
 ## Rollback
 
 `npx wrangler rollback --env production`, confirm with `check:edge`, redeploy the current version.
