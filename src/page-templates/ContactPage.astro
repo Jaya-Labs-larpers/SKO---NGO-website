@@ -28,50 +28,51 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
 
   <section class="section pb-0">
     <div class="wrap">
-    <dl class="contact-details max-w-none">
-      {
-        settings.phone && (
-          <div>
-            <dt>{t(lang, 'contactCall')}</dt>
-            <dd>
-              <a href={tel(settings.phone)}>{settings.phone}</a>
-              {hours.value && (
-                <span class="contact-details__meta" lang={hours.isFallback ? hours.lang : undefined}>
-                  {hours.value}
+      <dl class="contact-details contact-enter max-w-none" data-enter="pending">
+        {
+          settings.phone && (
+            <div class="contact-details__item">
+              <dt>{t(lang, 'contactCall')}</dt>
+              <dd>
+                <a href={tel(settings.phone)}>{settings.phone}</a>
+                {hours.value && (
+                  <span class="contact-details__meta" lang={hours.isFallback ? hours.lang : undefined}>
+                    {hours.value}
+                  </span>
+                )}
+              </dd>
+            </div>
+          )
+        }
+        {
+          settings.email && (
+            <div class="contact-details__item">
+              <dt>{t(lang, 'contactEmail')}</dt>
+              <dd>
+                <a href={`mailto:${settings.email}`} class="break-all">{settings.email}</a>
+                <span class="contact-details__meta">{t(lang, 'contactEmailAction')}</span>
+              </dd>
+            </div>
+          )
+        }
+        {
+          address.value && (
+            <div class="contact-details__item">
+              <dt>{t(lang, 'contactVisit')}</dt>
+              <dd>
+                <span class="whitespace-pre-line" lang={address.isFallback ? address.lang : undefined}>
+                  {address.value}
                 </span>
-              )}
-            </dd>
-          </div>
-        )
-      }
-      {
-        settings.email && (
-          <div>
-            <dt>{t(lang, 'contactEmail')}</dt>
-            <dd>
-              <a href={`mailto:${settings.email}`} class="break-all">{settings.email}</a>
-            </dd>
-          </div>
-        )
-      }
-      {
-        address.value && (
-          <div>
-            <dt>{t(lang, 'contactVisit')}</dt>
-            <dd>
-              <span class="whitespace-pre-line" lang={address.isFallback ? address.lang : undefined}>
-                {address.value}
-              </span>
-              {settings.mapUrl && (
-                <a href={settings.mapUrl} rel="noopener noreferrer" target="_blank" class="contact-details__meta">
-                  {t(lang, 'viewOnGoogleMaps')}
-                </a>
-              )}
-            </dd>
-          </div>
-        )
-      }
-    </dl>
+                {settings.mapUrl && (
+                  <a href={settings.mapUrl} rel="noopener noreferrer" target="_blank" class="contact-details__meta">
+                    {t(lang, 'viewOnGoogleMaps')}
+                  </a>
+                )}
+              </dd>
+            </div>
+          )
+        }
+      </dl>
     </div>
   </section>
 
@@ -114,7 +115,10 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
           </div>
         </div>
 
-        <aside class="contact-next lg:sticky lg:top-[calc(var(--header-offset)+1.5rem)]">
+        <aside
+          class="contact-next contact-enter lg:sticky lg:top-[calc(var(--header-offset)+1.5rem)]"
+          data-enter="pending"
+        >
           <h2 class="contact-next__title">{t(lang, 'nextTitle')}</h2>
           <ol class="contact-next__steps">
             {nextSteps.map((step) => <li>{t(lang, step)}</li>)}
@@ -134,11 +138,40 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
   </section>
 </BaseLayout>
 
-{/* Links from elsewhere on the site arrive as /contact/?topic=partner and so on. */}
+{/*
+  The three boxes arrive one after another as each comes into view: a slow
+  rise that sharpens from a blur (.contact-enter, global.css). The form's own
+  rows follow inside that window. A box already on screen at load goes first.
+*/}
 <script>
-  const topic = new URLSearchParams(window.location.search).get('topic');
-  if (topic) {
-    const reason = document.querySelector<HTMLSelectElement>('select[name="formType"]');
-    if (reason && Array.from(reason.options).some((option) => option.value === topic)) reason.value = topic;
+  const ENTER_MS = 2000;
+  const STAGGER_MS = 180;
+  const boxes = Array.from(document.querySelectorAll<HTMLElement>('.contact-enter'));
+
+  const show = (box: HTMLElement, index: number) => {
+    const delay = index * STAGGER_MS;
+    box.style.setProperty('--enter-delay', `${delay}ms`);
+    box.dataset.enter = 'shown';
+    setTimeout(() => {
+      box.dataset.enter = 'done';
+      box.style.removeProperty('--enter-delay');
+    }, delay + ENTER_MS + 900);
+  };
+
+  if (typeof IntersectionObserver !== 'function') {
+    boxes.forEach(show);
+  } else {
+    const arrival = new IntersectionObserver(
+      (entries) => {
+        entries
+          .filter((entry) => entry.isIntersecting)
+          .forEach((entry, index) => {
+            arrival.unobserve(entry.target);
+            show(entry.target as HTMLElement, index);
+          });
+      },
+      { threshold: 0.05 },
+    );
+    boxes.forEach((box) => arrival.observe(box));
   }
 </script>

@@ -284,6 +284,7 @@ export const programs: Program[] = [
         value: 200,
         displayValue: '200',
         label: { en: 'Households counselled', km: 'គ្រួសារទទួលការប្រឹក្សា' },
+        countUp: true,
         order: 1,
       },
       {
@@ -291,6 +292,7 @@ export const programs: Program[] = [
         value: 97,
         displayValue: '97%',
         label: { en: 'Feel more capable of dealing with problems', km: 'មានអារម្មណ៍ថាមានលទ្ធភាពដោះស្រាយបញ្ហាកាន់តែប្រសើរ' },
+        countUp: true,
         order: 2,
       },
       {
@@ -298,6 +300,7 @@ export const programs: Program[] = [
         value: 95,
         displayValue: '95%',
         label: { en: 'Continue to use referral services', km: 'បន្តប្រើសេវាបញ្ជូន' },
+        countUp: true,
         order: 3,
       },
       {
@@ -305,6 +308,7 @@ export const programs: Program[] = [
         value: 89,
         displayValue: '89%',
         label: { en: 'More equitable household decision-making', km: 'ការសម្រេចចិត្តគ្រួសារប្រកបដោយសមភាពកាន់តែច្រើន' },
+        countUp: true,
         order: 4,
       },
       {
@@ -312,6 +316,7 @@ export const programs: Program[] = [
         value: 94,
         displayValue: '94%',
         label: { en: 'Know where to seek help for gender-based violence', km: 'ដឹងកន្លែងស្វែងរកជំនួយអំពីអំពើហិង្សាយេនឌ័រ' },
+        countUp: true,
         order: 5,
       },
     ],
@@ -344,6 +349,7 @@ export const programs: Program[] = [
         displayValue: '410',
         label: { en: 'Children received school materials', km: 'កុមារទទួលបានសម្ភារៈសិក្សា' },
         context: { en: '1,640 packages of school material', km: 'សម្ភារៈសិក្សាចំនួន ១,៦៤០ កញ្ចប់' },
+        countUp: true,
         order: 1,
       },
       {
@@ -355,6 +361,7 @@ export const programs: Program[] = [
           en: 'Through medical check-ups and awareness raising on health issues',
           km: 'តាមរយៈការពិនិត្យសុខភាព និងការលើកកម្ពស់ការយល់ដឹងអំពីបញ្ហាសុខភាព',
         },
+        countUp: true,
         order: 2,
       },
       {
@@ -362,6 +369,7 @@ export const programs: Program[] = [
         value: 33910,
         displayValue: '33,910 kg',
         label: { en: 'Rice distributed to 313 families', km: 'អង្ករចែកចាយដល់គ្រួសារ ៣១៣' },
+        countUp: true,
         order: 3,
       },
       {
@@ -373,6 +381,7 @@ export const programs: Program[] = [
           en: 'Of hygiene and sanitation awareness',
           km: 'នៃការលើកកម្ពស់ការយល់ដឹងអំពីអនាម័យ និងអនាម័យបរិស្ថាន',
         },
+        countUp: true,
         order: 4,
       },
       {
@@ -387,6 +396,7 @@ export const programs: Program[] = [
           en: 'By removing barriers to literacy and fostering a positive relationship with education',
           km: 'ដោយកាត់បន្ថយឧបសគ្គក្នុងការអាន និងជំរុញទំនាក់ទំនងវិជ្ជមានជាមួយការសិក្សា',
         },
+        countUp: true,
         order: 5,
       },
     ],
@@ -430,6 +440,7 @@ export const programs: Program[] = [
         displayValue: '390',
         label: { en: 'Vulnerable children reached', km: 'កុមារងាយរងគ្រោះទទួលបានជំនួយ' },
         context: { en: '204 girls, 186 boys', km: '២០៤ ក្មេងស្រី ១៨៦ ក្មេងប្រុស' },
+        countUp: true,
         order: 1,
       },
       {
@@ -437,6 +448,7 @@ export const programs: Program[] = [
         value: 322,
         displayValue: '322',
         label: { en: 'Families reached', km: 'គ្រួសារទទួលបានជំនួយ' },
+        countUp: true,
         order: 2,
       },
       {
@@ -445,6 +457,7 @@ export const programs: Program[] = [
         displayValue: '237',
         label: { en: 'Direct reaches, 474 indirect reaches', km: 'អ្នកទទួលផលផ្ទាល់ និង ៤៧៤ នាក់ទទួលផលប្រយោល' },
         context: { en: 'Children through Children’s Clubs', km: 'កុមារតាមរយៈក្លឹបកុមារ' },
+        countUp: true,
         order: 3,
       },
       {
@@ -452,6 +465,7 @@ export const programs: Program[] = [
         value: 24700,
         displayValue: '24,700 kg',
         label: { en: 'Rice distributed to 247 families', km: 'អង្ករចែកចាយដល់គ្រួសារ ២៤៧' },
+        countUp: true,
         order: 4,
       },
     ],
@@ -998,14 +1012,18 @@ export const pages: Page[] = [
     slug: 'impact',
     title: { en: 'Impact & results', km: 'លទ្ធផល និងផលប្រយោជន៍' },
     intro: {
-      en: 'SKO’s empowerment approach through the Family Development Approach (FDA) goes beyond providing immediate support.',
-      km: 'វិធីសាស្ត្រពង្រឹងអំណាចរបស់ SKO តាមរយៈវិធីសាស្ត្រអភិវឌ្ឍន៍គ្រួសារ (FDA) លើសពីការផ្តល់ជំនួយភ្លាមៗ។',
+      en: 'What we have done, how we count it, and what the families we work with say.',
+      km: 'អ្វីដែលយើងបានធ្វើ របៀបដែលយើងរាប់ និងអ្វីដែលគ្រួសារដែលយើងធ្វើការជាមួយបាននិយាយ។',
     },
     body: enOnly([
-      'It helps families, youth, and children recognize their own strengths, build confidence, and take an active role in identifying challenges and finding solutions. Through counselling, guidance, and regular engagement, families gradually become more capable of making informed decisions and managing difficulties with greater confidence and resilience.',
+      'Through the Family Development Approach (FDA), SKO’s work goes beyond immediate support. It helps families, youth, and children recognize their own strengths, build confidence, and take an active role in identifying challenges and finding solutions. Through counselling, guidance, and regular engagement, families gradually become more capable of making informed decisions and managing difficulties with greater confidence and resilience.',
+      '## Children and youth',
       'For children and youth, empowerment means giving them opportunities to be heard, express their needs, develop life skills, and participate in decisions that affect their lives. This helps them build confidence, responsibility, and hope for their future rather than depending only on external support.',
-      'At the family and community level, empowerment strengthens relationships, communication, mutual support, and community participation. Families become more connected to available services and resources, while communities become better able to support vulnerable children and families. The lasting impact of SKO’s work is therefore not only the support provided today, but the strength, knowledge, confidence, and resilience that people can carry forward and use to create positive change in their own lives and communities.',
-      'The results for each of SKO’s four projects are on their own programme pages, not repeated here.',
+      '## Families and communities',
+      'At the family and community level, empowerment strengthens relationships, communication, mutual support, and community participation. Families become more connected to available services and resources, while communities become better able to support vulnerable children and families.',
+      'The lasting impact of SKO’s work is therefore not only the support provided today, but the strength, knowledge, confidence, and resilience that people can carry forward and use to create positive change in their own lives and communities.',
+      '## Results by project',
+      'The results for each of SKO’s four projects are on their own programme pages.',
     ]),
   },
   {

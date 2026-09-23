@@ -14,14 +14,17 @@ import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
 interface Props {
   lang: Locale;
   programs: Program[];
+  /** Leaves one programme out while keeping every other row's number. */
+  exclude?: string;
 }
 
-const { lang, programs } = Astro.props;
+const { lang, programs, exclude } = Astro.props;
 ---
 
 <ol class="program-rows reveal list-none p-0">
   {
     programs.map((program, index) => {
+      if (program.slug === exclude) return null;
       const title = pick(program.title, lang);
       const summary = pick(program.summary, lang);
       return (

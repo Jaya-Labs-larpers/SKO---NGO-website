@@ -5,7 +5,7 @@ import { pick, t } from '~/lib/i18n/utils';
 import { resolveSeo } from '~/lib/seo';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
-import AboutBody from '~/components/content/AboutBody.astro';
+import SectionedBody from '~/components/content/SectionedBody.astro';
 import SectionHeading from '~/components/content/SectionHeading.astro';
 import DirectorMessage from '~/components/content/DirectorMessage.astro';
 import OrgChart from '~/components/content/OrgChart.astro';
@@ -61,7 +61,7 @@ const seo = resolveSeo(page?.seo, lang, {
   />
 
   <div class="bg-white pb-[var(--spacing-section)]">
-    <AboutBody lang={lang} body={page?.body} />
+    <SectionedBody lang={lang} body={page?.body} />
   </div>
 
   <section class="section bg-[color:var(--color-surface-sunken)]">

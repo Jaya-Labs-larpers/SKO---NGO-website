@@ -16,8 +16,8 @@ const { lang, stats, columns = 4 } = Astro.props;
   stats.length > 0 && (
     <div
       class:list={[
-        'reveal grid overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white',
-        'grid-cols-1 sm:grid-cols-2',
+        'reveal grid gap-px overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-[color:var(--color-line)]',
+        'grid-cols-2',
         columns === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3',
       ]}
     >
@@ -29,7 +29,7 @@ const { lang, stats, columns = 4 } = Astro.props;
         const display =
           stat.displayValue ?? (typeof stat.value === 'number' ? formatNumber(stat.value, lang) : '');
         return (
-          <div class="border-b border-[color:var(--color-line)] px-6 py-7 last:border-b-0 sm:[&:nth-last-child(-n+2)]:border-b-0 sm:odd:border-r sm:odd:border-[color:var(--color-line)] lg:border-r lg:border-b-0 lg:last:border-r-0">
+          <div class="min-w-0 bg-white px-4 py-5 sm:px-6 sm:py-7">
             <b class="block text-[length:var(--text-stat)] leading-none font-bold tracking-[var(--text-stat--letter-spacing)] text-[color:var(--color-blue-700)] tabular-nums">
               {prefix.value && (
                 <span class="mr-1.5 text-[0.45em] tracking-normal" lang={prefix.isFallback ? prefix.lang : undefined}>
@@ -44,14 +44,14 @@ const { lang, stats, columns = 4 } = Astro.props;
               {suffix.value &&<span class="text-[0.6em]">{suffix.value}</span>}
             </b>
             <span
-              class="mt-3 block text-[15px] font-semibold text-[color:var(--color-ink-900)]"
+              class="mt-2.5 block text-[14px] leading-[1.35] font-semibold text-[color:var(--color-ink-900)] sm:mt-3 sm:text-[15px]"
               lang={label.isFallback ? label.lang : undefined}
             >
               {label.value}
             </span>
             {context.value && (
               <span
-                class="mt-1.5 block text-[13px] leading-[1.5] text-[color:var(--color-ink-400)]"
+                class="mt-1.5 hidden text-[13px] leading-[1.5] text-[color:var(--color-ink-400)] sm:block"
                 lang={context.isFallback ? context.lang : undefined}
               >
                 {context.value}

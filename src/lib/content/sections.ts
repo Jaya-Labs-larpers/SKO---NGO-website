@@ -32,8 +32,21 @@ export interface SplitBody {
 
 /** A statement longer than this reads as a paragraph, not a line to set large. */
 export const STATEMENT_MAX_CHARS = 240;
-const TERM_MAX_CHARS = 40;
-const TERM_MAX_WORDS = 3;
+
+export interface TermLimits {
+  maxChars: number;
+  maxWords: number;
+}
+
+/** A value's name: "Integrity", "Respect for families". */
+export const TERM_LIMITS: TermLimits = { maxChars: 40, maxWords: 3 };
+
+/**
+ * An activity's name runs longer ("Leadership and Management Training for
+ * youth and young people"), so programme bodies allow more room. A section
+ * still only becomes rows when every paragraph opens this way.
+ */
+export const ACTIVITY_LIMITS: TermLimits = { maxChars: 64, maxWords: 10 };
 
 function isTextBlock(block: PortableBlock): block is PortableTextBlock {
   return block._type === 'block';
@@ -55,13 +68,16 @@ function isPlain(block: PortableBlock): boolean {
  * Accepts the Khmer full stop (។) as well as ".". Returns null when the
  * opening sentence is longer than a short term, so ordinary prose never splits.
  */
-export function splitLeadIn(text: string): { term: string; rest: string } | null {
+export function splitLeadIn(
+  text: string,
+  limits: TermLimits = TERM_LIMITS,
+): { term: string; rest: string } | null {
   const match = /^([^.។]+)[.។]\s*([\s\S]+)$/.exec(text.trim());
   if (!match) return null;
   const term = match[1]!.trim();
   const rest = match[2]!.trim();
-  if (!term || !rest || term.length > TERM_MAX_CHARS) return null;
-  if (term.split(/\s+/).length > TERM_MAX_WORDS) return null;
+  if (!term || !rest || term.length > limits.maxChars) return null;
+  if (term.split(/\s+/).length > limits.maxWords) return null;
   return { term, rest };
 }
 
@@ -83,7 +99,7 @@ export function splitPoint(text: string): { term: string; rest: string } | null 
   return { term, rest };
 }
 
-export function layoutFor(blocks: PortableBlock[]): SectionLayout {
+export function layoutFor(blocks: PortableBlock[], limits: TermLimits = TERM_LIMITS): SectionLayout {
   if (blocks.length === 0 || !blocks.every(isTextBlock)) return 'prose';
   const text = blocks as PortableTextBlock[];
   if (
@@ -95,13 +111,16 @@ export function layoutFor(blocks: PortableBlock[]): SectionLayout {
   if (text.every((block) => block.listItem)) return 'facts';
   if (text.some((block) => block.listItem || (block.style && block.style !== 'normal'))) return 'prose';
   if (text.length === 1 && blockText(text[0]!).length <= STATEMENT_MAX_CHARS) return 'statement';
-  if (text.length >= 3 && text.every((block) => isPlain(block) && splitLeadIn(blockText(block)))) {
+  if (text.length >= 3 && text.every((block) => isPlain(block) && splitLeadIn(blockText(block), limits))) {
     return 'terms';
   }
   return 'prose';
 }
 
-export function splitBody(blocks: PortableBlock[] | null | undefined): SplitBody {
+export function splitBody(
+  blocks: PortableBlock[] | null | undefined,
+  limits: TermLimits = TERM_LIMITS,
+): SplitBody {
   const lead: PortableBlock[] = [];
   const sections: Omit<BodySection, 'layout'>[] = [];
 
@@ -119,6 +138,6 @@ export function splitBody(blocks: PortableBlock[] | null | undefined): SplitBody
     lead,
     sections: sections
       .filter((section) => section.heading.trim() || section.blocks.length > 0)
-      .map((section) => ({ ...section, layout: layoutFor(section.blocks) })),
+      .map((section) => ({ ...section, layout: layoutFor(section.blocks, limits) })),
   };
 }

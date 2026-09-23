@@ -62,6 +62,9 @@ const en = {
   orgStructure: 'SKO’s Structure',
   ourTeam: 'Our team',
   relatedProgram: 'Related program',
+  programLabel: 'Program',
+  otherPrograms: 'Other programs',
+  resultsAtAGlance: 'Results at a glance',
   allActivities: 'All activities',
 
   // --- Page titles (section indexes; page bodies come from the CMS) ---------
@@ -112,7 +115,6 @@ const en = {
   formVerifyLabel: 'Security check',
   formPanelTitleGeneral: 'Send us a message',
   formToastSent: 'Sent',
-  formPanelNoteGeneral: 'We reply to every message. Fields marked * are required.',
   formPanelNotePartner: 'Tell us about your organisation. Fields marked * are required.',
   formPanelNoteVolunteer: 'Tell us what you would like to help with. Fields marked * are required.',
   formPhoneHint: 'Include the country code, for example +855.',
@@ -194,6 +196,13 @@ const en = {
   formOutlet: 'Outlet or institution',
   formDeadline: 'Deadline',
   formMessageHint: 'Tell us a little about what you need.',
+  formPanelNoteGeneral: 'A few details and your message. Most replies arrive within two working days.',
+  formSectionYou: 'About you',
+  formSectionMessage: 'Your message',
+  formSectionPartner: 'Partnership details',
+  formSectionVolunteer: 'Volunteering details',
+  formSectionMedia: 'Request details',
+  topicPickerChange: 'Change',
 
   // --- Meta -----------------------------------------------------------------
   fileSizeLabel: 'file size',
@@ -255,6 +264,9 @@ const km: Record<UIKey, string> = {
   orgStructure: 'រចនាសម្ព័ន្ធ SKO',
   ourTeam: 'ក្រុមការងាររបស់យើង',
   relatedProgram: 'កម្មវិធីពាក់ព័ន្ធ',
+  programLabel: 'កម្មវិធី',
+  otherPrograms: 'កម្មវិធីផ្សេងទៀត',
+  resultsAtAGlance: 'លទ្ធផលសង្ខេប',
   allActivities: 'សកម្មភាពទាំងអស់',
 
   pageActivities: 'សកម្មភាព និងព័ត៌មាន',
@@ -302,7 +314,6 @@ const km: Record<UIKey, string> = {
   formVerifyLabel: 'ការត្រួតពិនិត្យសុវត្ថិភាព',
   formPanelTitleGeneral: 'ផ្ញើសារមកយើង',
   formToastSent: 'បានផ្ញើ',
-  formPanelNoteGeneral: 'យើងឆ្លើយតបគ្រប់សារទាំងអស់។ ប្រអប់ដែលមានសញ្ញា * ត្រូវតែបំពេញ។',
   formPanelNotePartner: 'សូមប្រាប់យើងអំពីអង្គការរបស់អ្នក។ ប្រអប់ដែលមានសញ្ញា * ត្រូវតែបំពេញ។',
   formPanelNoteVolunteer:
     'សូមប្រាប់យើងពីអ្វីដែលអ្នកចង់ជួយ។ ប្រអប់ដែលមានសញ្ញា * ត្រូវតែបំពេញ។',
@@ -381,6 +392,13 @@ const km: Record<UIKey, string> = {
   formOutlet: 'ស្ថាប័នព័ត៌មាន ឬស្ថាប័នសិក្សា',
   formDeadline: 'ថ្ងៃផុតកំណត់',
   formMessageHint: 'សូមប្រាប់យើងបន្តិចអំពីអ្វីដែលអ្នកត្រូវការ។',
+  formPanelNoteGeneral: 'ព័ត៌មានខ្លះៗ និងសាររបស់អ្នក។ ការឆ្លើយតបភាគច្រើនមកដល់ក្នុងរយៈពេលពីរថ្ងៃធ្វើការ។',
+  formSectionYou: 'អំពីអ្នក',
+  formSectionMessage: 'សាររបស់អ្នក',
+  formSectionPartner: 'ព័ត៌មានភាពជាដៃគូ',
+  formSectionVolunteer: 'ព័ត៌មានការស្ម័គ្រចិត្ត',
+  formSectionMedia: 'ព័ត៌មានសំណើ',
+  topicPickerChange: 'ផ្លាស់ប្តូរ',
 
   fileSizeLabel: 'ទំហំឯកសារ',
   languageEnglish: 'ភាសាអង់គ្លេស',

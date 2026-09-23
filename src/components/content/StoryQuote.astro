@@ -41,7 +41,12 @@ const quoteClass = inverse
   <div class:list={['rule-accent', inverse && 'bg-[color:var(--color-sky-400)]']}></div>
   {
     hasBody ? (
-      <blockquote class:list={['mt-4.5 text-[length:var(--text-lead)] leading-[1.7]', inverse && 'text-white']}>
+      <blockquote
+        class:list={[
+          'mt-4.5 text-[length:var(--text-body)] leading-[1.65] sm:text-[length:var(--text-lead)] sm:leading-[1.7]',
+          inverse && 'text-white',
+        ]}
+      >
         <RichText blocks={story.body} lang={lang} />
       </blockquote>
     ) : (

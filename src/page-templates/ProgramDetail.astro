@@ -1,13 +1,18 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import type { Program } from '~/lib/content/types';
-import { pick, t } from '~/lib/i18n/utils';
+import { getPartners, getPrograms, getStories } from '~/lib/content';
+import { ACTIVITY_LIMITS } from '~/lib/content/sections';
+import { localizePath, pick, t } from '~/lib/i18n/utils';
 import { resolveSeo } from '~/lib/seo';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
-import ImpactStats from '~/components/content/ImpactStats.astro';
-import RichText from '~/components/content/RichText.astro';
+import ProgramStats from '~/components/content/ProgramStats.astro';
+import SectionedBody from '~/components/content/SectionedBody.astro';
+import SectionHeading from '~/components/content/SectionHeading.astro';
+import ProgramRows from '~/components/content/ProgramRows.astro';
+import StoryQuote from '~/components/content/StoryQuote.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
 
 interface Props {
@@ -17,10 +22,23 @@ interface Props {
 
 const { lang, program } = Astro.props;
 
+const [programs, partners, stories] = await Promise.all([getPrograms(), getPartners(), getStories()]);
+
 const title = pick(program.title, lang);
 const summary = pick(program.summary, lang);
 const heading = title.value ?? '';
 const stats = program.impactStats ?? [];
+const position = programs.findIndex((entry) => entry.slug === program.slug) + 1;
+const others = programs.filter((entry) => entry.slug !== program.slug);
+const pad = (n: number) => String(n).padStart(2, '0');
+
+/*
+  The story's full account usually already sits in the programme body, so the
+  band carries only its quote.
+*/
+const story = stories.find((entry) => entry.program?.slug === program.slug);
+const pullQuote = story ? { ...story, body: null } : null;
+
 const seo = resolveSeo(program.seo, lang, {
   title: heading,
   description: summary.value,
@@ -29,45 +47,103 @@ const seo = resolveSeo(program.seo, lang, {
 ---
 
 <BaseLayout
+  headerOverlay
   lang={lang}
   title={seo.title}
   description={seo.description}
   ogImage={seo.ogImage}
   noindex={seo.noindex}
 >
-  <div class="border-b border-[color:var(--color-line-subtle)] [view-transition-name:card-media]" data-morph-hero>
-    <ResponsiveImage image={program.image} lang={lang} alt="" aspect="21/9" eager sizes="100vw" />
-  </div>
-
-  <section class="section">
-    <div class="wrap">
-      <Breadcrumbs
-        lang={lang}
-        trail={[{ label: t(lang, 'pagePrograms'), path: '/programs' }, { label: heading }]}
-      />
-      <div class="rule-accent mt-4"></div>
-      <h1
-        class="mt-4 text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]"
-        lang={title.isFallback ? title.lang : undefined}
-      >
-        {heading}
-      </h1>
-      {
-        summary.value && (
-          <p
-            class="justify mt-3 text-[length:var(--text-lead)] text-[color:var(--color-ink-400)]"
-            lang={summary.isFallback ? summary.lang : undefined}
-          >
-            {summary.value}
-          </p>
-        )
-      }
-
-      {stats.length > 0 && <div class="mt-7.5"><ImpactStats lang={lang} stats={stats} columns={3} /></div>}
-
-      <div class="mt-8.5"><RichText blocks={program.body} lang={lang} /></div>
+  <section class="hero-overlap program-hero border-b border-[color:var(--color-line-subtle)]">
+    <div class="program-hero__media [view-transition-name:card-media]" data-morph-hero>
+      <ResponsiveImage image={program.image} lang={lang} alt="" aspect="auto" eager sizes="100vw" />
+    </div>
+    <div class="wrap program-hero__inner">
+      <div class="program-hero__text">
+        <Breadcrumbs
+          lang={lang}
+          trail={[{ label: t(lang, 'pagePrograms'), path: '/programs' }, { label: heading }]}
+        />
+        {
+          position > 0 && (
+            <p class="eyebrow mt-6 flex items-center gap-3">
+              <span>{t(lang, 'programLabel')}</span>
+              <span class="font-[family-name:var(--font-mono)] tracking-[0.08em]">
+                {pad(position)} / {pad(programs.length)}
+              </span>
+            </p>
+          )
+        }
+        <h1
+          class:list={[
+            'mt-4 max-w-[20ch] text-balance',
+            lang === 'km'
+              ? 'text-[length:var(--text-h1)] leading-[1.45]'
+              : 'text-[length:var(--text-h1)] leading-[var(--text-h1--line-height)] tracking-[var(--text-h1--letter-spacing)]',
+          ]}
+          lang={title.isFallback ? title.lang : undefined}
+        >
+          {heading}
+        </h1>
+        {
+          summary.value && (
+            <p
+              class="mt-5 max-w-[60ch] text-[length:var(--text-lead)] leading-[1.65] text-[color:var(--color-ink-600)] text-pretty"
+              lang={summary.isFallback ? summary.lang : undefined}
+            >
+              {summary.value}
+            </p>
+          )
+        }
+      </div>
     </div>
   </section>
+
+  <div class="bg-white pb-[var(--spacing-section)]">
+    {
+      stats.length > 0 && (
+        <section class="section pb-0">
+          <div class="wrap">
+            <h2 class="eyebrow">{t(lang, 'resultsAtAGlance')}</h2>
+            <div class="mt-5">
+              <ProgramStats lang={lang} stats={stats} />
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <SectionedBody lang={lang} body={program.body} limits={ACTIVITY_LIMITS} partners={partners} leadProse />
+  </div>
+
+  {
+    pullQuote && (
+      <section class="story-band on-inverse">
+        <div class="wrap">
+          <StoryQuote lang={lang} story={pullQuote} inverse />
+        </div>
+      </section>
+    )
+  }
+
+  {
+    others.length > 0 && (
+      <section class="section">
+        <div class="wrap">
+          <div class="flex flex-wrap items-end justify-between gap-5">
+            <SectionHeading title={t(lang, 'otherPrograms')} />
+            <a href={localizePath('/programs', lang)} class="link-arrow">
+              {t(lang, 'viewAll')}
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div class="mt-8.5">
+            <ProgramRows lang={lang} programs={programs} exclude={program.slug} />
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <CtaBand lang={lang} title={t(lang, 'ctaProgramTitle')} />
 </BaseLayout>

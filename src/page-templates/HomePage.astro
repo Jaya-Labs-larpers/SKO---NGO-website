@@ -54,15 +54,16 @@ const story = stories[0];
     only, behind the text block, and exist on no other page.
   */}
   <section
+    data-home-hero
     class="hero-overlap relative border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] pt-[var(--header-h)]"
   >
     <ButterflyField />
-    <div class="wrap relative pt-8 pb-14 sm:pt-12 sm:pb-20 lg:pt-14 lg:pb-24">
+    <div class="wrap relative pt-5 pb-10 sm:pt-12 sm:pb-20 lg:pt-14 lg:pb-24">
       <div data-butterfly-shelter>
         <p class="eyebrow">Phnom Penh, Cambodia · Since 2007</p>
         <h1
           class:list={[
-            'mt-5 max-w-[15ch] text-balance',
+            'mt-4 max-w-[15ch] text-balance sm:mt-5',
             lang === 'km'
               ? 'text-[length:min(var(--text-hero-km),8svh)] leading-[1.35]'
               : 'text-[length:min(var(--text-hero),12svh)] leading-[var(--text-hero--line-height)] tracking-[var(--text-hero--letter-spacing)]',
@@ -109,7 +110,7 @@ const story = stories[0];
     right. Static — the words are the point.
   */}
   <section class="section">
-    <div class="wrap grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] lg:gap-12">
+    <div class="wrap grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] lg:gap-12">
       <h2 class="eyebrow pt-2">{t(lang, 'navAbout')}</h2>
       <div>
         <p
@@ -122,7 +123,7 @@ const story = stories[0];
         >
           {t(lang, 'homeHeroIntro')}
         </p>
-        <a href={localizePath('/about', lang)} class="link-arrow mt-7">
+        <a href={localizePath('/about', lang)} class="link-arrow mt-5 sm:mt-7">
           {t(lang, 'learnMore')}
           <span class="arrow" aria-hidden="true">→</span>
         </a>
