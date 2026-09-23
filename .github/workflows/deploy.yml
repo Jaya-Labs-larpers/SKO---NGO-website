@@ -13,6 +13,8 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # Also how a Studio publish rebuilds the site: a Sanity webhook calls the
+  # workflow dispatch API (docs/16-cloudflare-workers.md).
   workflow_dispatch:
 
 permissions:
