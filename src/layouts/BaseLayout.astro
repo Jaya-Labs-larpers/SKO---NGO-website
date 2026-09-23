@@ -115,5 +115,11 @@ const pathname = Astro.url.pathname;
     </main>
 
     <Footer lang={lang} settings={settings} />
+
+    <script>
+      import { revealOnEntry } from "~/lib/reveal";
+
+      revealOnEntry();
+    </script>
   </body>
 </html>

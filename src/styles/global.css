@@ -53,9 +53,9 @@
    Deliberately still absent, and it should stay that way: parallax, and
    count-up on the impact numbers. A figure that ticks up reads as marketing;
    a figure that is simply there reads as a fact, and that distinction is the
-   whole job of this site. Content boxes do sharpen into view (.reveal), but
-   only boxes, and only as a short scroll-linked blur that can never leave
-   them hidden.
+   whole job of this site. Content boxes do fade up out of a blur as they
+   first come into view (.reveal), but only boxes, and never one that was
+   already on screen.
 
    Script cost: one pageswap listener (card-morph.ts) that names the clicked
    card's photo, and the home hero's butterfly loop. The butterfly's flight
@@ -190,32 +190,24 @@ main {
 
 /* --- Box reveal ----------------------------------------------------------
  * Content boxes (cards, lists, stat and quote panels, the call-to-action
- * band) sharpen from a soft blur as they come up the screen.
- *
- * Scroll-linked rather than triggered: the animation's progress *is* the
- * scroll position, so a box is fully sharp whenever it is in view, one
- * already on screen at load is never animated, and nothing can be left stuck
- * half-revealed by a script that did not run. The range is a fixed 220px of
- * travel, so a tall list clears as quickly as a small card.
- *
- * `translate` rather than `transform`, so a card's hover lift still works.
- * Browsers without scroll timelines, and anyone preferring reduced motion,
- * simply see the boxes. */
-@keyframes reveal-in {
-  from {
-    opacity: 0;
-    filter: blur(8px);
-    translate: 0 16px;
-  }
+ * band) fade up out of a soft blur the first time they come into view. The
+ * script (~/lib/reveal) only ever sets aside boxes that start below the fold,
+ * so nothing already visible is hidden, and it does nothing at all under
+ * reduced motion. `translate` rather than `transform`, so a card's hover
+ * lift is untouched; the transition is removed again once it has played. */
+:root {
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
 }
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: reveal-in var(--ease-out-soft) both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 220px;
-    }
-  }
+.reveal[data-reveal="pending"] {
+  opacity: 0;
+  filter: blur(10px);
+  translate: 0 24px;
+}
+.reveal[data-reveal="shown"] {
+  transition:
+    opacity 900ms var(--ease-reveal) var(--reveal-delay, 0ms),
+    filter 900ms var(--ease-reveal) var(--reveal-delay, 0ms),
+    translate 900ms var(--ease-reveal) var(--reveal-delay, 0ms);
 }
 
 /* --- Mobile navigation panel ---------------------------------------------- */
@@ -905,10 +897,11 @@ details[open] > summary > .disclosure-icon {
  * Hidden only where scripting runs, because only script can say the photo has
  * loaded — a no-JS visitor gets the photo directly, never a stuck blur.
  *
+ * The photo sharpens from its own blur as it fades in, over 800ms, so the
+ * handover from placeholder to photo reads as one image coming into focus.
  * Layered so utilities passed to ResponsiveImage still win, and the image's
- * transition lists every property a caller animates (the card zoom, a
- * grayscale hover) so the fade never cancels them. A cached photo skips only
- * the fade, via --blur-fade.
+ * transition keeps the card zoom's transform, so the fade never cancels it.
+ * A cached photo skips only the fade, via --blur-fade.
  */
 @layer components {
   .blur-up {
@@ -929,18 +922,18 @@ details[open] > summary > .disclosure-icon {
   }
   .blur-up[data-loaded] {
     background: transparent;
-    transition: background-color 0s 420ms;
+    transition: background-color 0s 800ms;
   }
   .blur-up[data-loaded]::before {
     opacity: 0;
-    transition: opacity 0s 420ms;
+    transition: opacity 0s 800ms;
   }
   .blur-up > img {
     position: relative;
     transition:
-      opacity var(--blur-fade, 420ms) var(--ease-out-soft),
-      transform var(--duration-slow) var(--ease-out-soft),
-      filter var(--duration-fast) var(--ease-out-soft);
+      opacity var(--blur-fade, 800ms) var(--ease-reveal),
+      filter var(--blur-fade, 800ms) var(--ease-reveal),
+      transform var(--duration-slow) var(--ease-out-soft);
   }
   .blur-up[data-instant] {
     --blur-fade: 0s;
@@ -948,9 +941,11 @@ details[open] > summary > .disclosure-icon {
   @media (scripting: enabled) {
     .blur-up > img {
       opacity: 0;
+      filter: blur(12px);
     }
     .blur-up[data-loaded] > img {
       opacity: 1;
+      filter: none;
     }
   }
 }
