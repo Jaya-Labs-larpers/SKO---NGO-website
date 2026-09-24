@@ -121,13 +121,14 @@ production Turnstile widget listing `www.sko-samatapheapkhnom.org`, the five sec
 `"true"` in `wrangler.jsonc` for production. Then submit both forms on the live site and confirm
 each lands in the right inbox and not in spam.
 
-## Still to build before the real launch
+## Automation and remaining ownership
 
-- Sanity publish → rebuild. On Workers this is a GitHub Actions `repository_dispatch` triggered by a
-  Sanity webhook, not a Pages deploy hook.
-- Nightly rebuild at 02:00 Asia/Phnom_Penh so expired job posts drop off (Actions cron).
-- Uptime check on `/`, `/km/` and `/donate/`, alerting a named person.
-- Move the zone and Worker to an SKO-owned Cloudflare account if they are not there already.
+- The Sanity publish webhook is configured to dispatch the Deploy workflow; its GitHub token scope
+  still needs review.
+- A nightly rebuild is scheduled at 02:00 Asia/Phnom_Penh so expired job posts drop off.
+- The Uptime workflow checks the live site every 15 minutes. A manual run passed 28/28 checks on
+  2026-09-24.
+- Move the zone and Worker to an SKO-owned Cloudflare account.
 
 ## Launch record
 
