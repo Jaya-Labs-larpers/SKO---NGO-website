@@ -127,8 +127,8 @@ export const siteSettings: SiteSettings = {
     km: 'គ្រួសារដែលមានកម្លាំងផ្លាស់ប្តូរជីវិតរបស់ខ្លួនឯង។',
   },
   registration: {
-    en: 'Registered with the Ministry of Interior · Permit No. 457 (សជណ) · 20 April 2007',
-    km: 'ចុះបញ្ជីជាមួយក្រសួងមហាផ្ទៃ · លិខិតអនុញ្ញាតលេខ ៤៥៧ (សជណ) · ថ្ងៃទី ២០ ខែមេសា ឆ្នាំ ២០០៧',
+    en: 'Registered with the Ministry of Interior | Permit No. 457 (សជណ) | 20 April 2007',
+    km: 'ចុះបញ្ជីជាមួយក្រសួងមហាផ្ទៃ | លិខិតអនុញ្ញាតលេខ ៤៥៧ (សជណ) | ថ្ងៃទី ២០ ខែមេសា ឆ្នាំ ២០០៧',
   },
   address: {
     en: 'Office #8AE1, Street 138,\nSangkat Veal Vong, Khan 7 Makara,\nPhnom Penh, Cambodia',
@@ -573,7 +573,7 @@ export const activities: Activity[] = [
 export const stories: Story[] = [
   {
     _id: 'story-1',
-    quote: { en: sokVannyStory[0] },
+    quote: { en: sokVannyStory[2] },
     body: enOnly(sokVannyStory),
     personName: 'Sok Vanny',
     personRole: {

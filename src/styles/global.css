@@ -48,6 +48,13 @@
   main:not(:has(> [data-home-hero])) {
     background: var(--color-surface-subtle);
   }
+
+  /* A page with no hero band (404, an activity) still fills the first screen
+     with its own tint before the footer can show. */
+  main {
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100svh - var(--header-h));
+  }
 }
 
 /* ============================================================================
@@ -62,9 +69,10 @@
    them, and neither ever hides something already on screen.
 
    Script cost: one pageswap listener (card-morph.ts) that names the clicked
-   card's photo, and the home hero's butterfly loop. The butterfly's flight
-   between pages and every perch are CSS. Page transitions are the native cross-document API, so
-   unsupported browsers navigate exactly as before.
+   card's photo, the inline pagereveal listener in BaseLayout that marks a
+   page arriving by a view transition, and the hero butterfly loop. Page
+   transitions are the native cross-document API, so unsupported browsers
+   navigate exactly as before.
    ========================================================================= */
 
 /* Lets the accordion transition between 0 and `auto` height. */
@@ -84,6 +92,7 @@
  */
 header.site-header {
   view-transition-name: site-header;
+  height: var(--header-h);
   background: var(--color-canvas);
   border-bottom: 1px solid var(--color-line-subtle);
   transition:
@@ -163,9 +172,14 @@ header.site-header[data-overlay][data-at-top] {
  * Content inside the hero still has to clear the header, which is why the
  * section pays the height back as padding where the art is a background
  * layer rather than a block in the flow.
+ *
+ * The band alone fills the first screen on every device. svh is the window
+ * with a phone's browser bars showing, so nothing else appears above the fold.
  */
 .hero-overlap {
   margin-top: calc(-1 * var(--header-h));
+  min-height: 100vh;
+  min-height: 100svh;
 }
 
 footer.site-footer {
@@ -183,7 +197,6 @@ main {
 @keyframes page-enter {
   from {
     opacity: 0;
-    transform: translateY(8px);
   }
 }
 @keyframes page-exit {
@@ -192,7 +205,12 @@ main {
   }
 }
 
-/* Asymmetric: the outgoing page leaves quickly, the incoming one eases in. */
+/*
+ * Asymmetric: the outgoing page leaves quickly, the incoming one eases in.
+ * Only a crossfade: nothing on either page can be clicked while a transition
+ * runs, so it stays short, and the incoming page's slow rise plays on the
+ * live page instead (Page arrival, below).
+ */
 ::view-transition-old(page-content) {
   animation: page-exit 110ms ease-out both;
 }
@@ -214,20 +232,6 @@ main {
   object-fit: cover;
 }
 
-/*
- * Each butterfly has its own name, so leaving the home page fades it out on
- * its own instead of sliding it with the page content.
- */
-.flock-bird:nth-child(1) {
-  view-transition-name: flock-0;
-}
-.flock-bird:nth-child(2) {
-  view-transition-name: flock-1;
-}
-.flock-bird:nth-child(3) {
-  view-transition-name: flock-2;
-}
-
 /* --- Box reveal ----------------------------------------------------------
  * Content boxes (cards, lists, stat and quote panels, the call-to-action
  * band) rise into place from below as they come into view, and again each time
@@ -238,15 +242,18 @@ main {
 :root {
   --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-pop: cubic-bezier(0.34, 1.3, 0.64, 1);
+  --reveal-rise: 48px;
+  --reveal-fade: 700ms;
+  --reveal-move: 900ms;
 }
 .reveal[data-reveal="pending"] {
   opacity: 0;
-  translate: 0 48px;
+  translate: 0 var(--reveal-rise);
 }
 .reveal[data-reveal="shown"] {
   transition:
-    opacity 700ms var(--ease-reveal) var(--reveal-delay, 0ms),
-    translate 900ms var(--ease-pop) var(--reveal-delay, 0ms);
+    opacity var(--reveal-fade) var(--ease-reveal) var(--reveal-delay, 0ms),
+    translate var(--reveal-move) var(--ease-pop) var(--reveal-delay, 0ms);
 }
 
 /* A revealed grid whose cells then arrive one after another (the partner
@@ -277,6 +284,46 @@ main {
 }
 .reveal-cascade--slow[data-reveal="shown"] > li > :last-child {
   transition-delay: calc(var(--reveal-delay, 0ms) + 320ms + min(var(--i, 0), 10) * 160ms);
+}
+
+/* --- Page arrival -----------------------------------------------------------
+ * A page reached by a view transition lazy-loads in the way a box does on
+ * scroll: each section of <main> rises into place with the box reveal's
+ * motion, 90ms after the one before, and the hero's butterflies follow on
+ * beats of their own — as they also do on the first page of a visit, where
+ * ButterflyField marks the flock itself. html[data-arriving] comes from the
+ * inline script in BaseLayout. `backwards`, so nothing is held once it ends:
+ * a box set aside by the reveal keeps its own state underneath. */
+@keyframes arrive-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes arrive-rise {
+  from {
+    translate: 0 var(--reveal-rise);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-arriving] main > *,
+  html[data-arriving] .flock-bird,
+  .butterfly-flock[data-arriving] > .flock-bird {
+    animation:
+      arrive-fade var(--reveal-fade) var(--ease-reveal) var(--arrive-delay, 0ms) backwards,
+      arrive-rise var(--reveal-move) var(--ease-pop) var(--arrive-delay, 0ms) backwards;
+  }
+}
+main > :nth-child(2),
+.flock-bird:nth-child(1) {
+  --arrive-delay: 90ms;
+}
+main > :nth-child(3),
+.flock-bird:nth-child(2) {
+  --arrive-delay: 180ms;
+}
+main > :nth-child(n + 4),
+.flock-bird:nth-child(3) {
+  --arrive-delay: 270ms;
 }
 
 /* --- Mobile navigation panel ---------------------------------------------- */
@@ -429,7 +476,8 @@ details[open] > summary > .disclosure-icon {
     width: 100%;
     max-width: var(--container-page);
     margin-inline: auto;
-    padding-inline: var(--spacing-gutter);
+    padding-left: var(--gutter-left);
+    padding-right: var(--gutter-right);
   }
 
   .section {
@@ -575,7 +623,7 @@ details[open] > summary > .disclosure-icon {
     color: var(--color-blue-700);
   }
   .program-row__title {
-    font-size: clamp(1.25rem, 1rem + 1.1vw, 2rem);
+    font-size: clamp(1.125rem, 0.85rem + 1.4vw, 2rem);
     line-height: 1.2;
     letter-spacing: -0.02em;
     transition: color var(--duration-fast) var(--ease-out-soft);
@@ -749,7 +797,7 @@ details[open] > summary > .disclosure-icon {
     color: var(--color-blue-700);
   }
   .about-term__name {
-    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    font-size: clamp(1.125rem, 0.95rem + 1vw, 1.625rem);
     font-weight: 600;
     line-height: 1.25;
     letter-spacing: -0.015em;
@@ -786,7 +834,7 @@ details[open] > summary > .disclosure-icon {
     margin: 0;
     padding-block: 1.125rem;
     border-bottom: 1px solid var(--color-line);
-    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+    font-size: clamp(1rem, 0.85rem + 0.9vw, 1.5rem);
     line-height: 1.4;
     color: var(--color-ink-900);
     text-align: start;
@@ -835,11 +883,14 @@ details[open] > summary > .disclosure-icon {
   .program-hero {
     position: relative;
     isolation: isolate;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     background: var(--color-surface-subtle);
   }
   .program-hero__media {
     position: relative;
+    flex: none;
     height: calc(var(--header-h) + 56vw);
     max-height: 32rem;
   }
@@ -858,6 +909,7 @@ details[open] > summary > .disclosure-icon {
       linear-gradient(0deg, var(--color-surface-subtle) 0, rgb(245 247 253 / 0) 30%);
   }
   .program-hero__inner {
+    flex: 1;
     padding-block: 1rem 3rem;
   }
   @media (min-width: 64rem) {
@@ -966,7 +1018,7 @@ details[open] > summary > .disclosure-icon {
   }
   .footer-closing__title {
     font-family: var(--font-display);
-    font-size: clamp(2.25rem, 1.3rem + 4vw, 4.75rem);
+    font-size: clamp(1.625rem, 0.6rem + 4.9vw, 4.75rem);
     font-weight: 600;
     line-height: 1.05;
     letter-spacing: -0.03em;
@@ -974,7 +1026,7 @@ details[open] > summary > .disclosure-icon {
   }
   .footer-closing__title:lang(km) {
     font-family: var(--font-khmer);
-    font-size: clamp(1.875rem, 1.2rem + 2.8vw, 3.5rem);
+    font-size: clamp(1.5rem, 0.9rem + 3.3vw, 3.5rem);
     line-height: 1.45;
     letter-spacing: normal;
   }
@@ -984,7 +1036,7 @@ details[open] > summary > .disclosure-icon {
     gap: 0.5rem 2.5rem;
   }
   .footer-closing__link {
-    font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.625rem);
+    font-size: clamp(1rem, 0.8rem + 1.05vw, 1.625rem);
     font-weight: 500;
     color: var(--color-sky-200);
     text-decoration: none;
@@ -1375,7 +1427,7 @@ details[open] > summary > .disclosure-icon {
   .form-toast {
     position: fixed;
     z-index: 60;
-    bottom: 1.5rem;
+    bottom: calc(1.5rem + var(--safe-bottom));
     left: 50%;
     display: flex;
     align-items: center;
@@ -1406,7 +1458,7 @@ details[open] > summary > .disclosure-icon {
   @media (width >= 40rem) {
     .form-toast {
       left: auto;
-      right: 1.5rem;
+      right: calc(1.5rem + var(--safe-right));
       transform: translate(0, 0.5rem);
     }
     .form-toast.is-shown {
@@ -2113,9 +2165,9 @@ details[open] > summary > .disclosure-icon {
 
 
 /* --- The logo butterfly ---------------------------------------------------
-   One drawing (ButterflyGlyph) in two places: flying over the home hero and
-   perched on every page hero. The wings group hinges on the body line, which
-   sits at x=45 of the drawing's 100-unit width. */
+   One drawing (ButterflyGlyph) in two places: the flock flying inside every
+   hero band and the one at the pointer. The wings group hinges on the body
+   line, which sits at x=45 of the drawing's 100-unit width. */
 .butterfly-glyph {
   display: block;
   width: 100%;
@@ -2127,8 +2179,8 @@ details[open] > summary > .disclosure-icon {
   transform-origin: 45px 20.5px;
 }
 
-/* The flock's layer: fills the home hero and scrolls away with it, above the
-   hero picture but below the hero card, and never in the way of a click. */
+/* The flock's layer: fills the hero band and scrolls away with it, above the
+   band's background but below its text, and never in the way of a click. */
 .butterfly-flock {
   position: absolute;
   inset: 0;
@@ -2142,14 +2194,6 @@ details[open] > summary > .disclosure-icon {
 }
 .butterfly-flock[data-pending] {
   visibility: hidden;
-}
-.butterfly-flock[data-arriving] {
-  animation: flock-arrive 700ms var(--ease-out-soft) both;
-}
-@keyframes flock-arrive {
-  from {
-    opacity: 0;
-  }
 }
 .flock-bird {
   position: absolute;

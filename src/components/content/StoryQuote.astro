@@ -13,12 +13,17 @@ interface Props {
   showAvatar?: boolean;
   /** Set large, in white, for the navy story band on the home page. */
   inverse?: boolean;
+  /** Set a long account at body size rather than lead size. */
+  compact?: boolean;
+  /** Show the pull quote alone even when the full account exists. */
+  quoteOnly?: boolean;
 }
 
-const { lang, story, showAvatar = false, inverse = false } = Astro.props;
+const { lang, story, showAvatar = false, inverse = false, compact = false, quoteOnly = false } = Astro.props;
 
 const quote = pick(story.quote, lang);
-const hasBody = Object.values(story.body ?? {}).some((value) => Array.isArray(value) && value.length > 0);
+const hasBody =
+  !quoteOnly && Object.values(story.body ?? {}).some((value) => Array.isArray(value) && value.length > 0);
 const role = pick(story.personRole, lang);
 
 /**
@@ -31,10 +36,10 @@ const usePhoto = !story.useSilhouette && hasImage(story.photo);
 const quoteClass = inverse
   ? lang === 'km'
     ? 'font-[family-name:var(--font-khmer)] text-[length:var(--text-quote-km)] leading-[1.75] font-semibold'
-    : 'font-[family-name:var(--font-display)] text-[length:var(--text-quote)] leading-[1.25] tracking-[-0.02em] font-semibold'
+    : 'font-[family-name:var(--font-display)] text-[length:var(--text-quote)] leading-[1.3] tracking-[-0.02em] font-semibold'
   : lang === 'km'
-    ? 'font-[family-name:var(--font-khmer)] text-[22px] leading-[1.8] font-semibold'
-    : 'font-[family-name:var(--font-display)] text-[27px] leading-[1.4] font-semibold';
+    ? 'font-[family-name:var(--font-khmer)] text-[17px] sm:text-[22px] leading-[1.8] font-semibold'
+    : 'font-[family-name:var(--font-display)] text-[19px] sm:text-[27px] leading-[1.4] font-semibold';
 ---
 
 <figure class="m-0">
@@ -43,7 +48,10 @@ const quoteClass = inverse
     hasBody ? (
       <blockquote
         class:list={[
-          'mt-4.5 text-[length:var(--text-body)] leading-[1.65] sm:text-[length:var(--text-lead)] sm:leading-[1.7]',
+          'mt-4.5',
+          compact
+            ? 'max-w-[68ch] text-[15px] leading-[1.7] sm:text-[length:var(--text-body)]'
+            : 'text-[length:var(--text-body)] leading-[1.65] sm:text-[length:var(--text-lead)] sm:leading-[1.7]',
           inverse && 'text-white',
         ]}
       >
@@ -53,7 +61,7 @@ const quoteClass = inverse
       <blockquote
         class:list={[
           'mt-4.5',
-          inverse ? 'mt-7 max-w-[26ch] text-white' : 'text-[color:var(--color-ink-900)]',
+          inverse ? 'mt-7 max-w-[40ch] text-white text-pretty' : 'text-[color:var(--color-ink-900)]',
           quoteClass,
         ]}
         lang={quote.isFallback ? quote.lang : undefined}

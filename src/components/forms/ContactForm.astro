@@ -338,7 +338,14 @@ const strings = {
    * The script origin is allow-listed in script-src by scripts/csp.mjs.
    */
   function loadTurnstile(): void {
-    if (!document.querySelector(".cf-turnstile")) return;
+    const widgets = document.querySelectorAll<HTMLElement>(".cf-turnstile");
+    if (widgets.length === 0) return;
+    // The flexible widget is never narrower than 300px; in a tighter column
+    // (a 320px phone) it would push the whole page wider than the screen.
+    for (const widget of widgets) {
+      const column = widget.parentElement?.clientWidth ?? Infinity;
+      if (column < 300) widget.dataset.size = "compact";
+    }
     if (document.querySelector(`script[src="${TURNSTILE_SRC}"]`)) return;
     const script = document.createElement("script");
     script.src = TURNSTILE_SRC;

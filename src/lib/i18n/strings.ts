@@ -143,9 +143,9 @@ const en = {
     'Our annual reports, audited financial statements and governance documents.',
   introPartners: 'The institutions and organisations we work alongside.',
   introContact: 'Questions, partnerships, volunteering. We read every message.',
-  ctaHomeTitle: 'Talk to us about keeping a child with their family.',
+  ctaHomeTitle: 'Want to learn more about SKO?',
   ctaHomeBody:
-    'Tell us what you need and we will answer. Our annual and audit reports are published in full.',
+    'Get in touch with questions about our work or partnerships. Our annual and audit reports are published in full.',
   ctaAboutTitle: 'Questions about how we work?',
   ctaAboutBody: 'Our annual and audit reports are published in full. Ask us anything they do not cover.',
   ctaProgramsTitle: 'Ask about a program.',
@@ -339,9 +339,9 @@ const km: Record<UIKey, string> = {
     'របាយការណ៍ប្រចាំឆ្នាំ របាយការណ៍ហិរញ្ញវត្ថុដែលបានធ្វើសវនកម្ម និងឯកសារអភិបាលកិច្ចរបស់យើង។',
   introPartners: 'ស្ថាប័ន និងអង្គការដែលយើងធ្វើការជាមួយ។',
   introContact: 'សំណួរ ភាពជាដៃគូ ការស្ម័គ្រចិត្ត។ យើងអានរាល់សារ។',
-  ctaHomeTitle: 'ទាក់ទងមកយើង អំពីការរក្សាកុមារឱ្យនៅជាមួយគ្រួសារ។',
+  ctaHomeTitle: 'ចង់ស្វែងយល់បន្ថែមអំពី SKO មែនទេ?',
   ctaHomeBody:
-    'ប្រាប់យើងពីអ្វីដែលអ្នកត្រូវការ យើងនឹងឆ្លើយតប។ របាយការណ៍ប្រចាំឆ្នាំ និងសវនកម្មរបស់យើងត្រូវបានផ្សព្វផ្សាយពេញលេញ។',
+    'ទាក់ទងមកយើង ប្រសិនបើអ្នកមានសំណួរអំពីការងារ ឬភាពជាដៃគូរបស់យើង។ របាយការណ៍ប្រចាំឆ្នាំ និងសវនកម្មរបស់យើងត្រូវបានផ្សព្វផ្សាយពេញលេញ។',
   ctaAboutTitle: 'មានសំណួរអំពីរបៀបដែលយើងធ្វើការមែនទេ?',
   ctaAboutBody: 'របាយការណ៍ប្រចាំឆ្នាំ និងសវនកម្មរបស់យើងត្រូវបានផ្សព្វផ្សាយពេញលេញ។ សូមសួរយើងអំពីអ្វីដែលមិនមានក្នុងនោះ។',
   ctaProgramsTitle: 'សួរអំពីគម្រោងមួយ។',

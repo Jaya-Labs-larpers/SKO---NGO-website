@@ -55,7 +55,7 @@ const pathname = Astro.url.pathname;
     */
     }
     <meta http-equiv="Content-Security-Policy" content="__CSP_POLICY__" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -92,6 +92,35 @@ const pathname = Astro.url.pathname;
       publishedAt={publishedAt}
       jsonLd={jsonLd}
     />
+
+    {
+      /*
+      Marks a page reached by a view transition so it lazy-loads in (Page
+      arrival in global.css). pagereveal fires just before the first frame,
+      so this has to be inline in the head. The mark is dropped once the
+      slowest arrival (270ms late, 900ms long) has played, and on pageswap
+      before this page is captured on the way out, so a page brought back from
+      the back/forward cache arrives afresh.
+    */
+    }
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var settled = 0;
+        addEventListener('pagereveal', function (event) {
+          if (!event.viewTransition) return;
+          root.setAttribute('data-arriving', '');
+          clearTimeout(settled);
+          settled = setTimeout(function () {
+            root.removeAttribute('data-arriving');
+          }, 1500);
+        });
+        addEventListener('pageswap', function () {
+          clearTimeout(settled);
+          root.removeAttribute('data-arriving');
+        });
+      })();
+    </script>
   </head>
   <body class="bg-white">
     <a
