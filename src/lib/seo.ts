@@ -20,7 +20,11 @@ export interface ResolvedSeo {
 export function resolveSeo(
   seo: Seo | null | undefined,
   lang: Locale,
-  fallback: { title: string; description?: string | null; image?: CmsImage | null },
+  fallback: {
+    title: string;
+    description?: string | null;
+    image?: CmsImage | null;
+  },
 ): ResolvedSeo {
   const title = text(seo?.title, lang) || fallback.title;
   const description = text(seo?.description, lang) || fallback.description || '';

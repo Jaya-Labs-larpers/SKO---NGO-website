@@ -32,7 +32,10 @@ const jsonLd = {
       items.map((crumb, index) => (
         <li class="flex items-center gap-2">
           {crumb.path && index < items.length - 1 ? (
-            <a href={localizePath(crumb.path, lang)} class="text-inherit no-underline hover:text-[color:var(--color-blue-800)]">
+            <a
+              href={localizePath(crumb.path, lang)}
+              class="text-inherit no-underline hover:text-[color:var(--color-blue-800)]"
+            >
               {crumb.label}
             </a>
           ) : (

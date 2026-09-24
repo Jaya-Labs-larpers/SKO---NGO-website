@@ -28,7 +28,11 @@ const { lang, partners, columns = 5 } = Astro.props;
           <Tag
             style={`--i:${index}`}
             {...(partner.url
-              ? { href: partner.url, rel: 'noopener noreferrer', target: '_blank' }
+              ? {
+                  href: partner.url,
+                  rel: 'noopener noreferrer',
+                  target: '_blank',
+                }
               : {})}
             class="grid aspect-5/3 place-items-center overflow-hidden bg-white p-4 no-underline transition-colors hover:bg-[color:var(--color-blue-50)]"
           >
@@ -41,7 +45,14 @@ const { lang, partners, columns = 5 } = Astro.props;
             */}
             {hasImage(partner.logo) ? (
               <div class="grid h-full min-h-0 w-full place-items-center [&_img]:max-h-full [&_img]:object-contain">
-                <ResponsiveImage image={partner.logo} lang={lang} alt="" aspect="5/3" sizes="180px" blurUp={false} />
+                <ResponsiveImage
+                  image={partner.logo}
+                  lang={lang}
+                  alt=""
+                  aspect="5/3"
+                  sizes="180px"
+                  blurUp={false}
+                />
               </div>
             ) : (
               <span

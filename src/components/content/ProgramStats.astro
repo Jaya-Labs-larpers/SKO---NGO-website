@@ -23,7 +23,15 @@ const em = (text: string) =>
   Array.from(text).reduce(
     (width, char) =>
       width +
-      (/\d/.test(char) ? 0.62 : /[\s,.]/.test(char) ? 0.24 : /[a-z]/i.test(char) ? 0.6 : char === '%' ? 1 : 0.75),
+      (/\d/.test(char)
+        ? 0.62
+        : /[\s,.]/.test(char)
+          ? 0.24
+          : /[a-z]/i.test(char)
+            ? 0.6
+            : char === '%'
+              ? 1
+              : 0.75),
     0,
   );
 ---
@@ -40,16 +48,22 @@ const em = (text: string) =>
         const prefix = pick(stat.prefix, lang);
         const suffix = pick(stat.suffix, lang);
         const display =
-          stat.displayValue ?? (typeof stat.value === 'number' ? formatNumber(stat.value, lang) : '');
+          stat.displayValue ??
+          (typeof stat.value === 'number' ? formatNumber(stat.value, lang) : '');
         const valueEm = Math.max(
           1,
-          em(display) + (prefix.value ? 0.45 * em(prefix.value) + 0.1 : 0) + (suffix.value ? 0.6 * em(suffix.value) : 0),
+          em(display) +
+            (prefix.value ? 0.45 * em(prefix.value) + 0.1 : 0) +
+            (suffix.value ? 0.6 * em(suffix.value) : 0),
         );
         return (
           <div class="program-stat" style={`--i:${index};--value-em:${valueEm.toFixed(2)}`}>
             <b class="program-stat__value">
               {prefix.value && (
-                <span class="mr-1.5 text-[0.45em] tracking-normal" lang={prefix.isFallback ? prefix.lang : undefined}>
+                <span
+                  class="mr-1.5 text-[0.45em] tracking-normal"
+                  lang={prefix.isFallback ? prefix.lang : undefined}
+                >
                   {prefix.value}
                 </span>
               )}
@@ -64,7 +78,10 @@ const em = (text: string) =>
               {label.value}
             </span>
             {context.value && (
-              <span class="program-stat__context" lang={context.isFallback ? context.lang : undefined}>
+              <span
+                class="program-stat__context"
+                lang={context.isFallback ? context.lang : undefined}
+              >
                 {context.value}
               </span>
             )}

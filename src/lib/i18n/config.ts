@@ -5,7 +5,10 @@ export const defaultLocale: Locale = 'en';
 
 /** Label shown on the language toggle. Khmer is always written in Khmer script. */
 export const localeShort: Record<Locale, string> = { en: 'EN', km: 'ខ្មែរ' };
-export const localeName: Record<Locale, string> = { en: 'English', km: 'ភាសាខ្មែរ' };
+export const localeName: Record<Locale, string> = {
+  en: 'English',
+  km: 'ភាសាខ្មែរ',
+};
 
 /** BCP-47 tags for <html lang>, hreflang and Open Graph. */
 export const htmlLang: Record<Locale, string> = { en: 'en', km: 'km' };

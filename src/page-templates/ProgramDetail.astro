@@ -22,7 +22,11 @@ interface Props {
 
 const { lang, program } = Astro.props;
 
-const [programs, partners, stories] = await Promise.all([getPrograms(), getPartners(), getStories()]);
+const [programs, partners, stories] = await Promise.all([
+  getPrograms(),
+  getPartners(),
+  getStories(),
+]);
 
 const title = pick(program.title, lang);
 const summary = pick(program.summary, lang);
@@ -44,13 +48,18 @@ let body: LocaleBlocks | null | undefined = program.body;
 const impact: LocaleBlocks = {};
 if (story && program.body) {
   body = {};
-  for (const [locale, blocks] of Object.entries(program.body) as [Locale, PortableBlock[] | null][]) {
+  for (const [locale, blocks] of Object.entries(program.body) as [
+    Locale,
+    PortableBlock[] | null,
+  ][]) {
     const start = (blocks ?? []).findIndex(isImpactHeading);
     if (!blocks || start < 0) {
       body[locale] = blocks;
       continue;
     }
-    const next = blocks.findIndex((block, i) => i > start && block._type === 'block' && block.style === 'h2');
+    const next = blocks.findIndex(
+      (block, i) => i > start && block._type === 'block' && block.style === 'h2',
+    );
     const end = next < 0 ? blocks.length : next;
     body[locale] = [...blocks.slice(0, start), ...blocks.slice(end)];
     impact[locale] = blocks.slice(start + 1, end);
@@ -108,7 +117,7 @@ const seo = resolveSeo(program.seo, lang, {
         {
           summary.value && (
             <p
-              class="mt-5 max-w-[60ch] text-[length:var(--text-lead)] leading-[1.65] text-[color:var(--color-ink-600)] text-pretty"
+              class="mt-5 max-w-[60ch] text-[length:var(--text-lead)] leading-[1.65] text-pretty text-[color:var(--color-ink-600)]"
               lang={summary.isFallback ? summary.lang : undefined}
             >
               {summary.value}
@@ -154,7 +163,9 @@ const seo = resolveSeo(program.seo, lang, {
             <SectionHeading title={t(lang, 'otherPrograms')} />
             <a href={localizePath('/programs', lang)} class="link-arrow">
               {t(lang, 'viewAll')}
-              <span class="arrow" aria-hidden="true">→</span>
+              <span class="arrow" aria-hidden="true">
+                →
+              </span>
             </a>
           </div>
           <div class="mt-8.5">

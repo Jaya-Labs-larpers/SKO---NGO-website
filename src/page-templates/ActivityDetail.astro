@@ -93,10 +93,14 @@ const programTitle = pick(activity.program?.title, lang);
           {heading}
         </h1>
 
-        <p class="mt-3.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-[13px] text-[color:var(--color-ink-400)]">
+        <p
+          class="mt-3.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-[13px] text-[color:var(--color-ink-400)]"
+        >
           <span class="flex items-center gap-1.5">
             <Icon name="calendar-days" size={16} />
-            <time datetime={activity.publishedAt ?? undefined}>{formatDate(activity.publishedAt, lang)}</time>
+            <time datetime={activity.publishedAt ?? undefined}
+              >{formatDate(activity.publishedAt, lang)}</time
+            >
           </span>
           {
             activity.author && (
@@ -120,7 +124,10 @@ const programTitle = pick(activity.program?.title, lang);
           }
         </p>
 
-        <div class="mt-6.5 overflow-hidden rounded-[var(--radius-lg)] [view-transition-name:card-media]" data-morph-hero>
+        <div
+          class="mt-6.5 overflow-hidden rounded-[var(--radius-lg)] [view-transition-name:card-media]"
+          data-morph-hero
+        >
           <ResponsiveImage
             image={activity.coverImage}
             lang={lang}
@@ -129,42 +136,52 @@ const programTitle = pick(activity.program?.title, lang);
             eager
             sizes="(min-width: 48rem) 44rem, 100vw"
           />
-      </div>
+        </div>
 
-      {
-        excerpt.value && (
-          <p
-            class="mt-6.5 text-[17px] leading-[1.6] sm:text-[19px] text-[color:var(--color-ink-700)]"
-            lang={excerpt.isFallback ? excerpt.lang : undefined}
-          >
-            {excerpt.value}
-          </p>
-        )
-      }
-
-      <div class="mt-4.5"><RichText blocks={activity.body} lang={lang} /></div>
-
-      <nav
-        class="mt-8.5 flex flex-wrap justify-between gap-4 border-t border-[color:var(--color-line)] pt-5.5"
-        aria-label={t(lang, 'pageActivities')}
-      >
         {
-          previous ? (
-            <a href={localizePath(`/activities/${previous.slug}`, lang)} class="link-arrow" rel="prev">
-              ← {t(lang, 'previous')}
-            </a>
-          ) : (
-            <span />
+          excerpt.value && (
+            <p
+              class="mt-6.5 text-[17px] leading-[1.6] text-[color:var(--color-ink-700)] sm:text-[19px]"
+              lang={excerpt.isFallback ? excerpt.lang : undefined}
+            >
+              {excerpt.value}
+            </p>
           )
         }
-        {
-          next && (
-            <a href={localizePath(`/activities/${next.slug}`, lang)} class="link-arrow" rel="next">
-              {t(lang, 'next')} →
-            </a>
-          )
-        }
-      </nav>
+
+        <div class="mt-4.5">
+          <RichText blocks={activity.body} lang={lang} />
+        </div>
+
+        <nav
+          class="mt-8.5 flex flex-wrap justify-between gap-4 border-t border-[color:var(--color-line)] pt-5.5"
+          aria-label={t(lang, 'pageActivities')}
+        >
+          {
+            previous ? (
+              <a
+                href={localizePath(`/activities/${previous.slug}`, lang)}
+                class="link-arrow"
+                rel="prev"
+              >
+                ← {t(lang, 'previous')}
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            next && (
+              <a
+                href={localizePath(`/activities/${next.slug}`, lang)}
+                class="link-arrow"
+                rel="next"
+              >
+                {t(lang, 'next')} →
+              </a>
+            )
+          }
+        </nav>
       </div>
     </div>
   </article>

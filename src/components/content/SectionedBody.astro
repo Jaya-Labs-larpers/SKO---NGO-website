@@ -39,7 +39,9 @@ const fallbackLang = picked.isFallback ? bodyLang : undefined;
 const { lead, sections } = splitBody(picked.value, limits);
 
 /** RichText picks by locale, so each slice goes back in under the body's own language. */
-const asBlocks = (blocks: typeof lead): LocaleBlocks => ({ [bodyLang]: blocks });
+const asBlocks = (blocks: typeof lead): LocaleBlocks => ({
+  [bodyLang]: blocks,
+});
 
 /** "UNOPS / Cities Alliance" is credited when either half is named. */
 function mentioned(text: string): Partner[] {
@@ -68,9 +70,14 @@ function mentioned(text: string): Partner[] {
     const logos =
       section.layout === 'statement' ? mentioned(section.blocks.map(blockText).join(' ')) : [];
     return (
-      <section class:list={['about-section', `about-section--${section.layout}`]} lang={fallbackLang}>
+      <section
+        class:list={['about-section', `about-section--${section.layout}`]}
+        lang={fallbackLang}
+      >
         <div class="wrap about-section__grid">
-          <h2 class:list={['about-section__label eyebrow', section.layout === 'points' && 'reveal']}>
+          <h2
+            class:list={['about-section__label eyebrow', section.layout === 'points' && 'reveal']}
+          >
             {section.heading}
           </h2>
 
@@ -118,7 +125,10 @@ function mentioned(text: string): Partner[] {
           )}
 
           {section.layout === 'points' && (
-            <ol class="about-terms reveal reveal-cascade reveal-cascade--slow list-none p-0" data-reveal-ms="2400">
+            <ol
+              class="about-terms reveal reveal-cascade reveal-cascade--slow list-none p-0"
+              data-reveal-ms="2400"
+            >
               {section.blocks.map((block, index) => {
                 const split = splitPoint(blockText(block))!;
                 return (

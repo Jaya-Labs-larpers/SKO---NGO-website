@@ -9,10 +9,10 @@ everything in this guide.
 
 ## The two places
 
-| | What it is | Address |
-|---|---|---|
-| **The website** | What the public sees | `https://<your-domain>` |
-| **The Studio** | Where you write and edit | `https://sko.sanity.studio` |
+|                 | What it is               | Address                     |
+| --------------- | ------------------------ | --------------------------- |
+| **The website** | What the public sees     | `https://<your-domain>`     |
+| **The Studio**  | Where you write and edit | `https://sko.sanity.studio` |
 
 You only ever work in **the Studio**. You never touch the website directly.
 
@@ -49,17 +49,17 @@ This is the thing you will do most often.
 2. Click the **pencil-and-paper icon** at the top to start a new one
 3. Fill in:
 
-   | Box | What to put |
-   |---|---|
-   | **Title** | The headline, in both languages |
-   | **URL slug** | Click **Generate**. Leave it in English letters — this becomes the web address |
-   | **Date** | Today's date is filled in already; change it if the event was earlier |
-   | **Category** | News, Event, Story or Announcement |
-   | **Cover image** | The main photo (see the photo rules below) |
-   | **Summary** | One or two sentences. This is what shows on the list page |
-   | **Body** | The full article |
-   | **Related program** | Optional — links the post to Family Care, Child Protection or GBV Prevention |
-   | **Show on the homepage** | Turn on for important posts. The three most recent appear on the front page |
+   | Box                      | What to put                                                                    |
+   | ------------------------ | ------------------------------------------------------------------------------ |
+   | **Title**                | The headline, in both languages                                                |
+   | **URL slug**             | Click **Generate**. Leave it in English letters — this becomes the web address |
+   | **Date**                 | Today's date is filled in already; change it if the event was earlier          |
+   | **Category**             | News, Event, Story or Announcement                                             |
+   | **Cover image**          | The main photo (see the photo rules below)                                     |
+   | **Summary**              | One or two sentences. This is what shows on the list page                      |
+   | **Body**                 | The full article                                                               |
+   | **Related program**      | Optional — links the post to Family Care, Child Protection or GBV Prevention   |
+   | **Show on the homepage** | Turn on for important posts. The three most recent appear on the front page    |
 
 4. Click **Publish** (bottom right)
 
@@ -156,13 +156,13 @@ their closing date has passed — you do not need to delete them.
 
 ## If something goes wrong
 
-| What you see | What to do |
-|---|---|
-| The Studio will not let me publish | Look for a red message on a field. Usually a required box is empty, or a story's consent switch is off |
-| I published but the website has not changed | Wait three minutes and refresh. Try a hard refresh: **Ctrl+Shift+R** |
-| Still not showing after ten minutes | The automatic rebuild may have failed. Contact whoever manages the Cloudflare account |
-| I deleted something by accident | Open the document, click the **three dots** → **Review changes**. Sanity keeps a full history and you can restore an earlier version |
-| The website shows `[PLACEHOLDER]` somewhere | That field has not been filled in with real content yet. Find it in the Studio and replace it |
+| What you see                                | What to do                                                                                                                           |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| The Studio will not let me publish          | Look for a red message on a field. Usually a required box is empty, or a story's consent switch is off                               |
+| I published but the website has not changed | Wait three minutes and refresh. Try a hard refresh: **Ctrl+Shift+R**                                                                 |
+| Still not showing after ten minutes         | The automatic rebuild may have failed. Contact whoever manages the Cloudflare account                                                |
+| I deleted something by accident             | Open the document, click the **three dots** → **Review changes**. Sanity keeps a full history and you can restore an earlier version |
+| The website shows `[PLACEHOLDER]` somewhere | That field has not been filled in with real content yet. Find it in the Studio and replace it                                        |
 
 ---
 

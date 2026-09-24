@@ -27,11 +27,11 @@ interface Options {
 export function revealOnEntry({
   root = document,
   viewportHeight = window.innerHeight,
-  reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches,
 }: Options = {}): void {
-  if (reducedMotion || typeof IntersectionObserver !== "function") return;
+  if (reducedMotion || typeof IntersectionObserver !== 'function') return;
 
-  const boxes = Array.from(root.querySelectorAll<HTMLElement>(".reveal"));
+  const boxes = Array.from(root.querySelectorAll<HTMLElement>('.reveal'));
   if (boxes.length === 0) return;
 
   const handBack = new Map<HTMLElement, ReturnType<typeof setTimeout>>();
@@ -44,8 +44,8 @@ export function revealOnEntry({
         arrival.unobserve(box);
         const delay = Math.min(index, STAGGER_CAP) * STAGGER_MS;
         const length = Number(box.dataset.revealMs) || REVEAL_MS;
-        box.style.setProperty("--reveal-delay", `${delay}ms`);
-        box.dataset.reveal = "shown";
+        box.style.setProperty('--reveal-delay', `${delay}ms`);
+        box.dataset.reveal = 'shown';
         // Hand the box back to its own styles afterwards, so a card's hover
         // transitions are not overridden by the reveal's.
         handBack.set(
@@ -54,7 +54,7 @@ export function revealOnEntry({
             () => {
               handBack.delete(box);
               delete box.dataset.reveal;
-              box.style.removeProperty("--reveal-delay");
+              box.style.removeProperty('--reveal-delay');
             },
             delay + length + 50,
           ),
@@ -63,14 +63,14 @@ export function revealOnEntry({
     },
     // Starts once a box is properly on screen, not while it is still hidden
     // behind the bottom edge, so the visitor actually sees it arrive.
-    { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
+    { rootMargin: '0px 0px -8% 0px', threshold: 0.1 },
   );
 
   const setAside = (box: HTMLElement) => {
     clearTimeout(handBack.get(box));
     handBack.delete(box);
-    box.style.removeProperty("--reveal-delay");
-    box.dataset.reveal = "pending";
+    box.style.removeProperty('--reveal-delay');
+    box.dataset.reveal = 'pending';
     arrival.observe(box);
   };
 

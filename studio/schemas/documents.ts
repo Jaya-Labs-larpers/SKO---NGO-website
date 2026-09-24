@@ -22,15 +22,30 @@ export const siteSettings = defineType({
     { name: 'donation', title: 'Donation' },
   ],
   fields: [
-    defineField({ name: 'orgName', title: 'Organisation name', type: 'localeString', group: 'identity' }),
+    defineField({
+      name: 'orgName',
+      title: 'Organisation name',
+      type: 'localeString',
+      group: 'identity',
+    }),
     defineField({
       name: 'orgShortName',
       title: 'Short name (e.g. SKO)',
       type: 'string',
       group: 'identity',
     }),
-    defineField({ name: 'tagline', title: 'Tagline', type: 'localeString', group: 'identity' }),
-    defineField({ name: 'logo', title: 'Logo', type: 'imageWithAlt', group: 'identity' }),
+    defineField({
+      name: 'tagline',
+      title: 'Tagline',
+      type: 'localeString',
+      group: 'identity',
+    }),
+    defineField({
+      name: 'logo',
+      title: 'Logo',
+      type: 'imageWithAlt',
+      group: 'identity',
+    }),
     defineField({
       name: 'ogImage',
       title: 'Default social share image',
@@ -54,11 +69,22 @@ export const siteSettings = defineType({
       title: 'Registration line',
       type: 'localeString',
       group: 'identity',
-      description: 'Shown on the homepage and in the footer. E.g. Ministry of Interior registration.',
+      description:
+        'Shown on the homepage and in the footer. E.g. Ministry of Interior registration.',
     }),
 
-    defineField({ name: 'address', title: 'Address', type: 'localeText', group: 'contact' }),
-    defineField({ name: 'officeHours', title: 'Office hours', type: 'localeString', group: 'contact' }),
+    defineField({
+      name: 'address',
+      title: 'Address',
+      type: 'localeText',
+      group: 'contact',
+    }),
+    defineField({
+      name: 'officeHours',
+      title: 'Office hours',
+      type: 'localeString',
+      group: 'contact',
+    }),
     defineField({
       name: 'mapUrl',
       title: 'Google Maps link',
@@ -77,8 +103,18 @@ export const siteSettings = defineType({
         defineField({ name: 'lng', title: 'Longitude', type: 'number' }),
       ],
     }),
-    defineField({ name: 'phone', title: 'Phone', type: 'string', group: 'contact' }),
-    defineField({ name: 'email', title: 'General email', type: 'string', group: 'contact' }),
+    defineField({
+      name: 'phone',
+      title: 'Phone',
+      type: 'string',
+      group: 'contact',
+    }),
+    defineField({
+      name: 'email',
+      title: 'General email',
+      type: 'string',
+      group: 'contact',
+    }),
     defineField({
       name: 'partnerEmail',
       title: 'Partnerships / grants email',
@@ -91,7 +127,8 @@ export const siteSettings = defineType({
       title: 'Safeguarding email',
       type: 'string',
       group: 'contact',
-      description: 'Offered on the contact page when a visitor chooses “Safeguarding concern”, instead of the form.',
+      description:
+        'Offered on the contact page when a visitor chooses “Safeguarding concern”, instead of the form.',
       validation: (r) => r.email(),
     }),
     defineField({
@@ -127,7 +164,12 @@ export const siteSettings = defineType({
       description:
         'QR images and bank details only. This site never collects card details — there are no payment fields anywhere and there never will be.',
       fields: [
-        defineField({ name: 'qrCodes', title: 'QR codes', type: 'array', of: [{ type: 'donationQr' }] }),
+        defineField({
+          name: 'qrCodes',
+          title: 'QR codes',
+          type: 'array',
+          of: [{ type: 'donationQr' }],
+        }),
         defineField({
           name: 'bankAccounts',
           title: 'Bank accounts',
@@ -140,11 +182,20 @@ export const siteSettings = defineType({
           type: 'array',
           of: [{ type: 'allocationItem' }],
         }),
-        defineField({ name: 'note', title: 'Receipt / tax note', type: 'localeBlock' }),
+        defineField({
+          name: 'note',
+          title: 'Receipt / tax note',
+          type: 'localeBlock',
+        }),
       ],
     }),
 
-    defineField({ name: 'footerNote', title: 'Footer note', type: 'localeBlock', group: 'identity' }),
+    defineField({
+      name: 'footerNote',
+      title: 'Footer note',
+      type: 'localeBlock',
+      group: 'identity',
+    }),
   ],
   preview: { prepare: () => ({ title: 'Site settings' }) },
 });
@@ -154,7 +205,12 @@ export const page = defineType({
   title: 'Page',
   type: 'document',
   fields: [
-    defineField({ name: 'title', title: 'Title', type: 'localeString', validation: (r) => r.required() }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'localeString',
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'slug',
       title: 'URL slug',
@@ -164,7 +220,11 @@ export const page = defineType({
       validation: (r) => r.required(),
     }),
     defineField({ name: 'intro', title: 'Intro', type: 'localeText' }),
-    defineField({ name: 'heroImage', title: 'Hero image', type: 'imageWithAlt' }),
+    defineField({
+      name: 'heroImage',
+      title: 'Hero image',
+      type: 'imageWithAlt',
+    }),
     defineField({ name: 'body', title: 'Body', type: 'localeBlock' }),
     defineField({
       name: 'faqs',
@@ -184,7 +244,12 @@ export const program = defineType({
   title: 'Program',
   type: 'document',
   fields: [
-    defineField({ name: 'title', title: 'Title', type: 'localeString', validation: (r) => r.required() }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'localeString',
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'slug',
       title: 'URL slug',
@@ -192,14 +257,19 @@ export const program = defineType({
       options: { source: 'title.en', maxLength: 96 },
       validation: (r) => r.required(),
     }),
-    defineField({ name: 'summary', title: 'One-line summary', type: 'localeText' }),
+    defineField({
+      name: 'summary',
+      title: 'One-line summary',
+      type: 'localeText',
+    }),
     defineField({ name: 'body', title: 'Body', type: 'localeBlock' }),
     defineField({ name: 'image', title: 'Image', type: 'imageWithAlt' }),
     defineField({
       name: 'cardImage',
       title: 'Card image',
       type: 'imageWithAlt',
-      description: 'Shown on the programme card on the homepage and programme list. Leave empty to reuse the main image.',
+      description:
+        'Shown on the programme card on the homepage and programme list. Leave empty to reuse the main image.',
     }),
     defineField({
       name: 'impactStats',
@@ -207,10 +277,21 @@ export const program = defineType({
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'impactStat' }] }],
     }),
-    defineField({ name: 'order', title: 'Order', type: 'number', initialValue: 10 }),
+    defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      initialValue: 10,
+    }),
     defineField({ name: 'seo', title: 'Search & social', type: 'seo' }),
   ],
-  orderings: [{ title: 'Display order', name: 'order', by: [{ field: 'order', direction: 'asc' }] }],
+  orderings: [
+    {
+      title: 'Display order',
+      name: 'order',
+      by: [{ field: 'order', direction: 'asc' }],
+    },
+  ],
   preview: { select: { title: 'title.en', media: 'image' } },
 });
 
@@ -219,7 +300,12 @@ export const activity = defineType({
   title: 'Activity / news',
   type: 'document',
   fields: [
-    defineField({ name: 'title', title: 'Title', type: 'localeString', validation: (r) => r.required() }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'localeString',
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'slug',
       title: 'URL slug',
@@ -249,7 +335,11 @@ export const activity = defineType({
       },
       initialValue: 'news',
     }),
-    defineField({ name: 'coverImage', title: 'Cover image', type: 'imageWithAlt' }),
+    defineField({
+      name: 'coverImage',
+      title: 'Cover image',
+      type: 'imageWithAlt',
+    }),
     defineField({ name: 'excerpt', title: 'Summary', type: 'localeText' }),
     defineField({ name: 'body', title: 'Body', type: 'localeBlock' }),
     defineField({
@@ -274,7 +364,11 @@ export const activity = defineType({
     defineField({ name: 'seo', title: 'Search & social', type: 'seo' }),
   ],
   orderings: [
-    { title: 'Newest first', name: 'newest', by: [{ field: 'publishedAt', direction: 'desc' }] },
+    {
+      title: 'Newest first',
+      name: 'newest',
+      by: [{ field: 'publishedAt', direction: 'desc' }],
+    },
   ],
   preview: {
     select: { title: 'title.en', date: 'publishedAt', media: 'coverImage' },
@@ -291,7 +385,12 @@ export const story = defineType({
   title: 'Story / testimonial',
   type: 'document',
   fields: [
-    defineField({ name: 'quote', title: 'Quote', type: 'localeText', validation: (r) => r.required() }),
+    defineField({
+      name: 'quote',
+      title: 'Quote',
+      type: 'localeText',
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'personName',
       title: 'Name shown',
@@ -305,14 +404,23 @@ export const story = defineType({
       description: 'The story in full. When filled in, it is shown instead of the quote.',
     }),
     defineField({ name: 'personRole', title: 'Role', type: 'localeString' }),
-    defineField({ name: 'photo', title: 'Photo (optional)', type: 'imageWithAlt' }),
+    defineField({
+      name: 'photo',
+      title: 'Photo (optional)',
+      type: 'imageWithAlt',
+    }),
     defineField({
       name: 'useSilhouette',
       title: 'Use an illustrated avatar instead of a photo',
       type: 'boolean',
       initialValue: true,
     }),
-    defineField({ name: 'program', title: 'Program', type: 'reference', to: [{ type: 'program' }] }),
+    defineField({
+      name: 'program',
+      title: 'Program',
+      type: 'reference',
+      to: [{ type: 'program' }],
+    }),
     defineField({
       name: 'consentConfirmed',
       title: 'Consent confirmed',
@@ -326,7 +434,9 @@ export const story = defineType({
         ),
     }),
   ],
-  preview: { select: { title: 'personName', subtitle: 'quote.en', media: 'photo' } },
+  preview: {
+    select: { title: 'personName', subtitle: 'quote.en', media: 'photo' },
+  },
 });
 
 export const partner = defineType({
@@ -334,7 +444,12 @@ export const partner = defineType({
   title: 'Partner',
   type: 'document',
   fields: [
-    defineField({ name: 'name', title: 'Name', type: 'string', validation: (r) => r.required() }),
+    defineField({
+      name: 'name',
+      title: 'Name',
+      type: 'string',
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'logo',
       title: 'Logo',
@@ -356,7 +471,12 @@ export const partner = defineType({
         ],
       },
     }),
-    defineField({ name: 'order', title: 'Order', type: 'number', initialValue: 10 }),
+    defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      initialValue: 10,
+    }),
   ],
   preview: { select: { title: 'name', subtitle: 'category', media: 'logo' } },
 });
@@ -366,8 +486,18 @@ export const report = defineType({
   title: 'Report / policy',
   type: 'document',
   fields: [
-    defineField({ name: 'title', title: 'Title', type: 'localeString', validation: (r) => r.required() }),
-    defineField({ name: 'year', title: 'Year', type: 'number', validation: (r) => r.required() }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'localeString',
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'year',
+      title: 'Year',
+      type: 'number',
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'type',
       title: 'Type',
@@ -410,9 +540,19 @@ export const report = defineType({
       type: 'file',
       options: { accept: '.pdf' },
     }),
-    defineField({ name: 'coverImage', title: 'Cover image', type: 'imageWithAlt' }),
+    defineField({
+      name: 'coverImage',
+      title: 'Cover image',
+      type: 'imageWithAlt',
+    }),
   ],
-  orderings: [{ title: 'Newest first', name: 'year', by: [{ field: 'year', direction: 'desc' }] }],
+  orderings: [
+    {
+      title: 'Newest first',
+      name: 'year',
+      by: [{ field: 'year', direction: 'desc' }],
+    },
+  ],
   preview: { select: { title: 'title.en', subtitle: 'year' } },
 });
 
@@ -436,13 +576,15 @@ export const teamMember = defineType({
       title: 'Reports to',
       type: 'reference',
       to: [{ type: 'teamMember' }],
-      description: 'Places this person under their manager in the structure chart on the About page.',
+      description:
+        'Places this person under their manager in the structure chart on the About page.',
     }),
     defineField({
       name: 'vacancy',
       title: 'Vacant seat',
       type: 'boolean',
-      description: 'An open position shown in the chart, such as “Volunteer / Internship”. Put the position in Name.',
+      description:
+        'An open position shown in the chart, such as “Volunteer / Internship”. Put the position in Name.',
       initialValue: false,
     }),
     defineField({
@@ -458,9 +600,16 @@ export const teamMember = defineType({
       },
       initialValue: 'staff',
     }),
-    defineField({ name: 'order', title: 'Order', type: 'number', initialValue: 10 }),
+    defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      initialValue: 10,
+    }),
   ],
-  preview: { select: { title: 'name.en', subtitle: 'role.en', media: 'photo' } },
+  preview: {
+    select: { title: 'name.en', subtitle: 'role.en', media: 'photo' },
+  },
 });
 
 export const directorMessage = defineType({
@@ -469,7 +618,12 @@ export const directorMessage = defineType({
   type: 'document',
   fields: [
     defineField({ name: 'name', title: 'Name', type: 'localeString' }),
-    defineField({ name: 'title', title: 'Title', type: 'localeString', initialValue: undefined }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'localeString',
+      initialValue: undefined,
+    }),
     defineField({ name: 'photo', title: 'Portrait', type: 'imageWithAlt' }),
     defineField({
       name: 'pullQuote',
@@ -478,7 +632,11 @@ export const directorMessage = defineType({
       description: 'One sentence, set large above the message.',
     }),
     defineField({ name: 'message', title: 'Message', type: 'localeBlock' }),
-    defineField({ name: 'signature', title: 'Signature image (optional)', type: 'imageWithAlt' }),
+    defineField({
+      name: 'signature',
+      title: 'Signature image (optional)',
+      type: 'imageWithAlt',
+    }),
   ],
   preview: { prepare: () => ({ title: "Director's message" }) },
 });
@@ -526,21 +684,31 @@ export const impactStat = defineType({
       description:
         'What visitors actually see. Use this for "10,000+", "96%" or Khmer numerals. Leave blank to show the raw number formatted for the language.',
     }),
-    defineField({ name: 'label', title: 'Label', type: 'localeString', validation: (r) => r.required() }),
+    defineField({
+      name: 'label',
+      title: 'Label',
+      type: 'localeString',
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'prefix',
       title: 'Prefix (optional)',
       type: 'localeString',
       description: 'A qualifier set small before the figure, such as “Nearly”.',
     }),
-    defineField({ name: 'suffix', title: 'Suffix (optional)', type: 'localeString' }),
+    defineField({
+      name: 'suffix',
+      title: 'Suffix (optional)',
+      type: 'localeString',
+    }),
     defineField({
       name: 'context',
       title: 'Context line',
       type: 'localeString',
       description:
         'The line underneath, e.g. "since 2007" or "2025 cohort". A number without context reads as marketing; a number with it reads as evidence. Please always fill this in.',
-      validation: (r) => r.warning('A statistic without context is much less credible to a funder.'),
+      validation: (r) =>
+        r.warning('A statistic without context is much less credible to a funder.'),
     }),
     defineField({
       name: 'countUp',
@@ -549,10 +717,18 @@ export const impactStat = defineType({
       description: 'Rolls the figure up from zero over about two seconds. Leave off for years.',
       initialValue: false,
     }),
-    defineField({ name: 'order', title: 'Order', type: 'number', initialValue: 10 }),
+    defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      initialValue: 10,
+    }),
   ],
   preview: {
     select: { title: 'displayValue', value: 'value', subtitle: 'label.en' },
-    prepare: ({ title, value, subtitle }) => ({ title: title ?? String(value ?? ''), subtitle }),
+    prepare: ({ title, value, subtitle }) => ({
+      title: title ?? String(value ?? ''),
+      subtitle,
+    }),
   },
 });

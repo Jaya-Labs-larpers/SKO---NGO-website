@@ -105,7 +105,12 @@ export function notePointerMove(flight: CursorFlight, dx: number, dy: number, dt
   flight.pointerVelocity.y += (dy / seconds - flight.pointerVelocity.y) * 0.35;
 }
 
-export function stepCursorFlight(flight: CursorFlight, pointer: Point, dt: number, hovering: boolean): void {
+export function stepCursorFlight(
+  flight: CursorFlight,
+  pointer: Point,
+  dt: number,
+  hovering: boolean,
+): void {
   if (dt <= 0) return;
   flight.pointerIdle += dt;
 
@@ -164,16 +169,25 @@ export function cursorWingSpan(flight: CursorFlight, closed = 0.35): number {
   return 1 - (1 - closed) * (0.5 - 0.5 * Math.cos(flight.phase));
 }
 
-export const CURSOR_STORAGE_KEY = "sko-cursor";
+export const CURSOR_STORAGE_KEY = 'sko-cursor';
 
 /** Where the pointer was when the last page unloaded, so the next page can draw it there before first paint. */
-export function parseSavedCursor(raw: string | null, viewport: { width: number; height: number }): Point | null {
+export function parseSavedCursor(
+  raw: string | null,
+  viewport: { width: number; height: number },
+): Point | null {
   if (!raw) return null;
   try {
     const saved: unknown = JSON.parse(raw);
-    if (!saved || typeof saved !== "object") return null;
+    if (!saved || typeof saved !== 'object') return null;
     const { x, y } = saved as Record<string, unknown>;
-    if (typeof x !== "number" || typeof y !== "number" || !Number.isFinite(x) || !Number.isFinite(y)) return null;
+    if (
+      typeof x !== 'number' ||
+      typeof y !== 'number' ||
+      !Number.isFinite(x) ||
+      !Number.isFinite(y)
+    )
+      return null;
     if (x < 0 || y < 0 || x > viewport.width || y > viewport.height) return null;
     return { x, y };
   } catch {

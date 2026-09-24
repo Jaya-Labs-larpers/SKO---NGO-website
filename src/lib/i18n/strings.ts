@@ -58,7 +58,7 @@ const en = {
   latestActivities: 'Latest activities',
   whatWeDo: 'What we do',
   trustedBy: 'Trusted by',
-  directorMessage: "Message from the Director",
+  directorMessage: 'Message from the Director',
   orgStructure: 'SKO’s Structure',
   ourTeam: 'Our team',
   relatedProgram: 'Related program',
@@ -105,7 +105,8 @@ const en = {
   errPhone: 'Enter a valid phone number, for example +855 12 345 678',
   errTooShort: 'Please write a little more so we can help.',
   errTooLong: 'That message is too long. Please shorten it.',
-  errRateLimited: 'Too many messages from this connection. Please wait a few minutes and try again.',
+  errRateLimited:
+    'Too many messages from this connection. Please wait a few minutes and try again.',
   errVerification: 'The security check did not pass. Please try again.',
   errUnavailable: 'The contact form is not available on this preview. Please email us directly at',
   formSuccessTitle: 'Thank you. Your message has been sent.',
@@ -135,19 +136,19 @@ const en = {
   // can edit them; the keys stay as the fallback.
   homeHeroIntro:
     'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities. SKO is recognized as Cambodia’s leading expert in family care and social work.',
-  introPrograms: 'Four projects, one approach: a child growing up safe, in a family, in their own community.',
+  introPrograms:
+    'Four projects, one approach: a child growing up safe, in a family, in their own community.',
   introActivities: 'What our teams are doing, month by month.',
-  introImpact:
-    'What we have done, how we count it, and what the families we work with say.',
-  introReports:
-    'Our annual reports, audited financial statements and governance documents.',
+  introImpact: 'What we have done, how we count it, and what the families we work with say.',
+  introReports: 'Our annual reports, audited financial statements and governance documents.',
   introPartners: 'The institutions and organisations we work alongside.',
   introContact: 'Questions, partnerships, volunteering. We read every message.',
   ctaHomeTitle: 'Want to learn more about SKO?',
   ctaHomeBody:
     'Get in touch with questions about our work or partnerships. Our annual and audit reports are published in full.',
   ctaAboutTitle: 'Questions about how we work?',
-  ctaAboutBody: 'Our annual and audit reports are published in full. Ask us anything they do not cover.',
+  ctaAboutBody:
+    'Our annual and audit reports are published in full. Ask us anything they do not cover.',
   ctaProgramsTitle: 'Ask about a program.',
   ctaProgramTitle: 'Ask about this program.',
   ctaImpactTitle: 'Ask how we reach more families.',
@@ -192,11 +193,13 @@ const en = {
   formAvailability: 'Availability',
   formAvailabilityHint: 'For example: 2 days a week from March',
   formLanguages: 'Languages you speak',
-  formVolunteerNote: 'Everyone who may come into contact with children completes safeguarding screening and induction before starting.',
+  formVolunteerNote:
+    'Everyone who may come into contact with children completes safeguarding screening and induction before starting.',
   formOutlet: 'Outlet or institution',
   formDeadline: 'Deadline',
   formMessageHint: 'Tell us a little about what you need.',
-  formPanelNoteGeneral: 'A few details and your message. Most replies arrive within two working days.',
+  formPanelNoteGeneral:
+    'A few details and your message. Most replies arrive within two working days.',
   formSectionYou: 'About you',
   formSectionMessage: 'Your message',
   formSectionPartner: 'Partnership details',
@@ -306,7 +309,8 @@ const km: Record<UIKey, string> = {
   errTooLong: 'សារវែងពេក។ សូមកាត់បន្ថយ។',
   errRateLimited: 'មានសារច្រើនពេកពីការតភ្ជាប់នេះ។ សូមរង់ចាំពីរបីនាទី រួចព្យាយាមម្តងទៀត។',
   errVerification: 'ការត្រួតពិនិយសុវត្ថិភាពមិនបានជោគជ័យទេ។ សូមព្យាយាមម្តងទៀត។',
-  errUnavailable: 'ទម្រង់ទំនាក់ទំនងមិនអាចប្រើបាននៅលើការមើលជាមុននេះទេ។ សូមផ្ញើអ៊ីមែលមកយើងដោយផ្ទាល់តាម',
+  errUnavailable:
+    'ទម្រង់ទំនាក់ទំនងមិនអាចប្រើបាននៅលើការមើលជាមុននេះទេ។ សូមផ្ញើអ៊ីមែលមកយើងដោយផ្ទាល់តាម',
   formSuccessTitle: 'សូមអរគុណ។ សាររបស់អ្នកត្រូវបានផ្ញើ។',
   formSuccessBody: 'អ្វីដែលអ្នកបានវាយបញ្ចូល មិនត្រូវបានរក្សាទុកនៅលើគេហទំព័រនេះទេ។',
   formErrorTitle: 'យើងមិនអាចផ្ញើសារបានទេ។',
@@ -315,8 +319,7 @@ const km: Record<UIKey, string> = {
   formPanelTitleGeneral: 'ផ្ញើសារមកយើង',
   formToastSent: 'បានផ្ញើ',
   formPanelNotePartner: 'សូមប្រាប់យើងអំពីអង្គការរបស់អ្នក។ ប្រអប់ដែលមានសញ្ញា * ត្រូវតែបំពេញ។',
-  formPanelNoteVolunteer:
-    'សូមប្រាប់យើងពីអ្វីដែលអ្នកចង់ជួយ។ ប្រអប់ដែលមានសញ្ញា * ត្រូវតែបំពេញ។',
+  formPanelNoteVolunteer: 'សូមប្រាប់យើងពីអ្វីដែលអ្នកចង់ជួយ។ ប្រអប់ដែលមានសញ្ញា * ត្រូវតែបំពេញ។',
   formPhoneHint: 'សូមបញ្ចូលលេខកូដប្រទេស ឧទាហរណ៍ +855។',
   formPrivacyNote:
     'អ្វីដែលអ្នកវាយបញ្ចូលនៅទីនេះ មិនត្រូវបានរក្សាទុកនៅលើគេហទំព័រនេះទេ។ សាររបស់អ្នកត្រូវបានផ្ញើតាមអ៊ីមែលទៅ SKO តែប៉ុណ្ណោះ។',
@@ -333,8 +336,7 @@ const km: Record<UIKey, string> = {
   introPrograms:
     'គម្រោងបួន វិធីសាស្ត្រតែមួយ៖ កុមារធំធាត់ដោយសុវត្ថិភាព ក្នុងគ្រួសារ និងក្នុងសហគមន៍ខ្លួនឯង។',
   introActivities: 'អ្វីដែលក្រុមការងាររបស់យើងកំពុងធ្វើ ពីខែមួយទៅខែមួយ។',
-  introImpact:
-    'អ្វីដែលយើងបានធ្វើ របៀបដែលយើងរាប់ និងអ្វីដែលគ្រួសារដែលយើងធ្វើការជាមួយបាននិយាយ។',
+  introImpact: 'អ្វីដែលយើងបានធ្វើ របៀបដែលយើងរាប់ និងអ្វីដែលគ្រួសារដែលយើងធ្វើការជាមួយបាននិយាយ។',
   introReports:
     'របាយការណ៍ប្រចាំឆ្នាំ របាយការណ៍ហិរញ្ញវត្ថុដែលបានធ្វើសវនកម្ម និងឯកសារអភិបាលកិច្ចរបស់យើង។',
   introPartners: 'ស្ថាប័ន និងអង្គការដែលយើងធ្វើការជាមួយ។',
@@ -343,7 +345,8 @@ const km: Record<UIKey, string> = {
   ctaHomeBody:
     'ទាក់ទងមកយើង ប្រសិនបើអ្នកមានសំណួរអំពីការងារ ឬភាពជាដៃគូរបស់យើង។ របាយការណ៍ប្រចាំឆ្នាំ និងសវនកម្មរបស់យើងត្រូវបានផ្សព្វផ្សាយពេញលេញ។',
   ctaAboutTitle: 'មានសំណួរអំពីរបៀបដែលយើងធ្វើការមែនទេ?',
-  ctaAboutBody: 'របាយការណ៍ប្រចាំឆ្នាំ និងសវនកម្មរបស់យើងត្រូវបានផ្សព្វផ្សាយពេញលេញ។ សូមសួរយើងអំពីអ្វីដែលមិនមានក្នុងនោះ។',
+  ctaAboutBody:
+    'របាយការណ៍ប្រចាំឆ្នាំ និងសវនកម្មរបស់យើងត្រូវបានផ្សព្វផ្សាយពេញលេញ។ សូមសួរយើងអំពីអ្វីដែលមិនមានក្នុងនោះ។',
   ctaProgramsTitle: 'សួរអំពីគម្រោងមួយ។',
   ctaProgramTitle: 'សួរអំពីគម្រោងនេះ។',
   ctaImpactTitle: 'សួរពីរបៀបដែលយើងទៅដល់គ្រួសារកាន់តែច្រើន។',
@@ -371,7 +374,8 @@ const km: Record<UIKey, string> = {
   nextStep2: 'យើងឆ្លើយតបតាមអ៊ីមែល ឬទូរស័ព្ទ តាមដែលអ្នកចង់បាន។',
   nextStep3: 'បើចាំបាច់ យើងរៀបចំការហៅទូរស័ព្ទ ឬការមកជួបនៅការិយាល័យ។',
   nextHours: 'ម៉ោងធ្វើការ',
-  nextPrivacy: 'សាររបស់អ្នកត្រូវបានផ្ញើទៅបុគ្គលិក SKO តាមអ៊ីមែល ហើយមិនត្រូវបានរក្សាទុកនៅលើគេហទំព័រនេះទេ។',
+  nextPrivacy:
+    'សាររបស់អ្នកត្រូវបានផ្ញើទៅបុគ្គលិក SKO តាមអ៊ីមែល ហើយមិនត្រូវបានរក្សាទុកនៅលើគេហទំព័រនេះទេ។',
   formPreferred: 'វិធីល្អបំផុតដើម្បីទាក់ទងអ្នក',
   formPreferEmail: 'អ៊ីមែល',
   formPreferPhone: 'ទូរស័ព្ទ',
@@ -388,11 +392,13 @@ const km: Record<UIKey, string> = {
   formAvailability: 'ពេលវេលាទំនេរ',
   formAvailabilityHint: 'ឧទាហរណ៍៖ ២ថ្ងៃក្នុងមួយសប្តាហ៍ ចាប់ពីខែមីនា',
   formLanguages: 'ភាសាដែលអ្នកនិយាយ',
-  formVolunteerNote: 'អ្នកដែលអាចមានទំនាក់ទំនងជាមួយកុមារ ត្រូវឆ្លងកាត់ការត្រួតពិនិត្យសុវត្ថិភាពកុមារ និងការណែនាំ មុនពេលចាប់ផ្តើម។',
+  formVolunteerNote:
+    'អ្នកដែលអាចមានទំនាក់ទំនងជាមួយកុមារ ត្រូវឆ្លងកាត់ការត្រួតពិនិត្យសុវត្ថិភាពកុមារ និងការណែនាំ មុនពេលចាប់ផ្តើម។',
   formOutlet: 'ស្ថាប័នព័ត៌មាន ឬស្ថាប័នសិក្សា',
   formDeadline: 'ថ្ងៃផុតកំណត់',
   formMessageHint: 'សូមប្រាប់យើងបន្តិចអំពីអ្វីដែលអ្នកត្រូវការ។',
-  formPanelNoteGeneral: 'ព័ត៌មានខ្លះៗ និងសាររបស់អ្នក។ ការឆ្លើយតបភាគច្រើនមកដល់ក្នុងរយៈពេលពីរថ្ងៃធ្វើការ។',
+  formPanelNoteGeneral:
+    'ព័ត៌មានខ្លះៗ និងសាររបស់អ្នក។ ការឆ្លើយតបភាគច្រើនមកដល់ក្នុងរយៈពេលពីរថ្ងៃធ្វើការ។',
   formSectionYou: 'អំពីអ្នក',
   formSectionMessage: 'សាររបស់អ្នក',
   formSectionPartner: 'ព័ត៌មានភាពជាដៃគូ',

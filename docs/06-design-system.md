@@ -34,22 +34,22 @@ Result: institutional rather than campaign-y, which is what a grant officer need
 Full ramp with measured contrast in `theme.css`. Ratios are WCAG 2.1 relative-luminance calculations
 against `#FFFFFF`, not estimates.
 
-| Role | Token | Hex | Contrast | Use |
-|---|---|---|---|---|
-| Headings | `ink-900` | `#0E1533` | 17.4:1 | |
-| Body | `ink-600` | `#3E4869` | 8.5:1 | |
-| Meta / captions | `ink-400` | `#5C6689` | 5.4:1 | AA floor for small text |
-| Dividers, disabled | `ink-300` | `#929AB5` | 2.8:1 | **Never text** |
-| **Brand** | `blue-700` | **`#2B4CC7`** | 6.2:1 | Buttons, rules, numerals |
-| Links, hover | `blue-800` | `#1E3894` | 8.8:1 | |
-| Secondary, icons | `blue-600` | `#4A6BDB` | 4.6:1 | |
-| Borders, underlines | `blue-200` | `#B9C6EE` | — | |
-| Hover fills | `blue-50` | `#EEF2FD` | — | |
-| Dark surface | `blue-900` | `#14235C` | 12.8:1 | Footer + one CTA band |
-| **Support** | `aqua-200` | **`#C3E9E8`** | — | Chips, quote mark, notice wells |
-| **Support** | `sky-200` | **`#9BE1FF`** | — | Accent bars, hero wash, focus glow |
-| Error | `danger-700` | `#B42318` | 6.6:1 | Form errors, "closes in N days" |
-| Success | `success-700` | `#067647` | 5.7:1 | Sent-form confirmation only |
+| Role                | Token         | Hex           | Contrast | Use                                |
+| ------------------- | ------------- | ------------- | -------- | ---------------------------------- |
+| Headings            | `ink-900`     | `#0E1533`     | 17.4:1   |                                    |
+| Body                | `ink-600`     | `#3E4869`     | 8.5:1    |                                    |
+| Meta / captions     | `ink-400`     | `#5C6689`     | 5.4:1    | AA floor for small text            |
+| Dividers, disabled  | `ink-300`     | `#929AB5`     | 2.8:1    | **Never text**                     |
+| **Brand**           | `blue-700`    | **`#2B4CC7`** | 6.2:1    | Buttons, rules, numerals           |
+| Links, hover        | `blue-800`    | `#1E3894`     | 8.8:1    |                                    |
+| Secondary, icons    | `blue-600`    | `#4A6BDB`     | 4.6:1    |                                    |
+| Borders, underlines | `blue-200`    | `#B9C6EE`     | —        |                                    |
+| Hover fills         | `blue-50`     | `#EEF2FD`     | —        |                                    |
+| Dark surface        | `blue-900`    | `#14235C`     | 12.8:1   | Footer + one CTA band              |
+| **Support**         | `aqua-200`    | **`#C3E9E8`** | —        | Chips, quote mark, notice wells    |
+| **Support**         | `sky-200`     | **`#9BE1FF`** | —        | Accent bars, hero wash, focus glow |
+| Error               | `danger-700`  | `#B42318`     | 6.6:1    | Form errors, "closes in N days"    |
+| Success             | `success-700` | `#067647`     | 5.7:1    | Sent-form confirmation only        |
 
 Ink is blue-black rather than neutral grey, so text sits in the same family as the brand. `#2B4CC7`
 lands at 6.2:1 — near-identical to the previous brand colour, so it passes AA for normal text and for
@@ -69,11 +69,11 @@ semantics, and each exists purely to mean something.
 
 ## 3. Typography
 
-| Role | Family | Loaded |
-|---|---|---|
-| Latin UI + body | Inter | 400/600/700, Latin subset |
-| Khmer everything | **Kantumruy Pro** (fallback Noto Sans Khmer) | 400/600/700, `U+1780–17FF` subset |
-| Display serif | Source Serif 4 | 600, Latin only — used for exactly one thing |
+| Role             | Family                                       | Loaded                                       |
+| ---------------- | -------------------------------------------- | -------------------------------------------- |
+| Latin UI + body  | Inter                                        | 400/600/700, Latin subset                    |
+| Khmer everything | **Kantumruy Pro** (fallback Noto Sans Khmer) | 400/600/700, `U+1780–17FF` subset            |
+| Display serif    | Source Serif 4                               | 600, Latin only — used for exactly one thing |
 
 Self-hosted WOFF2, no third-party font request (ADR-006). Scale is fluid `clamp()`; body is **17px**, not
 16 — most readers are on a phone, in daylight, on mobile data.
@@ -83,14 +83,14 @@ Self-hosted WOFF2, no third-party font request (ADR-006). Scale is fluid `clamp(
 These live in `@layer base` under `:lang(km)`, so they follow the language wherever it appears — including
 a Khmer name inside an English sentence — instead of depending on a developer remembering per component.
 
-| Rule | Value | Why |
-|---|---|---|
-| `line-height` | 1.9 body / 1.5 headings | Subscript consonants (ជើង) and above-baseline vowel signs collide at Latin leading |
-| `font-size` | +6.25% on `p, li, dd, figcaption` (em-scoped, never compounds) | Khmer reads smaller at the same nominal size |
-| `letter-spacing` | `normal`, always | Tracking separates a cluster from its base consonant |
-| `text-transform` | never — eyebrows drop uppercase in km | Khmer has no case |
-| `hyphens` / `word-break` | `none` / `normal` | No inter-word spaces; forced breaks split clusters |
-| Measure | 44rem Latin / 40rem Khmer | Same reading length, wider glyphs |
+| Rule                     | Value                                                          | Why                                                                                |
+| ------------------------ | -------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `line-height`            | 1.9 body / 1.5 headings                                        | Subscript consonants (ជើង) and above-baseline vowel signs collide at Latin leading |
+| `font-size`              | +6.25% on `p, li, dd, figcaption` (em-scoped, never compounds) | Khmer reads smaller at the same nominal size                                       |
+| `letter-spacing`         | `normal`, always                                               | Tracking separates a cluster from its base consonant                               |
+| `text-transform`         | never — eyebrows drop uppercase in km                          | Khmer has no case                                                                  |
+| `hyphens` / `word-break` | `none` / `normal`                                              | No inter-word spaces; forced breaks split clusters                                 |
+| Measure                  | 44rem Latin / 40rem Khmer                                      | Same reading length, wider glyphs                                                  |
 
 The preview shows the wrong-vs-right leading comparison side by side — it's the clearest argument for why
 this is a system rule and not a stylistic preference.
@@ -123,14 +123,14 @@ costs one CMS field. The Sanity `alt` field's help text tells staff to describe 
 
 ## 6. Responsive behaviour
 
-| Breakpoint | What changes |
-|---|---|
-| < 640 | 1-col cards · stats stack · nav → full-screen panel · buttons full-width · bank table → definition list · **hero photo moves above the white card** |
-| 640–1023 | 2-col cards · stats 2×2 · director card still stacked |
-| ≥ 1024 | 3-col cards · stats 4-up · director card side-by-side · horizontal nav |
-| ≥ 1280 | Container caps at 1200px, gutters grow |
+| Breakpoint | What changes                                                                                                                                        |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| < 640      | 1-col cards · stats stack · nav → full-screen panel · buttons full-width · bank table → definition list · **hero photo moves above the white card** |
+| 640–1023   | 2-col cards · stats 2×2 · director card still stacked                                                                                               |
+| ≥ 1024     | 3-col cards · stats 4-up · director card side-by-side · horizontal nav                                                                              |
+| ≥ 1280     | Container caps at 1200px, gutters grow                                                                                                              |
 
-On mobile the hero photo sits *above* the white card rather than behind it. Text over a CMS-uploaded photo
+On mobile the hero photo sits _above_ the white card rather than behind it. Text over a CMS-uploaded photo
 at 375px is a contrast gamble no image can be trusted to win, and the site's AA commitment can't depend on
 which photo a staff member picks next year.
 
@@ -139,7 +139,7 @@ which photo a staff member picks next year.
 Built in: measured contrast on every token · 3px `:focus-visible` blue ring, inverted to white on dark surfaces ·
 skip link first in tab order · semantic landmarks, one `h1`, no skipped heading levels · focus trap and
 restore on the mobile nav and lightbox · `lang` per locale and on inline foreign passages · per-field form
-errors via `aria-describedby` with icon *and* text · `aria-live="polite"` status region · required alt on
+errors via `aria-describedby` with icon _and_ text · `aria-live="polite"` status region · required alt on
 every Sanity image field · 44px minimum tap targets · no horizontal scroll at 320px · layouts hold at 200%
 zoom.
 
@@ -149,7 +149,7 @@ falls back to a system font · 320px and 200%-zoom screenshots per page.
 
 ## 8. Notes on the placeholders
 
-Everything in *this preview file* is marked `[PLACEHOLDER]`. **No SKO facts, statistics, staff names, or a
+Everything in _this preview file_ is marked `[PLACEHOLDER]`. **No SKO facts, statistics, staff names, or a
 director's name have been invented** — the numbers shown (1,240 / 3,800 / 18 / 96%) are visibly bracketed
 placeholders demonstrating the component, not claims.
 

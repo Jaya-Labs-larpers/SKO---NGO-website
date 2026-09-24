@@ -24,7 +24,7 @@ export interface Pointer {
 
 export interface Flyer {
   /** Which edge it rests against. */
-  side: "left" | "right";
+  side: 'left' | 'right';
   /** Width in CSS px. */
   size: number;
   /** Resting spot. */
@@ -61,11 +61,10 @@ export interface Flock {
 export const COMPACT_BELOW = 768;
 
 const TAU = Math.PI * 2;
-const clamp = (v: number, lo: number, hi: number) =>
-  Math.min(hi, Math.max(lo, v));
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 interface Slot {
-  side: "left" | "right";
+  side: 'left' | 'right';
   /** Resting height as a share of the viewport. */
   y: number;
   flapHz: number;
@@ -85,7 +84,7 @@ interface Slot {
  */
 const SLOTS: readonly Slot[] = [
   {
-    side: "right",
+    side: 'right',
     y: 0.3,
     flapHz: 1.0,
     ring: 0.3,
@@ -97,7 +96,7 @@ const SLOTS: readonly Slot[] = [
     p2: 1.9,
   },
   {
-    side: "left",
+    side: 'left',
     y: 0.5,
     flapHz: 1.15,
     ring: 2.4,
@@ -109,7 +108,7 @@ const SLOTS: readonly Slot[] = [
     p2: 0.8,
   },
   {
-    side: "right",
+    side: 'right',
     y: 0.76,
     flapHz: 0.9,
     ring: 4.4,
@@ -136,13 +135,9 @@ export function flyerSize(viewport: Viewport): number {
  * The resting x. On phones they peek in from the very edge so they never sit
  * over running text; on larger screens they rest just inside it.
  */
-function restingX(
-  side: "left" | "right",
-  size: number,
-  viewport: Viewport,
-): number {
+function restingX(side: 'left' | 'right', size: number, viewport: Viewport): number {
   const inset = isCompact(viewport) ? size * 0.35 : 32 + size / 2;
-  return side === "left" ? inset : viewport.width - inset;
+  return side === 'left' ? inset : viewport.width - inset;
 }
 
 export function createFlock(viewport: Viewport): Flock {
@@ -285,7 +280,7 @@ export function wingSpan(flyer: Flyer, closed = 0.4): number {
    Carrying the flock from one page to the next
    ------------------------------------------------------------------------- */
 
-export const STORAGE_KEY = "sko-flock";
+export const STORAGE_KEY = 'sko-flock';
 
 /**
  * What the next page needs to draw the flock exactly where this one left it.

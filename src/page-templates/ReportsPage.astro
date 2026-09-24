@@ -39,7 +39,10 @@ const heading = t(lang, 'pageReports');
             years.map((year) => (
               <div class="mb-9">
                 <h2 class="mb-4 text-[length:var(--text-h3)]">{year || '—'}</h2>
-                <ReportList lang={lang} reports={reports.filter((report) => (report.year ?? 0) === year)} />
+                <ReportList
+                  lang={lang}
+                  reports={reports.filter((report) => (report.year ?? 0) === year)}
+                />
               </div>
             ))
           )
