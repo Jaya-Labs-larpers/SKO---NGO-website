@@ -136,8 +136,10 @@ look like code bugs.
 | `PARTNER_TO_EMAIL`     | partnerships/grants inbox |
 
 Production refuses localhost/example/Pages URLs, test Turnstile site keys, missing CMS settings,
-missing essential published documents, unfinished markers, untranslated Khmer fallback, and missing
-donation QR/bank data. Do not bypass this gate to get a first production deployment.
+missing essential published documents, unfinished markers, and missing donation QR/bank data. Do
+not bypass this gate to get a first production deployment. Khmer pages that fall back to English
+are listed as build warnings, not failures: the fallback is marked `lang="en"`, and staff fill in
+the Khmer in Sanity.
 `npm run build:production` exercises the gate locally. An intentionally configured preview remains
 available before content is complete and uses `noindex` plus a disallowing robots file.
 

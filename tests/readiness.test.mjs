@@ -57,26 +57,30 @@ test("production rejects development configuration while explicit previews remai
   );
 });
 
-test("production content rejects unfinished markers and untranslated Khmer", async () => {
-  const { contentFailures } = await import("../scripts/readiness.mjs");
+test("unfinished markers fail and untranslated Khmer is reported", async () => {
+  const { khmerFallbacks, markerFailures } = await import(
+    "../scripts/readiness.mjs"
+  );
   assert.deepEqual(
-    contentFailures(
+    khmerFallbacks(
       '<html lang="km"><a hreflang="en" lang="en" href="/about/">EN</a></html>',
       "/km/about/",
     ),
     [],
   );
-  assert.ok(contentFailures("<p>[NEEDS SKO]</p>", "/about/").length);
-  assert.ok(contentFailures("<p>[PLACEHOLDER MAP]</p>", "/contact/").length);
+  assert.ok(markerFailures("<p>[NEEDS SKO]</p>").length);
+  assert.ok(markerFailures("<p>[PLACEHOLDER MAP]</p>").length);
+  assert.ok(markerFailures("<h3>[EXAMPLE] A training day</h3>").length);
+  assert.ok(markerFailures("<div>[LOGO]</div>").length);
   assert.ok(
-    contentFailures("<h3>[EXAMPLE] A training day</h3>", "/activities/").length,
-  );
-  assert.ok(contentFailures("<div>[LOGO]</div>", "/partners/").length);
-  assert.ok(
-    contentFailures(
+    khmerFallbacks(
       '<html lang="km"><p lang="en">Fallback</p></html>',
       "/km/about/",
     ).length,
+  );
+  assert.deepEqual(
+    khmerFallbacks('<html lang="en"><p lang="en">About</p></html>', "/about/"),
+    [],
   );
 });
 

@@ -13,7 +13,7 @@
  * hides itself rather than rendering scaffolding. The same pass runs over CMS
  * content, because a staff member drafting in Sanity can type a marker too.
  *
- * Enforced downstream by `contentFailures()` in scripts/readiness.mjs, which
+ * Enforced downstream by `markerFailures()` in scripts/readiness.mjs, which
  * fails the build if a marker still reaches the HTML.
  */
 
