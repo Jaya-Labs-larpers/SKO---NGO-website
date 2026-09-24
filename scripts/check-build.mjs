@@ -10,7 +10,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
-import { contentFailures, deploymentEnvironment, markerFailures } from './readiness.mjs';
+import { deploymentEnvironment, khmerFallbacks, markerFailures } from './readiness.mjs';
 import { findEnvLeaks, findSecrets, secretEnvEntries } from './secrets.mjs';
 
 const env = { ...loadEnv('production', process.cwd(), ''), ...process.env };
@@ -35,6 +35,7 @@ async function* htmlFiles(dir) {
 const TEXT_FILE = /\.(?:html|js|mjs|css|json|xml|txt|svg|webmanifest|map)$/;
 
 const failures = [];
+const warnings = [];
 let checked = 0;
 
 function check(condition, page, message) {
@@ -46,11 +47,11 @@ for await (const file of htmlFiles(DIST)) {
   const html = await readFile(file, 'utf8');
   checked += 1;
   // An internal content marker in the HTML is a leak in any environment, so it
-  // is checked on every build. The rest of contentFailures() — the Khmer
-  // fallback rule — is a completeness gate and stays production-only.
-  const contentIssues =
-    production && !localContent ? contentFailures(html, page) : markerFailures(html);
-  for (const failure of contentIssues) check(false, page, failure);
+  // fails every build. Missing Khmer is a to-do list for staff, not a leak: it
+  // is reported on production Sanity builds and does not block the deploy.
+  for (const failure of markerFailures(html)) check(false, page, failure);
+  if (production && !localContent)
+    for (const warning of khmerFallbacks(html, page)) warnings.push(`${page}: ${warning}`);
 
   const isKhmer = page.startsWith('/km/');
   const is404 = page.includes('404');
@@ -131,6 +132,10 @@ for await (const file of allFiles(DIST)) {
 }
 
 console.log(`[check] ${checked} page(s) checked, ${scanned} text file(s) scanned for secrets`);
+if (warnings.length > 0) {
+  console.warn(`[check] ${warnings.length} warning(s), not blocking:`);
+  for (const warning of warnings) console.warn(`  - ${warning}`);
+}
 if (failures.length > 0) {
   console.error(`[check] ${failures.length} failure(s):`);
   for (const failure of failures) console.error(`  - ${failure}`);

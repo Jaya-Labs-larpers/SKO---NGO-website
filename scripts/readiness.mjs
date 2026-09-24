@@ -79,12 +79,17 @@ export function markerFailures(html) {
   return found ? [`unfinished content marker ${found[0]}`] : [];
 }
 
-export function contentFailures(html, page) {
-  const failures = markerFailures(html);
+/**
+ * English standing in for missing Khmer. Reported on production Sanity builds
+ * so staff can see what is left to translate, but it does not block a deploy:
+ * the page still works, and every fallback carries lang="en" for screen
+ * readers. English language-switch links are not fallbacks.
+ */
+export function khmerFallbacks(html, page) {
   const content = html.replace(/<a\b(?=[^>]*\bhreflang="en")[^>]*>/g, "");
-  if (page.startsWith("/km/") && /\blang="en"/.test(content))
-    failures.push("English fallback in Khmer content");
-  return failures;
+  return page.startsWith("/km/") && /\blang="en"/.test(content)
+    ? ["English fallback in Khmer content"]
+    : [];
 }
 
 export function siteSettingsFailures(settings) {

@@ -58,7 +58,8 @@ Valid general/partner tests preserve recipient routing, escaping and reply-to be
 - Production requires a real HTTPS origin, real-shaped Turnstile site key and CMS configuration.
   Missing published CMS documents no longer fall back to fixtures in production.
 - Production checks require published donation QR images, complete bank account essentials and
-  contact addresses; rendered unfinished markers and Khmer English fallback block the build.
+  contact addresses; rendered unfinished markers block the build, and Khmer English fallback is
+  reported as a warning.
   English language-switch links remain allowed. These checks do not certify financial accuracy or
   content/photo consent.
 - With runtime `PUBLIC_DEPLOYMENT_ENV=production`, form configuration rejects missing KV, test-shaped
