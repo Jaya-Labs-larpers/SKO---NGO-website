@@ -51,11 +51,11 @@ const story = stories[0];
     Hero: text-led, no photograph. It starts at the top of the window, under a
     header that has gone transparent, so the section pays the header's height
     back as padding. The butterflies (ButterflyField) fly inside this section
-    only, behind the text block, and exist on no other page.
+    only, behind the text block, as they do inside every PageHero.
   */}
   <section
     data-home-hero
-    class="hero-overlap relative border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] pt-[var(--header-h)]"
+    class="hero-overlap relative flex flex-col justify-center border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] pt-[var(--header-h)]"
   >
     <ButterflyField />
     <div class="wrap relative pt-5 pb-10 sm:pt-12 sm:pb-20 lg:pt-14 lg:pb-24">
@@ -72,14 +72,14 @@ const story = stories[0];
         >
           {tagline.value}
         </h1>
-        <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <a href={localizePath('/contact', lang)} class="btn btn-primary btn-fill btn-block sm:w-auto">
+        <div class="mt-7 inline-grid grid-cols-2 gap-3 max-[374px]:grid-cols-1">
+          <a href={localizePath('/contact', lang)} class="btn btn-primary btn-fill">
             <span class="btn-fill__blob" aria-hidden="true"></span>
             <span class="roll">
               <span class="roll__text" data-text={t(lang, 'contactUs')}>{t(lang, 'contactUs')}</span>
             </span>
           </a>
-          <a href={localizePath('/contact?topic=partner', lang)} class="btn btn-secondary btn-block sm:w-auto">
+          <a href={localizePath('/contact?topic=partner', lang)} class="btn btn-secondary">
             <span class="roll">
               <span class="roll__text" data-text={t(lang, 'partnerWithUs')}>{t(lang, 'partnerWithUs')}</span>
             </span>
@@ -183,7 +183,7 @@ const story = stories[0];
     story && (
       <section class="story-band on-inverse">
         <div class="wrap">
-          <StoryQuote lang={lang} story={story} inverse />
+          <StoryQuote lang={lang} story={story} inverse quoteOnly />
         </div>
       </section>
     )

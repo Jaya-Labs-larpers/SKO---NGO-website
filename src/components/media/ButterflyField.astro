@@ -1,16 +1,18 @@
 ---
 /**
- * The home hero's flock: three logo butterflies of one size, flying inside
- * the hero picture. Place it as a direct child of the hero section; it fills
- * that box, scrolls away with it, and exists on no other page. The motion
- * lives in ~/lib/butterflies/flight.
+ * The hero's flock: three logo butterflies of one size, flying inside the
+ * first-screen hero band of the home page and of every page hero. Place it as
+ * a direct child of the hero section; it fills that box, is clipped to it, and
+ * scrolls away with it. The motion lives in ~/lib/butterflies/flight.
  *
  * Each flies on its own; while the mouse moves over the hero they trail it,
  * and after it has been still for IDLE_MS, or has left the hero, they drift
- * back to the edges. They fly behind the hero card ([data-butterfly-shelter]),
- * which is also a no-follow zone. Leaving the page they fade out with it;
- * coming back, they are where they were — the flock is saved on the way out
- * and redrawn by the inline script below before first paint.
+ * back to the edges. They fly behind the hero text ([data-butterfly-shelter]),
+ * which is also a no-follow zone. Between two pages that both have a hero they
+ * carry straight on: the flock is saved on the way out and redrawn by the
+ * inline script below before first paint, so each comes back where it was and
+ * lazy-loads in with the arriving page, a beat behind the hero (Page arrival
+ * in global.css). Leaving for a page with no hero they fade out with the page.
  *
  * On phones they are small and keep to the edges. Under
  * prefers-reduced-motion or data saver they rest in place and never move.
@@ -181,10 +183,14 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     // covers browsers without it.
     window.addEventListener('pageswap', save);
     window.addEventListener('pagehide', save);
+    // Otherwise a first page brought back from the back/forward cache still
+    // counts as arrived, and the flock skips its beat behind the page.
+    window.addEventListener('pageswap', () => layer.removeAttribute('data-arriving'));
 
     render();
     if (layer.hasAttribute('data-pending')) {
-      // First page of the visit: nothing to restore, so the flock fades in.
+      // First page of the visit: nothing to restore, so the flock lazy-loads in
+      // on its own, with no arriving page around it.
       layer.setAttribute('data-arriving', '');
       layer.removeAttribute('data-pending');
     }

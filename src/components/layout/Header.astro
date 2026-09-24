@@ -30,9 +30,11 @@ function isCurrent(path: string): boolean {
   data-overlay={overlay ? '' : undefined}
   data-at-top={overlay ? '' : undefined}
 >
-  <div class="flex h-[var(--header-h)] w-full items-center gap-6 px-[var(--spacing-gutter)]">
+  <div
+    class="flex h-full w-full items-center gap-6 pt-[var(--safe-top)] pr-[var(--gutter-right)] pl-[var(--gutter-left)]"
+  >
     <a href={localizePath('/', lang)} class="flex flex-none items-center no-underline">
-      <Logo variant="full" height={92} title={orgName} class="w-auto lg:h-[118px]" />
+      <Logo variant="full" height={92} title={orgName} class="h-[68px] w-auto sm:h-[92px] lg:h-[118px]" />
     </a>
 
     <nav class="ml-auto hidden lg:flex lg:gap-0.5" aria-label={t(lang, 'mainNavLabel')}>
@@ -94,7 +96,9 @@ function isCurrent(path: string): boolean {
   aria-modal="true"
   aria-label={t(lang, 'menu')}
 >
-  <div class="wrap flex h-[var(--header-h)] flex-none items-center border-b border-[color:var(--color-line-subtle)]">
+  <div
+    class="wrap flex h-[var(--header-h)] flex-none items-center border-b border-[color:var(--color-line-subtle)] pt-[var(--safe-top)]"
+  >
     <span class="text-[14px] font-bold text-[color:var(--color-ink-900)]">{orgName}</span>
     <button
       type="button"
@@ -106,13 +110,16 @@ function isCurrent(path: string): boolean {
     </button>
   </div>
 
-  <nav class="wrap flex-1 overflow-y-auto py-3" aria-label={t(lang, 'mainNavLabel')}>
+  <nav
+    class="wrap flex-1 overflow-y-auto pt-3 pb-[calc(0.75rem+var(--safe-bottom))]"
+    aria-label={t(lang, 'mainNavLabel')}
+  >
     {
       mobileNav.map((item) => (
         <a
           href={localizePath(item.path, lang)}
           aria-current={isCurrent(item.path) ? 'page' : undefined}
-          class="flex items-center justify-between border-b border-[color:var(--color-line-subtle)] py-[17px] text-[19px] font-semibold text-[color:var(--color-ink-900)] no-underline"
+          class="flex items-center justify-between border-b border-[color:var(--color-line-subtle)] py-[15px] text-[17px] font-semibold text-[color:var(--color-ink-900)] no-underline"
         >
           {t(lang, item.key)}
           <span class="text-[color:var(--color-blue-700)]" aria-hidden="true">

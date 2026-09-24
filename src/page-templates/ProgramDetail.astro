@@ -1,8 +1,8 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
-import type { Program } from '~/lib/content/types';
+import type { LocaleBlocks, PortableBlock, Program } from '~/lib/content/types';
 import { getPartners, getPrograms, getStories } from '~/lib/content';
-import { ACTIVITY_LIMITS } from '~/lib/content/sections';
+import { ACTIVITY_LIMITS, blockText } from '~/lib/content/sections';
 import { localizePath, pick, t } from '~/lib/i18n/utils';
 import { resolveSeo } from '~/lib/seo';
 import BaseLayout from '~/layouts/BaseLayout.astro';
@@ -33,11 +33,31 @@ const others = programs.filter((entry) => entry.slug !== program.slug);
 const pad = (n: number) => String(n).padStart(2, '0');
 
 /*
-  The story's full account usually already sits in the programme body, so the
-  band carries only its quote.
+  When the programme has a story, its "Impact" section moves out of the body
+  and into the story band, so the account is told once, under the quote marks.
 */
 const story = stories.find((entry) => entry.program?.slug === program.slug);
-const pullQuote = story ? { ...story, body: null } : null;
+const isImpactHeading = (block: PortableBlock) =>
+  block._type === 'block' && block.style === 'h2' && /impact|លទ្ធផល/i.test(blockText(block));
+
+let body: LocaleBlocks | null | undefined = program.body;
+const impact: LocaleBlocks = {};
+if (story && program.body) {
+  body = {};
+  for (const [locale, blocks] of Object.entries(program.body) as [Locale, PortableBlock[] | null][]) {
+    const start = (blocks ?? []).findIndex(isImpactHeading);
+    if (!blocks || start < 0) {
+      body[locale] = blocks;
+      continue;
+    }
+    const next = blocks.findIndex((block, i) => i > start && block._type === 'block' && block.style === 'h2');
+    const end = next < 0 ? blocks.length : next;
+    body[locale] = [...blocks.slice(0, start), ...blocks.slice(end)];
+    impact[locale] = blocks.slice(start + 1, end);
+  }
+}
+const hasImpact = Object.values(impact).some((blocks) => blocks && blocks.length > 0);
+const pullQuote = story ? { ...story, body: hasImpact ? impact : null } : null;
 
 const seo = resolveSeo(program.seo, lang, {
   title: heading,
@@ -113,14 +133,14 @@ const seo = resolveSeo(program.seo, lang, {
       )
     }
 
-    <SectionedBody lang={lang} body={program.body} limits={ACTIVITY_LIMITS} partners={partners} leadProse />
+    <SectionedBody lang={lang} body={body} limits={ACTIVITY_LIMITS} partners={partners} leadProse />
   </div>
 
   {
     pullQuote && (
       <section class="story-band on-inverse">
         <div class="wrap">
-          <StoryQuote lang={lang} story={pullQuote} inverse />
+          <StoryQuote lang={lang} story={pullQuote} inverse compact />
         </div>
       </section>
     )

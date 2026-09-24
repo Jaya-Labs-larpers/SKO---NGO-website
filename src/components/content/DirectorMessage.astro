@@ -23,8 +23,8 @@ const pullQuote = pick(director.pullQuote, lang);
  */
 const quoteClass =
   lang === 'km'
-    ? 'font-[family-name:var(--font-khmer)] text-[24px] leading-[1.75] font-semibold'
-    : 'font-[family-name:var(--font-display)] text-[27px] leading-[1.35] font-semibold tracking-[-0.01em]';
+    ? 'font-[family-name:var(--font-khmer)] text-[18px] sm:text-[24px] leading-[1.75] font-semibold'
+    : 'font-[family-name:var(--font-display)] text-[19px] sm:text-[27px] leading-[1.35] font-semibold tracking-[-0.01em]';
 ---
 
 <div
@@ -48,7 +48,7 @@ const quoteClass =
 
   <div class="relative pt-1.5">
     <span
-      class="pointer-events-none absolute -top-3.5 -left-1.5 font-[family-name:var(--font-display)] text-[84px] leading-none font-bold text-[color:var(--color-aqua-200)]"
+      class="pointer-events-none absolute -top-3.5 -left-1.5 font-[family-name:var(--font-display)] text-[52px] leading-none sm:text-[84px] font-bold text-[color:var(--color-aqua-200)]"
       aria-hidden="true">&ldquo;</span
     >
 
@@ -63,7 +63,7 @@ const quoteClass =
       )
     }
 
-    <RichText blocks={director.message} lang={lang} class="mt-5 text-[16.5px]" />
+    <RichText blocks={director.message} lang={lang} class="mt-5 text-[15.5px] sm:text-[16.5px]" />
 
     <div class="mt-6.5 border-t border-[color:var(--color-line)] pt-5">
       <b

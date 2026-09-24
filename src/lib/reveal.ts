@@ -12,7 +12,7 @@
  * IntersectionObserver, or under reduced motion, nothing is touched at all.
  */
 
-/** Must match the transition length in global.css (.reveal[data-reveal]). */
+/** Must match --reveal-move in global.css. */
 export const REVEAL_MS = 900;
 /** Boxes arriving together are staggered by this much, up to STAGGER_CAP of them. */
 export const STAGGER_MS = 90;

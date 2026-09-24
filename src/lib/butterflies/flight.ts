@@ -1,6 +1,6 @@
 /**
- * The home hero's flock: three logo butterflies of one size that live inside
- * the hero picture.
+ * The hero's flock: three logo butterflies of one size that live inside the
+ * hero band of the home page and of every page hero.
  *
  * Each flies on its own — its own resting spot, wandering loop, wing beat and
  * pace — and together they keep the visitor company: while the mouse is
