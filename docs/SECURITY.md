@@ -160,7 +160,10 @@ domain in Phase 6.
 | Sanity token read-only / not shipped | **There is no token at all** (ADR-004). The dataset is public; the build reads it unauthenticated |
 | Dependency audit | Site and Studio: **0 vulnerabilities** on 2026-09-24 (see FIND-007) |
 | Pinned versions | All 14 site and 7 studio dependencies pinned to exact versions |
-| Sanity dataset permissions + CORS | **Cannot be done without a live project** — steps below |
+| Branch protection | **Done** — an active default-branch ruleset requires a pull request, resolved threads, and the `verify`, `lighthouse` and `studio` checks |
+| Dependabot | **Partial** — weekly updates are configured in PR #20 and alerts are enabled; automated security fixes still read back as disabled |
+| Uptime workflow | **Pending merge** — PR #20 schedules the live edge check every 15 minutes; no scheduled run has occurred yet |
+| Sanity dataset permissions + CORS | **Done** — `production` is public, no API tokens exist, and CORS has only the Studio and local development origins (verified 2026-09-24) |
 | Privacy: minimal collection, no tracking cookies | Verified: **no `Set-Cookie` header anywhere**. Analytics is Cloudflare's cookieless beacon. Form submissions are emailed and never stored |
 | No beneficiary/child data exposed | Verified — see below |
 
