@@ -135,7 +135,7 @@ export function sanityRows({ visibility, tokens, cors, hooks, users }) {
     row(
       "Sanity members",
       members.count > 0,
-      `${members.count} members; ${members.roles.join(", ")}`,
+      `${members.count} member${members.count === 1 ? "" : "s"}; ${members.roles.join(", ")}`,
     ),
   ];
 }
@@ -238,7 +238,9 @@ async function githubRows() {
         "api",
         `repos/${repository}/environments/Production/deployment-branch-policies`,
       ]);
-      rows.push(productionPolicyRow(environment, response.branch_policies ?? []));
+      rows.push(
+        productionPolicyRow(environment, response.branch_policies ?? []),
+      );
     } else {
       rows.push(productionPolicyRow(environment, []));
     }
