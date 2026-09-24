@@ -1,5 +1,6 @@
 # Phase 5 — Security review
 
+**Refreshed: 2026-09-24.**
 **Status: Phase 5 gate — awaiting sign-off.**
 **Scope:** the SKO website repository, its build output, and the contact Function. Testing was
 performed against a local instance only; nothing was run against a third-party system.
@@ -19,7 +20,7 @@ nothing to indicate it. That is now fail-closed.
 | Severity | Count | Status |
 |---|---|---|
 | High | 4 | Fixed |
-| Medium | 2 | 1 fixed, 1 accepted |
+| Medium | 2 | 2 fixed |
 | Low | 1 | Fixed |
 | Informational | 1 | Deployment prerequisite |
 
@@ -124,29 +125,10 @@ Development-only, and resolved by the same upgrade.
 ---
 
 ### FIND-007 — Sanity Studio dependency advisories
-**Severity: Medium** · `studio/package.json` · **Accepted, with rationale**
+**Severity: Medium** · `studio/package.json` · **Fixed**
 
-Seven advisories (4 high, 3 moderate) in `sanity@4.22.0`: `@sanity/cli`, `@sanity/runtime-cli`,
-`adm-zip`, `@sanity/preview-url-secret`, `@sanity/uuid`, `uuid`.
-
-**There is no clean upgrade path.** Every newer major is equal or worse:
-
-| Version | Advisories |
-|---|---|
-| `sanity@4.22.0` (shipped) | **7** (4 high, 3 moderate) |
-| `sanity@5.31.1` | 8 |
-| `sanity@6.8.0` | 14 — pulls in a new vulnerable tree (`@module-federation/*`, `js-yaml`, `@vercel/frameworks`) |
-
-npm's own remediation for 6.8.0 points *backwards* to 5.14.1. All three were installed and
-typechecked during this review before reverting.
-
-*Exposure:* the affected packages are the Sanity **CLI toolchain** — they run on a developer's
-machine during `sanity dev` and `sanity deploy`. They are not part of the Studio bundle served to
-SKO staff, and the Studio is hosted by Sanity, not by us. The website build does not depend on them
-at all.
-
-*Recommendation:* stay on 4.22.0, and re-check when Sanity publishes a release that resolves its own
-CLI advisories. Tracked as a maintenance item, not a launch blocker.
+The Studio now uses `sanity@6.13.2` with the overrides in `studio/package.json`. On 2026-09-24,
+`npm audit` reported zero vulnerabilities in both the site and Studio packages.
 
 ---
 
@@ -165,7 +147,7 @@ domain in Phase 6.
 | Item | Status |
 |---|---|
 | CSP | **Enforcing**, per page, with build-time hashes for inline structured data (see `08-build.md` §3). `frame-ancestors 'none'` in the header. |
-| HSTS | `max-age=31536000; includeSubDomains; preload` |
+| HSTS | Live header: `max-age=31536000`, without `includeSubDomains` or `preload`. See the reasoning in `docs/12-deployment-readiness.md`. |
 | X-Content-Type-Options | `nosniff` |
 | X-Frame-Options | `DENY` (plus `frame-ancestors 'none'`) |
 | Referrer-Policy | `strict-origin-when-cross-origin` |
@@ -176,7 +158,7 @@ domain in Phase 6.
 | Honeypot | Verified: a filled honeypot returns success and sends nothing — the bot is never told it failed |
 | No secrets in client bundle or repo | Verified by scan: 123 source and 67 built files, zero findings. The only `PUBLIC_*` name reaching the browser is the Turnstile **site** key, which is public by design |
 | Sanity token read-only / not shipped | **There is no token at all** (ADR-004). The dataset is public; the build reads it unauthenticated |
-| Dependency audit | Site: **0 vulnerabilities**. Studio: see FIND-007 |
+| Dependency audit | Site and Studio: **0 vulnerabilities** on 2026-09-24 (see FIND-007) |
 | Pinned versions | All 14 site and 7 studio dependencies pinned to exact versions |
 | Sanity dataset permissions + CORS | **Cannot be done without a live project** — steps below |
 | Privacy: minimal collection, no tracking cookies | Verified: **no `Set-Cookie` header anywhere**. Analytics is Cloudflare's cookieless beacon. Form submissions are emailed and never stored |
@@ -213,9 +195,9 @@ policy nobody reopens.
 
 ## Required before go-live (Phase 6)
 
-1. **Set production environment variables** in Cloudflare Pages, per environment:
-   `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `MAIL_FROM`, `CONTACT_TO_EMAIL`, `PARTNER_TO_EMAIL`,
-   `PUBLIC_SITE_URL`, `PUBLIC_TURNSTILE_SITE_KEY`, `PUBLIC_SANITY_PROJECT_ID`.
+1. **Set production Wrangler secrets** on the Workers production environment:
+   `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `MAIL_FROM`, `CONTACT_TO_EMAIL`, `PARTNER_TO_EMAIL`.
+   Set public build values as GitHub repository variables. Follow `docs/16-cloudflare-workers.md`.
    **The form now fails closed without the Turnstile secret — verify it after the first deploy.**
 2. **Bind the `RATE_LIMIT_KV` namespace.** Without it, rate limiting is skipped (deliberately
    fail-open, since Turnstile is the primary control) and a warning is logged on each submission.
