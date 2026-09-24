@@ -109,9 +109,15 @@ To seed an empty dataset from the fixtures, see `scripts/sanity-seed.mjs`.
 
 ## Rollback
 
-`npx wrangler rollback --env production`, confirm with `check:edge`, redeploy the current version.
-Do it once on purpose after launch and write down how long it took. Rollback restores files and
-code only: DNS, Redirect Rules, secrets and KV contents are unaffected.
+Automatic: the Deploy workflow records the live version before deploying. If the live checks fail
+after the deploy, it rolls back to that version, reruns the live checks and leaves the run failed,
+so GitHub emails. The site then serves the previous build, including its older Sanity content,
+until the cause is fixed and a deploy passes. Content sync reports the failed deploy but does not
+retry it.
+
+Manual: `npx wrangler rollback --env production`, confirm with `check:edge`, redeploy the current
+version. Rollback restores files and code only: DNS, Redirect Rules, secrets and KV contents are
+unaffected.
 
 ## Enabling the contact form (later)
 
