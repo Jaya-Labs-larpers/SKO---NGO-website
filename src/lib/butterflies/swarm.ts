@@ -17,7 +17,7 @@ import {
   WING_HINGE,
   WING_PALE,
   type WingPaths,
-} from "./shape";
+} from './shape';
 
 export interface SwarmOptions {
   /** Any integer. Same seed, same swarm. */
@@ -105,19 +105,14 @@ function mulberry32(seed: number): () => number {
 }
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const clamp = (v: number, lo: number, hi: number) =>
-  Math.min(hi, Math.max(lo, v));
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 const TAU = Math.PI * 2;
 
 /* ---------------------------------------------------------------------------
    Building the swarm
    ------------------------------------------------------------------------- */
 
-export function targetCount(
-  width: number,
-  height: number,
-  options: SwarmOptions,
-): number {
+export function targetCount(width: number, height: number, options: SwarmOptions): number {
   const byArea = Math.round((width * height) / options.areaPerButterfly);
   return clamp(byArea, options.minCount, options.maxCount);
 }
@@ -126,10 +121,7 @@ export function targetCount(
  * Homes are spread with a few rejection-sampling tries each, so the field reads
  * as scattered rather than clumped, without the regularity of a grid.
  */
-function pickHome(
-  existing: Butterfly[],
-  next: () => number,
-): { hx: number; hy: number } {
+function pickHome(existing: Butterfly[], next: () => number): { hx: number; hy: number } {
   let best = { hx: next(), hy: next() };
   let bestGap = -1;
   for (let attempt = 0; attempt < 6; attempt++) {
@@ -206,8 +198,7 @@ export function resizeSwarm(swarm: Swarm, width: number, height: number): void {
   }
   const count = targetCount(width, height, swarm.options);
   while (swarm.butterflies.length > count) swarm.butterflies.pop();
-  while (swarm.butterflies.length < count)
-    swarm.butterflies.push(makeButterfly(swarm));
+  while (swarm.butterflies.length < count) swarm.butterflies.push(makeButterfly(swarm));
   // Draw small ones first so the larger, nearer ones sit on top.
   swarm.butterflies.sort((a, b) => a.size - b.size);
 }
@@ -225,11 +216,7 @@ const GATHER_FORCE = 900;
  * Advance the swarm by `dt` seconds. `pointer` is the hover position in field
  * pixels, or null when nothing is hovering.
  */
-export function stepSwarm(
-  swarm: Swarm,
-  dt: number,
-  pointer: Pointer | null,
-): void {
+export function stepSwarm(swarm: Swarm, dt: number, pointer: Pointer | null): void {
   const { butterflies, options } = swarm;
   swarm.time += dt;
   const t = swarm.time;
@@ -256,8 +243,7 @@ export function stepSwarm(
       // A loose, slowly turning ring around the pointer — a cloud, not a pile.
       const a = b.ring + t * 0.55;
       tx = pointer.x + Math.cos(a) * b.ringR + Math.sin(t * b.w2 + b.p2) * 6;
-      ty =
-        pointer.y + Math.sin(a) * b.ringR * 0.8 + Math.sin(t * b.w1 + b.p1) * 6;
+      ty = pointer.y + Math.sin(a) * b.ringR * 0.8 + Math.sin(t * b.w1 + b.p1) * 6;
     } else {
       // A small wandering loop around home.
       tx =
@@ -350,16 +336,11 @@ function compile(wing: WingPaths): CompiledWing {
 }
 
 function wings() {
-  if (!compiled)
-    compiled = { left: compile(LEFT_WING), right: compile(RIGHT_WING) };
+  if (!compiled) compiled = { left: compile(LEFT_WING), right: compile(RIGHT_WING) };
   return compiled;
 }
 
-function drawWing(
-  ctx: CanvasRenderingContext2D,
-  wing: CompiledWing,
-  flap: number,
-): void {
+function drawWing(ctx: CanvasRenderingContext2D, wing: CompiledWing, flap: number): void {
   ctx.save();
   ctx.translate(WING_HINGE.x, WING_HINGE.y);
   ctx.scale(flap, 1);
@@ -372,11 +353,7 @@ function drawWing(
 }
 
 /** Draw one butterfly as vector paths, hinge at the origin, `size` CSS px wide. */
-function drawVector(
-  ctx: CanvasRenderingContext2D,
-  size: number,
-  flap: number,
-): void {
+function drawVector(ctx: CanvasRenderingContext2D, size: number, flap: number): void {
   const { left, right } = wings();
   const s = size / BUTTERFLY_VIEWBOX.width;
   ctx.save();
@@ -422,18 +399,16 @@ function makeSpriteCanvas(
   w: number,
   h: number,
 ): { canvas: CanvasImageSource; ctx: CanvasRenderingContext2D } | null {
-  if (typeof document !== "undefined") {
-    const canvas = document.createElement("canvas");
+  if (typeof document !== 'undefined') {
+    const canvas = document.createElement('canvas');
     canvas.width = w;
     canvas.height = h;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     return ctx ? { canvas, ctx } : null;
   }
-  if (typeof OffscreenCanvas !== "undefined") {
+  if (typeof OffscreenCanvas !== 'undefined') {
     const canvas = new OffscreenCanvas(w, h);
-    const ctx = canvas.getContext(
-      "2d",
-    ) as unknown as CanvasRenderingContext2D | null;
+    const ctx = canvas.getContext('2d') as unknown as CanvasRenderingContext2D | null;
     return ctx ? { canvas, ctx } : null;
   }
   return null;
@@ -445,12 +420,8 @@ function sprite(size: number, step: number, pixelRatio: number): Sprite | null {
   if (hit !== undefined) return hit;
 
   const s = size / BUTTERFLY_VIEWBOX.width;
-  const w = Math.ceil(
-    (BUTTERFLY_VIEWBOX.width * s + SPRITE_PAD * 2) * pixelRatio,
-  );
-  const h = Math.ceil(
-    (BUTTERFLY_VIEWBOX.height * s + SPRITE_PAD * 2) * pixelRatio,
-  );
+  const w = Math.ceil((BUTTERFLY_VIEWBOX.width * s + SPRITE_PAD * 2) * pixelRatio);
+  const h = Math.ceil((BUTTERFLY_VIEWBOX.height * s + SPRITE_PAD * 2) * pixelRatio);
   const hx = (WING_HINGE.x * s + SPRITE_PAD) * pixelRatio;
   const hy = (WING_HINGE.y * s + SPRITE_PAD) * pixelRatio;
 
@@ -497,9 +468,7 @@ export function drawSwarm(
 
   for (const b of swarm.butterflies) {
     // Wings close toward the body and open again — a flutter, not a full beat.
-    const step =
-      Math.round(((((b.phase % TAU) + TAU) % TAU) / TAU) * FLAP_STEPS) %
-      FLAP_STEPS;
+    const step = Math.round(((((b.phase % TAU) + TAU) % TAU) / TAU) * FLAP_STEPS) % FLAP_STEPS;
     const size = Math.round(b.size);
 
     ctx.save();

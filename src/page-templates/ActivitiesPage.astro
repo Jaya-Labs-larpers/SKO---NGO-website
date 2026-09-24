@@ -23,13 +23,19 @@ const hrefFor = (page: number) =>
   page === 1 ? localizePath('/activities', lang) : localizePath(`/activities/page/${page}`, lang);
 ---
 
-<BaseLayout headerOverlay
+<BaseLayout
+  headerOverlay
   lang={lang}
   title={heading}
   description={t(lang, 'introActivities')}
   noindex={currentPage > 1}
 >
-  <PageHero lang={lang} title={heading} intro={t(lang, 'introActivities')} trail={[{ label: heading }]} />
+  <PageHero
+    lang={lang}
+    title={heading}
+    intro={t(lang, 'introActivities')}
+    trail={[{ label: heading }]}
+  />
   <section class="section">
     <div class="wrap">
       {
@@ -38,7 +44,11 @@ const hrefFor = (page: number) =>
         ) : (
           <div class={cardGridCols(activities.length)}>
             {activities.map((activity) => (
-              <ActivityCard lang={lang} activity={activity} sizes={cardImageSizes(activities.length)} />
+              <ActivityCard
+                lang={lang}
+                activity={activity}
+                sizes={cardImageSizes(activities.length)}
+              />
             ))}
           </div>
         )

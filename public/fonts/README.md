@@ -4,12 +4,12 @@ These files are committed and served from this origin. **Nothing is requested fr
 runtime** — no third-party font request, no privacy question for European institutional donors, and
 a simpler CSP (`font-src 'self'`).
 
-| File | Family | Covers | Size |
-|---|---|---|---|
-| `inter-latin.woff2` | Inter | Latin, weights 400–700 | 47 KB |
-| `inter-latin-ext.woff2` | Inter | Latin Extended, weights 400–700 | 83 KB |
-| `kantumruy-pro-khmer.woff2` | Kantumruy Pro | Khmer block, weights 400–700 | 56 KB |
-| `source-serif-4-latin.woff2` | Source Serif 4 | Latin, weight 600 | 51 KB |
+| File                         | Family         | Covers                          | Size  |
+| ---------------------------- | -------------- | ------------------------------- | ----- |
+| `inter-latin.woff2`          | Inter          | Latin, weights 400–700          | 47 KB |
+| `inter-latin-ext.woff2`      | Inter          | Latin Extended, weights 400–700 | 83 KB |
+| `kantumruy-pro-khmer.woff2`  | Kantumruy Pro  | Khmer block, weights 400–700    | 56 KB |
+| `source-serif-4-latin.woff2` | Source Serif 4 | Latin, weight 600               | 51 KB |
 
 All are SIL Open Font Licence.
 
@@ -22,7 +22,7 @@ weight axis and synthesises a faux bold instead — which looks noticeably wrong
 
 **`unicode-range` does the work.** A subset file is only downloaded if the page actually renders a
 character in its block. So `inter-latin-ext.woff2` costs nothing until a partner name like
-*Planète Enfants & Développement* appears, and an English page does not pay for the Khmer file
+_Planète Enfants & Développement_ appears, and an English page does not pay for the Khmer file
 beyond the one word in the language toggle — which loads lazily under `font-display: swap`.
 
 `BaseLayout.astro` preloads only the font the current locale sets body copy in.

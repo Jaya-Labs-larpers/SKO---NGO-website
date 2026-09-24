@@ -31,120 +31,133 @@ const hasTextVersion = Object.values(chart.textVersion ?? {}).some(
 );
 ---
 
-{hasChartImage && (
-<figure class="reveal m-0 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white">
-  <!--
-    The button has no aria-label: its accessible name comes from its own visible
-    text, so the two cannot drift. An aria-label of "Enlarge image" over a
-    control that reads "Tap to enlarge" fails WCAG 2.5.3 (Label in Name) — a
-    speech-input user saying what they can see could not activate it.
+{
+  /**
+  The button has no aria-label: its accessible name comes from its own visible
+  text, so the two cannot drift. An aria-label of "Enlarge image" over a
+  control that reads "Tap to enlarge" fails WCAG 2.5.3 (Label in Name) — a
+  speech-input user saying what they can see could not activate it.
 
-    The expand affordance is an SVG rather than the "⤢" character on purpose:
-    a glyph counts as visible text and would put a symbol in the visible label
-    that the accessible name does not contain, which fails the same rule.
+  The expand affordance is an SVG rather than the "⤢" character on purpose:
+  a glyph counts as visible text and would put a symbol in the visible label
+  that the accessible name does not contain, which fails the same rule.
 
-    The in-page image is alt="" because it sits inside the button and would
-    otherwise be swallowed into its name. The description lives where it is
-    actually useful: on the full-size image in the dialog, and in the "read as
-    text" panel below, which is the route that works at 360px anyway.
-  -->
-  <button
-    type="button"
-    id="orgchart-open"
-    class="relative block w-full cursor-zoom-in border-0 bg-white p-0"
-  >
-    <ResponsiveImage
-      image={chart.image}
-      lang={lang}
-      alt=""
-      aspect="16/8"
-      sizes="(min-width: 64rem) 1100px, 100vw"
-    />
-    <span
-      class="absolute right-3.5 bottom-3.5 flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-[color:var(--color-line)] bg-white/95 px-3 py-1.5 text-[12.5px] font-semibold text-[color:var(--color-ink-700)] shadow-[var(--shadow-sm)]"
-    >
-      <Icon name="magnifying-glass" size={16} />
-      {t(lang, 'tapToEnlarge')}
-    </span>
-  </button>
-  {
-    caption.value && (
-      <figcaption
-        class="border-t border-[color:var(--color-line)] bg-[color:var(--color-surface-subtle)] px-5 py-4 text-[14px] text-[color:var(--color-ink-400)]"
-        lang={caption.isFallback ? caption.lang : undefined}
+  The in-page image is alt="" because it sits inside the button and would
+  otherwise be swallowed into its name. The description lives where it is
+  actually useful: on the full-size image in the dialog, and in the "read as
+  text" panel below, which is the route that works at 360px anyway.
+*/
+}
+{
+  hasChartImage && (
+    <figure class="reveal m-0 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-line)] bg-white">
+      <button
+        type="button"
+        id="orgchart-open"
+        class="relative block w-full cursor-zoom-in border-0 bg-white p-0"
       >
-        {caption.value}
-      </figcaption>
-    )
-  }
-</figure>
-)}
+        <ResponsiveImage
+          image={chart.image}
+          lang={lang}
+          alt=""
+          aspect="16/8"
+          sizes="(min-width: 64rem) 1100px, 100vw"
+        />
+        <span class="absolute right-3.5 bottom-3.5 flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-[color:var(--color-line)] bg-white/95 px-3 py-1.5 text-[12.5px] font-semibold text-[color:var(--color-ink-700)] shadow-[var(--shadow-sm)]">
+          <Icon name="magnifying-glass" size={16} />
+          {t(lang, 'tapToEnlarge')}
+        </span>
+      </button>
+      {caption.value && (
+        <figcaption
+          class="border-t border-[color:var(--color-line)] bg-[color:var(--color-surface-subtle)] px-5 py-4 text-[14px] text-[color:var(--color-ink-400)]"
+          lang={caption.isFallback ? caption.lang : undefined}
+        >
+          {caption.value}
+        </figcaption>
+      )}
+    </figure>
+  )
+}
 
-{/*
+{
+  /*
   The text version is not a substitute for the image treatment — it sits beside
   it. An image of a chart is invisible to a screen reader and unreadable at
   360px however good the zoom, and this costs one CMS field. With no image yet
   it is the whole section, so it opens expanded rather than hiding real content
   behind a disclosure that has nothing to disclose it from.
-*/}
-{hasTextVersion && (
-<details
-  class:list={[
-    'rounded-[var(--radius-md)] border border-[color:var(--color-line)] bg-white',
-    hasChartImage && 'mt-3.5',
-  ]}
-  open={!hasChartImage}
->
-  <summary
-    class="flex cursor-pointer list-none items-center justify-between px-4.5 py-3.5 text-[15px] font-semibold text-[color:var(--color-ink-900)] [&::-webkit-details-marker]:hidden"
-  >
-    {t(lang, 'readAsText')}
-    <span
-      class="disclosure-icon text-[19px] leading-none font-normal text-[color:var(--color-blue-700)]"
-      aria-hidden="true">+</span
+*/
+}
+{
+  hasTextVersion && (
+    <details
+      class:list={[
+        'rounded-[var(--radius-md)] border border-[color:var(--color-line)] bg-white',
+        hasChartImage && 'mt-3.5',
+      ]}
+      open={!hasChartImage}
     >
-  </summary>
-  <div class="px-4.5 pb-4.5">
-    <RichText blocks={chart.textVersion} lang={lang} class="max-w-none text-[15px]" />
-  </div>
-</details>
-)}
+      <summary class="flex cursor-pointer list-none items-center justify-between px-4.5 py-3.5 text-[15px] font-semibold text-[color:var(--color-ink-900)] [&::-webkit-details-marker]:hidden">
+        {t(lang, 'readAsText')}
+        <span
+          class="disclosure-icon text-[19px] leading-none font-normal text-[color:var(--color-blue-700)]"
+          aria-hidden="true"
+        >
+          +
+        </span>
+      </summary>
+      <div class="px-4.5 pb-4.5">
+        <RichText blocks={chart.textVersion} lang={lang} class="max-w-none text-[15px]" />
+      </div>
+    </details>
+  )
+}
 
-{hasChartImage && (
-<dialog
-  id="orgchart-dialog"
-  class="m-auto max-h-[92dvh] max-w-[96vw] rounded-[var(--radius-lg)] border-0 p-0 shadow-[var(--shadow-overlay)] backdrop:bg-[rgb(17_26_43/0.72)]"
->
-  <div class="flex items-center justify-between gap-4 border-b border-[color:var(--color-line)] px-4 py-3">
-    <span class="text-[14px] font-semibold text-[color:var(--color-ink-900)]">{caption.value}</span>
-    <button
-      type="button"
-      id="orgchart-close"
-      class="grid h-10 w-10 flex-none place-items-center rounded-[var(--radius-md)] border border-[color:var(--color-line-strong)] bg-white text-[color:var(--color-ink-900)]"
-      aria-label={t(lang, 'closeMenu')}
+{
+  hasChartImage && (
+    <dialog
+      id="orgchart-dialog"
+      class="m-auto max-h-[92dvh] max-w-[96vw] rounded-[var(--radius-lg)] border-0 p-0 shadow-[var(--shadow-overlay)] backdrop:bg-[rgb(17_26_43/0.72)]"
     >
-      <Icon name="x-mark" size={20} />
-    </button>
-  </div>
-  {/*
+      <div class="flex items-center justify-between gap-4 border-b border-[color:var(--color-line)] px-4 py-3">
+        <span class="text-[14px] font-semibold text-[color:var(--color-ink-900)]">
+          {caption.value}
+        </span>
+        <button
+          type="button"
+          id="orgchart-close"
+          class="grid h-10 w-10 flex-none place-items-center rounded-[var(--radius-md)] border border-[color:var(--color-line-strong)] bg-white text-[color:var(--color-ink-900)]"
+          aria-label={t(lang, 'closeMenu')}
+        >
+          <Icon name="x-mark" size={20} />
+        </button>
+      </div>
+      {/*
     A closed <dialog> is display:none, which does not stop an <img> from being
     fetched — the 2400px chart would land on every visitor who never opens it.
     The URL waits in a data attribute until the dialog is asked for.
   */}
-  <div class="overflow-auto p-3" style="touch-action: pinch-zoom;">
-    <img
-      id="orgchart-full"
-      data-lazy-src={fullUrl!}
-      alt={altText}
-      class="mx-auto block h-auto max-w-none"
-      style="max-width:100%"
-    />
-    <noscript>
-      <img src={fullUrl!} alt={altText} class="mx-auto block h-auto max-w-none" style="max-width:100%" />
-    </noscript>
-  </div>
-</dialog>
-)}
+      <div class="overflow-auto p-3" style="touch-action: pinch-zoom;">
+        <img
+          id="orgchart-full"
+          data-lazy-src={fullUrl!}
+          alt={altText}
+          class="mx-auto block h-auto max-w-none"
+          style="max-width:100%"
+        />
+        <noscript>
+          <img
+            src={fullUrl!}
+            alt={altText}
+            class="mx-auto block h-auto max-w-none"
+            style="max-width:100%"
+          />
+        </noscript>
+      </div>
+    </dialog>
+  )
+}
 
 <script>
   import { loadDeferredImage } from '~/lib/lazy';

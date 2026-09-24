@@ -25,7 +25,9 @@ export default defineConfig({
   document: {
     actions: (input, context) =>
       singletonTypes.has(context.schemaType)
-        ? input.filter(({ action }) => action !== 'unpublish' && action !== 'delete' && action !== 'duplicate')
+        ? input.filter(
+            ({ action }) => action !== 'unpublish' && action !== 'delete' && action !== 'duplicate',
+          )
         : input,
   },
 });

@@ -49,7 +49,7 @@ rest of the page.
 
 **Q1. How does someone report a concern about a child?**
 We need: the named person or role who receives it, the direct email or phone number, and what happens
-after a report is made. *This is the most important question on the website.*
+after a report is made. _This is the most important question on the website._
 
 **Q2. Can donors, partners or visitors come and meet the children?**
 We need SKO's actual policy. Our suggested position, for you to confirm or correct: programmes are

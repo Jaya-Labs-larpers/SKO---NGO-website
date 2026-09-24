@@ -1,8 +1,8 @@
 ---
-import type { Locale } from "~/lib/i18n/config";
-import type { UIKey } from "~/lib/i18n/strings";
-import { t } from "~/lib/i18n/utils";
-import Icon from "~/components/Icon.astro";
+import type { Locale } from '~/lib/i18n/config';
+import type { UIKey } from '~/lib/i18n/strings';
+import { t } from '~/lib/i18n/utils';
+import Icon from '~/components/Icon.astro';
 
 /**
  * The "what can we help with?" chooser. A native <select> carries the value
@@ -14,7 +14,7 @@ interface Topic {
   value: string;
   label: UIKey;
   hint: UIKey;
-  tone?: "danger";
+  tone?: 'danger';
 }
 
 interface Props {
@@ -46,7 +46,12 @@ const menuId = `${id}-menu`;
     <span class="topic-picker__faces" id={`${id}-current`}>
       {
         topics.map((topic, index) => (
-          <span class="topic-picker__face" data-value={topic.value} data-tone={topic.tone} hidden={index !== 0}>
+          <span
+            class="topic-picker__face"
+            data-value={topic.value}
+            data-tone={topic.tone}
+            hidden={index !== 0}
+          >
             <span class="topic-picker__text">
               <span class="topic-picker__label">{t(lang, topic.label)}</span>
               <span class="topic-picker__hint">{t(lang, topic.hint)}</span>
@@ -56,12 +61,19 @@ const menuId = `${id}-menu`;
       }
     </span>
     <span class="topic-picker__affordance">
-      <span class="topic-picker__change">{t(lang, "topicPickerChange")}</span>
+      <span class="topic-picker__change">{t(lang, 'topicPickerChange')}</span>
       <Icon name="chevron-down" size={16} class="topic-picker__chevron" />
     </span>
   </button>
 
-  <ul class="topic-picker__menu" id={menuId} role="listbox" aria-labelledby={labelId} tabindex="-1" hidden>
+  <ul
+    class="topic-picker__menu"
+    id={menuId}
+    role="listbox"
+    aria-labelledby={labelId}
+    tabindex="-1"
+    hidden
+  >
     {
       topics.map((topic, index) => (
         <li
@@ -70,7 +82,7 @@ const menuId = `${id}-menu`;
           id={`${id}-option-${topic.value}`}
           data-value={topic.value}
           data-tone={topic.tone}
-          aria-selected={index === 0 ? "true" : "false"}
+          aria-selected={index === 0 ? 'true' : 'false'}
           tabindex="-1"
         >
           <span class="topic-picker__text">
@@ -88,23 +100,23 @@ const menuId = `${id}-menu`;
   const CLOSE_MS = 220;
 
   function enhance(picker: HTMLElement): void {
-    const native = picker.querySelector<HTMLSelectElement>("select");
-    const trigger = picker.querySelector<HTMLButtonElement>(".topic-picker__trigger");
-    const menu = picker.querySelector<HTMLElement>(".topic-picker__menu");
+    const native = picker.querySelector<HTMLSelectElement>('select');
+    const trigger = picker.querySelector<HTMLButtonElement>('.topic-picker__trigger');
+    const menu = picker.querySelector<HTMLElement>('.topic-picker__menu');
     if (!native || !trigger || !menu) return;
 
     const options = Array.from(menu.querySelectorAll<HTMLElement>('[role="option"]'));
-    const faces = Array.from(trigger.querySelectorAll<HTMLElement>(".topic-picker__face"));
-    const values = options.map((option) => option.dataset.value ?? "");
+    const faces = Array.from(trigger.querySelectorAll<HTMLElement>('.topic-picker__face'));
+    const values = options.map((option) => option.dataset.value ?? '');
     let closing: ReturnType<typeof setTimeout> | undefined;
 
-    const isOpen = () => trigger.getAttribute("aria-expanded") === "true";
+    const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
 
     const sync = () => {
       const current = native.value;
       for (const face of faces) face.hidden = face.dataset.value !== current;
       for (const option of options) {
-        option.setAttribute("aria-selected", option.dataset.value === current ? "true" : "false");
+        option.setAttribute('aria-selected', option.dataset.value === current ? 'true' : 'false');
       }
       picker.dataset.current = current;
     };
@@ -112,7 +124,7 @@ const menuId = `${id}-menu`;
     const choose = (value: string) => {
       if (!values.includes(value) || native.value === value) return;
       native.value = value;
-      native.dispatchEvent(new Event("change", { bubbles: true }));
+      native.dispatchEvent(new Event('change', { bubbles: true }));
       sync();
     };
 
@@ -120,17 +132,18 @@ const menuId = `${id}-menu`;
       if (isOpen()) return;
       clearTimeout(closing);
       menu.hidden = false;
-      trigger.setAttribute("aria-expanded", "true");
-      requestAnimationFrame(() => menu.classList.add("is-open"));
-      const selected = options.find((option) => option.dataset.value === native.value) ?? options[0];
+      trigger.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(() => menu.classList.add('is-open'));
+      const selected =
+        options.find((option) => option.dataset.value === native.value) ?? options[0];
       selected?.focus({ preventScroll: true });
-      menu.scrollIntoView({ block: "nearest" });
+      menu.scrollIntoView({ block: 'nearest' });
     };
 
     const close = (refocus = false) => {
       if (!isOpen()) return;
-      trigger.setAttribute("aria-expanded", "false");
-      menu.classList.remove("is-open");
+      trigger.setAttribute('aria-expanded', 'false');
+      menu.classList.remove('is-open');
       closing = setTimeout(() => {
         menu.hidden = true;
       }, CLOSE_MS);
@@ -144,71 +157,71 @@ const menuId = `${id}-menu`;
       options[next]?.focus({ preventScroll: true });
     };
 
-    trigger.addEventListener("click", () => (isOpen() ? close() : open()));
-    trigger.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+    trigger.addEventListener('click', () => (isOpen() ? close() : open()));
+    trigger.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
         event.preventDefault();
         open();
       }
     });
 
-    menu.addEventListener("click", (event) => {
+    menu.addEventListener('click', (event) => {
       const option = (event.target as HTMLElement).closest<HTMLElement>('[role="option"]');
       if (!option) return;
-      choose(option.dataset.value ?? "");
+      choose(option.dataset.value ?? '');
       close(true);
     });
 
-    menu.addEventListener("keydown", (event) => {
+    menu.addEventListener('keydown', (event) => {
       switch (event.key) {
-        case "ArrowDown":
+        case 'ArrowDown':
           event.preventDefault();
           focusBy(1);
           break;
-        case "ArrowUp":
+        case 'ArrowUp':
           event.preventDefault();
           focusBy(-1);
           break;
-        case "Home":
+        case 'Home':
           event.preventDefault();
           options[0]?.focus({ preventScroll: true });
           break;
-        case "End":
+        case 'End':
           event.preventDefault();
           options[options.length - 1]?.focus({ preventScroll: true });
           break;
-        case "Enter":
-        case " ": {
+        case 'Enter':
+        case ' ': {
           event.preventDefault();
           const active = document.activeElement as HTMLElement | null;
           if (active?.dataset.value) choose(active.dataset.value);
           close(true);
           break;
         }
-        case "Escape":
+        case 'Escape':
           event.preventDefault();
           close(true);
           break;
-        case "Tab":
+        case 'Tab':
           close();
           break;
       }
     });
 
-    document.addEventListener("pointerdown", (event) => {
+    document.addEventListener('pointerdown', (event) => {
       if (!picker.contains(event.target as Node)) close();
     });
 
     // Links elsewhere on the site arrive as /contact/?topic=partner and so on.
-    const requested = new URLSearchParams(window.location.search).get("topic");
+    const requested = new URLSearchParams(window.location.search).get('topic');
     if (requested && values.includes(requested)) native.value = requested;
 
-    native.addEventListener("change", sync);
-    native.form?.addEventListener("reset", () => requestAnimationFrame(sync));
+    native.addEventListener('change', sync);
+    native.form?.addEventListener('reset', () => requestAnimationFrame(sync));
     sync();
-    picker.dataset.enhanced = "";
+    picker.dataset.enhanced = '';
     trigger.hidden = false;
   }
 
-  document.querySelectorAll<HTMLElement>("[data-topic-picker]").forEach(enhance);
+  document.querySelectorAll<HTMLElement>('[data-topic-picker]').forEach(enhance);
 </script>

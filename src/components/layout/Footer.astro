@@ -36,10 +36,12 @@ function iconForPlatform(platform: string): string {
   class="site-footer on-inverse bg-[color:var(--color-blue-900)] pt-[60px] pb-[calc(1.75rem+var(--safe-bottom))] text-[14.5px] text-white/70"
 >
   <div class="wrap">
-    {/*
+    {
+      /*
       Closing line: the invitation and the two direct ways to reach SKO, set
       as display type, so contact is the last thing every page says.
-    */}
+    */
+    }
     {
       showClosing && (
         <div class="footer-closing">
@@ -48,14 +50,18 @@ function iconForPlatform(platform: string): string {
             {settings.email && (
               <a href={`mailto:${settings.email}`} class="footer-closing__link">
                 <span class="roll">
-                  <span class="roll__text" data-text={settings.email}>{settings.email}</span>
+                  <span class="roll__text" data-text={settings.email}>
+                    {settings.email}
+                  </span>
                 </span>
               </a>
             )}
             {settings.phone && (
               <a href={`tel:${settings.phone.replace(/[^+\d]/g, '')}`} class="footer-closing__link">
                 <span class="roll">
-                  <span class="roll__text" data-text={settings.phone}>{settings.phone}</span>
+                  <span class="roll__text" data-text={settings.phone}>
+                    {settings.phone}
+                  </span>
                 </span>
               </a>
             )}
@@ -113,7 +119,11 @@ function iconForPlatform(platform: string): string {
                     target="_blank"
                     class="flex items-center gap-2 text-white/70 no-underline hover:text-white"
                   >
-                    <Icon name={iconForPlatform(social.platform)} size={20} class="text-[color:var(--color-sky-400)]" />
+                    <Icon
+                      name={iconForPlatform(social.platform)}
+                      size={20}
+                      class="text-[color:var(--color-sky-400)]"
+                    />
                     {social.platform}
                   </a>
                 </li>
@@ -153,8 +163,13 @@ function iconForPlatform(platform: string): string {
         class="flex items-center gap-1.5"
         lang={registration.isFallback ? registration.lang : undefined}
       >
-        {registration.value && <Icon name="check-badge" size={16} class="text-[color:var(--color-sky-400)]" />}
-        © {year} {orgName}. {registration.value}
+        {
+          registration.value && (
+            <Icon name="check-badge" size={16} class="text-[color:var(--color-sky-400)]" />
+          )
+        }
+        © {year}
+        {orgName}. {registration.value}
       </span>
       <span class="flex gap-4.5">
         <a href={localizePath('/privacy', lang)} class="text-white/55 no-underline hover:text-white"

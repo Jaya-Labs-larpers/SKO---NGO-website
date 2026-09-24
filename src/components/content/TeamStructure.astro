@@ -17,14 +17,19 @@ const roots = team.filter((member) => !member.reportsTo || !ids.has(member.repor
 const [head] = roots.length === 1 ? roots : [];
 const columns = head ? reportsOf(head._id) : roots;
 
-const label = (member: TeamMember) => ({ name: pick(member.name, lang), role: pick(member.role, lang) });
+const label = (member: TeamMember) => ({
+  name: pick(member.name, lang),
+  role: pick(member.role, lang),
+});
 const headLabel = head ? label(head) : null;
 ---
 
-{/*
+{
+  /*
   The chart reads top to bottom as a nested list, so a screen reader hears who
   reports to whom without the drawing.
-*/}
+*/
+}
 <div class="team-structure">
   {
     head && headLabel && (
@@ -50,14 +55,19 @@ const headLabel = head ? label(head) : null;
     )
   }
 
-  <ul class:list={['reveal reveal-cascade m-0 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4', head && 'team-structure__branches mt-10 pt-10']}>
+  <ul
+    class:list={[
+      'reveal reveal-cascade m-0 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4',
+      head && 'team-structure__branches mt-10 pt-10',
+    ]}
+  >
     {
       columns.map((lead, index) => {
         const leadLabel = label(lead);
         const staff = reportsOf(lead._id);
         return (
           <li style={`--i:${index}`}>
-            <div class="w-28 aspect-4/5 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-blue-700)]">
+            <div class="aspect-4/5 w-28 overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--color-blue-700)]">
               <ResponsiveImage image={lead.photo} lang={lang} alt="" aspect="4/5" sizes="112px" />
             </div>
             <b
@@ -85,14 +95,23 @@ const headLabel = head ? label(head) : null;
                         />
                       ) : (
                         <span class="h-21 w-21 flex-none overflow-hidden rounded-full border border-[color:var(--color-line)]">
-                          <ResponsiveImage image={member.photo} lang={lang} alt="" aspect="1/1" sizes="84px" class="object-[50%_15%]" />
+                          <ResponsiveImage
+                            image={member.photo}
+                            lang={lang}
+                            alt=""
+                            aspect="1/1"
+                            sizes="84px"
+                            class="object-[50%_15%]"
+                          />
                         </span>
                       )}
                       <span class="min-w-0">
                         <b
                           class:list={[
                             'block text-[15px] leading-snug',
-                            member.vacancy ? 'text-[color:var(--color-ink-400)]' : 'text-[color:var(--color-ink-900)]',
+                            member.vacancy
+                              ? 'text-[color:var(--color-ink-400)]'
+                              : 'text-[color:var(--color-ink-900)]',
                           ]}
                           lang={name.isFallback ? name.lang : undefined}
                         >

@@ -75,7 +75,11 @@ export function pick<T>(field: LocaleField<T>, lang: Locale): Picked<T> {
 
   const fallback = field?.[defaultLocale];
   if (!isEmpty(fallback)) {
-    return { value: fallback as T, lang: defaultLocale, isFallback: lang !== defaultLocale };
+    return {
+      value: fallback as T,
+      lang: defaultLocale,
+      isFallback: lang !== defaultLocale,
+    };
   }
   return { value: null, lang, isFallback: false };
 }

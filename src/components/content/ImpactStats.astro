@@ -27,12 +27,16 @@ const { lang, stats, columns = 4 } = Astro.props;
         const prefix = pick(stat.prefix, lang);
         const suffix = pick(stat.suffix, lang);
         const display =
-          stat.displayValue ?? (typeof stat.value === 'number' ? formatNumber(stat.value, lang) : '');
+          stat.displayValue ??
+          (typeof stat.value === 'number' ? formatNumber(stat.value, lang) : '');
         return (
           <div class="min-w-0 bg-white px-4 py-5 sm:px-6 sm:py-7">
             <b class="block text-[length:var(--text-stat)] leading-none font-bold tracking-[var(--text-stat--letter-spacing)] text-[color:var(--color-blue-700)] tabular-nums">
               {prefix.value && (
-                <span class="mr-1.5 text-[0.45em] tracking-normal" lang={prefix.isFallback ? prefix.lang : undefined}>
+                <span
+                  class="mr-1.5 text-[0.45em] tracking-normal"
+                  lang={prefix.isFallback ? prefix.lang : undefined}
+                >
                   {prefix.value}
                 </span>
               )}
@@ -41,7 +45,7 @@ const { lang, stats, columns = 4 } = Astro.props;
               ) : (
                 display
               )}
-              {suffix.value &&<span class="text-[0.6em]">{suffix.value}</span>}
+              {suffix.value && <span class="text-[0.6em]">{suffix.value}</span>}
             </b>
             <span
               class="mt-2.5 block text-[14px] leading-[1.35] font-semibold text-[color:var(--color-ink-900)] sm:mt-3 sm:text-[15px]"

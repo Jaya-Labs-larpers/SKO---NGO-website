@@ -22,7 +22,10 @@ const { lang, faqs, heading } = Astro.props;
  * that collapsing them saves nothing worth the cost.
  */
 const resolved = faqs
-  .map((faq) => ({ question: pick(faq.question, lang), answer: pick(faq.answer, lang) }))
+  .map((faq) => ({
+    question: pick(faq.question, lang),
+    answer: pick(faq.answer, lang),
+  }))
   .filter((faq) => faq.question.value && faq.answer.value);
 
 const jsonLd =
