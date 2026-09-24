@@ -13,6 +13,7 @@ dist/
 studio/dist/
 studio/.sanity/
 video/out/
+.impeccable/
 
 # Dependencies
 node_modules/
@@ -32,3 +33,6 @@ npm-debug.log*
 SKO-content-review.html
 SKO-website-preview/
 SKO-website-preview.zip
+
+# graphify knowledge graph, regenerated locally
+graphify-out/
