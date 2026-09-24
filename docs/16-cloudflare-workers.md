@@ -93,13 +93,21 @@ Sanity webhook runs the Deploy workflow on every publish. A person sets it up on
 
 - Token: GitHub → Settings → Developer settings → fine-grained token, resource owner
   `Jaya-Labs-larpers`, only the `SKO---NGO-website` repository, one permission: **Actions: Read and
-  write**. Not Contents: the token lives in Sanity, and Actions cannot touch the code.
+  write**. Not Contents: the token lives in Sanity, and Actions cannot touch the code. The org
+  requires an owner to approve the token (Org Settings → Personal access tokens → Pending requests);
+  until then every delivery gets a 403. Note its expiry date and replace it in the webhook before
+  then.
 - Webhook: sanity.io/manage → project `xm91vtfk` → API → Webhooks → Create.
   - URL `https://api.github.com/repos/Jaya-Labs-larpers/SKO---NGO-website/actions/workflows/deploy.yml/dispatches`
   - Dataset `production`; trigger on create, update and delete; drafts and versions off.
   - Projection `{"ref": "main"}`; method POST.
   - Headers `Authorization: Bearer <token>` and `Accept: application/vnd.github+json`.
 - Check: publish any small edit, and a Deploy run appears under Actions within seconds.
+- Delivery log: `npx sanity hook logs "Rebuild site on publish"` from `studio/`. A 204 is a
+  delivered publish.
+- Safety net: the Content sync workflow runs every 15 minutes. If a publish is 10 minutes old and no
+  deploy picked it up, it starts one and fails, which emails its last committer. A failing run means
+  the webhook needs attention. Deletions are not detected; the nightly rebuild covers them.
 
 Deploys queue one at a time and a newer pending run replaces an older one, so a burst of publishes
 builds once or twice, not once per edit. Until `PUBLIC_CONTENT_SOURCE` is `sanity` those runs
