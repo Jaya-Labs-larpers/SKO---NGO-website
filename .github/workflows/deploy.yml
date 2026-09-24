@@ -71,6 +71,26 @@ jobs:
             echo "ready=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # The exact version serving traffic now, so a failed deploy returns to it
+      # rather than to whatever Cloudflare counts as "previous". Empty when it
+      # cannot be read; the deploy still runs, without the automatic rollback.
+      - name: Record the live version
+        id: previous
+        if: steps.creds.outputs.ready == 'true'
+        run: |
+          version=$(npx wrangler deployments status --env production --json | node -e '
+            let s = ""; process.stdin.on("data", (d) => (s += d)).on("end", () => {
+              const top = JSON.parse(s).versions.sort((a, b) => b.percentage - a.percentage)[0];
+              process.stdout.write(top?.version_id ?? "");
+            });') || version=""
+          if [ -z "$version" ]; then
+            echo "::warning::Could not read the live version; this deploy has no automatic rollback."
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Deploy to Cloudflare Workers (production)
         if: steps.creds.outputs.ready == 'true'
         run: npx wrangler deploy --env production
@@ -79,5 +99,25 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Live checks against production
+        id: live
         if: steps.creds.outputs.ready == 'true'
+        run: npm run check:edge -- https://www.sko-samatapheapkhnom.org
+
+      # The new version is already serving when the live checks fail, so put the
+      # recorded one back. The job stays failed either way, and GitHub emails.
+      - name: Roll back to the recorded version
+        id: rollback
+        if: failure() && steps.live.outcome == 'failure' && steps.previous.outputs.version != ''
+        run: |
+          npx wrangler rollback "$VERSION" --env production --yes \
+            --message "Live checks failed in Deploy run $RUN_ID"
+          echo "::error::Live checks failed; rolled back to version $VERSION."
+        env:
+          VERSION: ${{ steps.previous.outputs.version }}
+          RUN_ID: ${{ github.run_id }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Live checks after rollback
+        if: failure() && steps.rollback.outcome == 'success'
         run: npm run check:edge -- https://www.sko-samatapheapkhnom.org
