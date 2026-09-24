@@ -16,6 +16,7 @@ import { findEnvLeaks, findSecrets, secretEnvEntries } from './secrets.mjs';
 const env = { ...loadEnv('production', process.cwd(), ''), ...process.env };
 const production = deploymentEnvironment(env) === 'production';
 const localContent = env.PUBLIC_CONTENT_SOURCE === 'fixtures';
+const siteUrl = (env.PUBLIC_SITE_URL || 'http://localhost:4321').replace(/\/+$/, '');
 
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
 
@@ -96,6 +97,9 @@ for await (const file of htmlFiles(DIST)) {
     check(/hreflang="km"/.test(html), page, 'missing hreflang="km"');
     check(/hreflang="x-default"/.test(html), page, 'missing hreflang="x-default"');
     check(/<meta name="description"/.test(html), page, 'no meta description');
+    const ogImage = /<meta property="og:image" content="([^"]*)"/.exec(html)?.[1];
+    check(ogImage?.startsWith(`${siteUrl}/`), page, `og:image is not an absolute site URL: ${ogImage}`);
+    check(/<meta name="twitter:card" content="summary_large_image"/.test(html), page, 'no summary_large_image card');
   }
 
   // Structured data
