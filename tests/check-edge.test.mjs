@@ -53,3 +53,42 @@ test("a dropped connection is retried once, then counted as a failed check", asy
     server.close();
   }
 });
+
+test("a homepage still pointing at the previous build is waited out", async () => {
+  let homeRequests = 0;
+  const server = createServer((request, response) => {
+    if (request.url === "/") {
+      homeRequests += 1;
+      const css = homeRequests === 1 ? "Old.aaaa.css" : "New.bbbb.css";
+      response.end(`<link rel="stylesheet" href="/_astro/${css}">`);
+      return;
+    }
+    if (request.url.startsWith("/_astro/")) {
+      response.writeHead(request.url.includes("New") ? 200 : 404, {
+        "cache-control": "public, max-age=31536000, immutable",
+      });
+    }
+    response.end();
+  });
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  const base = `http://127.0.0.1:${server.address().port}`;
+
+  try {
+    const { stdout } = await run(process.execPath, [script, base]).catch(
+      (error) => error,
+    );
+
+    assert.match(
+      stdout,
+      /^INFO {2}\/_astro\/Old\.aaaa\.css is 404, waiting for the deploy to settle$/m,
+    );
+    assert.match(
+      stdout,
+      /^PASS {2}hashed asset \/_astro\/New\.bbbb\.css is immutable {2}\(200 /m,
+    );
+  } finally {
+    server.closeAllConnections();
+    server.close();
+  }
+});
