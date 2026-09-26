@@ -10,15 +10,15 @@ special treatments' final polish is Phase 4.
 
 ## 1. What was built
 
-| Phase 3 requirement | Status |
-|---|---|
-| Scaffold Astro + TypeScript + Tailwind | Done. Astro 5 static output, Tailwind v4 via `@tailwindcss/vite`, TS strict + `noUncheckedIndexedAccess`. |
-| Sanity Studio + all schemas | Done. 12 document types, 7 objects, 3 localisation primitives, custom desk structure. Typechecks clean. |
-| Connect Astro to Sanity (typed GROQ) | Done. All queries in one file, typed projections, single content-layer seam. |
-| i18n routing km/en + toggle | Done. 46 pages, 23 per locale. Toggle links to the equivalent page. |
-| Image optimization pipeline | Done. Sanity CDN transforms, srcset, LQIP, intrinsic dimensions, graceful placeholder when no image exists. |
-| Contact form → Pages Function | Done and tested. Honeypot → validation → rate-limit check → Turnstile → rate-limit record → Resend. |
-| Environment config + `.env.example` | Done. `.gitignore` excludes `.env*` from the first commit. No secret in the repo. |
+| Phase 3 requirement                    | Status                                                                                                      |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Scaffold Astro + TypeScript + Tailwind | Done. Astro 5 static output, Tailwind v4 via `@tailwindcss/vite`, TS strict + `noUncheckedIndexedAccess`.   |
+| Sanity Studio + all schemas            | Done. 12 document types, 7 objects, 3 localisation primitives, custom desk structure. Typechecks clean.     |
+| Connect Astro to Sanity (typed GROQ)   | Done. All queries in one file, typed projections, single content-layer seam.                                |
+| i18n routing km/en + toggle            | Done. 46 pages, 23 per locale. Toggle links to the equivalent page.                                         |
+| Image optimization pipeline            | Done. Sanity CDN transforms, srcset, LQIP, intrinsic dimensions, graceful placeholder when no image exists. |
+| Contact form → Pages Function          | Done and tested. Honeypot → validation → rate-limit check → Turnstile → rate-limit record → Resend.         |
+| Environment config + `.env.example`    | Done. `.gitignore` excludes `.env*` from the first commit. No secret in the repo.                           |
 
 ## 2. Verification — actually run, not assumed
 
@@ -30,17 +30,17 @@ studio typecheck    tsc --noEmit → clean
 
 Against the local Wrangler server (`npm run preview`), which serves the built site **and** the Function:
 
-| Test | Result |
-|---|---|
-| `POST /api/contact` with a short message and malformed email | `400` `{"fieldErrors":{"name":"too_short","email":"email","message":"too_short"}}` |
-| Honeypot field filled | `200 {"ok":true}` — and nothing sent. The bot is not told it failed. |
-| Valid payload, no Turnstile token | `403 verification_failed` — enforced server-side, not just in the widget |
-| `GET /api/contact` | `405 method_not_allowed` |
-| Security headers on `/about/` | HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy all present; CSP in Report-Only (see §6) |
-| Khmer page Latin-leakage scan | Clean — no English marketing string on any `/km/` page |
-| `hreflang` on `/km/about/` | `en`, `km`, `x-default` all correct |
-| `<html lang>` | `km` on Khmer routes, `en` on English routes |
-| Sitemap | 44 URLs, both locales, 404s excluded |
+| Test                                                         | Result                                                                                                                      |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `POST /api/contact` with a short message and malformed email | `400` `{"fieldErrors":{"name":"too_short","email":"email","message":"too_short"}}`                                          |
+| Honeypot field filled                                        | `200 {"ok":true}` — and nothing sent. The bot is not told it failed.                                                        |
+| Valid payload, no Turnstile token                            | `403 verification_failed` — enforced server-side, not just in the widget                                                    |
+| `GET /api/contact`                                           | `405 method_not_allowed`                                                                                                    |
+| Security headers on `/about/`                                | HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy all present; CSP in Report-Only (see §6) |
+| Khmer page Latin-leakage scan                                | Clean — no English marketing string on any `/km/` page                                                                      |
+| `hreflang` on `/km/about/`                                   | `en`, `km`, `x-default` all correct                                                                                         |
+| `<html lang>`                                                | `km` on Khmer routes, `en` on English routes                                                                                |
+| Sitemap                                                      | 44 URLs, both locales, 404s excluded                                                                                        |
 
 ## 3. Three defects found and fixed during the build
 
@@ -51,7 +51,7 @@ Worth recording because two of them would have shipped silently.
    and the "hidden" panel rendered over the page. Only invisible on desktop, where `lg:hidden` masks
    it. Fixed with an authoritative `[hidden] { display: none !important }`.
 2. **The Function returned English error sentences to Khmer readers.** Zod's built-in messages are
-   English-only. The Function now returns *codes* (`required`, `email`, `too_short`, `too_long`) and
+   English-only. The Function now returns _codes_ (`required`, `email`, `too_short`, `too_long`) and
    the page renders the message in the visitor's language.
 3. **Page intros and CTA headings were hardcoded English inside shared templates**, so they appeared
    untranslated on Khmer pages. Moved into `src/lib/i18n/strings.ts` with Khmer written for each. In
@@ -68,7 +68,7 @@ see "Markers never reach a visitor" below.
 touch the Sanity client and never write GROQ. Behind the seam, if `PUBLIC_SANITY_PROJECT_ID` is set
 the getter runs a GROQ query; if it is blank it returns a local fixture.
 
-That fallback is not a toy. It means the site builds, previews and can be reviewed *today*, before
+That fallback is not a toy. It means the site builds, previews and can be reviewed _today_, before
 SKO's Sanity project exists — and the moment the project id is set, the same components render real
 content with no code change. A failed GROQ query throws and fails the build; a silently empty section
 discovered in production is worse than a build that stops.
@@ -79,7 +79,7 @@ discovered in production is worse than a build that stops.
 team, and the note was being printed on the public site along with the instruction that followed it
 ("Replace this with your own first post…"). Every read now passes through
 `stripPlaceholders()` (`src/lib/content/placeholders.ts`) at the content-layer seam, which drops
-marked strings and marked Portable Text blocks from fixtures *and* from CMS content — a staff member
+marked strings and marked Portable Text blocks from fixtures _and_ from CMS content — a staff member
 can type a marker into Sanity just as easily. A document left with no title drops out of its listing
 and loses its route rather than appearing as an untitled card. Components carry the other half:
 a missing image holds its box silently, a partner with no logo file is credited in type, and a
@@ -109,7 +109,7 @@ store never holds an identifiable address.
 
 - No schema anywhere models a beneficiary's real name, age, address, school or case detail.
 - `story.consentConfirmed` is a hard validation rule — a story cannot be published without it.
-- `story.personName` carries field help text: *pseudonym or initials only*.
+- `story.personName` carries field help text: _pseudonym or initials only_.
 - Alt text is `required` on every image field in the Studio.
 - No file uploads anywhere, including job applications. Careers pages say "email your CV".
 - A prominent comment block at the top of `studio/schemas/documents.ts` states why: the dataset is

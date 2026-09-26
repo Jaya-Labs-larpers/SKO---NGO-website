@@ -50,7 +50,12 @@ const seconds = half.length * 5;
               <li class="partner-marquee__item" aria-hidden={hidden ? 'true' : undefined}>
                 <Tag
                   {...(partner.url
-                    ? { href: partner.url, rel: 'noopener noreferrer', target: '_blank', tabindex: hidden ? -1 : undefined }
+                    ? {
+                        href: partner.url,
+                        rel: 'noopener noreferrer',
+                        target: '_blank',
+                        tabindex: hidden ? -1 : undefined,
+                      }
                     : {})}
                   class="partner-marquee__logo"
                   style={`--logo-scale:${scale}`}

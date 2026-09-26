@@ -20,7 +20,11 @@ export const imageWithAlt = defineType({
         'What a person would see if the image loaded. For a chart or diagram, describe the relationships in words, not just the title.',
       validation: (rule) => rule.required().error('Alt text is required on every image.'),
     }),
-    defineField({ name: 'caption', title: 'Caption (optional)', type: 'localeString' }),
+    defineField({
+      name: 'caption',
+      title: 'Caption (optional)',
+      type: 'localeString',
+    }),
   ],
 });
 
@@ -46,7 +50,10 @@ export const callout = defineType({
   ],
   preview: {
     select: { title: 'text.en' },
-    prepare: ({ title }) => ({ title: title ?? 'Callout', subtitle: 'Callout' }),
+    prepare: ({ title }) => ({
+      title: title ?? 'Callout',
+      subtitle: 'Callout',
+    }),
   },
 });
 
@@ -102,7 +109,11 @@ export const seo = defineType({
       type: 'localeText',
       description: 'Around 150 characters. Leave blank to use the page intro.',
     }),
-    defineField({ name: 'image', title: 'Social share image', type: 'imageWithAlt' }),
+    defineField({
+      name: 'image',
+      title: 'Social share image',
+      type: 'imageWithAlt',
+    }),
     defineField({
       name: 'noindex',
       title: 'Hide from search engines',
@@ -117,7 +128,12 @@ export const socialLink = defineType({
   title: 'Social link',
   type: 'object',
   fields: [
-    defineField({ name: 'platform', title: 'Platform', type: 'string', validation: (r) => r.required() }),
+    defineField({
+      name: 'platform',
+      title: 'Platform',
+      type: 'string',
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'url',
       title: 'URL',
@@ -135,10 +151,23 @@ export const bankAccount = defineType({
   fields: [
     defineField({ name: 'bankName', title: 'Bank name', type: 'string' }),
     defineField({ name: 'accountName', title: 'Account name', type: 'string' }),
-    defineField({ name: 'accountNumber', title: 'Account number', type: 'string' }),
+    defineField({
+      name: 'accountNumber',
+      title: 'Account number',
+      type: 'string',
+    }),
     defineField({ name: 'swift', title: 'SWIFT / BIC', type: 'string' }),
-    defineField({ name: 'branchAddress', title: 'Branch address', type: 'string' }),
-    defineField({ name: 'currency', title: 'Currency', type: 'string', initialValue: 'USD / KHR' }),
+    defineField({
+      name: 'branchAddress',
+      title: 'Branch address',
+      type: 'string',
+    }),
+    defineField({
+      name: 'currency',
+      title: 'Currency',
+      type: 'string',
+      initialValue: 'USD / KHR',
+    }),
   ],
   preview: { select: { title: 'bankName', subtitle: 'accountNumber' } },
 });
@@ -148,14 +177,22 @@ export const donationQr = defineType({
   title: 'Donation QR code',
   type: 'object',
   fields: [
-    defineField({ name: 'label', title: 'Label (bank or wallet name)', type: 'localeString' }),
+    defineField({
+      name: 'label',
+      title: 'Label (bank or wallet name)',
+      type: 'localeString',
+    }),
     defineField({
       name: 'image',
       title: 'QR code image',
       type: 'imageWithAlt',
       validation: (r) => r.required(),
     }),
-    defineField({ name: 'instructions', title: 'Line underneath', type: 'localeString' }),
+    defineField({
+      name: 'instructions',
+      title: 'Line underneath',
+      type: 'localeString',
+    }),
   ],
   preview: { select: { title: 'label.en', media: 'image' } },
 });
@@ -176,6 +213,9 @@ export const allocationItem = defineType({
   ],
   preview: {
     select: { title: 'label.en', subtitle: 'percent' },
-    prepare: ({ title, subtitle }) => ({ title, subtitle: `${subtitle ?? 0}%` }),
+    prepare: ({ title, subtitle }) => ({
+      title,
+      subtitle: `${subtitle ?? 0}%`,
+    }),
   },
 });

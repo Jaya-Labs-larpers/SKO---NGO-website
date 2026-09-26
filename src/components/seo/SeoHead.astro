@@ -38,9 +38,8 @@ const fullTitle = title === orgName ? title : `${title} · ${orgName}`;
 const canonical = new URL(pathname, siteUrl).href;
 
 const shareImage = ogImage ?? settings.ogImage ?? null;
-const shareImagePath = shareImage && hasImage(shareImage)
-  ? imageUrl(shareImage, { width: 1200, height: 630 })
-  : null;
+const shareImagePath =
+  shareImage && hasImage(shareImage) ? imageUrl(shareImage, { width: 1200, height: 630 }) : null;
 const share = shareImagePath
   ? {
       url: new URL(shareImagePath, siteUrl).href,
@@ -66,7 +65,8 @@ const share = shareImagePath
  * name, the registration, the area served and what the organisation actually
  * works on, not just a name and a URL.
  */
-const logoUrl = settings.logo && hasImage(settings.logo) ? imageUrl(settings.logo, { width: 512 }) : null;
+const logoUrl =
+  settings.logo && hasImage(settings.logo) ? imageUrl(settings.logo, { width: 512 }) : null;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -111,7 +111,11 @@ const jsonLd = {
       }
     : {}),
   ...(settings.socials && settings.socials.length > 0
-    ? { sameAs: settings.socials.map((social) => social.url).filter((url) => /^https?:\/\//.test(url)) }
+    ? {
+        sameAs: settings.socials
+          .map((social) => social.url)
+          .filter((url) => /^https?:\/\//.test(url)),
+      }
     : {}),
 };
 
@@ -141,7 +145,11 @@ const webSiteJsonLd = {
     />
   ))
 }
-<link rel="alternate" hreflang="x-default" href={new URL(alternatePath(pathname, 'en'), siteUrl).href} />
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href={new URL(alternatePath(pathname, 'en'), siteUrl).href}
+/>
 
 <meta property="og:type" content={publishedAt ? 'article' : 'website'} />
 <meta property="og:site_name" content={orgName} />
@@ -164,7 +172,11 @@ const webSiteJsonLd = {
 
 <script is:inline type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
 <script is:inline type="application/ld+json" set:html={serializeJsonLd(webSiteJsonLd)} />
-{extraJsonLd && <script is:inline type="application/ld+json" set:html={serializeJsonLd(extraJsonLd)} />}
+{
+  extraJsonLd && (
+    <script is:inline type="application/ld+json" set:html={serializeJsonLd(extraJsonLd)} />
+  )
+}
 
 {
   cfAnalyticsToken && (

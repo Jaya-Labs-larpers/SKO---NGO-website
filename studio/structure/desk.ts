@@ -10,6 +10,7 @@ import type { StructureResolver } from 'sanity/structure';
 const FIXED_PAGES: { slug: string; title: string }[] = [
   { slug: 'about', title: 'About' },
   { slug: 'faq', title: 'Common questions' },
+  { slug: 'impact', title: 'Impact & results' },
   { slug: 'safeguarding', title: 'Safeguarding' },
   { slug: 'privacy', title: 'Privacy' },
 ];

@@ -129,7 +129,6 @@ References: [Node functions](https://vercel.com/docs/functions/runtimes/node-js)
 [Attack Mode](https://vercel.com/docs/vercel-firewall/attack-mode),
 [Hobby](https://vercel.com/docs/plans/hobby).
 
-
 ## Temporary production site without Sanity
 
 The domain can serve the existing local content with these Production settings:

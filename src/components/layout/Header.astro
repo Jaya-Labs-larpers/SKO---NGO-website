@@ -34,7 +34,12 @@ function isCurrent(path: string): boolean {
     class="flex h-full w-full items-center gap-6 pt-[var(--safe-top)] pr-[var(--gutter-right)] pl-[var(--gutter-left)]"
   >
     <a href={localizePath('/', lang)} class="flex flex-none items-center no-underline">
-      <Logo variant="full" height={92} title={orgName} class="h-[68px] w-auto sm:h-[92px] lg:h-[118px]" />
+      <Logo
+        variant="full"
+        height={92}
+        title={orgName}
+        class="h-[68px] w-auto sm:h-[92px] lg:h-[118px]"
+      />
     </a>
 
     <nav class="ml-auto hidden lg:flex lg:gap-0.5" aria-label={t(lang, 'mainNavLabel')}>
@@ -132,7 +137,10 @@ function isCurrent(path: string): boolean {
     <a href={localizePath('/contact', lang)} class="btn btn-primary btn-block mt-6 py-4">
       {t(lang, 'contactUs')}
     </a>
-    <a href={localizePath('/contact?topic=volunteer', lang)} class="btn btn-secondary btn-block mt-2.5 py-4">
+    <a
+      href={localizePath('/contact?topic=volunteer', lang)}
+      class="btn btn-secondary btn-block mt-2.5 py-4"
+    >
       {t(lang, 'navVolunteer')}
     </a>
 
@@ -183,7 +191,8 @@ function isCurrent(path: string): boolean {
     let ticking = false;
 
     const setHidden = (hidden: boolean) => {
-      if (header.hasAttribute('data-hidden') !== hidden) header.toggleAttribute('data-hidden', hidden);
+      if (header.hasAttribute('data-hidden') !== hidden)
+        header.toggleAttribute('data-hidden', hidden);
     };
 
     const update = () => {

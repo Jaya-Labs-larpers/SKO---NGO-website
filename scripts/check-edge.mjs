@@ -12,6 +12,8 @@
  * content), and turn it on the day the real content goes live.
  */
 
+import { setTimeout as sleep } from "node:timers/promises";
+
 const args = process.argv.slice(2);
 const base = args.find((arg) => !arg.startsWith("--"))?.replace(/\/+$/, "");
 const indexable = args.includes("--indexable");
@@ -28,7 +30,13 @@ function record(ok, label, detail = "") {
   );
 }
 
-async function get(path, init = {}) {
+const reasonOf = (error) => {
+  const cause = error.cause ?? error;
+  const kind = typeof cause.code === "string" ? cause.code : cause.name;
+  return [kind, cause.message].filter(Boolean).join(": ");
+};
+
+async function fetchOnce(path, init) {
   const response = await fetch(`${base}${path}`, {
     redirect: "manual",
     signal: AbortSignal.timeout(20000),
@@ -36,6 +44,25 @@ async function get(path, init = {}) {
   });
   const text = init.method === "HEAD" ? "" : await response.text();
   return { status: response.status, headers: response.headers, text };
+}
+
+// A request that fails at the network level (connect timeout, reset) is retried
+// once, then recorded as a failed check so the summary line still prints. Every
+// request here is read-only or built to be rejected, so a retry is safe.
+async function get(path, init = {}) {
+  const request = `${init.method ?? "GET"} ${path}`;
+  try {
+    return await fetchOnce(path, init);
+  } catch (error) {
+    console.log(`INFO  retrying ${request} after ${reasonOf(error)}`);
+  }
+  await sleep(1000);
+  try {
+    return await fetchOnce(path, init);
+  } catch (error) {
+    record(false, `${request} responds`, reasonOf(error));
+    return { status: 0, headers: new Headers(), text: "" };
+  }
 }
 
 const header = (res, name) => res.headers.get(name) ?? "";

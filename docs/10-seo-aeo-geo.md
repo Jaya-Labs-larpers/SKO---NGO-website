@@ -5,11 +5,11 @@ first, and two of them are policy rather than code.
 
 Three different things, often conflated:
 
-| | What it is | Who you are optimising for |
-|---|---|---|
-| **SEO** | Search Engine Optimisation | Google, Bing — ranking a *link* |
-| **AEO** | Answer Engine Optimisation | Featured snippets, People Also Ask, voice — being *the answer* |
-| **GEO** | Generative Engine Optimisation | ChatGPT, Claude, Perplexity, AI Overviews — being *cited* |
+|         | What it is                     | Who you are optimising for                                     |
+| ------- | ------------------------------ | -------------------------------------------------------------- |
+| **SEO** | Search Engine Optimisation     | Google, Bing — ranking a _link_                                |
+| **AEO** | Answer Engine Optimisation     | Featured snippets, People Also Ask, voice — being _the answer_ |
+| **GEO** | Generative Engine Optimisation | ChatGPT, Claude, Perplexity, AI Overviews — being _cited_      |
 
 They pull in the same direction more often than not, but not always. GEO in particular rewards things
 classic SEO ignores: factual density, clear attribution, and machine-readable structure.
@@ -20,17 +20,17 @@ classic SEO ignores: factual density, clear attribution, and machine-readable st
 
 ### SEO — strong. This is largely done.
 
-| Signal | Status |
-|---|---|
-| Lighthouse SEO | **100** on every page tested |
-| Per-page title and meta description | Yes — the audit caught 14 pages missing descriptions in Phase 4; fixed |
-| Canonical URLs | Yes |
-| `hreflang` en / km / x-default | Yes, on every page, plus alternates inside the sitemap |
-| Sitemap | Yes, both locales, 404s excluded |
-| `robots.txt` | Yes — though still pointing at `example.org` until launch |
-| Semantic HTML, one `h1`, no skipped levels | Verified across all 64 pages by `scripts/check-build.mjs` |
-| Mobile-first, CLS 0, LCP under 2s | Yes |
-| Structured data | `NGO`, `BreadcrumbList`, `Article`, `JobPosting` |
+| Signal                                     | Status                                                                 |
+| ------------------------------------------ | ---------------------------------------------------------------------- |
+| Lighthouse SEO                             | **100** on every page tested                                           |
+| Per-page title and meta description        | Yes — the audit caught 14 pages missing descriptions in Phase 4; fixed |
+| Canonical URLs                             | Yes                                                                    |
+| `hreflang` en / km / x-default             | Yes, on every page, plus alternates inside the sitemap                 |
+| Sitemap                                    | Yes, both locales, 404s excluded                                       |
+| `robots.txt`                               | Yes — though still pointing at `example.org` until launch              |
+| Semantic HTML, one `h1`, no skipped levels | Verified across all 64 pages by `scripts/check-build.mjs`              |
+| Mobile-first, CLS 0, LCP under 2s          | Yes                                                                    |
+| Structured data                            | `NGO`, `BreadcrumbList`, `Article`, `JobPosting`                       |
 
 **One structural advantage worth naming:** the site renders complete HTML with **zero JavaScript**.
 Most AI crawlers execute JS poorly or not at all. A React site that assembles its content client-side
@@ -39,14 +39,14 @@ is a real GEO advantage the current architecture already gives you for free.
 
 ### AEO — thin. This is the biggest gap.
 
-Answer engines lift *specific, self-contained answers*. The site currently presents prose, not
+Answer engines lift _specific, self-contained answers_. The site currently presents prose, not
 answers.
 
 - **No `FAQPage` schema anywhere.** This is the single highest-leverage omission. "How do I donate to
   a Cambodian NGO?", "Is SKO registered?", "Where does my donation go?" are all questions the site
   answers in prose but never marks up as question-and-answer pairs.
 - **No answer-first paragraphs.** Program pages open with context, not with a one-sentence definition
-  of what the programme *is*. Answer engines extract the first self-contained sentence under a
+  of what the programme _is_. Answer engines extract the first self-contained sentence under a
   heading; ours often needs the paragraph before it to make sense.
 - **No `speakable` markup** for voice assistants.
 
@@ -63,7 +63,7 @@ answers.
 - **Missing: `llms.txt`.** An emerging convention — a plain-text map at the site root telling LLM
   crawlers what the site contains and where the authoritative pages are.
 - **No explicit AI crawler policy.** `User-agent: * Allow: /` permits them by default, but silently.
-  For an NGO that *wants* to be cited, this should be a stated intent, not an accident.
+  For an NGO that _wants_ to be cited, this should be a stated intent, not an accident.
 - **No feed.** RSS/JSON feeds remain a primary discovery channel for aggregators and crawlers.
 
 ### Also missing, plain SEO
@@ -91,7 +91,7 @@ Ask and AI answers.
 
 **3. Enrich the `NGO` schema** — `logo`, `description`, `areaServed: Cambodia`, `knowsAbout`
 (child protection, family care, GBV prevention), `nonprofitStatus`, and `sameAs` pointing at a
-Wikidata record if SKO has one. This is what makes a model confident *which* organisation you are.
+Wikidata record if SKO has one. This is what makes a model confident _which_ organisation you are.
 
 **4. Add `WebSite` schema and `dateModified`**, and turn on `lastmod` in the sitemap. Small, purely
 mechanical.
@@ -104,10 +104,10 @@ programmes, where the annual reports live. Cheap to generate at build time from 
 **6. An explicit AI crawler policy in `robots.txt`.** **This is your decision, not mine.** Two honest
 options:
 
-| | What it means |
-|---|---|
-| **Allow** (my recommendation) | Name GPTBot, ClaudeBot, PerplexityBot, Google-Extended explicitly and allow them. You *want* an AI answering "which NGOs work on child protection in Phnom Penh?" to name SKO |
-| **Disallow** | Some organisations object on principle to their content training commercial models |
+|                               | What it means                                                                                                                                                                 |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Allow** (my recommendation) | Name GPTBot, ClaudeBot, PerplexityBot, Google-Extended explicitly and allow them. You _want_ an AI answering "which NGOs work on child protection in Phnom Penh?" to name SKO |
+| **Disallow**                  | Some organisations object on principle to their content training commercial models                                                                                            |
 
 For a small NGO competing for visibility against much larger organisations, being citable in AI
 answers is a genuine channel. But it is a governance question for SKO's board, not a technical one.
@@ -128,7 +128,7 @@ extract.
 
 **12. Internal linking discipline** — activities already link to their programme; programmes should
 link back to related activities. Both search and generative crawlers use link structure to work out
-what a site is *about*.
+what a site is _about_.
 
 ---
 
@@ -139,12 +139,12 @@ tracked in `fixtures.ts` and listed in `SKO-content-review.html`, and render as 
 rather than as `[PLACEHOLDER]` text. Schema
 markup describing placeholder text achieves nothing — worse, publishing structured data that
 describes empty content can be actively counterproductive. **Tier 1 items 2 and 3 should be done
-*after* SKO's real copy is in**, not before.
+_after_ SKO's real copy is in**, not before.
 
 **The Khmer side has a specific opportunity.** There is very little authoritative Khmer-language
 content about child protection and family care in Cambodia, and correspondingly little competition.
 A Khmer page that genuinely answers "តើធ្វើដូចម្តេចដើម្បីរាយការណ៍ករណីកុមាររងគ្រោះ?" has a real chance of
-being *the* cited source — for both Google and generative engines. That is worth more to SKO than
+being _the_ cited source — for both Google and generative engines. That is worth more to SKO than
 competing in English against organisations a hundred times its size. It also depends entirely on the
 Khmer copy being written properly, which brings it back to the same bottleneck.
 

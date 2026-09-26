@@ -17,20 +17,20 @@ This review checked repository configuration, local builds, dependency advisorie
 
 ## Verified progress
 
-| Check | Result |
-| --- | --- |
-| Website `npm run typecheck` | Pass: 98 files, no errors, warnings, or hints |
-| Website `npm run verify` | Pass: 46 pages built and structurally checked |
-| CSP post-build processing | Pass: 46 page policies, 202 inline-script hashes |
-| Studio locked installation | Pass; installed separately from the website |
-| Studio typecheck and production build | Pass; build warnings described below |
-| Local Pages normal routes | English and Khmer home/contact pages, About, and Donate return 200 with expected language |
-| Local Pages security headers | Tested HTML responses include CSP frame restrictions and HSTS |
-| Contact endpoint | GET returns 405; malformed JSON 400; wrong media type 415; invalid fields 400; honeypot 200 without sending |
-| Missing Khmer route | Returns 404 with English markup; intended Khmer fallback is broken |
-| Production dependency audit | Fails: 1 critical, 4 high affected packages |
-| Full website dependency audit | Fails: 1 critical, 8 high affected packages, including deployment tooling |
-| Studio production dependency audit | Fails: 6 high, 4 moderate affected packages |
+| Check                                 | Result                                                                                                      |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Website `npm run typecheck`           | Pass: 98 files, no errors, warnings, or hints                                                               |
+| Website `npm run verify`              | Pass: 46 pages built and structurally checked                                                               |
+| CSP post-build processing             | Pass: 46 page policies, 202 inline-script hashes                                                            |
+| Studio locked installation            | Pass; installed separately from the website                                                                 |
+| Studio typecheck and production build | Pass; build warnings described below                                                                        |
+| Local Pages normal routes             | English and Khmer home/contact pages, About, and Donate return 200 with expected language                   |
+| Local Pages security headers          | Tested HTML responses include CSP frame restrictions and HSTS                                               |
+| Contact endpoint                      | GET returns 405; malformed JSON 400; wrong media type 415; invalid fields 400; honeypot 200 without sending |
+| Missing Khmer route                   | Returns 404 with English markup; intended Khmer fallback is broken                                          |
+| Production dependency audit           | Fails: 1 critical, 4 high affected packages                                                                 |
+| Full website dependency audit         | Fails: 1 critical, 8 high affected packages, including deployment tooling                                   |
+| Studio production dependency audit    | Fails: 6 high, 4 moderate affected packages                                                                 |
 
 Audit totals count affected packages, including transitive dependencies; they are not counts of independently exploitable vulnerabilities in the deployed website. Studio installation used `--ignore-scripts`; this review does not replace a clean CI installation with normal lifecycle scripts. Browser automation was unavailable, so no visual, console, or Lighthouse pass is claimed.
 
@@ -50,19 +50,19 @@ Audit totals count affected packages, including transitive dependencies; they ar
 
 ## Vercel hosting configuration
 
-| Setting | Required configuration |
-| --- | --- |
-| Vercel project | Import the Git repository; Framework Preset **Astro**; production branch `main` after protection is enabled |
-| Repository root / output | Repository root / `dist` |
-| Node | Select a supported version matching CI and the package engine; pin the tested major consistently rather than relying on the open-ended `>=22` range |
-| Installation | Locked installation with `npm ci` |
-| Build command | Explicitly use `npm run verify` so the custom build script generates CSP and structural checks run; add the missing production configuration gate before launch |
-| Public build values | `PUBLIC_SITE_URL`, `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET`, `PUBLIC_SANITY_API_VERSION`, `PUBLIC_TURNSTILE_SITE_KEY` |
-| Runtime secrets | `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY` |
-| Runtime email settings | `MAIL_FROM`, `CONTACT_TO_EMAIL`, `PARTNER_TO_EMAIL` |
-| Rate limiting | Configure the chosen shared store/platform control; Cloudflare `RATE_LIMIT_KV` does not carry over |
-| Optional analytics | `PUBLIC_CF_ANALYTICS_TOKEN`; omission does not break the site |
-| Production URL | Set `PUBLIC_SITE_URL` to the assigned stable `https://<project>.vercel.app` hostname or the final custom domain; never localhost or an individual preview URL |
+| Setting                  | Required configuration                                                                                                                                          |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vercel project           | Import the Git repository; Framework Preset **Astro**; production branch `main` after protection is enabled                                                     |
+| Repository root / output | Repository root / `dist`                                                                                                                                        |
+| Node                     | Select a supported version matching CI and the package engine; pin the tested major consistently rather than relying on the open-ended `>=22` range             |
+| Installation             | Locked installation with `npm ci`                                                                                                                               |
+| Build command            | Explicitly use `npm run verify` so the custom build script generates CSP and structural checks run; add the missing production configuration gate before launch |
+| Public build values      | `PUBLIC_SITE_URL`, `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET`, `PUBLIC_SANITY_API_VERSION`, `PUBLIC_TURNSTILE_SITE_KEY`                                |
+| Runtime secrets          | `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`                                                                                                                        |
+| Runtime email settings   | `MAIL_FROM`, `CONTACT_TO_EMAIL`, `PARTNER_TO_EMAIL`                                                                                                             |
+| Rate limiting            | Configure the chosen shared store/platform control; Cloudflare `RATE_LIMIT_KV` does not carry over                                                              |
+| Optional analytics       | `PUBLIC_CF_ANALYTICS_TOKEN`; omission does not break the site                                                                                                   |
+| Production URL           | Set `PUBLIC_SITE_URL` to the assigned stable `https://<project>.vercel.app` hostname or the final custom domain; never localhost or an individual preview URL   |
 
 Configure Production and Preview separately. Preview should use test recipient inboxes and separate credentials/resources so review submissions do not contact staff or spend production quotas. Protect review URLs as appropriate and prevent search indexing.
 

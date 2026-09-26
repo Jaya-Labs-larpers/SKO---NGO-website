@@ -101,14 +101,15 @@ Developers run `cd studio && npm install` once. Documented in the README.
 ## Scripts
 
 **Root:**
-| Script | Does |
-|---|---|
-| `dev` | `astro dev` |
-| `build` | `astro build` (the Cloudflare build command) |
-| `preview` | `wrangler pages dev dist` — serves the built site *with* the Functions, the honest local preview |
-| `typecheck` | `astro check && tsc --noEmit` |
-| `sanity:types` | Regenerate typed GROQ results |
-| `lint`, `format` | ESLint + Prettier (with `prettier-plugin-astro`, `prettier-plugin-tailwindcss`) |
+
+| Script           | Does                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------ |
+| `dev`            | `astro dev`                                                                                      |
+| `build`          | `astro build` (the Cloudflare build command)                                                     |
+| `preview`        | `wrangler pages dev dist` — serves the built site _with_ the Functions, the honest local preview |
+| `typecheck`      | `astro check && tsc --noEmit`                                                                    |
+| `sanity:types`   | Regenerate typed GROQ results                                                                    |
+| `lint`, `format` | ESLint + Prettier (with `prettier-plugin-astro`, `prettier-plugin-tailwindcss`)                  |
 
 **Studio:** `dev`, `build`, `deploy`, `deploy-graphql`.
 

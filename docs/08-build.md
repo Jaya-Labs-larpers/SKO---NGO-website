@@ -11,13 +11,13 @@ over every built page.
 
 Lighthouse, **mobile profile** (the one that matters — most local visitors are on a phone on 4G):
 
-| Page | Perf | A11y | Best practices | SEO |
-|---|---|---|---|---|
-| `/` (English home) | 100 | 100 | 100 | 100 |
-| `/km/` (Khmer home) | 100 | 100 | 100 | 100 |
-| `/about/` (heaviest — director card, org chart, dialog, team) | 99 | 100 | 100 | 100 |
-| `/donate/` | 100 | 100 | 100 | 100 |
-| `/km/contact/` (form + Turnstile) | 100 | 100 | 100 | 100 |
+| Page                                                          | Perf | A11y | Best practices | SEO |
+| ------------------------------------------------------------- | ---- | ---- | -------------- | --- |
+| `/` (English home)                                            | 100  | 100  | 100            | 100 |
+| `/km/` (Khmer home)                                           | 100  | 100  | 100            | 100 |
+| `/about/` (heaviest — director card, org chart, dialog, team) | 99   | 100  | 100            | 100 |
+| `/donate/`                                                    | 100  | 100  | 100            | 100 |
+| `/km/contact/` (form + Turnstile)                             | 100  | 100  | 100            | 100 |
 
 Zero failing audits on every page. LCP 1.5–1.9 s, **CLS 0**, TBT 0 ms.
 
@@ -60,8 +60,8 @@ and on pull requests, not between a staff member and their post going live.
 Phase 3 deferred this because browser behaviour around inline `<script type="application/ld+json">`
 was genuinely uncertain. It has now been tested rather than assumed.
 
-**Chrome does block it.** Under a strict policy it logs: *"Executing inline script violates the
-following Content Security Policy directive… The action has been blocked."* Every page carries
+**Chrome does block it.** Under a strict policy it logs: _"Executing inline script violates the
+following Content Security Policy directive… The action has been blocked."_ Every page carries
 structured data in exactly such a block, so a strict CSP needs a hash for each one.
 
 Those hashes differ per page and change whenever staff edit content, so they cannot live in a
@@ -99,7 +99,7 @@ Two defects surfaced during this, both of which would have shipped looking "fine
    `kantumruy-pro-khmer.woff2` and `inter-latin.woff2`.
 
 `unicode-range` also means an English page pays nothing for `inter-latin-ext.woff2` until a name like
-*Planète Enfants & Développement* appears on it.
+_Planète Enfants & Développement_ appears on it.
 
 ## 5. Three more accessibility defects found and fixed
 
@@ -134,16 +134,16 @@ dialog, and in the "read as text" panel — which is the route that works at 360
 
 ## 7. What is still placeholder, and what that needs
 
-The site is structurally complete. What it is not is *finished*, and the gap is content, not code:
+The site is structurally complete. What it is not is _finished_, and the gap is content, not code:
 
-| Needed | From |
-|---|---|
-| Real copy for every `[PLACEHOLDER]` string | SKO |
-| **Khmer copy written or reviewed by a Khmer-speaking staff member** | SKO |
-| Real logo, photographs, org-chart image, QR codes, bank details | SKO |
-| Real impact figures — and the "how we count" methodology note under them | SKO |
-| Partner logos, plus confirmation each partner permits logo use | SKO |
-| A Sanity project id, so the build reads the CMS instead of fixtures | SKO account |
+| Needed                                                                   | From        |
+| ------------------------------------------------------------------------ | ----------- |
+| Real copy for every `[PLACEHOLDER]` string                               | SKO         |
+| **Khmer copy written or reviewed by a Khmer-speaking staff member**      | SKO         |
+| Real logo, photographs, org-chart image, QR codes, bank details          | SKO         |
+| Real impact figures — and the "how we count" methodology note under them | SKO         |
+| Partner logos, plus confirmation each partner permits logo use           | SKO         |
+| A Sanity project id, so the build reads the CMS instead of fixtures      | SKO account |
 
 I have not invented SKO facts, statistics, staff names or a director's name. The numbers on the site
 are visibly bracketed placeholders demonstrating the component.

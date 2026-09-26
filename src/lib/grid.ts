@@ -14,26 +14,25 @@
  * Tailwind only generates classes it can see literally, so every variant is
  * spelled out here rather than built with template strings.
  */
-type Layout = "pairs" | "thirds" | "quarters";
+type Layout = 'pairs' | 'thirds' | 'quarters';
 
 const GRID: Record<Layout, string> = {
-  pairs: "grid gap-6 grid-cols-1 sm:grid-cols-2",
-  thirds: "grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-  quarters: "grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4",
+  pairs: 'grid gap-6 grid-cols-1 sm:grid-cols-2',
+  thirds: 'grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+  quarters: 'grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4',
 };
 
 const SIZES: Record<Layout, string> = {
-  pairs: "(min-width: 75rem) 36rem, (min-width: 40rem) 50vw, 100vw",
-  thirds:
-    "(min-width: 75rem) 23rem, (min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw",
-  quarters: "(min-width: 80rem) 17rem, (min-width: 40rem) 50vw, 100vw",
+  pairs: '(min-width: 75rem) 36rem, (min-width: 40rem) 50vw, 100vw',
+  thirds: '(min-width: 75rem) 23rem, (min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw',
+  quarters: '(min-width: 80rem) 17rem, (min-width: 40rem) 50vw, 100vw',
 };
 
 function layoutFor(count: number): Layout {
   const n = Math.max(1, Math.floor(count));
-  if (n <= 2) return "pairs";
-  if (n % 4 === 0 && n % 3 !== 0) return "quarters";
-  return "thirds";
+  if (n <= 2) return 'pairs';
+  if (n % 4 === 0 && n % 3 !== 0) return 'quarters';
+  return 'thirds';
 }
 
 export function cardGridCols(count: number): string {

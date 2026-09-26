@@ -6,15 +6,11 @@
  * missing pages fall through to the nearest `404.html`.
  */
 
-import { onRequest } from "../functions/api/contact";
+import { onRequest } from '../functions/api/contact';
 
 interface KVNamespaceLike {
   get(key: string): Promise<string | null>;
-  put(
-    key: string,
-    value: string,
-    options?: { expirationTtl?: number },
-  ): Promise<void>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 }
 
 export interface Env {
@@ -29,16 +25,12 @@ export interface Env {
   RATE_LIMIT_KV?: KVNamespaceLike;
 }
 
-function json(
-  body: unknown,
-  status: number,
-  headers: Record<string, string> = {},
-): Response {
+function json(body: unknown, status: number, headers: Record<string, string> = {}): Response {
   return Response.json(body, {
     status,
     headers: {
-      "Cache-Control": "no-store",
-      "X-Content-Type-Options": "nosniff",
+      'Cache-Control': 'no-store',
+      'X-Content-Type-Options': 'nosniff',
       ...headers,
     },
   });
@@ -48,22 +40,22 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const { pathname } = new URL(request.url);
 
-    if (pathname === "/api/contact" || pathname === "/api/contact/") {
-      if (request.method !== "POST") {
-        return json({ ok: false, error: "method_not_allowed" }, 405, {
-          Allow: "POST",
+    if (pathname === '/api/contact' || pathname === '/api/contact/') {
+      if (request.method !== 'POST') {
+        return json({ ok: false, error: 'method_not_allowed' }, 405, {
+          Allow: 'POST',
         });
       }
       // Runtime kill switch, independent of the build-time PUBLIC_CONTACT_ENABLED.
       // Rejects before the body is read or any service is contacted.
-      if (env.CONTACT_ENABLED !== "true") {
-        return json({ ok: false, error: "preview_disabled" }, 503);
+      if (env.CONTACT_ENABLED !== 'true') {
+        return json({ ok: false, error: 'preview_disabled' }, 503);
       }
       return onRequest({ request, env });
     }
 
-    if (pathname.startsWith("/api/")) {
-      return json({ ok: false, error: "not_found" }, 404);
+    if (pathname.startsWith('/api/')) {
+      return json({ ok: false, error: 'not_found' }, 404);
     }
 
     return env.ASSETS.fetch(request);

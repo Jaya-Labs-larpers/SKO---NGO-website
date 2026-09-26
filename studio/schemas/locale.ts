@@ -94,7 +94,12 @@ export const localeBlock = defineType({
   title: 'Rich text (both languages)',
   type: 'object',
   fields: [
-    defineField({ name: 'en', title: 'English', type: 'array', of: blockOptions }),
+    defineField({
+      name: 'en',
+      title: 'English',
+      type: 'array',
+      of: blockOptions,
+    }),
     defineField({
       name: 'km',
       title: KHMER_TITLE,

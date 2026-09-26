@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "./theme.css";
+@import 'tailwindcss';
+@import './theme.css';
 
 /* ============================================================================
    Component layer.
@@ -116,7 +116,8 @@ header.site-header[data-scrolled] {
 header.site-header[data-hidden] {
   translate: 0 -100%;
   box-shadow: none;
-  transition-timing-function: var(--ease-out-soft), var(--ease-out-soft), var(--ease-out-soft), cubic-bezier(0.4, 0, 1, 1);
+  transition-timing-function:
+    var(--ease-out-soft), var(--ease-out-soft), var(--ease-out-soft), cubic-bezier(0.4, 0, 1, 1);
   transition-duration: var(--duration-base), var(--duration-base), var(--duration-base), 360ms;
 }
 
@@ -246,11 +247,11 @@ main {
   --reveal-fade: 700ms;
   --reveal-move: 900ms;
 }
-.reveal[data-reveal="pending"] {
+.reveal[data-reveal='pending'] {
   opacity: 0;
   translate: 0 var(--reveal-rise);
 }
-.reveal[data-reveal="shown"] {
+.reveal[data-reveal='shown'] {
   transition:
     opacity var(--reveal-fade) var(--ease-reveal) var(--reveal-delay, 0ms),
     translate var(--reveal-move) var(--ease-pop) var(--reveal-delay, 0ms);
@@ -259,11 +260,11 @@ main {
 /* A revealed grid whose cells then arrive one after another (the partner
    wall). Each cell carries its place as --i, capped so the whole cascade ends
    inside the box's own 900ms, before reveal.ts hands the box back. */
-.reveal-cascade[data-reveal="pending"] > li > * {
+.reveal-cascade[data-reveal='pending'] > li > * {
   opacity: 0;
   translate: 0 10px;
 }
-.reveal-cascade[data-reveal="shown"] > li > * {
+.reveal-cascade[data-reveal='shown'] > li > * {
   transition:
     opacity 420ms var(--ease-reveal),
     translate 420ms var(--ease-pop);
@@ -273,16 +274,16 @@ main {
 /* The unhurried cascade: rows rise one by one from below, each row's text
    a beat after its name. The box carries data-reveal-ms long enough for the
    last row to finish before reveal.ts hands it back. */
-.reveal-cascade--slow[data-reveal="pending"] > li > * {
+.reveal-cascade--slow[data-reveal='pending'] > li > * {
   translate: 0 24px;
 }
-.reveal-cascade--slow[data-reveal="shown"] > li > * {
+.reveal-cascade--slow[data-reveal='shown'] > li > * {
   transition:
     opacity 800ms var(--ease-reveal),
     translate 800ms var(--ease-pop);
   transition-delay: calc(var(--reveal-delay, 0ms) + 200ms + min(var(--i, 0), 10) * 160ms);
 }
-.reveal-cascade--slow[data-reveal="shown"] > li > :last-child {
+.reveal-cascade--slow[data-reveal='shown'] > li > :last-child {
   transition-delay: calc(var(--reveal-delay, 0ms) + 320ms + min(var(--i, 0), 10) * 160ms);
 }
 
@@ -563,7 +564,7 @@ details[open] > summary > .disclosure-icon {
     border-color: #fff;
   }
 
-  .btn[aria-disabled="true"],
+  .btn[aria-disabled='true'],
   .btn:disabled {
     background: var(--color-surface-sunken);
     color: var(--color-ink-300);
@@ -895,7 +896,7 @@ details[open] > summary > .disclosure-icon {
     max-height: 32rem;
   }
   .program-hero__media::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -922,8 +923,18 @@ details[open] > summary > .disclosure-icon {
     }
     .program-hero__media::after {
       background:
-        linear-gradient(180deg, rgb(245 247 253 / 0.85) 0, rgb(245 247 253 / 0) calc(var(--header-h) * 1.4)),
-        linear-gradient(90deg, var(--color-surface-subtle) 0, rgb(245 247 253 / 0.94) 38%, rgb(245 247 253 / 0.4) 62%, rgb(245 247 253 / 0) 80%);
+        linear-gradient(
+          180deg,
+          rgb(245 247 253 / 0.85) 0,
+          rgb(245 247 253 / 0) calc(var(--header-h) * 1.4)
+        ),
+        linear-gradient(
+          90deg,
+          var(--color-surface-subtle) 0,
+          rgb(245 247 253 / 0.94) 38%,
+          rgb(245 247 253 / 0.4) 62%,
+          rgb(245 247 253 / 0) 80%
+        );
     }
     .program-hero__inner {
       display: flex;
@@ -1071,7 +1082,7 @@ details[open] > summary > .disclosure-icon {
   }
 
   /* Press feedback — a small scale-down so a tap feels physical. */
-  .btn:active:not([aria-disabled="true"]):not(:disabled) {
+  .btn:active:not([aria-disabled='true']):not(:disabled) {
     transform: scale(0.98);
   }
 
@@ -1092,7 +1103,7 @@ details[open] > summary > .disclosure-icon {
     transition: color var(--duration-fast) var(--ease-out-soft);
   }
   .nav-link::after {
-    content: "";
+    content: '';
     position: absolute;
     inset-inline: 0.9375rem;
     bottom: 0.25rem;
@@ -1131,7 +1142,7 @@ details[open] > summary > .disclosure-icon {
     transition: translate 480ms var(--ease-reveal);
   }
   .roll__text::after {
-    content: attr(data-text) / "";
+    content: attr(data-text) / '';
     position: absolute;
     left: 0;
     top: calc(100% + 0.6em);
@@ -1280,11 +1291,11 @@ details[open] > summary > .disclosure-icon {
     border-color: var(--color-blue-700);
     box-shadow: 0 0 0 3px var(--color-sky-200);
   }
-  .field[aria-invalid="true"] {
+  .field[aria-invalid='true'] {
     border-color: var(--color-danger-700);
     background: var(--color-danger-50);
   }
-  .field[aria-invalid="true"]:focus {
+  .field[aria-invalid='true']:focus {
     box-shadow: 0 0 0 3px rgb(180 35 24 / 0.15);
   }
   .field--select {
@@ -1332,7 +1343,7 @@ details[open] > summary > .disclosure-icon {
   /* The brand stripe across the top. 3px of --color-blue-700 into the logo
      cyan: the two colours the identity is actually built from. */
   .form-panel::before {
-    content: "";
+    content: '';
     display: block;
     height: 3px;
     flex: none;
@@ -1632,7 +1643,7 @@ details[open] > summary > .disclosure-icon {
     border-color: var(--color-ink-300);
   }
   .topic-picker__trigger:focus-visible,
-  .topic-picker__trigger[aria-expanded="true"] {
+  .topic-picker__trigger[aria-expanded='true'] {
     outline: 0;
     border-color: var(--color-blue-700);
     box-shadow: 0 0 0 3px var(--color-sky-200);
@@ -1662,7 +1673,7 @@ details[open] > summary > .disclosure-icon {
     line-height: 1.4;
     color: var(--color-ink-400);
   }
-  [data-tone="danger"] > .topic-picker__text > .topic-picker__label {
+  [data-tone='danger'] > .topic-picker__text > .topic-picker__label {
     color: var(--color-danger-700);
   }
   .topic-picker__affordance {
@@ -1685,7 +1696,7 @@ details[open] > summary > .disclosure-icon {
   .topic-picker__chevron {
     transition: rotate var(--duration-base) var(--ease-out-soft);
   }
-  .topic-picker__trigger[aria-expanded="true"] .topic-picker__chevron {
+  .topic-picker__trigger[aria-expanded='true'] .topic-picker__chevron {
     rotate: 180deg;
   }
   .topic-picker__menu {
@@ -1731,7 +1742,7 @@ details[open] > summary > .disclosure-icon {
   /* A hairline between rows, as in a grouped list on iOS; the safeguarding
      row sits in its own group below a full one. */
   .topic-picker__option + .topic-picker__option::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0.875rem;
@@ -1739,10 +1750,10 @@ details[open] > summary > .disclosure-icon {
     height: 1px;
     background: var(--color-line-subtle);
   }
-  .topic-picker__option[data-tone="danger"] {
+  .topic-picker__option[data-tone='danger'] {
     margin-top: 0.4375rem;
   }
-  .topic-picker__option[data-tone="danger"]::before {
+  .topic-picker__option[data-tone='danger']::before {
     top: -0.25rem;
     background: var(--color-line);
   }
@@ -1751,12 +1762,12 @@ details[open] > summary > .disclosure-icon {
     outline: 0;
     background: var(--color-blue-50);
   }
-  .topic-picker__option[data-tone="danger"]:hover,
-  .topic-picker__option[data-tone="danger"]:focus-visible {
+  .topic-picker__option[data-tone='danger']:hover,
+  .topic-picker__option[data-tone='danger']:focus-visible {
     background: var(--color-danger-50);
   }
   .topic-picker__option:focus-visible::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -1773,11 +1784,11 @@ details[open] > summary > .disclosure-icon {
       opacity var(--duration-fast) var(--ease-out-soft),
       scale var(--duration-base) var(--ease-pop);
   }
-  .topic-picker__option[aria-selected="true"] .topic-picker__check {
+  .topic-picker__option[aria-selected='true'] .topic-picker__check {
     opacity: 1;
     scale: 1;
   }
-  .topic-picker__option[data-tone="danger"] .topic-picker__check {
+  .topic-picker__option[data-tone='danger'] .topic-picker__check {
     color: var(--color-danger-700);
   }
 
@@ -1787,22 +1798,22 @@ details[open] > summary > .disclosure-icon {
      same window (ContactPage.astro sets the timing). Only under scripting,
      so a page with no script never hides anything. */
   @media (scripting: enabled) {
-    .contact-enter[data-enter="pending"] {
+    .contact-enter[data-enter='pending'] {
       opacity: 0;
       translate: 0 36px;
       filter: blur(14px);
     }
-    .contact-enter[data-enter="shown"] {
+    .contact-enter[data-enter='shown'] {
       transition:
         opacity 2000ms var(--ease-reveal) var(--enter-delay, 0ms),
         translate 2000ms var(--ease-pop) var(--enter-delay, 0ms),
         filter 1600ms var(--ease-reveal) var(--enter-delay, 0ms);
     }
-    .contact-enter[data-enter="pending"] .form-enter-row {
+    .contact-enter[data-enter='pending'] .form-enter-row {
       opacity: 0;
       translate: 0 14px;
     }
-    .contact-enter[data-enter="shown"] .form-enter-row {
+    .contact-enter[data-enter='shown'] .form-enter-row {
       transition:
         opacity 900ms var(--ease-reveal),
         translate 900ms var(--ease-pop);
@@ -1891,20 +1902,25 @@ details[open] > summary > .disclosure-icon {
   .form-topic {
     gap: 1.125rem;
   }
-  .contact-desk:has([name="formType"] > option[value="partner"]:checked) [data-topic-fields="partner"],
-  .contact-desk:has([name="formType"] > option[value="volunteer"]:checked) [data-topic-fields="volunteer"],
-  .contact-desk:has([name="formType"] > option[value="media"]:checked) [data-topic-fields="media"] {
+  .contact-desk:has([name='formType'] > option[value='partner']:checked)
+    [data-topic-fields='partner'],
+  .contact-desk:has([name='formType'] > option[value='volunteer']:checked)
+    [data-topic-fields='volunteer'],
+  .contact-desk:has([name='formType'] > option[value='media']:checked) [data-topic-fields='media'] {
     display: grid;
   }
   /* The reason field stays, so the visitor can still change their mind. */
-  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-panel-body > :not(.form-section--reason),
-  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-panel-foot {
+  .contact-desk:has([name='formType'] > option[value='safeguarding']:checked)
+    .form-panel-body
+    > :not(.form-section--reason),
+  .contact-desk:has([name='formType'] > option[value='safeguarding']:checked) .form-panel-foot {
     display: none;
   }
-  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .form-section--reason {
+  .contact-desk:has([name='formType'] > option[value='safeguarding']:checked)
+    .form-section--reason {
     padding-bottom: 1.75rem;
   }
-  .contact-desk:has([name="formType"] > option[value="safeguarding"]:checked) .safeguarding-panel {
+  .contact-desk:has([name='formType'] > option[value='safeguarding']:checked) .safeguarding-panel {
     display: block;
     margin-top: 1.5rem;
   }
@@ -2126,7 +2142,7 @@ details[open] > summary > .disclosure-icon {
     background: var(--color-surface-sunken);
   }
   .blur-up::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     background: var(--lqip, none) center / cover;
@@ -2162,7 +2178,6 @@ details[open] > summary > .disclosure-icon {
     }
   }
 }
-
 
 /* --- The logo butterfly ---------------------------------------------------
    One drawing (ButterflyGlyph) in two places: the flock flying inside every
@@ -2224,10 +2239,10 @@ details[open] > summary > .disclosure-icon {
     opacity var(--duration-fast) var(--ease-out-soft),
     scale 220ms var(--ease-out-soft);
 }
-.butterfly-cursor[data-state="link"] .butterfly-cursor__glyph {
+.butterfly-cursor[data-state='link'] .butterfly-cursor__glyph {
   scale: 1.3;
 }
-.butterfly-cursor[data-state="label"] .butterfly-cursor__glyph {
+.butterfly-cursor[data-state='label'] .butterfly-cursor__glyph {
   scale: 1.45;
 }
 /* The word beneath the butterfly over a card ("Read more"). The butterfly
@@ -2253,14 +2268,14 @@ details[open] > summary > .disclosure-icon {
     opacity var(--duration-fast) var(--ease-out-soft),
     scale 260ms var(--ease-reveal);
 }
-.butterfly-cursor[data-state="label"] .butterfly-cursor__label {
+.butterfly-cursor[data-state='label'] .butterfly-cursor__label {
   opacity: 1;
   scale: 1;
 }
 .butterfly-cursor[data-pressed] .butterfly-cursor__glyph {
   scale: 0.85;
 }
-.butterfly-cursor:is([data-state="hidden"], [data-state="text"]) .butterfly-cursor__glyph {
+.butterfly-cursor:is([data-state='hidden'], [data-state='text']) .butterfly-cursor__glyph {
   opacity: 0;
 }
 html:not([data-butterfly-cursor]) .butterfly-cursor,

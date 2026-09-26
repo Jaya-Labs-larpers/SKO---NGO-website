@@ -59,8 +59,10 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
   } from '~/lib/butterflies/cursor';
 
   const QUERY = '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)';
-  const INTERACTIVE = 'a[href], button, [role="button"], summary, label, select, [data-cursor="link"]';
-  const TEXT_ENTRY = 'input:not([type="checkbox"], [type="radio"], [type="button"], [type="submit"], [type="reset"]), textarea, [contenteditable]';
+  const INTERACTIVE =
+    'a[href], button, [role="button"], summary, label, select, [data-cursor="link"]';
+  const TEXT_ENTRY =
+    'input:not([type="checkbox"], [type="radio"], [type="button"], [type="submit"], [type="reset"]), textarea, [contenteditable]';
 
   type State = 'hidden' | 'idle' | 'link' | 'label' | 'text';
 
@@ -117,7 +119,8 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     };
 
     const wake = () => {
-      if (!frameId && state !== 'hidden' && !document.hidden) frameId = requestAnimationFrame(frame);
+      if (!frameId && state !== 'hidden' && !document.hidden)
+        frameId = requestAnimationFrame(frame);
     };
 
     const sleep = () => {
@@ -182,7 +185,8 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     const onHide = () => {
       try {
         if (state === 'hidden') sessionStorage.removeItem(CURSOR_STORAGE_KEY);
-        else sessionStorage.setItem(CURSOR_STORAGE_KEY, JSON.stringify(saveCursor(flight, pointer)));
+        else
+          sessionStorage.setItem(CURSOR_STORAGE_KEY, JSON.stringify(saveCursor(flight, pointer)));
       } catch {
         // Storage full or blocked: the next page simply waits for the mouse.
       }

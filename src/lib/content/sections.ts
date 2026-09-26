@@ -99,7 +99,10 @@ export function splitPoint(text: string): { term: string; rest: string } | null 
   return { term, rest };
 }
 
-export function layoutFor(blocks: PortableBlock[], limits: TermLimits = TERM_LIMITS): SectionLayout {
+export function layoutFor(
+  blocks: PortableBlock[],
+  limits: TermLimits = TERM_LIMITS,
+): SectionLayout {
   if (blocks.length === 0 || !blocks.every(isTextBlock)) return 'prose';
   const text = blocks as PortableTextBlock[];
   if (
@@ -109,9 +112,13 @@ export function layoutFor(blocks: PortableBlock[], limits: TermLimits = TERM_LIM
     return 'points';
   }
   if (text.every((block) => block.listItem)) return 'facts';
-  if (text.some((block) => block.listItem || (block.style && block.style !== 'normal'))) return 'prose';
+  if (text.some((block) => block.listItem || (block.style && block.style !== 'normal')))
+    return 'prose';
   if (text.length === 1 && blockText(text[0]!).length <= STATEMENT_MAX_CHARS) return 'statement';
-  if (text.length >= 3 && text.every((block) => isPlain(block) && splitLeadIn(blockText(block), limits))) {
+  if (
+    text.length >= 3 &&
+    text.every((block) => isPlain(block) && splitLeadIn(blockText(block), limits))
+  ) {
     return 'terms';
   }
   return 'prose';
@@ -138,6 +145,9 @@ export function splitBody(
     lead,
     sections: sections
       .filter((section) => section.heading.trim() || section.blocks.length > 0)
-      .map((section) => ({ ...section, layout: layoutFor(section.blocks, limits) })),
+      .map((section) => ({
+        ...section,
+        layout: layoutFor(section.blocks, limits),
+      })),
   };
 }

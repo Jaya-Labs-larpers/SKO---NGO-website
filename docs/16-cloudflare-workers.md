@@ -86,11 +86,46 @@ After cutover nobody deploys from a laptop.
   `wrangler deploy --env production`, then `check:edge` against the live host. Pull requests run
   `check` only.
 
+## Publishing from the Studio
+
+The site reads Sanity at build time, so a publish reaches the live site only through a deploy. A
+Sanity webhook runs the Deploy workflow on every publish. A person sets it up once:
+
+- Token: GitHub → Settings → Developer settings → fine-grained token, resource owner
+  `Jaya-Labs-larpers`, only the `SKO---NGO-website` repository, one permission: **Actions: Read and
+  write**. Not Contents: the token lives in Sanity, and Actions cannot touch the code. The org
+  requires an owner to approve the token (Org Settings → Personal access tokens → Pending requests);
+  until then every delivery gets a 403. Note its expiry date and replace it in the webhook before
+  then.
+- Webhook: sanity.io/manage → project `xm91vtfk` → API → Webhooks → Create.
+  - URL `https://api.github.com/repos/Jaya-Labs-larpers/SKO---NGO-website/actions/workflows/deploy.yml/dispatches`
+  - Dataset `production`; trigger on create, update and delete; drafts and versions off.
+  - Projection `{"ref": "main"}`; method POST.
+  - Headers `Authorization: Bearer <token>` and `Accept: application/vnd.github+json`.
+- Check: publish any small edit, and a Deploy run appears under Actions within seconds.
+- Delivery log: `npx sanity hook logs "Rebuild site on publish"` from `studio/`. A 204 is a
+  delivered publish.
+- Safety net: the Content sync workflow runs every 15 minutes. If a publish is 10 minutes old and no
+  deploy picked it up, it starts one and fails, which emails its last committer. A failing run means
+  the webhook needs attention. Deletions are not detected; the nightly rebuild covers them.
+
+Deploys queue one at a time and a newer pending run replaces an older one, so a burst of publishes
+builds once or twice, not once per edit. Until `PUBLIC_CONTENT_SOURCE` is `sanity` those runs
+still build from fixtures, harmlessly.
+
+To seed an empty dataset from the fixtures, see `scripts/sanity-seed.mjs`.
+
 ## Rollback
 
-`npx wrangler rollback --env production`, confirm with `check:edge`, redeploy the current version.
-Do it once on purpose after launch and write down how long it took. Rollback restores files and
-code only: DNS, Redirect Rules, secrets and KV contents are unaffected.
+Automatic: the Deploy workflow records the live version before deploying. If the live checks fail
+after the deploy, it rolls back to that version, reruns the live checks and leaves the run failed,
+so GitHub emails. The site then serves the previous build, including its older Sanity content,
+until the cause is fixed and a deploy passes. Content sync reports the failed deploy but does not
+retry it.
+
+Manual: `npx wrangler rollback --env production`, confirm with `check:edge`, redeploy the current
+version. Rollback restores files and code only: DNS, Redirect Rules, secrets and KV contents are
+unaffected.
 
 ## Enabling the contact form (later)
 
@@ -100,13 +135,14 @@ production Turnstile widget listing `www.sko-samatapheapkhnom.org`, the five sec
 `"true"` in `wrangler.jsonc` for production. Then submit both forms on the live site and confirm
 each lands in the right inbox and not in spam.
 
-## Still to build before the real launch
+## Automation and remaining ownership
 
-- Sanity publish → rebuild. On Workers this is a GitHub Actions `repository_dispatch` triggered by a
-  Sanity webhook, not a Pages deploy hook.
-- Nightly rebuild at 02:00 Asia/Phnom_Penh so expired job posts drop off (Actions cron).
-- Uptime check on `/`, `/km/` and `/donate/`, alerting a named person.
-- Move the zone and Worker to an SKO-owned Cloudflare account if they are not there already.
+- The Sanity publish webhook is configured to dispatch the Deploy workflow; its GitHub token scope
+  still needs review.
+- A nightly rebuild is scheduled at 02:00 Asia/Phnom_Penh so expired job posts drop off.
+- The Uptime workflow checks the live site every 15 minutes. A manual run passed 28/28 checks on
+  2026-09-24.
+- Move the zone and Worker to an SKO-owned Cloudflare account.
 
 ## Launch record
 
@@ -114,14 +150,15 @@ each lands in the right inbox and not in spam.
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Cut over             | 21 September 2026, about 13:45 Asia/Phnom_Penh                                                                                                     |
 | Source               | `main` at merge commit 445d403 (PR #5)                                                                                                             |
-| Worker version       | `f1938c64-3155-4870-9ec4-89dffff0fa2e` on `sko-website-production`                                                                                 |
-| Deployed by          | Kimchhun, from a laptop, because CI deploys are not set up yet                                                                                     |
+| Worker version       | `f1938c64-3155-4870-9ec4-89dffff0fa2e` on `sko-website-production`, deployed by Kimchhun from a laptop because CI was not yet wired                |
+| CI deploys           | Active since 10:05 UTC the same day. First CI deploy: version `9ff8cdd6-22bb-446b-9860-303455f271c8`, 28/28 live checks from the runner            |
 | Verified             | `check:edge` 28/28 against `https://www.sko-samatapheapkhnom.org`; apex → www is one 301 with path and query preserved; HTTP → HTTPS on both hosts |
-| State                | Fixture content, `noindex`, forms disabled. Identical posture to the Vercel site it replaced.                                                      |
-| Accepted limitations | Cloudflare account is a personal one, not SKO's; no CI deploy; no uptime check; rollback not yet rehearsed (only one version exists)               |
+| Rollback rehearsed   | Yes, same day: `wrangler rollback` to `f1938c64`, confirmed live, rolled forward to `9ff8cdd6`. Round trip about 22 seconds                        |
+| Vercel               | Both projects deleted the same day. `vercel.json` and the Vercel test removed in PR #9                                                             |
+| State                | Fixture content, `noindex`, forms disabled. Identical posture to the Vercel site it replaced                                                       |
+| Accepted limitations | Cloudflare account is a personal one, not SKO's; no uptime check yet                                                                               |
 | Review by            | 21 October 2026, or at the first content launch, whichever comes first                                                                             |
 
-Still open after launch, in order: remove the domain from the Vercel project and delete both Vercel
-projects; decide where the CI deploy token lives and add `deploy.yml`; rehearse a rollback once a
-second version exists; add the production hostname to the Turnstile widget; set the five production
-secrets; add an uptime check with a named recipient.
+Still open after launch, in order: add the production hostname to the Turnstile widget; set the five
+production secrets; add an uptime check with a named recipient; move the zone and Worker to an
+SKO-owned account before the content launch.

@@ -12,7 +12,12 @@ export const DEFAULT_WIDTHS = [400, 640, 828, 1200, 1600] as const;
 
 const LOCAL_PREFIX = 'local:';
 
-type LocalImage = { width: number; height: number; widths: number[]; lqip: string };
+type LocalImage = {
+  width: number;
+  height: number;
+  widths: number[];
+  lqip: string;
+};
 
 /**
  * Photos committed to the repo (public/images, built by scripts/local-images.mjs)
@@ -34,10 +39,17 @@ export function localCmsImage(name: string, alt?: CmsImage['alt']): CmsImage {
   const meta = (localImages as Record<string, LocalImage>)[name];
   if (!meta) throw new Error(`[sko] No local image named "${name}" — run scripts/local-images.mjs`);
   return {
-    asset: { _id: `${LOCAL_PREFIX}${name}`, url: localUrl(name, meta.widths.at(-1)!) },
+    asset: {
+      _id: `${LOCAL_PREFIX}${name}`,
+      url: localUrl(name, meta.widths.at(-1)!),
+    },
     alt: alt ?? null,
     lqip: meta.lqip,
-    dimensions: { width: meta.width, height: meta.height, aspectRatio: meta.width / meta.height },
+    dimensions: {
+      width: meta.width,
+      height: meta.height,
+      aspectRatio: meta.width / meta.height,
+    },
   };
 }
 
@@ -53,7 +65,9 @@ export function hasImage(image: CmsImage | null | undefined): boolean {
  */
 export function imageUrl(
   image: CmsImage,
-  options: { width: number; height?: number; quality?: number } = { width: 1200 },
+  options: { width: number; height?: number; quality?: number } = {
+    width: 1200,
+  },
 ): string | null {
   const local = localImage(image);
   if (local) {

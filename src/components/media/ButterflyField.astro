@@ -41,7 +41,13 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
         if (!bird) return;
         bird.style.width = f.s + 'px';
         bird.style.transform =
-          'translate(' + f.x * sx + 'px,' + f.y * sy + 'px) translate(-50%,-50%) rotate(' + f.r + 'rad)';
+          'translate(' +
+          f.x * sx +
+          'px,' +
+          f.y * sy +
+          'px) translate(-50%,-50%) rotate(' +
+          f.r +
+          'rad)';
         var wings = bird.querySelector('.butterfly-wings');
         if (wings) wings.style.transform = 'scaleX(' + f.k + ')';
       });
@@ -67,7 +73,8 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   /** A metered connection is treated like reduced motion: the flock rests. */
   const saveData =
-    (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData ===
+    true;
 
   /** After this long without the mouse moving, they stop following and fly free. */
   const IDLE_MS = 4000;
@@ -89,7 +96,9 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     const wings = birds.map((bird) => bird.querySelector<SVGGElement>('.butterfly-wings'));
 
     const saved = readSaved();
-    const flock: Flock = saved ? restoreFlock(saved, viewport(layer)) : createFlock(viewport(layer));
+    const flock: Flock = saved
+      ? restoreFlock(saved, viewport(layer))
+      : createFlock(viewport(layer));
 
     let pointer: Pointer | null = null;
     let pointerMovedAt = 0;
@@ -148,7 +157,8 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
       (event) => {
         if (event.pointerType === 'touch') return;
         const target = event.target;
-        const sheltered = target instanceof Element && target.closest('[data-butterfly-shelter]') !== null;
+        const sheltered =
+          target instanceof Element && target.closest('[data-butterfly-shelter]') !== null;
         const box = layer.getBoundingClientRect();
         const x = event.clientX - box.left;
         const y = event.clientY - box.top;

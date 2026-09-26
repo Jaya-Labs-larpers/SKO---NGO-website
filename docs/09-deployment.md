@@ -136,8 +136,10 @@ look like code bugs.
 | `PARTNER_TO_EMAIL`     | partnerships/grants inbox |
 
 Production refuses localhost/example/Pages URLs, test Turnstile site keys, missing CMS settings,
-missing essential published documents, unfinished markers, untranslated Khmer fallback, and missing
-donation QR/bank data. Do not bypass this gate to get a first production deployment.
+missing essential published documents, unfinished markers, and missing donation QR/bank data. Do
+not bypass this gate to get a first production deployment. Khmer pages that fall back to English
+are listed as build warnings, not failures: the fallback is marked `lang="en"`, and staff fill in
+the Khmer in Sanity.
 `npm run build:production` exercises the gate locally. An intentionally configured preview remains
 available before content is complete and uses `noindex` plus a disallowing robots file.
 
@@ -282,7 +284,7 @@ Neither is a code change you need me for, but both are wrong until you do them:
 
 1. **`public/robots.txt`** — replace `https://example.org/sitemap-index.xml` with the real domain.
 2. **Fixture content** — once Sanity has real content, the finished copy replaces the fixtures on
-   its own. Unfinished fields are *not* visible on the live site: the content layer strips every
+   its own. Unfinished fields are _not_ visible on the live site: the content layer strips every
    `[NEEDS SKO]` / `[EXAMPLE]` marker before render and the build fails if one reaches the HTML
    (`src/lib/content/placeholders.ts`, `scripts/check-build.mjs`), so a gap shows up as a section
    that is simply absent. To see what SKO still owes, run `node scripts/content-review.mjs` and open

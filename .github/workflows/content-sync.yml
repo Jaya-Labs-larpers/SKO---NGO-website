@@ -1,0 +1,39 @@
+# A Sanity publish reaches the site only through the Deploy workflow, which a
+# Sanity webhook starts. If that webhook stops working (its GitHub token
+# expires or is revoked), publishes succeed in Studio and silently never go
+# live. This starts the missed deploy and fails, so GitHub emails the
+# workflow's last committer. See scripts/content-sync.mjs.
+name: Content sync
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: content-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      - run: node scripts/content-sync.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLIC_SANITY_PROJECT_ID: ${{ vars.PUBLIC_SANITY_PROJECT_ID }}
+          PUBLIC_SANITY_DATASET: ${{ vars.PUBLIC_SANITY_DATASET }}
+          PUBLIC_SANITY_API_VERSION: ${{ vars.PUBLIC_SANITY_API_VERSION }}

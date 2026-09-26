@@ -55,7 +55,10 @@ function blocks(en: string[], km: string[]): LocaleBlocks {
         style: isHeading ? ('h2' as const) : ('normal' as const),
         ...(isBullet ? { listItem: 'bullet' as const, level: 1 } : {}),
         children: [
-          { _type: 'span' as const, text: isHeading ? raw.slice(3) : isBullet ? raw.slice(2) : raw },
+          {
+            _type: 'span' as const,
+            text: isHeading ? raw.slice(3) : isBullet ? raw.slice(2) : raw,
+          },
         ],
       };
     });
@@ -84,7 +87,10 @@ const sokVannyStory = [
  */
 const donationFaqs: FaqItem[] = [
   {
-    question: { en: 'How can I donate to SKO?', km: 'តើខ្ញុំអាចបរិច្ចាគទៅ SKO ដោយរបៀបណា?' },
+    question: {
+      en: 'How can I donate to SKO?',
+      km: 'តើខ្ញុំអាចបរិច្ចាគទៅ SKO ដោយរបៀបណា?',
+    },
     answer: {
       en: 'You can donate by scanning a KHQR code with any Cambodian banking app, or by international bank transfer using the account details on this page. SKO does not collect card details on this website.',
       km: 'អ្នកអាចបរិច្ចាគដោយស្កេនកូដ KHQR ជាមួយកម្មវិធីធនាគារកម្ពុជាណាមួយ ឬតាមការផ្ទេរប្រាក់ធនាគារអន្តរជាតិ។ SKO មិនប្រមូលព័ត៌មានកាតឥណទាននៅលើគេហទំព័រនេះទេ។',
@@ -152,7 +158,10 @@ export const siteSettings: SiteSettings = {
     qrCodes: [
       {
         label: { en: '[NEEDS SKO] Bank name', km: '[NEEDS SKO] ឈ្មោះធនាគារ' },
-        instructions: { en: 'Samatapheap Khnom Organization · KHR / USD', km: 'អង្គការសមត្ថភាពខ្ញុំ · KHR / USD' },
+        instructions: {
+          en: 'Samatapheap Khnom Organization · KHR / USD',
+          km: 'អង្គការសមត្ថភាពខ្ញុំ · KHR / USD',
+        },
       },
       {
         label: { en: 'KHQR', km: 'KHQR' },
@@ -199,7 +208,10 @@ export const impactStats: ImpactStat[] = [
     _id: 'stat-since',
     value: 2007,
     displayValue: '2007',
-    label: { en: 'Working in Phnom Penh since', km: 'ធ្វើការនៅរាជធានីភ្នំពេញតាំងពីឆ្នាំ' },
+    label: {
+      en: 'Working in Phnom Penh since',
+      km: 'ធ្វើការនៅរាជធានីភ្នំពេញតាំងពីឆ្នាំ',
+    },
     context: {
       en: 'Registered with the Ministry of Interior, permit No. 457',
       km: 'ចុះបញ្ជីជាមួយក្រសួងមហាផ្ទៃ លិខិតលេខ ៤៥៧',
@@ -291,7 +303,10 @@ export const programs: Program[] = [
         _id: 'hali-capable',
         value: 97,
         displayValue: '97%',
-        label: { en: 'Feel more capable of dealing with problems', km: 'មានអារម្មណ៍ថាមានលទ្ធភាពដោះស្រាយបញ្ហាកាន់តែប្រសើរ' },
+        label: {
+          en: 'Feel more capable of dealing with problems',
+          km: 'មានអារម្មណ៍ថាមានលទ្ធភាពដោះស្រាយបញ្ហាកាន់តែប្រសើរ',
+        },
         countUp: true,
         order: 2,
       },
@@ -299,7 +314,10 @@ export const programs: Program[] = [
         _id: 'hali-referral',
         value: 95,
         displayValue: '95%',
-        label: { en: 'Continue to use referral services', km: 'បន្តប្រើសេវាបញ្ជូន' },
+        label: {
+          en: 'Continue to use referral services',
+          km: 'បន្តប្រើសេវាបញ្ជូន',
+        },
         countUp: true,
         order: 3,
       },
@@ -307,7 +325,10 @@ export const programs: Program[] = [
         _id: 'hali-decisions',
         value: 89,
         displayValue: '89%',
-        label: { en: 'More equitable household decision-making', km: 'ការសម្រេចចិត្តគ្រួសារប្រកបដោយសមភាពកាន់តែច្រើន' },
+        label: {
+          en: 'More equitable household decision-making',
+          km: 'ការសម្រេចចិត្តគ្រួសារប្រកបដោយសមភាពកាន់តែច្រើន',
+        },
         countUp: true,
         order: 4,
       },
@@ -315,7 +336,10 @@ export const programs: Program[] = [
         _id: 'hali-gbv-help',
         value: 94,
         displayValue: '94%',
-        label: { en: 'Know where to seek help for gender-based violence', km: 'ដឹងកន្លែងស្វែងរកជំនួយអំពីអំពើហិង្សាយេនឌ័រ' },
+        label: {
+          en: 'Know where to seek help for gender-based violence',
+          km: 'ដឹងកន្លែងស្វែងរកជំនួយអំពីអំពើហិង្សាយេនឌ័រ',
+        },
         countUp: true,
         order: 5,
       },
@@ -347,8 +371,14 @@ export const programs: Program[] = [
         _id: 'tfcf1-school-materials',
         value: 410,
         displayValue: '410',
-        label: { en: 'Children received school materials', km: 'កុមារទទួលបានសម្ភារៈសិក្សា' },
-        context: { en: '1,640 packages of school material', km: 'សម្ភារៈសិក្សាចំនួន ១,៦៤០ កញ្ចប់' },
+        label: {
+          en: 'Children received school materials',
+          km: 'កុមារទទួលបានសម្ភារៈសិក្សា',
+        },
+        context: {
+          en: '1,640 packages of school material',
+          km: 'សម្ភារៈសិក្សាចំនួន ១,៦៤០ កញ្ចប់',
+        },
         countUp: true,
         order: 1,
       },
@@ -356,7 +386,10 @@ export const programs: Program[] = [
         _id: 'tfcf1-medical',
         value: 656,
         displayValue: '656',
-        label: { en: 'Direct reaches, 2,624 indirect reaches', km: 'អ្នកទទួលផលផ្ទាល់ និង ២,៦២៤ នាក់ទទួលផលប្រយោល' },
+        label: {
+          en: 'Direct reaches, 2,624 indirect reaches',
+          km: 'អ្នកទទួលផលផ្ទាល់ និង ២,៦២៤ នាក់ទទួលផលប្រយោល',
+        },
         context: {
           en: 'Through medical check-ups and awareness raising on health issues',
           km: 'តាមរយៈការពិនិត្យសុខភាព និងការលើកកម្ពស់ការយល់ដឹងអំពីបញ្ហាសុខភាព',
@@ -368,7 +401,10 @@ export const programs: Program[] = [
         _id: 'tfcf1-rice',
         value: 33910,
         displayValue: '33,910 kg',
-        label: { en: 'Rice distributed to 313 families', km: 'អង្ករចែកចាយដល់គ្រួសារ ៣១៣' },
+        label: {
+          en: 'Rice distributed to 313 families',
+          km: 'អង្ករចែកចាយដល់គ្រួសារ ៣១៣',
+        },
         countUp: true,
         order: 3,
       },
@@ -376,7 +412,10 @@ export const programs: Program[] = [
         _id: 'tfcf1-hygiene',
         value: 289,
         displayValue: '289',
-        label: { en: 'Direct reaches, 1,156 indirect reaches', km: 'អ្នកទទួលផលផ្ទាល់ និង ១,១៥៦ នាក់ទទួលផលប្រយោល' },
+        label: {
+          en: 'Direct reaches, 1,156 indirect reaches',
+          km: 'អ្នកទទួលផលផ្ទាល់ និង ១,១៥៦ នាក់ទទួលផលប្រយោល',
+        },
         context: {
           en: 'Of hygiene and sanitation awareness',
           km: 'នៃការលើកកម្ពស់ការយល់ដឹងអំពីអនាម័យ និងអនាម័យបរិស្ថាន',
@@ -438,8 +477,14 @@ export const programs: Program[] = [
         _id: 'tfcf2-children',
         value: 390,
         displayValue: '390',
-        label: { en: 'Vulnerable children reached', km: 'កុមារងាយរងគ្រោះទទួលបានជំនួយ' },
-        context: { en: '204 girls, 186 boys', km: '២០៤ ក្មេងស្រី ១៨៦ ក្មេងប្រុស' },
+        label: {
+          en: 'Vulnerable children reached',
+          km: 'កុមារងាយរងគ្រោះទទួលបានជំនួយ',
+        },
+        context: {
+          en: '204 girls, 186 boys',
+          km: '២០៤ ក្មេងស្រី ១៨៦ ក្មេងប្រុស',
+        },
         countUp: true,
         order: 1,
       },
@@ -455,8 +500,14 @@ export const programs: Program[] = [
         _id: 'tfcf2-clubs',
         value: 237,
         displayValue: '237',
-        label: { en: 'Direct reaches, 474 indirect reaches', km: 'អ្នកទទួលផលផ្ទាល់ និង ៤៧៤ នាក់ទទួលផលប្រយោល' },
-        context: { en: 'Children through Children’s Clubs', km: 'កុមារតាមរយៈក្លឹបកុមារ' },
+        label: {
+          en: 'Direct reaches, 474 indirect reaches',
+          km: 'អ្នកទទួលផលផ្ទាល់ និង ៤៧៤ នាក់ទទួលផលប្រយោល',
+        },
+        context: {
+          en: 'Children through Children’s Clubs',
+          km: 'កុមារតាមរយៈក្លឹបកុមារ',
+        },
         countUp: true,
         order: 3,
       },
@@ -464,7 +515,10 @@ export const programs: Program[] = [
         _id: 'tfcf2-rice',
         value: 24700,
         displayValue: '24,700 kg',
-        label: { en: 'Rice distributed to 247 families', km: 'អង្ករចែកចាយដល់គ្រួសារ ២៤៧' },
+        label: {
+          en: 'Rice distributed to 247 families',
+          km: 'អង្ករចែកចាយដល់គ្រួសារ ២៤៧',
+        },
         countUp: true,
         order: 4,
       },
@@ -629,18 +683,25 @@ export const reports: Report[] = [
       en: 'Opens SKO’s reports folder (Google Drive) until the PDFs are uploaded here.',
       km: 'បើកថតឯកសាររបាយការណ៍របស់ SKO (Google Drive) រហូតដល់ឯកសារ PDF ត្រូវបានផ្ទុកឡើងទីនេះ។',
     },
-    file: { url: 'https://drive.google.com/drive/folders/1NNiA02FyrtoAtRF-FDAYM-Qmv6UpQXas?usp=sharing' },
+    file: {
+      url: 'https://drive.google.com/drive/folders/1NNiA02FyrtoAtRF-FDAYM-Qmv6UpQXas?usp=sharing',
+    },
   },
   {
     _id: 'report-policy',
     year: 2026,
     type: 'policy',
-    title: { en: 'Safeguarding & Child Protection Policy', km: 'គោលការណ៍ការពារកុមារ' },
+    title: {
+      en: 'Safeguarding & Child Protection Policy',
+      km: 'គោលការណ៍ការពារកុមារ',
+    },
     summary: {
       en: 'Opens SKO’s reports folder (Google Drive) until the PDF is uploaded here.',
       km: 'បើកថតឯកសាររបស់ SKO (Google Drive) រហូតដល់ឯកសារ PDF ត្រូវបានផ្ទុកឡើងទីនេះ។',
     },
-    file: { url: 'https://drive.google.com/drive/folders/1O1tcKHz2duE2VS4yp_STFPpzlXNB4DZy?usp=sharing' },
+    file: {
+      url: 'https://drive.google.com/drive/folders/1O1tcKHz2duE2VS4yp_STFPpzlXNB4DZy?usp=sharing',
+    },
   },
 ];
 
@@ -683,7 +744,10 @@ export const team: TeamMember[] = [
   {
     _id: 'team-rachana-chheang',
     name: { en: 'Rachana Chheang' },
-    role: { en: 'Finance & Admin Manager', km: 'ប្រធានផ្នែកហិរញ្ញវត្ថុ និងរដ្ឋបាល' },
+    role: {
+      en: 'Finance & Admin Manager',
+      km: 'ប្រធានផ្នែកហិរញ្ញវត្ថុ និងរដ្ឋបាល',
+    },
     photo: localCmsImage('team-rachana-chheang'),
     group: 'leadership',
     reportsTo: 'team-ed',
@@ -781,7 +845,10 @@ export const team: TeamMember[] = [
   {
     _id: 'team-chetnileak-key',
     name: { en: 'Chetnileak Key' },
-    role: { en: 'Finance & Admin Assistant', km: 'ជំនួយការហិរញ្ញវត្ថុ និងរដ្ឋបាល' },
+    role: {
+      en: 'Finance & Admin Assistant',
+      km: 'ជំនួយការហិរញ្ញវត្ថុ និងរដ្ឋបាល',
+    },
     photo: localCmsImage('team-chetnileak-key'),
     group: 'staff',
     reportsTo: 'team-rachana-chheang',
@@ -800,7 +867,10 @@ export const team: TeamMember[] = [
 export const directorMessage: DirectorMessage = {
   name: { en: 'Samnang Mourn', km: 'សំណាង មួន' },
   title: { en: 'Executive Director', km: 'នាយកប្រតិបត្តិ' },
-  photo: localCmsImage('director', { en: 'Samnang Mourn, Executive Director', km: 'សំណាង មួន នាយកប្រតិបត្តិ' }),
+  photo: localCmsImage('director', {
+    en: 'Samnang Mourn, Executive Director',
+    km: 'សំណាង មួន នាយកប្រតិបត្តិ',
+  }),
   pullQuote: {
     en: 'Our key message is to continue putting families and children at the heart of everything we do.',
     km: 'សារសំខាន់របស់យើងគឺបន្តដាក់គ្រួសារ និងកុមារជាចំណុចស្នូលនៃអ្វីគ្រប់យ៉ាងដែលយើងធ្វើ។',
@@ -863,21 +933,30 @@ export const pages: Page[] = [
     ]),
     faqs: [
       {
-        question: { en: 'Is SKO a registered organisation?', km: 'តើ SKO ជាអង្គការដែលបានចុះបញ្ជីដែរឬទេ?' },
+        question: {
+          en: 'Is SKO a registered organisation?',
+          km: 'តើ SKO ជាអង្គការដែលបានចុះបញ្ជីដែរឬទេ?',
+        },
         answer: {
           en: 'Yes. Samatapheap Khnom Organization is registered with the Cambodian Ministry of Interior under permit number 457 (សជណ), issued on 20 April 2007. SKO is a local, non-political, non-profit organization.',
           km: 'បាទ/ចាស។ អង្គការសមត្ថភាពខ្ញុំ បានចុះបញ្ជីជាមួយក្រសួងមហាផ្ទៃ តាមលិខិតអនុញ្ញាតលេខ ៤៥៧ (សជណ) ចេញនៅថ្ងៃទី ២០ ខែមេសា ឆ្នាំ ២០០៧។',
         },
       },
       {
-        question: { en: 'Where does SKO work?', km: 'តើ SKO ធ្វើការនៅកន្លែងណា?' },
+        question: {
+          en: 'Where does SKO work?',
+          km: 'តើ SKO ធ្វើការនៅកន្លែងណា?',
+        },
         answer: {
           en: 'SKO works in the urban poor communities of Phnom Penh, Cambodia, across 14 khans and 105 sangkats.',
           km: 'SKO ធ្វើការនៅសហគមន៍ក្រីក្រតាមទីក្រុងក្នុងរាជធានីភ្នំពេញ គ្របដណ្តប់ ១៤ ខណ្ឌ និង ១០៥ សង្កាត់។',
         },
       },
       {
-        question: { en: 'What does Samatapheap Khnom mean?', km: 'តើ «សមត្ថភាពខ្ញុំ» មានន័យដូចម្តេច?' },
+        question: {
+          en: 'What does Samatapheap Khnom mean?',
+          km: 'តើ «សមត្ថភាពខ្ញុំ» មានន័យដូចម្តេច?',
+        },
         answer: {
           en: 'Samatapheap Khnom (សមត្ថភាពខ្ញុំ) is Khmer for “my capacity.” The name reflects the belief that families already hold the capability to change their own circumstances, and that our job is to support that capacity rather than replace it.',
           km: '«សមត្ថភាពខ្ញុំ» មានន័យថាសមត្ថភាពរបស់ខ្ញុំ។ វាឆ្លុះបញ្ចាំងពីជំនឿថាគ្រួសារមានលទ្ធភាពផ្លាស់ប្តូរស្ថានភាពរបស់ខ្លួនរួចទៅហើយ ហើយតួនាទីរបស់យើងគឺគាំទ្រសមត្ថភាពនោះ មិនមែនជំនួសវាទេ។',
@@ -893,9 +972,7 @@ export const pages: Page[] = [
       en: 'Answers to the questions we are asked most often by donors, partners and people who want to understand our work.',
       km: 'ចម្លើយចំពោះសំណួរដែលយើងត្រូវបានសួរញឹកញាប់បំផុត ដោយម្ចាស់ជំនួយ ដៃគូ និងអ្នកដែលចង់យល់អំពីការងាររបស់យើង។',
     },
-    body: enOnly([
-      'If your question is not answered here, email info@samatapheapkhnom.org.',
-    ]),
+    body: enOnly(['If your question is not answered here, email info@samatapheapkhnom.org.']),
     faqs: [
       {
         question: {

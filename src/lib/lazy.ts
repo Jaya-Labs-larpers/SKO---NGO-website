@@ -17,7 +17,7 @@
  */
 
 /** How a deferred image decides when to load. See ResponsiveImage's `defer`. */
-export type DeferStrategy = "idle" | "visible" | "manual";
+export type DeferStrategy = 'idle' | 'visible' | 'manual';
 
 /**
  * Run at the browser's next spare moment, or on the next tick where
@@ -26,7 +26,7 @@ export type DeferStrategy = "idle" | "visible" | "manual";
  * The timeout matters on a slow phone, where idle may never arrive on its own.
  */
 export function whenIdle(work: () => void, timeout = 500): void {
-  if (typeof window.requestIdleCallback === "function") {
+  if (typeof window.requestIdleCallback === 'function') {
     window.requestIdleCallback(work, { timeout });
   } else {
     setTimeout(work, 1);
@@ -43,8 +43,8 @@ export function whenIdle(work: () => void, timeout = 500): void {
  */
 export function whenSettled(work: () => void): void {
   const idle = () => whenIdle(work);
-  if (document.readyState === "complete") idle();
-  else window.addEventListener("load", idle, { once: true });
+  if (document.readyState === 'complete') idle();
+  else window.addEventListener('load', idle, { once: true });
 }
 
 /**
@@ -54,12 +54,8 @@ export function whenSettled(work: () => void): void {
  * screen so the visitor meets a picture rather than a gap. Without
  * IntersectionObserver the work simply happens now.
  */
-export function whenVisible(
-  element: Element,
-  work: () => void,
-  rootMargin = "256px",
-): void {
-  if (typeof IntersectionObserver !== "function") {
+export function whenVisible(element: Element, work: () => void, rootMargin = '256px'): void {
+  if (typeof IntersectionObserver !== 'function') {
     work();
     return;
   }
@@ -95,12 +91,8 @@ export function loadDeferredImage(image: HTMLImageElement): void {
 }
 
 /** Every image still waiting on JavaScript, under `root`. */
-export function deferredImages(
-  root: ParentNode = document,
-): HTMLImageElement[] {
-  return Array.from(
-    root.querySelectorAll<HTMLImageElement>("img[data-lazy-src]"),
-  );
+export function deferredImages(root: ParentNode = document): HTMLImageElement[] {
+  return Array.from(root.querySelectorAll<HTMLImageElement>('img[data-lazy-src]'));
 }
 
 /**
@@ -112,9 +104,8 @@ export function deferredImages(
 export function hydrateDeferredImages(root: ParentNode = document): void {
   for (const image of deferredImages(root)) {
     const strategy = image.dataset.lazy as DeferStrategy | undefined;
-    if (strategy === "idle") whenSettled(() => loadDeferredImage(image));
-    else if (strategy === "visible")
-      whenVisible(image, () => loadDeferredImage(image));
+    if (strategy === 'idle') whenSettled(() => loadDeferredImage(image));
+    else if (strategy === 'visible') whenVisible(image, () => loadDeferredImage(image));
   }
 }
 
@@ -129,22 +120,20 @@ export function hydrateDeferredImages(root: ParentNode = document): void {
  * permanent blur.
  */
 export function revealWhenLoaded(root: ParentNode = document): void {
-  for (const frame of Array.from(
-    root.querySelectorAll<HTMLElement>("[data-blur-up]"),
-  )) {
-    const image = frame.querySelector("img");
+  for (const frame of Array.from(root.querySelectorAll<HTMLElement>('[data-blur-up]'))) {
+    const image = frame.querySelector('img');
     if (!image) continue;
     const reveal = () => {
-      frame.dataset.loaded = "";
+      frame.dataset.loaded = '';
     };
     // An <img> with no src yet also reports `complete`: that is a deferred
     // image still waiting for its turn, not a cached one.
-    if (image.complete && image.getAttribute("src")) {
-      frame.dataset.instant = "";
+    if (image.complete && image.getAttribute('src')) {
+      frame.dataset.instant = '';
       reveal();
       continue;
     }
-    image.addEventListener("load", reveal, { once: true });
-    image.addEventListener("error", reveal, { once: true });
+    image.addEventListener('load', reveal, { once: true });
+    image.addEventListener('error', reveal, { once: true });
   }
 }

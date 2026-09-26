@@ -20,7 +20,7 @@ export interface Point {
 }
 
 /** What the pointer is over: nothing special, something clickable, or a card with a label. */
-export type Hover = "none" | "link" | "label";
+export type Hover = 'none' | 'link' | 'label';
 
 export interface CursorFlight {
   x: number;
@@ -167,7 +167,12 @@ function landingAngle(flight: CursorFlight): number {
   return flight.angle + (ahead + 1e-9 >= stopping ? ahead : ahead + TAU);
 }
 
-export function stepCursorFlight(flight: CursorFlight, pointer: Point, dt: number, hover: Hover = "none"): void {
+export function stepCursorFlight(
+  flight: CursorFlight,
+  pointer: Point,
+  dt: number,
+  hover: Hover = 'none',
+): void {
   if (!(dt > 0)) return;
 
   if (Math.hypot(pointer.x - flight.seen.x, pointer.y - flight.seen.y) > MOVE_EPSILON) {
@@ -181,7 +186,7 @@ export function stepCursorFlight(flight: CursorFlight, pointer: Point, dt: numbe
 
   let target: Point;
   let flapGoal = resting ? 0 : 1;
-  if (hover === "label") {
+  if (hover === 'label') {
     target = perchFor(pointer);
     flight.circling = false;
     flight.land = null;
@@ -192,7 +197,7 @@ export function stepCursorFlight(flight: CursorFlight, pointer: Point, dt: numbe
       flight.angle = Math.atan2((flight.y - pointer.y) / RING_SQUASH, flight.x - pointer.x);
       flight.circling = true;
     }
-    const radiusGoal = hover === "link" ? LINK_RING_RADIUS : RING_RADIUS;
+    const radiusGoal = hover === 'link' ? LINK_RING_RADIUS : RING_RADIUS;
     flight.radius += (radiusGoal - flight.radius) * ease(RADIUS_EASE, dt);
     flight.spin += (SPIN - flight.spin) * ease(SPIN_EASE, dt);
 
@@ -216,13 +221,14 @@ export function stepCursorFlight(flight: CursorFlight, pointer: Point, dt: numbe
 
   flight.flap += (flapGoal - flight.flap) * ease(FLAP_EASE, dt);
   const effort = Math.min(Math.hypot(flight.vx, flight.vy) / FULL_EFFORT_SPEED, 1);
-  const hz = IDLE_FLAP_HZ + effort * FLIGHT_FLAP_HZ + (hover === "none" ? 0 : HOVER_FLAP_HZ);
+  const hz = IDLE_FLAP_HZ + effort * FLIGHT_FLAP_HZ + (hover === 'none' ? 0 : HOVER_FLAP_HZ);
   flight.phase = (flight.phase + TAU * hz * dt) % TAU;
 }
 
 /** True once the butterfly is at rest beside a still pointer, wings open, and the loop can stop. */
 export function isSettled(flight: CursorFlight): boolean {
-  if (flight.idle < REST_AFTER_S || flight.flap > 0.01 || Math.abs(flight.tilt) > 0.01) return false;
+  if (flight.idle < REST_AFTER_S || flight.flap > 0.01 || Math.abs(flight.tilt) > 0.01)
+    return false;
   if (Math.hypot(flight.vx, flight.vy) > 2) return false;
   return !flight.circling || (flight.land !== null && flight.land - flight.angle < 1e-3);
 }
@@ -236,7 +242,7 @@ export function cursorWingSpan(flight: CursorFlight, closed = 0.35): number {
    Carrying the butterfly from one page to the next
    ------------------------------------------------------------------------- */
 
-export const CURSOR_STORAGE_KEY = "sko-cursor";
+export const CURSOR_STORAGE_KEY = 'sko-cursor';
 
 /**
  * The pointer (`x`, `y`) and, when known, the butterfly's own flight. `x`, `y`,
@@ -277,7 +283,10 @@ export function saveCursor(flight: CursorFlight, pointer: Point): SavedCursor {
  * script applies the same test. Any flight field that is missing or not a
  * finite number is dropped, and the butterfly starts that part afresh.
  */
-export function parseSavedCursor(raw: string | null, viewport: { width: number; height: number }): SavedCursor | null {
+export function parseSavedCursor(
+  raw: string | null,
+  viewport: { width: number; height: number },
+): SavedCursor | null {
   if (!raw) return null;
   let saved: unknown;
   try {
@@ -285,15 +294,16 @@ export function parseSavedCursor(raw: string | null, viewport: { width: number; 
   } catch {
     return null;
   }
-  if (!saved || typeof saved !== "object") return null;
+  if (!saved || typeof saved !== 'object') return null;
   const fields = saved as Record<string, unknown>;
   const { x, y } = fields;
-  if (typeof x !== "number" || typeof y !== "number" || !Number.isFinite(x) || !Number.isFinite(y)) return null;
+  if (typeof x !== 'number' || typeof y !== 'number' || !Number.isFinite(x) || !Number.isFinite(y))
+    return null;
   if (x < 0 || y < 0 || x > viewport.width || y > viewport.height) return null;
   const out: SavedCursor = { x, y };
-  for (const key of ["bx", "by", "vx", "vy", "s", "i", "f"] as const) {
+  for (const key of ['bx', 'by', 'vx', 'vy', 's', 'i', 'f'] as const) {
     const value = fields[key];
-    if (typeof value === "number" && Number.isFinite(value)) out[key] = value;
+    if (typeof value === 'number' && Number.isFinite(value)) out[key] = value;
   }
   return out;
 }

@@ -79,8 +79,7 @@ collecting exactly the data that would violate it.
 
 ## Brand Commitments
 
-- Organization name: **Samatapheap Khnom Organization (SKO)**, Phnom Penh, Cambodia, registered
-  2007. Do not invent SKO facts, statistics, staff names, or a real director's name — use marked
+- Organization name: **Samatapheap Khnom Organization (SKO)**, Phnom Penh, Cambodia, registered 2007. Do not invent SKO facts, statistics, staff names, or a real director's name — use marked
   placeholders until SKO supplies the real ones.
 - Work areas, stated as such: family care, child protection, gender-based-violence prevention.
 

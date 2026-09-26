@@ -24,7 +24,12 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
 ---
 
 <BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introContact')}>
-  <PageHero lang={lang} title={heading} intro={t(lang, 'introContact')} trail={[{ label: heading }]} />
+  <PageHero
+    lang={lang}
+    title={heading}
+    intro={t(lang, 'introContact')}
+    trail={[{ label: heading }]}
+  />
 
   <section class="section pb-0">
     <div class="wrap">
@@ -36,7 +41,10 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
               <dd>
                 <a href={tel(settings.phone)}>{settings.phone}</a>
                 {hours.value && (
-                  <span class="contact-details__meta" lang={hours.isFallback ? hours.lang : undefined}>
+                  <span
+                    class="contact-details__meta"
+                    lang={hours.isFallback ? hours.lang : undefined}
+                  >
                     {hours.value}
                   </span>
                 )}
@@ -49,7 +57,9 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
             <div class="contact-details__item">
               <dt>{t(lang, 'contactEmail')}</dt>
               <dd>
-                <a href={`mailto:${settings.email}`} class="break-all">{settings.email}</a>
+                <a href={`mailto:${settings.email}`} class="break-all">
+                  {settings.email}
+                </a>
                 <span class="contact-details__meta">{t(lang, 'contactEmailAction')}</span>
               </dd>
             </div>
@@ -60,11 +70,19 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
             <div class="contact-details__item">
               <dt>{t(lang, 'contactVisit')}</dt>
               <dd>
-                <span class="whitespace-pre-line" lang={address.isFallback ? address.lang : undefined}>
+                <span
+                  class="whitespace-pre-line"
+                  lang={address.isFallback ? address.lang : undefined}
+                >
                   {address.value}
                 </span>
                 {settings.mapUrl && (
-                  <a href={settings.mapUrl} rel="noopener noreferrer" target="_blank" class="contact-details__meta">
+                  <a
+                    href={settings.mapUrl}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    class="contact-details__meta"
+                  >
                     {t(lang, 'viewOnGoogleMaps')}
                   </a>
                 )}
@@ -76,22 +94,33 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
     </div>
   </section>
 
-  {/*
+  {
+    /*
     Which extra questions show — and whether the form gives way to the
     safeguarding panel — follows the reason chosen in the form, in pure CSS on
     :has(), so the page works before (and without) any script.
-  */}
+  */
+  }
   <section class="section contact-desk pt-10 lg:pt-12">
     <div class="wrap">
       <div class="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10">
         <div>
           <ContactForm lang={lang} id={formId} />
 
-          <div class="safeguarding-panel" role="region" aria-label={t(lang, 'safeguardingPanelTitle')}>
-            <h2 class="safeguarding-panel__title">{t(lang, 'safeguardingPanelTitle')}</h2>
+          <div
+            class="safeguarding-panel"
+            role="region"
+            aria-label={t(lang, 'safeguardingPanelTitle')}
+          >
+            <h2 class="safeguarding-panel__title">
+              {t(lang, 'safeguardingPanelTitle')}
+            </h2>
             {
               safeguarding.value && (
-                <p class="safeguarding-panel__body" lang={safeguarding.isFallback ? safeguarding.lang : undefined}>
+                <p
+                  class="safeguarding-panel__body"
+                  lang={safeguarding.isFallback ? safeguarding.lang : undefined}
+                >
                   {safeguarding.value}
                 </p>
               )
@@ -106,7 +135,10 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
               }
               {
                 settings.safeguardingEmail && (
-                  <a href={`mailto:${settings.safeguardingEmail}`} class="btn btn-secondary break-all">
+                  <a
+                    href={`mailto:${settings.safeguardingEmail}`}
+                    class="btn btn-secondary break-all"
+                  >
                     {settings.safeguardingEmail}
                   </a>
                 )
@@ -131,18 +163,22 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
               </div>
             )
           }
-          <p class="contact-next__block contact-next__privacy">{t(lang, 'nextPrivacy')}</p>
+          <p class="contact-next__block contact-next__privacy">
+            {t(lang, 'nextPrivacy')}
+          </p>
         </aside>
       </div>
     </div>
   </section>
 </BaseLayout>
 
-{/*
+{
+  /*
   The three boxes arrive one after another as each comes into view: a slow
   rise that sharpens from a blur (.contact-enter, global.css). The form's own
   rows follow inside that window. A box already on screen at load goes first.
-*/}
+*/
+}
 <script>
   const ENTER_MS = 2000;
   const STAGGER_MS = 180;
@@ -152,10 +188,13 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
     const delay = index * STAGGER_MS;
     box.style.setProperty('--enter-delay', `${delay}ms`);
     box.dataset.enter = 'shown';
-    setTimeout(() => {
-      box.dataset.enter = 'done';
-      box.style.removeProperty('--enter-delay');
-    }, delay + ENTER_MS + 900);
+    setTimeout(
+      () => {
+        box.dataset.enter = 'done';
+        box.style.removeProperty('--enter-delay');
+      },
+      delay + ENTER_MS + 900,
+    );
   };
 
   if (typeof IntersectionObserver !== 'function') {
