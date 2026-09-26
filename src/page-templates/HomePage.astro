@@ -54,51 +54,47 @@ const story = stories[0];
     header that has gone transparent, so the section pays the header's height
     back as padding. The butterflies (ButterflyField) fly inside this section
     only, behind the text block, as they do inside every PageHero.
+
+    The tint fills the first screen and nothing else shows above the fold. The
+    free height splits 2:3 above and below the headline, which puts it on the
+    optical centre; the action bar is pinned to the bottom, in the thumb zone
+    on a phone. Contact lives in the header, so the hero asks for one thing.
   */
   }
   <section
     data-home-hero
-    class="hero-overlap relative flex flex-col justify-center border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] pt-[var(--header-h)]"
+    class="hero-overlap relative flex flex-col border-b border-[color:var(--color-line-subtle)] bg-[color:var(--color-surface-subtle)] pt-[var(--header-h)]"
   >
     <ButterflyField />
-    <div class="wrap relative pt-5 pb-10 sm:pt-12 sm:pb-20 lg:pt-14 lg:pb-24">
+    <div class="wrap relative flex flex-1 flex-col">
+      <div class="min-h-6 flex-[2_1_0px]"></div>
       <div data-butterfly-shelter>
-        <p class="eyebrow">Phnom Penh, Cambodia · Since 2007</p>
+        <p class="eyebrow">{t(lang, 'homeEyebrow')}</p>
         <h1
           class:list={[
-            'mt-4 max-w-[15ch] text-balance sm:mt-5',
+            'mt-4 max-w-[22ch] text-balance sm:mt-5',
             lang === 'km'
-              ? 'text-[length:min(var(--text-hero-km),8svh)] leading-[1.35]'
+              ? 'text-[length:min(var(--text-hero-km),8.6svh)] leading-[1.45]'
               : 'text-[length:min(var(--text-hero),12svh)] leading-[var(--text-hero--line-height)] tracking-[var(--text-hero--letter-spacing)]',
           ]}
           lang={tagline.isFallback ? tagline.lang : undefined}
         >
           {tagline.value}
         </h1>
-        <div class="mt-7 inline-grid grid-cols-2 gap-3 max-[374px]:grid-cols-1">
-          <a href={localizePath('/contact', lang)} class="btn btn-primary btn-fill">
-            <span class="btn-fill__blob" aria-hidden="true"></span>
-            <span class="roll">
-              <span class="roll__text" data-text={t(lang, 'contactUs')}>{t(lang, 'contactUs')}</span
-              >
-            </span>
-          </a>
-          <a href={localizePath('/contact?topic=partner', lang)} class="btn btn-secondary">
-            <span class="roll">
-              <span class="roll__text" data-text={t(lang, 'partnerWithUs')}
-                >{t(lang, 'partnerWithUs')}</span
-              >
-            </span>
-          </a>
-        </div>
+      </div>
+      <div class="min-h-8 flex-[3_1_0px]"></div>
+      <div
+        data-butterfly-shelter
+        class="flex flex-col gap-4 border-t border-[color:var(--color-line)] pt-5 pb-[max(1.25rem,calc(var(--safe-bottom)+0.75rem))] sm:pt-6 sm:pb-7 lg:flex-row-reverse lg:items-center lg:justify-between lg:gap-10 lg:py-7"
+      >
         {
           registration.value && (
             <p
-              class="mt-6 flex items-center gap-2.5 text-[13.5px] text-[color:var(--color-ink-400)]"
+              class="flex items-start gap-2.5 text-[13.5px] leading-[1.5] text-[color:var(--color-ink-400)] lg:max-w-none"
               lang={registration.isFallback ? registration.lang : undefined}
             >
               <span
-                class="grid h-[18px] w-[18px] flex-none place-items-center rounded-full bg-[color:var(--color-sky-200)] text-[11px] text-[color:var(--color-blue-900)]"
+                class="mt-px grid h-[18px] w-[18px] flex-none place-items-center rounded-full bg-[color:var(--color-sky-200)] text-[11px] text-[color:var(--color-blue-900)]"
                 aria-hidden="true"
               >
                 ✓
@@ -107,6 +103,18 @@ const story = stories[0];
             </p>
           )
         }
+        <a
+          href={localizePath('/contact?topic=partner', lang)}
+          class="btn btn-primary btn-fill h-[58px] w-full flex-none rounded-[10px] text-[17px] sm:h-16 sm:w-auto sm:self-start sm:px-10 sm:text-[19px] lg:self-auto max-sm:[@media(max-height:42.5rem)]:h-[54px]"
+        >
+          <span class="btn-fill__blob" aria-hidden="true"></span>
+          <span class="roll">
+            <span class="roll__text" data-text={t(lang, 'partnerWithUs')}
+              >{t(lang, 'partnerWithUs')}</span
+            >
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </section>

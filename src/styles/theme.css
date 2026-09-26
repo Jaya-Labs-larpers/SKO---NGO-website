@@ -103,11 +103,11 @@
   --text-display--letter-spacing: -0.025em;
   /* The text-led home hero: grows with the window, capped so a wide screen
      never turns the tagline into a poster. */
-  --text-hero: clamp(1.875rem, 0.25rem + 6.6vw, 5.75rem);
-  --text-hero--line-height: 1.02;
-  --text-hero--letter-spacing: -0.035em;
+  --text-hero: clamp(2.25rem, 0.75rem + 9vw, 6rem);
+  --text-hero--line-height: 1.04;
+  --text-hero--letter-spacing: -0.03em;
   /* Khmer's stacked vowels need a smaller size and far more leading. */
-  --text-hero-km: clamp(1.5rem, 0.6rem + 4.6vw, 4rem);
+  --text-hero-km: calc(var(--text-hero) * 0.72);
   /* A single sentence set as a statement (the home "who we are" block). */
   --text-statement: clamp(1.125rem, 0.6rem + 2.25vw, 2.625rem);
   /* The story quote on its navy band; Khmer runs smaller for its taller glyphs. */
