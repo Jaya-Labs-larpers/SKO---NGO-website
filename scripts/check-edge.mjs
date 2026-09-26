@@ -68,9 +68,29 @@ async function get(path, init = {}) {
 const header = (res, name) => res.headers.get(name) ?? "";
 const langOf = (html) => /<html lang="([a-z-]+)"/.exec(html)?.[1];
 const titleOf = (html) => /<title>([^<]*)<\/title>/.exec(html)?.[1]?.trim();
+const assetOf = (html) => /\/_astro\/[^"']+\.(?:css|js)/.exec(html)?.[0];
+
+// For a few seconds after a deploy some edges still serve the previous HTML
+// while the asset store holds only the new build's hashed files, so the
+// homepage can reference a stylesheet that 404s. Wait for them to agree before
+// judging anything, and let the asset check below fail if they never do.
+async function settledHome() {
+  for (let attempt = 1; ; attempt++) {
+    const page = await get("/");
+    const asset = assetOf(page.text);
+    if (!asset || attempt === 10) return page;
+    const status = await fetchOnce(asset, { method: "HEAD" }).then(
+      (res) => res.status,
+      reasonOf,
+    );
+    if (status === 200) return page;
+    console.log(`INFO  ${asset} is ${status}, waiting for the deploy to settle`);
+    await sleep(3000);
+  }
+}
 
 // Pages
-const home = await get("/");
+const home = await settledHome();
 record(home.status === 200, "GET / is 200", String(home.status));
 record(langOf(home.text) === "en", "homepage is English", langOf(home.text));
 record(/<main[^>]*id="main"/.test(home.text), 'homepage has <main id="main">');
@@ -155,13 +175,13 @@ record(
   "HTML is not immutable",
   header(home, "cache-control"),
 );
-const asset = /\/_astro\/[^"']+\.(?:css|js)/.exec(home.text)?.[0];
+const asset = assetOf(home.text);
 if (asset) {
   const res = await get(asset, { method: "HEAD" });
   record(
     res.status === 200 && /immutable/.test(header(res, "cache-control")),
     `hashed asset ${asset} is immutable`,
-    header(res, "cache-control"),
+    `${res.status} ${header(res, "cache-control")}`,
   );
 } else {
   record(false, "homepage references a /_astro/ asset");
