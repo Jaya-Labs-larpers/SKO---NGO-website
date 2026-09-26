@@ -9,3 +9,5 @@ import { Config } from "@remotion/cli/config";
 
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
+// Share the website's self-hosted fonts instead of keeping a second copy.
+Config.setPublicDir("../public");

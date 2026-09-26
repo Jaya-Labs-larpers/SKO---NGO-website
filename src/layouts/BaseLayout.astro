@@ -8,6 +8,7 @@ import type { CmsImage } from '~/lib/content/types';
 import Header from '~/components/layout/Header.astro';
 import Footer from '~/components/layout/Footer.astro';
 import ButterflyCursor from '~/components/media/ButterflyCursor.astro';
+import PageLoader from '~/components/layout/PageLoader.astro';
 import SeoHead from '~/components/seo/SeoHead.astro';
 
 interface Props {
@@ -25,9 +26,11 @@ interface Props {
    * reaches the top of the window.
    */
   headerOverlay?: boolean;
+  /** Play the intro (PageLoader) when a visit starts on this page. */
+  intro?: boolean;
 }
 
-const { lang, title, description, ogImage, noindex, publishedAt, jsonLd, headerOverlay } =
+const { lang, title, description, ogImage, noindex, publishedAt, jsonLd, headerOverlay, intro } =
   Astro.props;
 
 const settings = await getSiteSettings();
@@ -113,6 +116,8 @@ const pathname = Astro.url.pathname;
     </script>
   </head>
   <body class="bg-white">
+    {intro && <PageLoader />}
+
     <a
       href="#main"
       class="sr-only-focusable absolute top-3 left-3 z-[100] rounded-[var(--radius-md)] bg-[color:var(--color-blue-700)] px-4 py-3 text-[15px] font-semibold text-white no-underline"
