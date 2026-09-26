@@ -1,16 +1,18 @@
 ---
 /**
- * The logo butterfly flying just ahead of the mouse pointer, on every page.
- * The system pointer stays visible and does the aiming; the butterfly keeps a
- * little way out in front, along the direction of travel, and rests past the
- * arrow's tip. The motion lives in ~/lib/butterflies/cursor.
+ * The logo butterfly circling the mouse pointer, on every page. The system
+ * pointer stays visible and does the aiming; the butterfly flies round it,
+ * perches just above it over a card so the card's label can be read, and
+ * after a while of stillness comes to rest past the arrow's tip. The motion
+ * lives in ~/lib/butterflies/cursor.
  *
  * Only for a mouse: touch, pen, and anyone asking for reduced motion never see
  * it. It steps aside over text fields, where it would sit on what is being
- * typed, and while a modal is open, since the top layer covers it.
+ * typed, while a modal is open, since the top layer covers it, and while the
+ * pointer is inside an iframe, which keeps its pointer events to itself.
  *
  * Anything carrying data-cursor-label (the program and activity cards) makes
- * it grow and show that word beside it, already translated by the page.
+ * it grow and show that word beneath it, already translated by the page.
  */
 import ButterflyGlyph from './ButterflyGlyph.astro';
 ---
@@ -20,9 +22,10 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
   <span class="butterfly-cursor__label"></span>
 </div>
 <script is:inline>
-  // Draws the butterfly where the previous page left the pointer, before first
-  // paint. Reads the shape parseSavedCursor in ~/lib/butterflies/cursor checks,
-  // and places it at restingPoint from the same file; keep both in step.
+  // Draws the butterfly where the previous page left it, before first paint.
+  // Applies the same test as parseSavedCursor in ~/lib/butterflies/cursor, and
+  // without a saved flight places it at restingPoint from the same file (the
+  // -29.5/-21.6 below); keep both in step.
   (function () {
     var query = '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)';
     if (!window.matchMedia(query).matches) return;
@@ -31,8 +34,11 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
       var saved = JSON.parse(sessionStorage.getItem('sko-cursor'));
       if (!saved || typeof saved.x !== 'number' || typeof saved.y !== 'number') return;
       if (saved.x < 0 || saved.y < 0 || saved.x > innerWidth || saved.y > innerHeight) return;
+      var flown = typeof saved.bx === 'number' && typeof saved.by === 'number';
+      var x = flown ? saved.bx : saved.x - 29.5;
+      var y = flown ? saved.by : saved.y - 21.6;
       var el = document.currentScript.previousElementSibling;
-      el.style.transform = 'translate3d(' + (saved.x - 26) + 'px,' + (saved.y - 22) + 'px,0)';
+      el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
       el.setAttribute('data-state', 'idle');
     } catch (error) {}
   })();
@@ -44,9 +50,11 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     createCursorFlight,
     cursorWingSpan,
     isSettled,
-    notePointerMove,
     parseSavedCursor,
+    restoreCursorFlight,
+    saveCursor,
     stepCursorFlight,
+    type Hover,
     type Point,
   } from '~/lib/butterflies/cursor';
 
@@ -58,22 +66,33 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
 
   type State = 'hidden' | 'idle' | 'link' | 'label' | 'text';
 
+  function readSaved() {
+    try {
+      return parseSavedCursor(sessionStorage.getItem(CURSOR_STORAGE_KEY), {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    } catch {
+      // Storage blocked: start with the mouse, as on a first visit.
+      return null;
+    }
+  }
+
   function start(element: HTMLElement) {
     const wings = element.querySelector<SVGGElement>('.butterfly-wings');
     const labelSlot = element.querySelector<HTMLElement>('.butterfly-cursor__label');
     const root = document.documentElement;
     const media = window.matchMedia(QUERY);
 
-    const saved = parseSavedCursor(sessionStorage.getItem(CURSOR_STORAGE_KEY), {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-    const pointer: Point = saved ?? { x: -100, y: -100 };
-    let flight = createCursorFlight(pointer);
-    let lastMoveTime = 0;
+    const saved = readSaved();
+    const pointer: Point = saved ? { x: saved.x, y: saved.y } : { x: -100, y: -100 };
+    let flight = saved ? restoreCursorFlight(saved) : createCursorFlight(pointer);
     let state: State = saved ? 'idle' : 'hidden';
     let frameId = 0;
     let lastTime = 0;
+    let hoverCheck = 0;
+
+    const hover = (): Hover => (state === 'link' || state === 'label' ? state : 'none');
 
     const setState = (next: State) => {
       if (next === state) return;
@@ -87,12 +106,12 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     };
 
     const frame = (time: number) => {
+      frameId = 0;
       const dt = lastTime ? Math.min((time - lastTime) / 1000, 1 / 20) : 1 / 60;
       lastTime = time;
-      stepCursorFlight(flight, pointer, dt, state === 'link' || state === 'label');
+      stepCursorFlight(flight, pointer, dt, hover());
       draw();
-      if (isSettled(flight) && state !== 'link' && state !== 'label') {
-        frameId = 0;
+      if (state === 'hidden' || document.hidden || isSettled(flight)) {
         lastTime = 0;
         return;
       }
@@ -100,7 +119,31 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     };
 
     const wake = () => {
-      if (!frameId && !document.hidden) frameId = requestAnimationFrame(frame);
+      if (!frameId && state !== 'hidden' && !document.hidden)
+        frameId = requestAnimationFrame(frame);
+    };
+
+    const sleep = () => {
+      if (frameId) cancelAnimationFrame(frameId);
+      frameId = 0;
+      lastTime = 0;
+    };
+
+    const classify = (under: Element | null) => {
+      if (under?.closest(TEXT_ENTRY)) {
+        setState('text');
+        return;
+      }
+      const labelled = under?.closest<HTMLElement>('[data-cursor-label]');
+      if (labelled?.dataset.cursorLabel) {
+        if (labelSlot && labelSlot.textContent !== labelled.dataset.cursorLabel) {
+          labelSlot.textContent = labelled.dataset.cursorLabel;
+          labelSlot.lang = labelled.closest<HTMLElement>('[lang]')?.lang ?? '';
+        }
+        setState('label');
+        return;
+      }
+      setState(under?.closest(INTERACTIVE) ? 'link' : 'idle');
     };
 
     const onMove = (event: PointerEvent) => {
@@ -108,56 +151,44 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
         setState('hidden');
         return;
       }
-      const arriving = state === 'hidden';
-      if (!arriving) {
-        const seconds = lastMoveTime ? (event.timeStamp - lastMoveTime) / 1000 : 1 / 60;
-        notePointerMove(flight, event.clientX - pointer.x, event.clientY - pointer.y, seconds);
-      }
-      lastMoveTime = event.timeStamp;
       pointer.x = event.clientX;
       pointer.y = event.clientY;
-      if (arriving) flight = createCursorFlight(pointer);
-      const under = event.target instanceof Element ? event.target : null;
-      const labelled = under?.closest<HTMLElement>('[data-cursor-label]');
-      if (under?.closest(TEXT_ENTRY)) setState('text');
-      else if (labelled?.dataset.cursorLabel) {
-        if (labelSlot && labelSlot.textContent !== labelled.dataset.cursorLabel) {
-          labelSlot.textContent = labelled.dataset.cursorLabel;
-          labelSlot.lang = labelled.closest<HTMLElement>('[lang]')?.lang ?? '';
-        }
-        setState('label');
-      } else if (under?.closest(INTERACTIVE)) setState('link');
-      else setState('idle');
+      // Back from outside the window: start beside the pointer, not from wherever it vanished.
+      if (state === 'hidden') flight = createCursorFlight(pointer);
+      classify(event.target instanceof Element ? event.target : null);
       wake();
     };
 
     const onDown = () => element.setAttribute('data-pressed', '');
     const onUp = () => element.removeAttribute('data-pressed');
     const onOut = (event: MouseEvent) => {
-      if (!event.relatedTarget) setState('hidden');
+      const to = event.relatedTarget;
+      if (to && !(to instanceof HTMLIFrameElement)) return;
+      setState('hidden');
+      onUp();
+    };
+    // A still pointer can end up over something else when the page scrolls
+    // under it, and no pointermove says so.
+    const onScroll = () => {
+      if (state === 'hidden' || hoverCheck) return;
+      hoverCheck = requestAnimationFrame(() => {
+        hoverCheck = 0;
+        if (state === 'hidden') return;
+        classify(document.elementFromPoint(pointer.x, pointer.y));
+        wake();
+      });
     };
     const onVisibility = () => {
-      if (document.hidden && frameId) {
-        cancelAnimationFrame(frameId);
-        frameId = 0;
-        lastTime = 0;
-      }
+      if (document.hidden) sleep();
+      else wake();
     };
     const onHide = () => {
-      if (state === 'hidden') {
-        sessionStorage.removeItem(CURSOR_STORAGE_KEY);
-        return;
-      }
       try {
-        sessionStorage.setItem(
-          CURSOR_STORAGE_KEY,
-          JSON.stringify({
-            x: Math.round(pointer.x),
-            y: Math.round(pointer.y),
-          }),
-        );
+        if (state === 'hidden') sessionStorage.removeItem(CURSOR_STORAGE_KEY);
+        else
+          sessionStorage.setItem(CURSOR_STORAGE_KEY, JSON.stringify(saveCursor(flight, pointer)));
       } catch {
-        /* storage full or blocked: the next page just waits for the mouse */
+        // Storage full or blocked: the next page simply waits for the mouse.
       }
     };
     const onMediaChange = () => {
@@ -169,9 +200,13 @@ import ButterflyGlyph from './ButterflyGlyph.astro';
     };
 
     draw();
+    wake();
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('pointerdown', onDown, { passive: true });
     window.addEventListener('pointerup', onUp, { passive: true });
+    // A drag that turns into a native drag-and-drop never sends pointerup.
+    window.addEventListener('pointercancel', onUp, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true });
     document.addEventListener('mouseout', onOut);
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('pagehide', onHide);

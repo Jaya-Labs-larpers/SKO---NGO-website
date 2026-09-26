@@ -40,7 +40,21 @@ const canonical = new URL(pathname, siteUrl).href;
 const shareImage = ogImage ?? settings.ogImage ?? null;
 const shareImagePath =
   shareImage && hasImage(shareImage) ? imageUrl(shareImage, { width: 1200, height: 630 }) : null;
-const shareImageUrl = shareImagePath ? new URL(shareImagePath, siteUrl).href : null;
+const share = shareImagePath
+  ? {
+      url: new URL(shareImagePath, siteUrl).href,
+      alt: text(shareImage!.alt, lang) || orgName,
+      width: null,
+      height: null,
+      type: null,
+    }
+  : {
+      url: new URL('/og-image.png', siteUrl).href,
+      alt: `${orgName} logo`,
+      width: 1200,
+      height: 630,
+      type: 'image/png',
+    };
 
 /**
  * Organization node.
@@ -143,13 +157,18 @@ const webSiteJsonLd = {
 {description && <meta property="og:description" content={description} />}
 <meta property="og:url" content={canonical} />
 <meta property="og:locale" content={ogLocale[lang]} />
-{shareImageUrl && <meta property="og:image" content={shareImageUrl} />}
+<meta property="og:image" content={share.url} />
+{share.type && <meta property="og:image:type" content={share.type} />}
+{share.width && <meta property="og:image:width" content={String(share.width)} />}
+{share.height && <meta property="og:image:height" content={String(share.height)} />}
+<meta property="og:image:alt" content={share.alt} />
 {publishedAt && <meta property="article:published_time" content={publishedAt} />}
 
-<meta name="twitter:card" content={shareImageUrl ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 {description && <meta name="twitter:description" content={description} />}
-{shareImageUrl && <meta name="twitter:image" content={shareImageUrl} />}
+<meta name="twitter:image" content={share.url} />
+<meta name="twitter:image:alt" content={share.alt} />
 
 <script is:inline type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
 <script is:inline type="application/ld+json" set:html={serializeJsonLd(webSiteJsonLd)} />

@@ -2217,7 +2217,7 @@ details[open] > summary > .disclosure-icon {
   width: 40px;
   will-change: transform;
 }
-/* The butterfly that trails the pointer (ButterflyCursor). The outer box sits
+/* The butterfly that circles the pointer (ButterflyCursor). The outer box sits
    on its flight point and rotates about it; the glyph is centred on its body
    line so it banks around its own middle. */
 .butterfly-cursor {
@@ -2245,8 +2245,9 @@ details[open] > summary > .disclosure-icon {
 .butterfly-cursor[data-state='label'] .butterfly-cursor__glyph {
   scale: 1.45;
 }
-/* The word beside the butterfly over a card ("Read more"), hung below its
-   body so it never covers the pointer. */
+/* The word beneath the butterfly over a card ("Read more"). The butterfly
+   perches above the pointer there, so the word hangs between the two and
+   never covers the pointer. */
 .butterfly-cursor__label {
   position: absolute;
   left: 0;
