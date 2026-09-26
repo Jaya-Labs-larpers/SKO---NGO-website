@@ -98,7 +98,13 @@ for await (const file of htmlFiles(DIST)) {
     check(/hreflang="x-default"/.test(html), page, 'missing hreflang="x-default"');
     check(/<meta name="description"/.test(html), page, 'no meta description');
     const ogImage = /<meta property="og:image" content="([^"]*)"/.exec(html)?.[1];
-    check(ogImage?.startsWith(`${siteUrl}/`), page, `og:image is not an absolute site URL: ${ogImage}`);
+    // The default preview image is served from the site; per-page images come from the Sanity CDN.
+    const shareImageOrigins = [`${siteUrl}/`, 'https://cdn.sanity.io/'];
+    check(
+      shareImageOrigins.some((origin) => ogImage?.startsWith(origin)),
+      page,
+      `og:image is not an absolute site or Sanity CDN URL: ${ogImage}`,
+    );
     check(/<meta name="twitter:card" content="summary_large_image"/.test(html), page, 'no summary_large_image card');
   }
 
