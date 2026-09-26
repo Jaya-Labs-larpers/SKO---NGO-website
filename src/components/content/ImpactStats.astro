@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import type { ImpactStat } from '~/lib/content/types';
+import { countsUp } from '~/lib/content/stats';
 import { formatNumber, pick } from '~/lib/i18n/utils';
 
 interface Props {
@@ -40,11 +41,7 @@ const { lang, stats, columns = 4 } = Astro.props;
                   {prefix.value}
                 </span>
               )}
-              {stat.countUp && typeof stat.value === 'number' ? (
-                <span data-count-to={stat.value}>{display}</span>
-              ) : (
-                display
-              )}
+              {countsUp(stat) ? <span data-count-to={stat.value}>{display}</span> : display}
               {suffix.value && <span class="text-[0.6em]">{suffix.value}</span>}
             </b>
             <span

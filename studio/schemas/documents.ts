@@ -714,8 +714,9 @@ export const impactStat = defineType({
       name: 'countUp',
       title: 'Count up when it comes into view',
       type: 'boolean',
-      description: 'Rolls the figure up from zero over about two seconds. Leave off for years.',
-      initialValue: false,
+      description:
+        'Rolls the figure up from zero over about two seconds. On unless switched off; a plain year such as 2007 never rolls.',
+      initialValue: true,
     }),
     defineField({
       name: 'order',
