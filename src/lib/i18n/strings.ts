@@ -134,6 +134,7 @@ const en = {
   // These sit here rather than in a component so nothing English can leak onto
   // a Khmer page. In Phase 4 they move into Sanity `page` documents so staff
   // can edit them; the keys stay as the fallback.
+  homeEyebrow: 'Phnom Penh, Cambodia · Since 2007',
   homeHeroIntro:
     'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities. SKO is recognized as Cambodia’s leading expert in family care and social work.',
   introPrograms:
@@ -331,6 +332,7 @@ const km: Record<UIKey, string> = {
   notFoundBody: 'ទំព័រដែលអ្នកកំពុងស្វែងរក ត្រូវបានផ្លាស់ប្តូរ ឬមិនធ្លាប់មាន។',
   notFoundCta: 'ត្រឡប់ទៅទំព័រដើម',
 
+  homeEyebrow: 'ភ្នំពេញ កម្ពុជា · តាំងពីឆ្នាំ ២០០៧',
   homeHeroIntro:
     'អង្គការសមត្ថភាពខ្ញុំ (SKO) ជាអង្គការក្រៅរដ្ឋាភិបាលក្នុងស្រុករបស់កម្ពុជា ដែលធ្វើការគាំទ្រកុមារ គ្រួសារ និងសហគមន៍ងាយរងគ្រោះ ជាពិសេសនៅសហគមន៍ក្រីក្រទីក្រុង និងសហគមន៍ចំណាកស្រុក។ SKO ត្រូវបានទទួលស្គាល់ថាជាអ្នកជំនាញឈានមុខគេនៅកម្ពុជា ក្នុងវិស័យថែទាំគ្រួសារ និងសង្គមកិច្ច។',
   introPrograms:
