@@ -2283,9 +2283,75 @@ html:has(:modal, :popover-open) .butterfly-cursor {
   display: none;
 }
 
+/* --- Page loader ------------------------------------------------------------
+   PageLoader, the loading screen at the start of a visit, driven by its own
+   inline script. The butterfly holds still and only its wings beat; the bar
+   follows the page's real loading progress (--intro-progress, 0 to 1). It sits
+   below the skip link and the pointer butterfly, and the page underneath does
+   not scroll while it shows. */
+.page-loader {
+  --loader-size: clamp(9.5rem, 6rem + 14vw, 14rem);
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.75rem, 1.25rem + 2vw, 2.75rem);
+  padding: 1rem;
+  background: var(--color-canvas);
+  transition: opacity 480ms var(--ease-out-soft);
+}
+html[data-intro] .page-loader {
+  display: flex;
+}
+html[data-intro=''] {
+  overflow: hidden;
+}
+html[data-intro='done'] .page-loader {
+  opacity: 0;
+  pointer-events: none;
+}
+.page-loader__butterfly {
+  width: var(--loader-size);
+}
+.page-loader__butterfly .butterfly-wings {
+  animation: loader-flap 500ms cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+.page-loader__track {
+  width: calc(var(--loader-size) * 0.65);
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-surface-sunken);
+}
+.page-loader__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-sky-400);
+  transform-origin: left center;
+  scale: var(--intro-progress, 0) 1;
+  transition: scale 450ms var(--ease-out-soft);
+}
+.page-loader__label {
+  color: var(--color-ink-600);
+  font-family: var(--font-sans);
+  font-size: clamp(0.9375rem, 0.875rem + 0.2vw, 1.0625rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+@keyframes loader-flap {
+  to {
+    scale: 0.55 1;
+  }
+}
+
 @media print {
   .butterfly-flock,
-  .butterfly-cursor {
+  .butterfly-cursor,
+  .page-loader {
     display: none;
   }
 }
