@@ -6,6 +6,7 @@
  */
 import type { Locale } from '~/lib/i18n/config';
 import type { ImpactStat } from '~/lib/content/types';
+import { countsUp } from '~/lib/content/stats';
 import { formatNumber, pick } from '~/lib/i18n/utils';
 
 interface Props {
@@ -67,11 +68,7 @@ const em = (text: string) =>
                   {prefix.value}
                 </span>
               )}
-              {stat.countUp && typeof stat.value === 'number' ? (
-                <span data-count-to={stat.value}>{display}</span>
-              ) : (
-                display
-              )}
+              {countsUp(stat) ? <span data-count-to={stat.value}>{display}</span> : display}
               {suffix.value && <span class="text-[0.6em]">{suffix.value}</span>}
             </b>
             <span class="program-stat__label" lang={label.isFallback ? label.lang : undefined}>

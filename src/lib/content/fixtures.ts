@@ -216,6 +216,7 @@ export const impactStats: ImpactStat[] = [
       en: 'Registered with the Ministry of Interior, permit No. 457',
       km: 'ចុះបញ្ជីជាមួយក្រសួងមហាផ្ទៃ លិខិតលេខ ៤៥៧',
     },
+    countUp: false,
     order: 1,
   },
   {
