@@ -608,4 +608,168 @@ Every field changed above is a `LocaleString` with a `.km` side (or a `km` block
 - Site changes (new pages, redesign, CMS migration) → run 2.
 - 4–8 weeks after run 3 → paste the new Search Console rows into 1.3 and run 1 again; compare position and CTR per cluster with the "Now" column in the previous SEO-KEYWORDS.md. Search Console is not connected yet — connect the property (`https://www.sko-samatapheapkhnom.org`) before run 3 so there is a baseline.
 
-## Applied — (filled by run 3)
+## Applied — 2026-09-29
+
+Branch `seo/plan-2026-09`, off `main` at 8fa640b. Nothing merged; Sanity untouched. Steps 1–21 applied as written except where listed under "Judgement calls". Step 22 (Sanity) is a to-do table for a human. Step 23 ran and passed.
+
+### Commits
+
+| Plan | Commit |
+|---|---|
+| Step 1, `<head>` suffix, `WebSite.alternateName`, `knowsAbout` (D1) | 5e32775 |
+| Step 3, inline links in fixture body copy | a0a3007 |
+| Step 4, links in page intros | 9043c9c |
+| Step 5, programme hero alt | 09d551b |
+| Step 2, `seoX`/`metaX` on the seven code-driven pages | 3033630 |
+| Step 6, page-type JSON-LD | 453df74 |
+| Step 7, FAQ ids, links in answers and report summaries | c420bfe |
+| Not in plan: rows layout keeps a link (needed by §1.5, §1.10, §1.4 link placements) | b6585e6 |
+| Steps 8–21 (§1.1–§1.14), one commit per page | b92b7e1 5ba1b26 6eef22e c33564a e9e4ccd 583f923 474c8e7 09fc217 0ee418d f9f73e4 4643fce 869741b 5713d68 a12c3aa |
+| Not in plan: English SEO override no longer used on `/km/` pages | 8133256 |
+
+Steps 3–5 were committed before step 2; none depends on the other.
+
+### Per page
+
+| Page | Changed | Skipped |
+|---|---|---|
+| /programs/housing-and-living-conditions-hali/ | seo title and description, summary, H2 "Impact and results: …", link to /impact/, hero and card alt (en, km), `Service` JSON-LD, Activities link | none |
+| /programs/childrens-active-citizenship/ | same set; two links | none |
+| /impact/ | H1, intro (with link), seo, H2 "Families, communities and economic resilience", three link sentences, story role line links to RCMD | `speakable` (§6, not a step) |
+| /about/ | H1, intro, seo, H2 "How we work: …", three links, one "Where we work" bullet, FAQ link line, `AboutPage` JSON-LD | none |
+| /programs/childrens-education-and-health/ | seo, summary, H2, one link, both alts, `Service` JSON-LD | none |
+| /programs/ | H1, intro, seo title/description, new H2 over the cards, `CollectionPage` + `ItemList` | none |
+| / | seo title/description, `homeHeroIntro`, About and programme link text, partners link, story role link; H1 kept (D3) | none |
+| /activities/ | H1, intro (with link), seo title/description, `CollectionPage` with `hasPart` | RSS `<link>` (§6 item 9, waits for a real post) |
+| /safeguarding/ | H1, intro (two links), seo, Reports link, policy link on /contact/ | 1-item `FAQPage` (§6 item 11, waits for SKO) |
+| /programs/resilient-city-and-migration/ | seo, summary, three links, both alts, `Service` JSON-LD with `funder`; Sok Vanny account untouched | none |
+| /partners/ | H1, intro (with link), seo title/description, CTA title, `ItemList` of `Organization` | `[FACT NEEDED: partner website URLs]`: list emitted without `url` |
+| /contact/ | H1, intro (two links), seo title/description, safeguarding-policy link, "not sure who to ask" line, `ContactPage` JSON-LD, opening hours on the `NGO` node | `[FACT NEEDED: latitude/longitude]`: no `geo` |
+| /faq/ | H1, intro, seo, H2 "Questions and answers", five answers with links, ids on every question, links render and stay out of the `FAQPage` text | none |
+| /reports/ | intro, seo title/description, safeguarding link in the policy summary, `CollectionPage` | `Report` JSON-LD nodes: `[FACT NEEDED: the actual PDFs]` (links are Drive folders; the plan says only worth adding once the PDFs are real) |
+
+Not applied, outside §4: §2.1 new page brief (`Create new pages in run 3: no`); §6 items 1 (`og:image`, FACT NEEDED), 6 (`llms.txt`), 7 (robots policy, SKO decision), 8 (sitemap `lastmod`), 9, 10, 11, 12. No redirects (§3). `/privacy/` and `/404` untouched. Impact statistics, the registration line and the safeguarding contact block are verbatim.
+
+### Khmer (§7)
+
+- `seoX`, `metaX`, `homeAboutLink`, `viewAllPrograms`, `allPartners`, `nextFaq`, `faqMore`, `programsSectionTitle`, `activitiesFromProgram`, `contactSafeguardingPolicy` are empty in `km`. Where an existing Khmer string does the same job the template falls back to it (`|| t(lang, 'learnMore')`, the Khmer heading and intro); where none exists (`allPartners`, `nextFaq`, `faqMore`, `programsSectionTitle`, `activitiesFromProgram`, `contactSafeguardingPolicy`) the element is not shown on Khmer pages. No English in any `km` field. A Khmer writer should fill these.
+- `seo.title.km` and `seo.description.km` are left empty. §7 says `resolveSeo` then falls back to the Khmer title and intro; it did not (it fell back to English), so 8133256 fixes that. Khmer pages keep their existing Khmer titles, now with the ` · SKO` suffix.
+- Image `alt.km` for the eight programme photos: written by me as a plain translation of the approved English alt, **not reviewed by a Khmer speaker**. Review before merge.
+- `/km/` page H1 and summaries are unchanged (their bodies are English-only).
+
+### Judgement calls a reviewer should check
+
+1. **Alt text vs. photo.** `tfcf1-cover` alt says "seated in rows"; the photo shows children in a circle. Applied as written. Suggest "seated in a circle".
+2. **/impact/ intro** says "89% of households" and "75% of women surveyed"; the HALI body says "89% of beneficiaries" and "75% of female respondents". Numbers match; wording is looser. Applied as written (D5).
+3. **Programme /childrens-active-citizenship/ headlined as child protection** is still the plan's open `[FACT CHECK]` for SKO.
+4. **/safeguarding/ Reports link**: the plan gives two anchors ("Reports & policies" and "Safeguarding & Child Protection Policy under Reports"). I linked the existing words "Reports & policies".
+5. **Full stops.** Where a plan "append" would have left a sentence ending "…. or visit …" or "…. through the …", the link text sits before the full stop (FAQ partner answer, /impact/ Families sentence, HALI results sentence).
+6. **"Activities from this programme"** is the plan's spelling; the site's UI uses "program".
+7. **Title suffix** is now ` · SKO` on every page including Khmer pages (D1). Home passes `plainTitle`.
+8. **Code beyond the plan**, each needed to make a listed placement work: `InlineLinks.astro` and `src/lib/inline-links.ts` (links in strings without injecting HTML); rows layout keeps its numbered rows when a row carries a link (`sections.ts`, `SectionedBody.astro`, tests); `ReportList` shows a summary only when it carries a link; `src/lib/seo/page-schema.ts` holds the `serviceType`, audience and funder values from §1 keyed by programme slug; `nextFaq` is a paragraph in the "What happens next" box, not a numbered step.
+9. **Search Console** is not connected (§8): there is no baseline for the 4–8 week comparison.
+
+### Verify (step 23)
+
+`npm run check` passes (134 tests, typecheck 0 errors, build, structural checks) in both modes: against the live Sanity dataset (the `.env` default) and with `PUBLIC_CONTENT_SOURCE=fixtures`.
+
+Against `dist/` from the fixtures build (the plan's values), the §5 checks run as file reads instead of `curl`:
+
+- 14/14 pages: proposed title present, 50–60 characters (51–59), exactly one H1 equal to the plan's, canonical present, meta description 150–160 characters (home 151).
+- No duplicate titles. Every JSON-LD block parses (checked on 9 pages incl. the five in §5). `FAQPage` has 10 Q&As and no link syntax. No `](/` in any built HTML.
+- Khmer pages keep Khmer titles; none of the new English-only strings appear on `/km/` pages.
+- `noindex` appears in the fixtures build by design (`preventIndexing` when content is local). It is absent in the Sanity-source build.
+- Redirects: `public/_redirects` is unchanged and still 301s `/donate/`, `/volunteer/`, `/careers/`, `/partner-with-us/` to `/contact/`. Not curl-tested (no server).
+- **The Sanity-source build still shows the old titles, H1s and descriptions for the CMS-backed pages** (about, faq, impact, safeguarding, four programmes) until the table below is entered. The seven code-driven pages already show the new values in both modes.
+
+### Sanity to-do
+
+Read-only query of `xm91vtfk` / `production`: 11 documents (5 pages, 4 programmes, 2 reports); none has `seo.title` or `seo.description`. Ten were created 2026-09-23 18:04 and bulk-updated 2026-09-24 16:14:41 (all at the same second, which looks like a script, not staff); the two reports and `page-privacy` were not updated. **I cannot confirm the dataset was never edited after seeding**, and the live /impact/ description already differs from the fixture, so do not re-import with `--replace`. Enter the values by hand:
+
+Plain fields (type the value exactly; `[anchor](/path)` in `intro` is typed literally, the site turns it into a link):
+
+| Document | Field | Value |
+|---|---|---|
+| `program-hali` | `summary.en` | HALI is SKO's programme to reduce gender-based violence and improve living conditions for families in Phnom Penh's urban poor areas. Using the Family Development Program (FDP) methodology, social workers provide family counselling, resilience-building, information and referrals to health, education, economic and administrative services, with a focus on women, children and youth. |
+| `program-hali` | `seo.title.en` | Gender-Based Violence Prevention in Phnom Penh: HALI |
+| `program-hali` | `seo.description.en` | HALI reduces gender-based violence in Phnom Penh's urban poor areas through family counselling, GBV training and referrals. 94% now know where to seek help. |
+| `program-hali` | `image.alt.en` | SKO social worker leading a community counselling session with families under a shelter in Phnom Penh |
+| `program-hali` | `image.alt.km` | បុគ្គលិកសង្គមកិច្ច SKO កំពុងដឹកនាំវគ្គប្រឹក្សាសហគមន៍ជាមួយគ្រួសារ នៅក្រោមជម្រកមួយក្នុងរាជធានីភ្នំពេញ |
+| `program-hali` | `cardImage.alt.en` | Women in a community gender discussion group with an SKO social worker |
+| `program-hali` | `cardImage.alt.km` | ស្ត្រីក្នុងក្រុមពិភាក្សាយេនឌ័រសហគមន៍ ជាមួយបុគ្គលិកសង្គមកិច្ច SKO |
+| `program-tfcf1` | `summary.en` | Children's Active Citizenship is SKO's programme for the education, health and child protection of vulnerable children in three sangkats of Phnom Penh. Children learn their rights, child protection and online safety; schools, parents, Family Development Volunteers and local authorities work together to keep them in school and safe. |
+| `program-tfcf1` | `seo.title.en` | Child Protection: Children's Active Citizenship |
+| `program-tfcf1` | `seo.description.en` | Child protection for vulnerable children in Phnom Penh: Children's Active Citizenship teaches child rights and online safety and keeps children in school. |
+| `program-tfcf1` | `image.alt.en` | Children seated in rows on a mat at a community session in an urban poor neighbourhood of Phnom Penh |
+| `program-tfcf1` | `image.alt.km` | កុមារអង្គុយជាជួរលើកន្ទេលនៅក្នុងវគ្គសហគមន៍មួយ ក្នុងសង្កាត់ក្រីក្រទីក្រុងនៃរាជធានីភ្នំពេញ |
+| `program-tfcf1` | `cardImage.alt.en` | Children holding up their drawings at a Children's Club session with SKO staff |
+| `program-tfcf1` | `cardImage.alt.km` | កុមារកំពុងលើកគំនូររបស់ខ្លួននៅវគ្គក្លឹបកុមារ ជាមួយបុគ្គលិក SKO |
+| `page-impact` | `title.en` | Our impact on women's empowerment and family resilience |
+| `page-impact` | `intro.en` | SKO measures its impact in women's empowerment, family resilience and child protection. In the HALI programme, 89% of households report more equitable decision-making, 75% of women surveyed make the household's financial decisions, and 94% know where to seek help for [gender-based violence](/programs/housing-and-living-conditions-hali/). |
+| `page-impact` | `seo.title.en` | Women's Empowerment & Family Resilience: Our Impact |
+| `page-impact` | `seo.description.en` | SKO's impact in Phnom Penh: women's empowerment and family resilience. 89% of households report fairer decisions and 94% know where to get help for GBV. |
+| `page-about` | `title.en` | About SKO: family preservation in Phnom Penh |
+| `page-about` | `intro.en` | Samatapheap Khnom Organization (SKO) is a Cambodian local NGO whose work is family preservation: social work that keeps vulnerable families in Phnom Penh's urban poor and migrant communities together, so children grow up at home rather than in institutions. |
+| `page-about` | `seo.title.en` | Family Preservation NGO in Phnom Penh: About Us |
+| `page-about` | `seo.description.en` | Samatapheap Khnom Organization (SKO) is a family preservation and social work NGO in Phnom Penh, registered since 2007, keeping vulnerable families together. |
+| `program-tfcf2` | `summary.en` | Promoting Children's Education and Health through FDP is SKO's family development programme in Khan Dangkor, Phnom Penh. Through the Family Development Program (FDP), social workers, Family Development Volunteers, schools and health centres support 390 vulnerable children and their families with education, health, protection and family strengthening. |
+| `program-tfcf2` | `seo.title.en` | Family Development: Children's Education and Health |
+| `program-tfcf2` | `seo.description.en` | Family development through FDP in Khan Dangkor, Phnom Penh: SKO supports 390 vulnerable children and their families with education, health and case management. |
+| `program-tfcf2` | `image.alt.en` | Children queue at a registration table during an SKO community session in Phnom Penh |
+| `program-tfcf2` | `image.alt.km` | កុមារតម្រង់ជួរនៅតុចុះឈ្មោះ ក្នុងវគ្គសហគមន៍របស់ SKO នៅរាជធានីភ្នំពេញ |
+| `program-tfcf2` | `cardImage.alt.en` | Parents and children at a community meeting with illustrated posters, Phnom Penh |
+| `program-tfcf2` | `cardImage.alt.km` | ឪពុកម្តាយ និងកុមារនៅក្នុងកិច្ចប្រជុំសហគមន៍ដែលមានផ្ទាំងរូបភាពបង្ហាញ នៅរាជធានីភ្នំពេញ |
+| `program-rcmd` | `summary.en` | Resilient City and Migration Dynamics (RCMD) is SKO's migration and development project for migrants and vulnerable families in Phnom Penh: financial literacy, vocational training, legal documents and public services, education, health, gender equality and capacity-building for local authorities, with UNOPS (Cities Alliance) and funding from the Swiss Agency for Development and Cooperation. |
+| `program-rcmd` | `seo.title.en` | Migration and Development in Phnom Penh: RCMD Project |
+| `program-rcmd` | `seo.description.en` | Migration and development in Phnom Penh: RCMD helps migrants and vulnerable families with financial literacy, legal documents and gender equality, with UNOPS. |
+| `program-rcmd` | `image.alt.en` | An SKO staff member speaks with a microphone at a public forum on legal documents with residents of a Phnom Penh community |
+| `program-rcmd` | `image.alt.km` | បុគ្គលិក SKO ម្នាក់និយាយតាមមីក្រូនៅក្នុងវេទិកាសាធារណៈស្តីពីឯកសារស្របច្បាប់ ជាមួយអ្នករស់នៅសហគមន៍មួយក្នុងរាជធានីភ្នំពេញ |
+| `program-rcmd` | `cardImage.alt.en` | A woman holds the official documents obtained with SKO's support |
+| `program-rcmd` | `cardImage.alt.km` | ស្ត្រីម្នាក់កាន់ឯកសារផ្លូវការដែលទទួលបានដោយមានការគាំទ្រពី SKO |
+| `page-safeguarding` | `title.en` | Child safeguarding: our policy and how to report a concern |
+| `page-safeguarding` | `intro.en` | Child safeguarding at SKO means every person working with us, staff, volunteers and partners, is responsible for keeping children safe. It applies to all our work with [vulnerable families](/) and to the [child protection](/programs/childrens-active-citizenship/) training we deliver. |
+| `page-safeguarding` | `seo.title.en` | Child Safeguarding Policy and How to Report a Concern |
+| `page-safeguarding` | `seo.description.en` | SKO's child safeguarding policy: every staff member, volunteer and partner is responsible for keeping children safe. How to report a concern, and the policy. |
+| `page-faq` | `title.en` | Common questions about SKO, an NGO in Cambodia |
+| `page-faq` | `intro.en` | Common questions about SKO, a local NGO in Cambodia working with vulnerable families in Phnom Penh: what we do, who we help, how the Family Development Approach works, and how a Cambodian NGO, funder or company can partner with us. |
+| `page-faq` | `seo.title.en` | NGO in Cambodia: Common Questions About Our Work |
+| `page-faq` | `seo.description.en` | Common questions about SKO, an NGO in Cambodia: what we do, who we help, whether we run an orphanage (we do not), how the Family Development Approach works. |
+| `report-policy` | `summary.en` | Opens SKO’s reports folder (Google Drive) until the PDF is uploaded here. Read how it is applied on our [child safeguarding](/safeguarding/) page. |
+
+Body (Portable Text). For each row, change the block to this text. Where it shows `[anchor](/path)`, type only the anchor text and add a **link annotation** with that path on it:
+
+| Document | Block | New text |
+|---|---|---|
+| `program-hali` | heading (H2) | Impact and results: GBV prevention and family counselling |
+| `program-hali` | paragraph | Gender awareness and empowerment through gender discussion groups reached 80% of all HALI beneficiaries, through SKO training (40 individuals) and CAFÉ training with PE&D (122 individuals). A large majority of beneficiaries consider gender-based violence a serious issue. 89% of beneficiaries report more equitable decision-making within households, and 75% of female respondents report that they make decisions on financial matters in the household — see our [women's empowerment results](/impact/). 94% of beneficiaries surveyed know where to seek assistance if they or someone they know experiences gender-based violence. |
+| `program-tfcf1` | heading (H2) | Impact and results: child protection and education |
+| `program-tfcf1` | paragraph | Under education and child protection, children demonstrated increased awareness of their rights, child protection, online safety, and the risks of drug use. Mobile library activities strengthened children’s reading, listening, communication, and learning engagement, while also improving their knowledge of road safety. The distribution of school materials to 410 children reduced financial pressure on vulnerable families and helped children remain motivated and better equipped for school. School Support Committee meetings also strengthened cooperation among schools, parents, volunteers, and local authorities, enabling stakeholders to identify children at risk of dropping out and develop practical solutions to support their continued education. SKO's own [child safeguarding](/safeguarding/) policy applies to every activity. |
+| `program-tfcf1` | paragraph | This project shares its partner and highlight activities with its sister project, [Promoting Children’s Education and Health through FDP](/programs/childrens-education-and-health/). See that programme page for the full activity list. |
+| `page-impact` | paragraph | For children and youth, empowerment means giving them opportunities to be heard, express their needs, develop life skills, and participate in decisions that affect their lives. This helps them build confidence, responsibility, and hope for their future rather than depending only on external support. Child protection training is delivered through [Children's Active Citizenship](/programs/childrens-active-citizenship/). |
+| `page-impact` | heading (H2) | Families, communities and economic resilience |
+| `page-impact` | paragraph | At the family and community level, empowerment strengthens relationships, communication, mutual support, and community participation. Families become more connected to available services and resources, while communities become better able to support vulnerable children and families through the [Family Development Program](/programs/childrens-education-and-health/) delivered in Khan Dangkor. |
+| `page-impact` | paragraph | The results for each of SKO’s four projects are on their own programme pages. Month-by-month updates are under [activities from our family strengthening programs](/activities/). |
+| `page-about` | heading (H2) | How we work: the Family Development Program (FDP) |
+| `page-about` | paragraph | SKO recognizes that lasting change for children, families, and communities cannot be achieved by one organization alone. Networking and partnership are therefore an important part of SKO’s approach, enabling us to work together with government institutions, local authorities, NGOs, community groups, schools, service providers, development partners, and other stakeholders. See [the partners in our NGO work in Cambodia](/partners/). |
+| `page-about` | paragraph | Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions. By connecting people, services, and resources, SKO aims to strengthen [family and community resilience](/impact/) and contribute to safer, more protective, and supportive environments for children and families. |
+| `page-about` | bullet | Four [family support programs](/programs/), all delivered through FDP |
+| `program-tfcf2` | paragraph | Child Protection Training. Building children’s capacity to understand and respond to different forms of violence (emotional, sexual, physical, neglect, exploitation). Delivered together with our sister project [Children's Active Citizenship](/programs/childrens-active-citizenship/). |
+| `program-tfcf2` | heading (H2) | Impact and results: family strengthening in Khan Dangkor |
+| `program-rcmd` | paragraph | Counselling & Referral Services. Identifies the root causes of problems facing host and migrant communities, meets basic needs, strengthens capacity, and works towards sustainable solutions through [scheduled counselling from social workers and weekly family visits](/programs/childrens-education-and-health/). |
+| `program-rcmd` | paragraph | Gender-Based Violence (GBV) Training. Trains host community and migrant residents on gender concepts and the root causes and impact of GBV, building towards positive change for families and the wider community. SKO's GBV work began in [HALI](/programs/housing-and-living-conditions-hali/). |
+| `program-rcmd` | paragraph | Economic Empowerment. Builds migrant and host community members’ capacity to manage household income and expenses through microfinance, without added stress. Results across programmes: [community economic development](/impact/). |
+| `page-safeguarding` | paragraph | The full policy is available under [Reports & policies](/reports/). |
+
+FAQ answers on `page-faq` (`faqs[].answer.en`; type the `[anchor](/path)` syntax literally, as for `intro`):
+
+| Question | New answer |
+|---|---|
+| Does SKO run an orphanage or residential care centre? | No. SKO does the opposite: our work is to [prevent children being separated from their families](/about/) in the first place. We provide counselling, case management and practical support so that families under pressure can stay together. Children do better in families than in institutions, and every part of the Family Development Program is built on that principle. |
+| What does SKO do? | SKO works with [the most vulnerable families in Phnom Penh’s urban poor communities](/). Social workers visit families at home, help them identify their own needs and objectives, and connect them to health, education, administrative and economic services. The aim is for families to sustain the progress themselves after SKO withdraws. This runs through four [family support programs](/programs/), including [child protection](/programs/childrens-active-citizenship/) training. |
+| Who does SKO help? | Families living in poverty in Phnom Penh’s urban poor communities, and the children and young people in them, including children at risk of separation from their families, children without birth certificates, children affected by [domestic violence](/programs/housing-and-living-conditions-hali/), children with disabilities, children affected by HIV/AIDS, and children whose parents have [migrated for work](/programs/resilient-city-and-migration/). |
+| What is the Family Development Approach? | A structured method for working with families in poverty, built on the premise that families are not short of capability but of support, information and access. Social workers visit families at home, assess the situation together, agree objectives the family sets for itself, and work through them over a series of visits. See [family development in practice](/programs/childrens-education-and-health/) in Khan Dangkor. |
+| How can my organisation partner with SKO? | SKO works in partnership with government ministries, NGOs and private-sector partners, and holds quarterly meetings with partners to work through shared challenges. Email info@samatapheapkhnom.org to start a conversation or [visit our office in Phnom Penh](/contact/). |
+
+Also in Studio: nothing for the seven code-driven pages (home, programs, activities, partners, contact, reports; strings live in code). After publishing, the content-sync workflow redeploys.
+
+Not decided here: `siteSettings.ogImage` (§6 item 1, needs a 1200×630 photo from SKO) and the AI-crawler policy in `robots.txt` (§6 item 7, SKO board decision).
