@@ -684,7 +684,7 @@ Against `dist/` from the fixtures build (the plan's values), the §5 checks run 
 
 ### Sanity to-do
 
-Read-only query of `xm91vtfk` / `production`: 11 documents (5 pages, 4 programmes, 2 reports); none has `seo.title` or `seo.description`. Ten were created 2026-09-23 18:04 and bulk-updated 2026-09-24 16:14:41 (all at the same second, which looks like a script, not staff); the two reports and `page-privacy` were not updated. **I cannot confirm the dataset was never edited after seeding**, and the live /impact/ description already differs from the fixture, so do not re-import with `--replace`. Enter the values by hand:
+Read-only query of `xm91vtfk` / `production`: 11 documents (5 pages, 4 programmes, 2 reports); none has `seo.title` or `seo.description`. All were created 2026-09-23 18:04. Eight (about, faq, impact, safeguarding, four programmes) were updated 2026-09-24 16:14:41, all in the same second, which looks like a script, not staff; the two reports and `page-privacy` were never updated. **I cannot confirm the dataset was never edited after seeding**, and the live /impact/ description already differs from the fixture, so do not re-import with `--replace`. Enter the values by hand:
 
 Plain fields (type the value exactly; `[anchor](/path)` in `intro` is typed literally, the site turns it into a link):
 
