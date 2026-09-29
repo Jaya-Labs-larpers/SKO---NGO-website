@@ -1,5 +1,6 @@
 import type { Locale } from './i18n/config';
 import { text } from './i18n/utils';
+import { stripInlineLinks } from './inline-links';
 import type { CmsImage, Seo } from './content/types';
 
 export interface ResolvedSeo {
@@ -31,7 +32,7 @@ export function resolveSeo(
 
   return {
     title,
-    description: description ? truncate(description, 300) : undefined,
+    description: description ? truncate(stripInlineLinks(description), 300) : undefined,
     ogImage: seo?.image ?? fallback.image ?? null,
     noindex: seo?.noindex === true,
   };
