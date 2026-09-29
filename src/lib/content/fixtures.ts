@@ -359,24 +359,36 @@ export const programs: Program[] = [
   },
   {
     _id: 'program-tfcf1',
-    image: localCmsImage('tfcf1-cover'),
-    cardImage: localCmsImage('tfcf1-card'),
+    image: localCmsImage('tfcf1-cover', {
+      en: 'Children seated in rows on a mat at a community session in an urban poor neighbourhood of Phnom Penh',
+      km: 'កុមារអង្គុយជាជួរលើកន្ទេលនៅក្នុងវគ្គសហគមន៍មួយ ក្នុងសង្កាត់ក្រីក្រទីក្រុងនៃរាជធានីភ្នំពេញ',
+    }),
+    cardImage: localCmsImage('tfcf1-card', {
+      en: "Children holding up their drawings at a Children's Club session with SKO staff",
+      km: 'កុមារកំពុងលើកគំនូររបស់ខ្លួននៅវគ្គក្លឹបកុមារ ជាមួយបុគ្គលិក SKO',
+    }),
     slug: 'childrens-active-citizenship',
     order: 2,
     title: { en: "Children's Active Citizenship", km: 'សកម្មភាពពលរដ្ឋកុមារ' },
     summary: {
-      en: 'To promote understanding of basic education and primary health care among community members, caregivers, and authorities for vulnerable children.',
+      en: "Children's Active Citizenship is SKO's programme for the education, health and child protection of vulnerable children in three sangkats of Phnom Penh. Children learn their rights, child protection and online safety; schools, parents, Family Development Volunteers and local authorities work together to keep them in school and safe.",
       km: 'ដើម្បីលើកកម្ពស់ការយល់ដឹងអំពីការអប់រំមូលដ្ឋាន និងសុខភាពថែទាំបឋមក្នុងចំណោមសមាជិកសហគមន៍ អ្នកថែទាំ និងអាជ្ញាធរ សម្រាប់កុមារងាយរងគ្រោះ។',
     },
+    seo: {
+      title: { en: "Child Protection: Children's Active Citizenship" },
+      description: {
+        en: "Child protection for vulnerable children in Phnom Penh: Children's Active Citizenship teaches child rights and online safety and keeps children in school.",
+      },
+    },
     body: enOnly([
-      '## Impact and results',
+      '## Impact and results: child protection and education',
       'The project made meaningful progress in strengthening vulnerable families and improving the well-being, education, health, and protection of children across the three target Sangkats. Through close collaboration with local authorities, schools, health centers, Family Development Volunteers (FDVs), parents, and community stakeholders, the project reached children, families, and community members with practical and integrated support.',
-      'Under education and child protection, children demonstrated increased awareness of their rights, child protection, online safety, and the risks of drug use. Mobile library activities strengthened children’s reading, listening, communication, and learning engagement, while also improving their knowledge of road safety. The distribution of school materials to 410 children reduced financial pressure on vulnerable families and helped children remain motivated and better equipped for school. School Support Committee meetings also strengthened cooperation among schools, parents, volunteers, and local authorities, enabling stakeholders to identify children at risk of dropping out and develop practical solutions to support their continued education.',
+      "Under education and child protection, children demonstrated increased awareness of their rights, child protection, online safety, and the risks of drug use. Mobile library activities strengthened children’s reading, listening, communication, and learning engagement, while also improving their knowledge of road safety. The distribution of school materials to 410 children reduced financial pressure on vulnerable families and helped children remain motivated and better equipped for school. School Support Committee meetings also strengthened cooperation among schools, parents, volunteers, and local authorities, enabling stakeholders to identify children at risk of dropping out and develop practical solutions to support their continued education. SKO's own [child safeguarding](/safeguarding/) policy applies to every activity.",
       'Under health, hygiene, and family well-being, the project improved access to basic healthcare for vulnerable families through 52 medical check-up sessions reaching 656 people within 2,624 indirect reaches, including children and elderly community members. Additional ear health services reached 159 people, particularly children, while health education promoted better sanitation, disease prevention, and awareness of available social protection and healthcare services. Environment Day activities engaged 289 direct reaches 1,156 indirect reaches and in practical hygiene and environmental actions, strengthening community responsibility for cleaner and healthier living environments.',
       'The project also provided important food and emergency assistance to vulnerable families. A total of 33,910 kg of rice was distributed to 313 families supporting 410 children, while an additional 1,900 kg of emergency rice supported 189 families. These interventions helped reduce immediate household financial pressure and food insecurity, allowing parents to better focus on supporting their children’s education and well-being. Community contributions in Sangkat Chbar Ampov further demonstrated local solidarity and strengthened community ownership.',
       'Under positive parenting and family development, community meetings strengthened parents’ knowledge and practices related to children’s education, health, stress management, legal documentation, communication, and positive parenting.',
       'Overall, the project contributed to a more supportive and protective environment for vulnerable children and families, strengthening local ownership alongside schools, volunteers, parents and authorities.',
-      'This project shares its partner and highlight activities with its sister project, Promoting Children’s Education and Health through FDP. See that programme page for the full activity list.',
+      'This project shares its partner and highlight activities with its sister project, [Promoting Children’s Education and Health through FDP](/programs/childrens-education-and-health/). See that programme page for the full activity list.',
     ]),
     impactStats: [
       {
