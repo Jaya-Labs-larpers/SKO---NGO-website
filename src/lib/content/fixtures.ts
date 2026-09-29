@@ -1116,15 +1116,24 @@ export const pages: Page[] = [
   {
     _id: 'page-safeguarding',
     slug: 'safeguarding',
-    title: { en: 'Safeguarding and child protection', km: 'ការការពារកុមារ' },
+    title: {
+      en: 'Child safeguarding: our policy and how to report a concern',
+      km: 'ការការពារកុមារ',
+    },
     intro: {
-      en: 'Every person working with SKO, staff, volunteers and partners, is responsible for keeping children safe.',
+      en: 'Child safeguarding at SKO means every person working with us, staff, volunteers and partners, is responsible for keeping children safe. It applies to all our work with [vulnerable families](/) and to the [child protection](/programs/childrens-active-citizenship/) training we deliver.',
       km: 'មនុស្សគ្រប់រូបដែលធ្វើការជាមួយ SKO បុគ្គលិក អ្នកស្ម័គ្រចិត្ត និងដៃគូ មានទំនួលខុសត្រូវរក្សាសុវត្ថិភាពកុមារ។',
+    },
+    seo: {
+      title: { en: 'Child Safeguarding Policy and How to Report a Concern' },
+      description: {
+        en: "SKO's child safeguarding policy: every staff member, volunteer and partner is responsible for keeping children safe. How to report a concern, and the policy.",
+      },
     },
     body: enOnly([
       '## Reporting a concern',
       'To report a safeguarding concern, please contact Soraksmey Heng, Senior Team Leader, directly at stlhali@samatapheapkhnom.org or +855 12 781 203 rather than using the form below. Concerns are treated confidentially.',
-      'The full policy is available under Reports & policies.',
+      'The full policy is available under [Reports & policies](/reports/).',
     ]),
   },
   {
