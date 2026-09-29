@@ -5,6 +5,7 @@ import { localizePath, pick, t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
 import ProgramCard from '~/components/content/ProgramCard.astro';
+import SectionHeading from '~/components/content/SectionHeading.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
 import { cardGridCols, cardImageSizes } from '~/lib/grid';
@@ -40,6 +41,13 @@ const collection = collectionPageJsonLd({
   />
   <section class="section">
     <div class="wrap">
+      {
+        programs.length > 0 && t(lang, 'programsSectionTitle') && (
+          <div class="mb-8">
+            <SectionHeading title={t(lang, 'programsSectionTitle')} />
+          </div>
+        )
+      }
       {
         programs.length === 0 ? (
           <EmptyState message={t(lang, 'emptyGeneric')} />

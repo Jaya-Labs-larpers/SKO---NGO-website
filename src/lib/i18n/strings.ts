@@ -70,7 +70,7 @@ const en = {
 
   // --- Page titles (section indexes; page bodies come from the CMS) ---------
   pageActivities: 'Activities & news',
-  pagePrograms: 'Our work',
+  pagePrograms: 'Our family support programs',
   pageImpact: 'Impact & results',
   pageReports: 'Annual reports & financials',
   pageSafeguarding: 'Safeguarding & child protection',
@@ -137,9 +137,10 @@ const en = {
   // page then falls back to its Khmer heading and intro.
   seoHome: 'Samatapheap Khnom Organization',
   metaHome: 'Families with the strength to change their own lives.',
-  seoPrograms: 'Our work',
+  seoPrograms: 'Family Support Programs in Phnom Penh: Our Work',
   metaPrograms:
-    'Four projects, one approach: a child growing up safe, in a family, in their own community.',
+    "SKO's four family support programs in Phnom Penh: family counselling and GBV prevention, child protection, education and health, and migration. Since 2007.",
+  programsSectionTitle: 'Four programs, one Family Development Program',
   seoActivities: 'Activities & news',
   metaActivities: 'What our teams are doing, month by month.',
   seoPartners: 'Partners & supporters',
@@ -157,7 +158,7 @@ const en = {
   homeHeroIntro:
     'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities. SKO is recognized as Cambodia’s leading expert in family care and social work.',
   introPrograms:
-    'Four projects, one approach: a child growing up safe, in a family, in their own community.',
+    "SKO runs four family support programs in Phnom Penh's urban poor communities, all delivered through one approach, the Family Development Program: social work services so that a child grows up safe, in a family, in their own community.",
   introActivities: 'What our teams are doing, month by month.',
   introImpact: 'What we have done, how we count it, and what the families we work with say.',
   introReports: 'Our annual reports, audited financial statements and governance documents.',
@@ -356,6 +357,7 @@ const km: Record<UIKey, string> = {
   metaHome: '',
   seoPrograms: '',
   metaPrograms: '',
+  programsSectionTitle: '',
   seoActivities: '',
   metaActivities: '',
   seoPartners: '',
