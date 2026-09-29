@@ -25,6 +25,7 @@
  * now and falls back with lang="en"; it needs a Khmer-speaking staff writer.
  */
 
+import { inlineLinkSpans } from '../inline-links';
 import { localCmsImage } from '../sanity/image';
 import type {
   Activity,
@@ -43,7 +44,10 @@ import type {
   TeamMember,
 } from './types';
 
-/** Compact Portable Text builder. A paragraph beginning "## " becomes an h2, "- " a bullet. */
+/**
+ * Compact Portable Text builder. A paragraph beginning "## " becomes an h2, "- " a bullet,
+ * and `[anchor](/path)` becomes a link.
+ */
 function blocks(en: string[], km: string[]): LocaleBlocks {
   const build = (paragraphs: string[]): PortableBlock[] =>
     paragraphs.map((raw, index) => {
@@ -54,12 +58,7 @@ function blocks(en: string[], km: string[]): LocaleBlocks {
         _key: `b${index}`,
         style: isHeading ? ('h2' as const) : ('normal' as const),
         ...(isBullet ? { listItem: 'bullet' as const, level: 1 } : {}),
-        children: [
-          {
-            _type: 'span' as const,
-            text: isHeading ? raw.slice(3) : isBullet ? raw.slice(2) : raw,
-          },
-        ],
+        ...inlineLinkSpans(isHeading ? raw.slice(3) : isBullet ? raw.slice(2) : raw),
       };
     });
   return { en: build(en), km: build(km) };
