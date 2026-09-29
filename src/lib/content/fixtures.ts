@@ -921,10 +921,16 @@ export const pages: Page[] = [
   {
     _id: 'page-about',
     slug: 'about',
-    title: { en: 'About us', km: 'អំពីយើង' },
+    title: { en: 'About SKO: family preservation in Phnom Penh', km: 'អំពីយើង' },
     intro: {
-      en: 'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities.',
+      en: "Samatapheap Khnom Organization (SKO) is a Cambodian local NGO whose work is family preservation: social work that keeps vulnerable families in Phnom Penh's urban poor and migrant communities together, so children grow up at home rather than in institutions.",
       km: 'អង្គការសមត្ថភាពខ្ញុំ (SKO) ជាអង្គការក្រៅរដ្ឋាភិបាលក្នុងស្រុករបស់កម្ពុជា ដែលធ្វើការគាំទ្រកុមារ គ្រួសារ និងសហគមន៍ងាយរងគ្រោះ ជាពិសេសនៅសហគមន៍ក្រីក្រទីក្រុង និងសហគមន៍ចំណាកស្រុក។',
+    },
+    seo: {
+      title: { en: 'Family Preservation NGO in Phnom Penh: About Us' },
+      description: {
+        en: 'Samatapheap Khnom Organization (SKO) is a family preservation and social work NGO in Phnom Penh, registered since 2007, keeping vulnerable families together.',
+      },
     },
     body: enOnly([
       'Samatapheap Khnom Organization (SKO) is a local, neutral, non-sectarian, non-political, non-racial and non-profit organization, registered with the Ministry of Interior under permit number 457 (សជណ) on 20 April 2007. SKO is recognised as Cambodia’s leading expert in family care and social work.',
@@ -939,7 +945,7 @@ export const pages: Page[] = [
       'Integrity. We are honest and transparent in all our actions and decisions.',
       'Respect. We value the dignity, choices, potential and contribution of staff, families, partners and donors.',
       'Responsibility. We accept personal and collective responsibility for our learning and our performance, to increase our impact.',
-      '## Key Approaches of FDP',
+      '## How we work: the Family Development Program (FDP)',
       '- Family-centred approach: Focuses on the overall well-being of vulnerable families, children and youth.',
       '- Strengths-based approach: Identifies family strengths, capacities, resources and resilience, alongside their needs and challenges.',
       '- Family assessment and case management: Conducts family assessments, identifies root causes and priorities, develops appropriate support and follows up on progress.',
@@ -949,11 +955,12 @@ export const pages: Page[] = [
       '- Family empowerment and participation: Encourages families to participate in identifying solutions and building their own capacity and resilience.',
       '- Partnership and community approach: Works closely with local authorities, communities, NGOs and other stakeholders to strengthen support for families.',
       '## Networking and partnership',
-      'SKO recognizes that lasting change for children, families, and communities cannot be achieved by one organization alone. Networking and partnership are therefore an important part of SKO’s approach, enabling us to work together with government institutions, local authorities, NGOs, community groups, schools, service providers, development partners, and other stakeholders.',
-      'Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions. By connecting people, services, and resources, SKO aims to strengthen family and community resilience and contribute to safer, more protective, and supportive environments for children and families.',
+      'SKO recognizes that lasting change for children, families, and communities cannot be achieved by one organization alone. Networking and partnership are therefore an important part of SKO’s approach, enabling us to work together with government institutions, local authorities, NGOs, community groups, schools, service providers, development partners, and other stakeholders. See [the partners in our NGO work in Cambodia](/partners/).',
+      'Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions. By connecting people, services, and resources, SKO aims to strengthen [family and community resilience](/impact/) and contribute to safer, more protective, and supportive environments for children and families.',
       '## Where we work',
       '- Phnom Penh, across 14 khans within 105 Sangkat (urban poor communities are selected)',
       '- Some provinces will be selected for urban poor communities.',
+      '- Four [family support programs](/programs/), all delivered through FDP',
     ]),
     faqs: [
       {

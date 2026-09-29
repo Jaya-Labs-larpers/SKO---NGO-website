@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import { getDirectorMessage, getOrgChart, getPage, getTeam } from '~/lib/content';
-import { pick, t } from '~/lib/i18n/utils';
+import { localizePath, pick, t } from '~/lib/i18n/utils';
 import { resolveSeo } from '~/lib/seo';
 import { aboutPageJsonLd } from '~/lib/seo/page-schema';
 import BaseLayout from '~/layouts/BaseLayout.astro';
@@ -110,7 +110,16 @@ const aboutPage = aboutPageJsonLd({
     )
   }
 
-  {page?.faqs && page.faqs.length > 0 && <FaqSection lang={lang} faqs={page.faqs} />}
+  {
+    page?.faqs && page.faqs.length > 0 && (
+      <FaqSection
+        lang={lang}
+        faqs={page.faqs}
+        moreHref={localizePath('/faq', lang)}
+        moreLabel={t(lang, 'faqMore')}
+      />
+    )
+  }
 
   <CtaBand lang={lang} title={t(lang, 'ctaAboutTitle')} body={t(lang, 'ctaAboutBody')} />
 </BaseLayout>

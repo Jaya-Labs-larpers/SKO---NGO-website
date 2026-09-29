@@ -55,6 +55,7 @@ const en = {
 
   // --- Section headings -----------------------------------------------------
   faqHeading: 'Common questions',
+  faqMore: 'More common questions about SKO',
   latestActivities: 'Latest activities',
   whatWeDo: 'What we do',
   trustedBy: 'Trusted by',
@@ -279,6 +280,7 @@ const km: Record<UIKey, string> = {
   tapToEnlarge: 'ចុចដើម្បីពង្រីក',
 
   faqHeading: 'សំណួរដែលសួរញឹកញាប់',
+  faqMore: '',
   latestActivities: 'សកម្មភាពថ្មីៗ',
   whatWeDo: 'អ្វីដែលយើងធ្វើ',
   trustedBy: 'ដៃគូរបស់យើង',
