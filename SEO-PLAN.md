@@ -584,9 +584,9 @@ These are not keyword placements but they decide whether the placements above ge
 | 3 | `Service` per programme, `AboutPage`, `ContactPage`, `CollectionPage`s | step 6 | in plan |
 | 4 | Answer-first summaries | §1.x "Summary" rows | in plan — every page now opens with a sentence that stands alone |
 | 5 | FAQ question `id`s + links in answers | step 7 | in plan |
-| 6 | `llms.txt` at the site root | new `src/pages/llms.txt.ts`, generated from `getPrograms()`, `getPage('about')`, `getReports()` | proposed: name, one-line description (the About summary), the 14 canonical URLs with one line each, programme summaries, reports links. Cheap; do with step 6 |
+| 6 | `llms.txt` at the site root | `src/pages/llms.txt.ts`, generated from `getSiteSettings()`, `getPage()`, `getPrograms()`, `getReports()` | **applied 2026-09-30**: name, the About intro as the one-line description, registration line, the four programmes with their resolved SEO description, the ten other canonical URLs with their meta description, the two report links, one line for `/km/`. `scripts/check-build.mjs` fails the build if it is missing or holds a relative link |
 | 7 | AI-crawler policy in `robots.txt` | `src/pages/robots.txt.ts` | **SKO board decision** (docs/10 item 6). If "allow": add explicit `User-agent: GPTBot / ClaudeBot / PerplexityBot / Google-Extended` + `Allow: /`. Plan does not decide this |
-| 8 | Sitemap `lastmod` | `astro.config.mjs` sitemap `serialize` with a build date, or per-document `_updatedAt` from Sanity | mechanical; do with step 23 |
+| 8 | Sitemap `lastmod` | `astro.config.mjs` sitemap `lastmod: new Date()` | **applied 2026-09-30** with the build date on every URL; `check-build.mjs` fails the build if any `<url>` lacks it. Per-document `_updatedAt` would be more precise but the sitemap integration runs after the pages, outside the content layer, so it stays a build date until that is worth wiring |
 | 9 | RSS feed for `/activities/` | `src/pages/activities/rss.xml.ts` (`@astrojs/rss`) + `<link rel="alternate" type="application/rss+xml">` in `SeoHead` | after the first real post |
 | 10 | `speakable` on the mission statement and the impact stats | `AboutPage`/`ImpactPage` JSON-LD `speakable.cssSelector` | after 1–8; low effort, low certainty of uptake |
 | 11 | Safeguarding 1-item `FAQPage` | `pages[2].faqs` | after SKO confirms the reporting wording is final |
@@ -648,7 +648,7 @@ Steps 3–5 were committed before step 2; none depends on the other.
 | /faq/ | H1, intro, seo, H2 "Questions and answers", five answers with links, ids on every question, links render and stay out of the `FAQPage` text | none |
 | /reports/ | intro, seo title/description, safeguarding link in the policy summary, `CollectionPage` | `Report` JSON-LD nodes: `[FACT NEEDED: the actual PDFs]` (links are Drive folders; the plan says only worth adding once the PDFs are real) |
 
-Not applied, outside §4: §2.1 new page brief (`Create new pages in run 3: no`); §6 items 1 (`og:image`, FACT NEEDED), 6 (`llms.txt`), 7 (robots policy, SKO decision), 8 (sitemap `lastmod`), 9, 10, 11, 12. No redirects (§3). `/privacy/` and `/404` untouched. Impact statistics, the registration line and the safeguarding contact block are verbatim.
+Not applied, outside §4: §2.1 new page brief (`Create new pages in run 3: no`); §6 items 1 (`og:image`, FACT NEEDED), 7 (robots policy, SKO decision), 9, 10, 11, 12. §6 items 6 (`llms.txt`) and 8 (sitemap `lastmod`) were applied on 2026-09-30, after run 3. No redirects (§3). `/privacy/` and `/404` untouched. Impact statistics, the registration line and the safeguarding contact block are verbatim.
 
 ### Khmer (§7)
 
