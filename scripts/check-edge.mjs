@@ -3,6 +3,7 @@
  *
  *   node scripts/check-edge.mjs https://sko-website.<subdomain>.workers.dev
  *   node scripts/check-edge.mjs https://www.sko-samatapheapkhnom.org --indexable
+ *   node scripts/check-edge.mjs https://www.sko-samatapheapkhnom.org --expect-build
  *
  * Run it on the workers.dev rehearsal before attaching the domain, on
  * production after every deploy, and after any incident. Exits 1 on failure.
@@ -10,15 +11,21 @@
  * `--indexable` additionally asserts that nothing tells search engines to stay
  * away. Leave it off while production deliberately ships noindex (fixture
  * content), and turn it on the day the real content goes live.
+ *
+ * `--expect-build` waits for the homepage to be the build in dist/ and fails if
+ * it never arrives. Pass it straight after deploying that build, and only then.
  */
 
+import { readFile } from "node:fs/promises";
 import { setTimeout as sleep } from "node:timers/promises";
 
 const args = process.argv.slice(2);
 const base = args.find((arg) => !arg.startsWith("--"))?.replace(/\/+$/, "");
 const indexable = args.includes("--indexable");
 if (!base) {
-  console.error("usage: node scripts/check-edge.mjs <base-url> [--indexable]");
+  console.error(
+    "usage: node scripts/check-edge.mjs <base-url> [--indexable] [--expect-build]",
+  );
   process.exit(2);
 }
 
@@ -70,28 +77,55 @@ const langOf = (html) => /<html lang="([a-z-]+)"/.exec(html)?.[1];
 const titleOf = (html) => /<title>([^<]*)<\/title>/.exec(html)?.[1]?.trim();
 const assetOf = (html) => /\/_astro\/[^"']+\.(?:css|js)/.exec(html)?.[0];
 
-// For a few seconds after a deploy some edges still serve the previous HTML
-// while the asset store holds only the new build's hashed files, so the
-// homepage can reference a stylesheet that 404s. Wait for them to agree before
-// judging anything, and let the asset check below fail if they never do.
+const expected = args.includes("--expect-build")
+  ? assetOf(await readFile("dist/index.html", "utf8"))
+  : undefined;
+if (args.includes("--expect-build") && !expected) {
+  console.error("--expect-build: dist/index.html references no /_astro/ asset");
+  process.exit(2);
+}
+
+// For several seconds after a deploy each request can land on the old or the
+// new version, so the homepage may still be the previous build, or reference a
+// stylesheet the version answering the next request does not have. One good
+// answer proves nothing, since the old build agrees with itself: wait for the
+// expected build when there is one, and for three agreeing answers in a row.
 async function settledHome() {
-  for (let attempt = 1; ; attempt++) {
-    const page = await get("/");
+  let page;
+  for (let attempt = 1, agreed = 0; attempt <= 20 && agreed < 3; attempt++) {
+    if (attempt > 1) await sleep(agreed ? 1000 : 3000);
+    page = await get("/");
     const asset = assetOf(page.text);
-    if (!asset || attempt === 10) return page;
+    if (!asset) return page;
+    if (expected && asset !== expected) {
+      agreed = 0;
+      console.log(`INFO  homepage is still on ${asset}, waiting for ${expected}`);
+      continue;
+    }
     const status = await fetchOnce(asset, { method: "HEAD" }).then(
       (res) => res.status,
       reasonOf,
     );
-    if (status === 200) return page;
-    console.log(`INFO  ${asset} is ${status}, waiting for the deploy to settle`);
-    await sleep(3000);
+    if (status === 200) {
+      agreed++;
+    } else {
+      agreed = 0;
+      console.log(`INFO  ${asset} is ${status}, waiting for the deploy to settle`);
+    }
   }
+  return page;
 }
 
 // Pages
 const home = await settledHome();
 record(home.status === 200, "GET / is 200", String(home.status));
+if (expected) {
+  record(
+    assetOf(home.text) === expected,
+    "homepage is this build",
+    assetOf(home.text),
+  );
+}
 record(langOf(home.text) === "en", "homepage is English", langOf(home.text));
 record(/<main[^>]*id="main"/.test(home.text), 'homepage has <main id="main">');
 record(
