@@ -360,8 +360,8 @@ export const programs: Program[] = [
   {
     _id: 'program-tfcf1',
     image: localCmsImage('tfcf1-cover', {
-      en: 'Children seated in rows on a mat at a community session in an urban poor neighbourhood of Phnom Penh',
-      km: 'កុមារអង្គុយជាជួរលើកន្ទេលនៅក្នុងវគ្គសហគមន៍មួយ ក្នុងសង្កាត់ក្រីក្រទីក្រុងនៃរាជធានីភ្នំពេញ',
+      en: 'Children seated in a circle on a mat at a community session in an urban poor neighbourhood of Phnom Penh',
+      km: 'កុមារអង្គុយជារង្វង់លើកន្ទេលនៅក្នុងវគ្គសហគមន៍មួយ ក្នុងសង្កាត់ក្រីក្រទីក្រុងនៃរាជធានីភ្នំពេញ',
     }),
     cardImage: localCmsImage('tfcf1-card', {
       en: "Children holding up their drawings at a Children's Club session with SKO staff",

@@ -659,7 +659,7 @@ Not applied, outside §4: §2.1 new page brief (`Create new pages in run 3: no`)
 
 ### Judgement calls a reviewer should check
 
-1. **Alt text vs. photo.** `tfcf1-cover` alt says "seated in rows"; the photo shows children in a circle. Applied as written. Suggest "seated in a circle".
+1. **Alt text vs. photo.** The plan's `tfcf1-cover` alt said "seated in rows", but the photo shows children in a circle. Applied as "seated in a circle" (en) and the matching Khmer, at the plan owner's request; this is the one alt that differs from §1.2.
 2. **/impact/ intro** says "89% of households" and "75% of women surveyed"; the HALI body says "89% of beneficiaries" and "75% of female respondents". Numbers match; wording is looser. Applied as written (D5).
 3. **Programme /childrens-active-citizenship/ headlined as child protection** is still the plan's open `[FACT CHECK]` for SKO.
 4. **/safeguarding/ Reports link**: the plan gives two anchors ("Reports & policies" and "Safeguarding & Child Protection Policy under Reports"). I linked the existing words "Reports & policies".
@@ -700,8 +700,8 @@ Plain fields (type the value exactly; `[anchor](/path)` in `intro` is typed lite
 | `program-tfcf1` | `summary.en` | Children's Active Citizenship is SKO's programme for the education, health and child protection of vulnerable children in three sangkats of Phnom Penh. Children learn their rights, child protection and online safety; schools, parents, Family Development Volunteers and local authorities work together to keep them in school and safe. |
 | `program-tfcf1` | `seo.title.en` | Child Protection: Children's Active Citizenship |
 | `program-tfcf1` | `seo.description.en` | Child protection for vulnerable children in Phnom Penh: Children's Active Citizenship teaches child rights and online safety and keeps children in school. |
-| `program-tfcf1` | `image.alt.en` | Children seated in rows on a mat at a community session in an urban poor neighbourhood of Phnom Penh |
-| `program-tfcf1` | `image.alt.km` | កុមារអង្គុយជាជួរលើកន្ទេលនៅក្នុងវគ្គសហគមន៍មួយ ក្នុងសង្កាត់ក្រីក្រទីក្រុងនៃរាជធានីភ្នំពេញ |
+| `program-tfcf1` | `image.alt.en` | Children seated in a circle on a mat at a community session in an urban poor neighbourhood of Phnom Penh |
+| `program-tfcf1` | `image.alt.km` | កុមារអង្គុយជារង្វង់លើកន្ទេលនៅក្នុងវគ្គសហគមន៍មួយ ក្នុងសង្កាត់ក្រីក្រទីក្រុងនៃរាជធានីភ្នំពេញ |
 | `program-tfcf1` | `cardImage.alt.en` | Children holding up their drawings at a Children's Club session with SKO staff |
 | `program-tfcf1` | `cardImage.alt.km` | កុមារកំពុងលើកគំនូររបស់ខ្លួននៅវគ្គក្លឹបកុមារ ជាមួយបុគ្គលិក SKO |
 | `page-impact` | `title.en` | Our impact on women's empowerment and family resilience |
