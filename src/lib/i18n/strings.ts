@@ -69,7 +69,7 @@ const en = {
   allActivities: 'All activities',
 
   // --- Page titles (section indexes; page bodies come from the CMS) ---------
-  pageActivities: 'Activities & news',
+  pageActivities: 'Family strengthening in action: activities & news',
   pagePrograms: 'Our family support programs',
   pageImpact: 'Impact & results',
   pageReports: 'Annual reports & financials',
@@ -145,8 +145,10 @@ const en = {
   metaPrograms:
     "SKO's four family support programs in Phnom Penh: family counselling and GBV prevention, child protection, education and health, and migration. Since 2007.",
   programsSectionTitle: 'Four programs, one Family Development Program',
-  seoActivities: 'Activities & news',
-  metaActivities: 'What our teams are doing, month by month.',
+  seoActivities: 'Family Strengthening Programs: Activities & News',
+  metaActivities:
+    "News from SKO's family strengthening programs in Phnom Penh: community counselling, training with local authorities, and stories from families, month by month.",
+  activitiesFromProgram: 'Activities from this programme',
   seoPartners: 'Partners & supporters',
   metaPartners: 'The institutions and organisations we work alongside.',
   seoContact: 'Contact us',
@@ -163,7 +165,8 @@ const en = {
     "Samatapheap Khnom Organization (SKO) is a Cambodian local NGO supporting vulnerable families, children and communities in Phnom Penh's urban poor and migrant communities since 2007. SKO is recognized as Cambodia's leading expert in family care and social work.",
   introPrograms:
     "SKO runs four family support programs in Phnom Penh's urban poor communities, all delivered through one approach, the Family Development Program: social work services so that a child grows up safe, in a family, in their own community.",
-  introActivities: 'What our teams are doing, month by month.',
+  introActivities:
+    "News from SKO's family strengthening programs in Phnom Penh: community counselling, [family counselling](/programs/housing-and-living-conditions-hali/) at home, training with local authorities, and stories from the families we work with, month by month.",
   introImpact: 'What we have done, how we count it, and what the families we work with say.',
   introReports: 'Our annual reports, audited financial statements and governance documents.',
   introPartners: 'The institutions and organisations we work alongside.',
@@ -367,6 +370,7 @@ const km: Record<UIKey, string> = {
   programsSectionTitle: '',
   seoActivities: '',
   metaActivities: '',
+  activitiesFromProgram: '',
   seoPartners: '',
   metaPartners: '',
   seoContact: '',

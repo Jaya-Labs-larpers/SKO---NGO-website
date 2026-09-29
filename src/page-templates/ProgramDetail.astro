@@ -185,6 +185,19 @@ const service = serviceJsonLd({
   }
 
   <CtaBand lang={lang} title={t(lang, 'ctaProgramTitle')} />
+
+  {
+    t(lang, 'activitiesFromProgram') && (
+      <div class="wrap py-8">
+        <a href={localizePath('/activities', lang)} class="link-arrow">
+          {t(lang, 'activitiesFromProgram')}
+          <span class="arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+      </div>
+    )
+  }
 </BaseLayout>
 
 <script>
