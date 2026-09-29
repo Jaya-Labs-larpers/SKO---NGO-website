@@ -59,6 +59,7 @@ export default defineConfig({
         locales: { en: "en-US", km: "km-KH" },
       },
       filter: (page) => !page.includes("/404"),
+      lastmod: new Date(),
     }),
   ],
 });

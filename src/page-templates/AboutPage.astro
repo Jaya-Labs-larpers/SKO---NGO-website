@@ -1,8 +1,9 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import { getDirectorMessage, getOrgChart, getPage, getTeam } from '~/lib/content';
-import { pick, t } from '~/lib/i18n/utils';
+import { localizePath, pick, t } from '~/lib/i18n/utils';
 import { resolveSeo } from '~/lib/seo';
+import { aboutPageJsonLd } from '~/lib/seo/page-schema';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
 import SectionedBody from '~/components/content/SectionedBody.astro';
@@ -43,6 +44,11 @@ const seo = resolveSeo(page?.seo, lang, {
   description: intro.value,
   image: page?.heroImage,
 });
+const aboutPage = aboutPageJsonLd({
+  pathname: Astro.url.pathname,
+  name: seo.title,
+  description: seo.description,
+});
 ---
 
 <BaseLayout
@@ -52,6 +58,7 @@ const seo = resolveSeo(page?.seo, lang, {
   description={seo.description}
   ogImage={seo.ogImage}
   noindex={seo.noindex}
+  jsonLd={aboutPage}
 >
   <PageHero
     lang={lang}
@@ -103,7 +110,16 @@ const seo = resolveSeo(page?.seo, lang, {
     )
   }
 
-  {page?.faqs && page.faqs.length > 0 && <FaqSection lang={lang} faqs={page.faqs} />}
+  {
+    page?.faqs && page.faqs.length > 0 && (
+      <FaqSection
+        lang={lang}
+        faqs={page.faqs}
+        moreHref={localizePath('/faq', lang)}
+        moreLabel={t(lang, 'faqMore')}
+      />
+    )
+  }
 
   <CtaBand lang={lang} title={t(lang, 'ctaAboutTitle')} body={t(lang, 'ctaAboutBody')} />
 </BaseLayout>

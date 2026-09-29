@@ -2,6 +2,8 @@
 import type { Locale } from '~/lib/i18n/config';
 import type { Report } from '~/lib/content/types';
 import { formatFileSize, pick, t } from '~/lib/i18n/utils';
+import { hasInlineLinks } from '~/lib/inline-links';
+import InlineLinks from './InlineLinks.astro';
 
 interface Props {
   lang: Locale;
@@ -24,6 +26,7 @@ const typeLabels: Record<string, Record<Locale, string>> = {
   {
     reports.map((report) => {
       const title = pick(report.title, lang);
+      const summary = pick(report.summary, lang);
       // Prefer the Khmer PDF when the visitor is reading Khmer and one exists.
       const file = lang === 'km' && report.fileKm?.url ? report.fileKm : report.file;
       const fileLanguage =
@@ -61,6 +64,14 @@ const typeLabels: Record<string, Record<Locale, string>> = {
               <span aria-hidden="true">↓</span>
             </span>
           </a>
+          {summary.value && hasInlineLinks(summary.value) && (
+            <p
+              class="inline-links px-5.5 pb-4.5 text-[14px] text-[color:var(--color-ink-400)]"
+              lang={summary.isFallback ? summary.lang : undefined}
+            >
+              <InlineLinks text={summary.value} />
+            </p>
+          )}
         </li>
       );
     })

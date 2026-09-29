@@ -38,12 +38,15 @@ const orgName = text(settings.orgName, lang);
 const tagline = pick(settings.tagline, lang);
 const registration = pick(settings.registration, lang);
 const story = stories[0];
+const brand = settings.orgShortName ?? 'SKO';
+const seoTitle = t(lang, 'seoHome');
 ---
 
 <BaseLayout
   lang={lang}
-  title={orgName}
-  description={tagline.value ?? undefined}
+  title={seoTitle ? `${seoTitle} · ${brand}` : orgName}
+  plainTitle
+  description={t(lang, 'metaHome') || tagline.value || undefined}
   ogImage={settings.ogImage}
   headerOverlay
   intro
@@ -140,7 +143,7 @@ const story = stories[0];
           {t(lang, 'homeHeroIntro')}
         </p>
         <a href={localizePath('/about', lang)} class="link-arrow mt-5 sm:mt-7">
-          {t(lang, 'learnMore')}
+          {t(lang, 'homeAboutLink') || t(lang, 'learnMore')}
           <span class="arrow" aria-hidden="true">→</span>
         </a>
       </div>
@@ -160,7 +163,7 @@ const story = stories[0];
           <div class="flex flex-wrap items-end justify-between gap-5">
             <SectionHeading title={t(lang, 'whatWeDo')} />
             <a href={localizePath('/programs', lang)} class="link-arrow">
-              {t(lang, 'viewAll')}
+              {t(lang, 'viewAllPrograms') || t(lang, 'viewAll')}
               <span class="arrow" aria-hidden="true">
                 →
               </span>
@@ -205,7 +208,7 @@ const story = stories[0];
     story && (
       <section class="story-band on-inverse">
         <div class="wrap">
-          <StoryQuote lang={lang} story={story} inverse quoteOnly />
+          <StoryQuote lang={lang} story={story} inverse quoteOnly linkProgram />
         </div>
       </section>
     )
@@ -220,6 +223,16 @@ const story = stories[0];
         <div class="mt-8 border-y border-[color:var(--color-line)] py-4">
           <PartnerMarquee lang={lang} partners={partners} />
         </div>
+        {t(lang, 'allPartners') && (
+          <div class="wrap mt-6">
+            <a href={localizePath('/partners', lang)} class="link-arrow">
+              {t(lang, 'allPartners')}
+              <span class="arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </div>
+        )}
       </section>
     )
   }

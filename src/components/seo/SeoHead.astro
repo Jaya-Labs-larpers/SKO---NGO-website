@@ -14,11 +14,15 @@ interface Props {
   description?: string;
   ogImage?: CmsImage | null;
   noindex?: boolean;
+  /** The title is already complete; do not append the organisation's short name. */
+  plainTitle?: boolean;
   settings: SiteSettings;
   /** Article publish date, when the page is a news/story item. */
   publishedAt?: string | null;
   /** Extra schema.org node for this page type. */
   jsonLd?: Record<string, unknown> | null;
+  /** Extra properties for the Organization node, e.g. opening hours on the contact page. */
+  orgJsonLd?: Record<string, unknown> | null;
 }
 
 const {
@@ -28,13 +32,16 @@ const {
   description,
   ogImage,
   noindex,
+  plainTitle = false,
   settings,
   publishedAt,
   jsonLd: extraJsonLd,
+  orgJsonLd,
 } = Astro.props;
 
 const orgName = text(settings.orgName, lang);
-const fullTitle = title === orgName ? title : `${title} · ${orgName}`;
+const brand = settings.orgShortName ?? 'SKO';
+const fullTitle = plainTitle ? title : `${title} · ${brand}`;
 const canonical = new URL(pathname, siteUrl).href;
 
 const shareImage = ogImage ?? settings.ogImage ?? null;
@@ -98,6 +105,11 @@ const jsonLd = {
     'Domestic violence prevention',
     'Psychosocial support',
     'Case management',
+    'Family preservation',
+    'Gender-based violence prevention',
+    "Women's empowerment",
+    'Family Development Program (FDP)',
+    'Migration and development',
   ],
   nonprofitStatus: 'NonprofitANBI',
   foundingDate: '2007-04-20',
@@ -117,6 +129,7 @@ const jsonLd = {
           .filter((url) => /^https?:\/\//.test(url)),
       }
     : {}),
+  ...orgJsonLd,
 };
 
 /** WebSite node, so search engines can attribute the site to the organisation. */
@@ -126,6 +139,7 @@ const webSiteJsonLd = {
   '@id': `${siteUrl}/#website`,
   url: siteUrl,
   name: orgName,
+  alternateName: ['SKO'],
   inLanguage: ['en', 'km'],
   publisher: { '@id': `${siteUrl}/#organization` },
 };

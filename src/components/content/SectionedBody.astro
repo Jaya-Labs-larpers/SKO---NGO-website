@@ -13,11 +13,14 @@ import { hasImage } from '~/lib/sanity/image';
 import {
   TERM_LIMITS,
   blockText,
+  blockAfterLeadIn,
+  hasLinkMarks,
   splitBody,
   splitLeadIn,
   splitPoint,
   type TermLimits,
 } from '~/lib/content/sections';
+import { renderSpans } from '~/lib/portable-text';
 import RichText from './RichText.astro';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
 
@@ -42,6 +45,12 @@ const { lead, sections } = splitBody(picked.value, limits);
 const asBlocks = (blocks: typeof lead): LocaleBlocks => ({
   [bodyLang]: blocks,
 });
+
+/** A row's running text, keeping any link the row carries. */
+const restHtml = (block: (typeof lead)[number], rest: string) => {
+  const after = hasLinkMarks(block) ? blockAfterLeadIn(block, rest) : null;
+  return after ? renderSpans(after) : null;
+};
 
 /** "UNOPS / Cities Alliance" is credited when either half is named. */
 function mentioned(text: string): Partner[] {
@@ -111,13 +120,18 @@ function mentioned(text: string): Partner[] {
             <ol class="about-terms reveal reveal-cascade list-none p-0">
               {section.blocks.map((block, index) => {
                 const split = splitLeadIn(blockText(block), limits)!;
+                const html = restHtml(block, split.rest);
                 return (
                   <li class="about-term" style={`--i:${index}`}>
                     <span class="about-term__index" aria-hidden="true">
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <span class="about-term__name">{split.term}</span>
-                    <span class="about-term__text">{split.rest}</span>
+                    {html ? (
+                      <span class="about-term__text" set:html={html} />
+                    ) : (
+                      <span class="about-term__text">{split.rest}</span>
+                    )}
                   </li>
                 );
               })}
@@ -131,13 +145,18 @@ function mentioned(text: string): Partner[] {
             >
               {section.blocks.map((block, index) => {
                 const split = splitPoint(blockText(block))!;
+                const html = restHtml(block, split.rest);
                 return (
                   <li class="about-term" style={`--i:${index}`}>
                     <span class="about-term__index" aria-hidden="true">
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <span class="about-term__name">{split.term}</span>
-                    <span class="about-term__text">{split.rest}</span>
+                    {html ? (
+                      <span class="about-term__text" set:html={html} />
+                    ) : (
+                      <span class="about-term__text">{split.rest}</span>
+                    )}
                   </li>
                 );
               })}

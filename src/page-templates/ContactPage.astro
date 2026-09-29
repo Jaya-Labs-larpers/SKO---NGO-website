@@ -6,6 +6,9 @@ import { pick, t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
 import ContactForm from '~/components/forms/ContactForm.astro';
+import InlineLinks from '~/components/content/InlineLinks.astro';
+import { stripInlineLinks } from '~/lib/inline-links';
+import { contactPageJsonLd, officeOpeningHours } from '~/lib/seo/page-schema';
 
 interface Props {
   lang: Locale;
@@ -21,9 +24,19 @@ const heading = t(lang, 'pageContact');
 const formId = 'form-contact';
 const tel = (phone: string) => `tel:${phone.replace(/[^+\d]/g, '')}`;
 const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
+const title = t(lang, 'seoContact') || heading;
+const description = t(lang, 'metaContact') || stripInlineLinks(t(lang, 'introContact'));
+const contactPage = contactPageJsonLd({ pathname: Astro.url.pathname, name: title, description });
 ---
 
-<BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introContact')}>
+<BaseLayout
+  headerOverlay
+  lang={lang}
+  title={title}
+  description={description}
+  jsonLd={contactPage}
+  orgJsonLd={{ openingHoursSpecification: officeOpeningHours }}
+>
   <PageHero
     lang={lang}
     title={heading}
@@ -125,6 +138,13 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
                 </p>
               )
             }
+            {
+              t(lang, 'contactSafeguardingPolicy') && (
+                <p class="safeguarding-panel__body inline-links">
+                  <InlineLinks text={t(lang, 'contactSafeguardingPolicy')} />
+                </p>
+              )
+            }
             <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               {
                 settings.phone && (
@@ -155,6 +175,13 @@ const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
           <ol class="contact-next__steps">
             {nextSteps.map((step) => <li>{t(lang, step)}</li>)}
           </ol>
+          {
+            t(lang, 'nextFaq') && (
+              <p class="contact-next__block inline-links">
+                <InlineLinks text={t(lang, 'nextFaq')} />
+              </p>
+            )
+          }
           {
             hours.value && (
               <div class="contact-next__block">

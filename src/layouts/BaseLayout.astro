@@ -17,9 +17,12 @@ interface Props {
   description?: string;
   ogImage?: CmsImage | null;
   noindex?: boolean;
+  plainTitle?: boolean;
   publishedAt?: string | null;
   /** Extra schema.org node for this page type, e.g. Article or BreadcrumbList. */
   jsonLd?: Record<string, unknown> | null;
+  /** Extra properties for the Organization node. */
+  orgJsonLd?: Record<string, unknown> | null;
   /**
    * Float the header over the page's own opening art instead of giving it a
    * white band. Only for pages whose first element is a full-bleed hero that
@@ -30,8 +33,19 @@ interface Props {
   intro?: boolean;
 }
 
-const { lang, title, description, ogImage, noindex, publishedAt, jsonLd, headerOverlay, intro } =
-  Astro.props;
+const {
+  lang,
+  title,
+  description,
+  ogImage,
+  noindex,
+  plainTitle,
+  publishedAt,
+  jsonLd,
+  orgJsonLd,
+  headerOverlay,
+  intro,
+} = Astro.props;
 
 const settings = await getSiteSettings();
 const pathname = Astro.url.pathname;
@@ -81,9 +95,11 @@ const pathname = Astro.url.pathname;
       description={description}
       ogImage={ogImage}
       noindex={noindex}
+      plainTitle={plainTitle}
       settings={settings}
       publishedAt={publishedAt}
       jsonLd={jsonLd}
+      orgJsonLd={orgJsonLd}
     />
 
     {

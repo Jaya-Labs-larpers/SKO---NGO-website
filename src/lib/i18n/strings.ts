@@ -54,7 +54,8 @@ const en = {
   tapToEnlarge: 'Tap to enlarge',
 
   // --- Section headings -----------------------------------------------------
-  faqHeading: 'Common questions',
+  faqHeading: 'Questions and answers',
+  faqMore: 'More common questions about SKO',
   latestActivities: 'Latest activities',
   whatWeDo: 'What we do',
   trustedBy: 'Trusted by',
@@ -68,13 +69,13 @@ const en = {
   allActivities: 'All activities',
 
   // --- Page titles (section indexes; page bodies come from the CMS) ---------
-  pageActivities: 'Activities & news',
-  pagePrograms: 'Our work',
+  pageActivities: 'Family strengthening in action: activities & news',
+  pagePrograms: 'Our family support programs',
   pageImpact: 'Impact & results',
   pageReports: 'Annual reports & financials',
   pageSafeguarding: 'Safeguarding & child protection',
-  pagePartners: 'Partners & supporters',
-  pageContact: 'Contact us',
+  pagePartners: 'Partners in our NGO work in Cambodia',
+  pageContact: 'Contact SKO, an NGO in Phnom Penh',
   pageAbout: 'About us',
   pagePrivacy: 'Privacy',
   pageFaq: 'Common questions',
@@ -130,20 +131,54 @@ const en = {
   notFoundBody: 'The page you were looking for has moved or never existed.',
   notFoundCta: 'Go to the homepage',
 
+  // --- Search-result titles and descriptions ----------------------------------
+  // The six code-driven pages and the home page keep their H1 in pageX/tagline;
+  // these are what search results and link previews show. Empty in Khmer: the
+  // page then falls back to its Khmer heading and intro.
+  seoHome: 'Support for Vulnerable Families in Phnom Penh',
+  metaHome:
+    'Samatapheap Khnom Organization (SKO): a Cambodian NGO supporting vulnerable families in Phnom Penh since 2007 through social work and child protection.',
+  homeAboutLink: 'Our approach to family preservation',
+  viewAllPrograms: 'All our family support programs',
+  allPartners: 'All partners and funders',
+  seoPrograms: 'Family Support Programs in Phnom Penh: Our Work',
+  metaPrograms:
+    "SKO's four family support programs in Phnom Penh: family counselling and GBV prevention, child protection, education and health, and migration. Since 2007.",
+  programsSectionTitle: 'Four programs, one Family Development Program',
+  seoActivities: 'Family Strengthening Programs: Activities & News',
+  metaActivities:
+    "News from SKO's family strengthening programs in Phnom Penh: community counselling, training with local authorities, and stories from families, month by month.",
+  activitiesFromProgram: 'Activities from this programme',
+  seoPartners: 'NGO Work in Cambodia: Our Partners and Funders',
+  metaPartners:
+    "SKO's NGO work in Cambodia is delivered with Planète Enfants & Développement, Family Fund for Children, UNOPS (Cities Alliance) and Swiss funding from SDC.",
+  seoContact: 'Contact Our NGO in Phnom Penh: Visit, Call or Email',
+  metaContact:
+    'Contact SKO, an NGO in Phnom Penh: Street 138, Sangkat Veal Vong, Khan 7 Makara. Call +855 12 781 203 or email info@samatapheapkhnom.org, Mon–Fri 8:00–17:00.',
+  nextFaq:
+    'Not sure who to ask? Start with our [common questions about SKO, an NGO in Cambodia](/faq/).',
+  seoReports: 'Annual Reports and Audited Financial Statements',
+  metaReports:
+    "SKO's annual reports, audited financial statements and Safeguarding & Child Protection Policy, published in full by a Cambodian NGO registered since 2007.",
+
   // --- Placeholder marketing copy -------------------------------------------
   // These sit here rather than in a component so nothing English can leak onto
   // a Khmer page. In Phase 4 they move into Sanity `page` documents so staff
   // can edit them; the keys stay as the fallback.
   homeEyebrow: 'Phnom Penh, Cambodia · Since 2007',
   homeHeroIntro:
-    'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities. SKO is recognized as Cambodia’s leading expert in family care and social work.',
+    "Samatapheap Khnom Organization (SKO) is a Cambodian local NGO supporting vulnerable families, children and communities in Phnom Penh's urban poor and migrant communities since 2007. SKO is recognized as Cambodia's leading expert in family care and social work.",
   introPrograms:
-    'Four projects, one approach: a child growing up safe, in a family, in their own community.',
-  introActivities: 'What our teams are doing, month by month.',
+    "SKO runs four family support programs in Phnom Penh's urban poor communities, all delivered through one approach, the Family Development Program: social work services so that a child grows up safe, in a family, in their own community.",
+  introActivities:
+    "News from SKO's family strengthening programs in Phnom Penh: community counselling, [family counselling](/programs/housing-and-living-conditions-hali/) at home, training with local authorities, and stories from the families we work with, month by month.",
   introImpact: 'What we have done, how we count it, and what the families we work with say.',
-  introReports: 'Our annual reports, audited financial statements and governance documents.',
-  introPartners: 'The institutions and organisations we work alongside.',
-  introContact: 'Questions, partnerships, volunteering. We read every message.',
+  introReports:
+    'SKO publishes its annual reports, audited financial statements and its Safeguarding & Child Protection Policy in full. Registered with the Ministry of Interior since 2007, we account for our social work as an [NGO in Cambodia](/faq/) to the families we serve, our partners and our donors.',
+  introPartners:
+    "SKO's NGO work in Cambodia is delivered with international NGOs, foundations, UN agencies and government partners: Planète Enfants & Développement, Family Fund for Children Organization, UNOPS (Cities Alliance) and the Swiss Agency for Development and Cooperation. As a [social work NGO](/about/) we hold quarterly meetings with partners to work through shared challenges.",
+  introContact:
+    'SKO is a local NGO in Phnom Penh, Cambodia: visit us at Office #8AE1, Street 138, Sangkat Veal Vong, Khan 7 Makara, call +855 12 781 203, or send a message about [our family support programs](/programs/), [partnerships](/partners/) or volunteering. We read every message.',
   ctaHomeTitle: 'Want to learn more about SKO?',
   ctaHomeBody:
     'Get in touch with questions about our work or partnerships. Our annual and audit reports are published in full.',
@@ -153,7 +188,7 @@ const en = {
   ctaProgramsTitle: 'Ask about a program.',
   ctaProgramTitle: 'Ask about this program.',
   ctaImpactTitle: 'Ask how we reach more families.',
-  ctaPartnersTitle: 'Work with us.',
+  ctaPartnersTitle: 'Fund or partner with our community development work.',
   viewOnGoogleMaps: 'Open in Google Maps',
   contactCall: 'Call',
   contactCallAction: 'Tap to call',
@@ -171,6 +206,7 @@ const en = {
   topicMediaHint: 'Journalists, students and researchers',
   topicSafeguarding: 'Safeguarding concern',
   topicSafeguardingHint: 'Report a concern about a child',
+  contactSafeguardingPolicy: 'Read our [child safeguarding](/safeguarding/) policy.',
   safeguardingPanelTitle: 'Report a safeguarding concern',
   nextTitle: 'What happens next',
   nextStep1: 'Your message goes to the right person at SKO.',
@@ -261,6 +297,7 @@ const km: Record<UIKey, string> = {
   tapToEnlarge: 'ចុចដើម្បីពង្រីក',
 
   faqHeading: 'សំណួរដែលសួរញឹកញាប់',
+  faqMore: '',
   latestActivities: 'សកម្មភាពថ្មីៗ',
   whatWeDo: 'អ្វីដែលយើងធ្វើ',
   trustedBy: 'ដៃគូរបស់យើង',
@@ -332,6 +369,25 @@ const km: Record<UIKey, string> = {
   notFoundBody: 'ទំព័រដែលអ្នកកំពុងស្វែងរក ត្រូវបានផ្លាស់ប្តូរ ឬមិនធ្លាប់មាន។',
   notFoundCta: 'ត្រឡប់ទៅទំព័រដើម',
 
+  seoHome: '',
+  metaHome: '',
+  homeAboutLink: '',
+  viewAllPrograms: '',
+  allPartners: '',
+  seoPrograms: '',
+  metaPrograms: '',
+  programsSectionTitle: '',
+  seoActivities: '',
+  metaActivities: '',
+  activitiesFromProgram: '',
+  seoPartners: '',
+  metaPartners: '',
+  seoContact: '',
+  metaContact: '',
+  nextFaq: '',
+  seoReports: '',
+  metaReports: '',
+
   homeEyebrow: 'ភ្នំពេញ កម្ពុជា · តាំងពីឆ្នាំ ២០០៧',
   homeHeroIntro:
     'អង្គការសមត្ថភាពខ្ញុំ (SKO) ជាអង្គការក្រៅរដ្ឋាភិបាលក្នុងស្រុករបស់កម្ពុជា ដែលធ្វើការគាំទ្រកុមារ គ្រួសារ និងសហគមន៍ងាយរងគ្រោះ ជាពិសេសនៅសហគមន៍ក្រីក្រទីក្រុង និងសហគមន៍ចំណាកស្រុក។ SKO ត្រូវបានទទួលស្គាល់ថាជាអ្នកជំនាញឈានមុខគេនៅកម្ពុជា ក្នុងវិស័យថែទាំគ្រួសារ និងសង្គមកិច្ច។',
@@ -370,6 +426,7 @@ const km: Record<UIKey, string> = {
   topicMediaHint: 'អ្នកសារព័ត៌មាន និស្សិត និងអ្នកស្រាវជ្រាវ',
   topicSafeguarding: 'កង្វល់អំពីសុវត្ថិភាពកុមារ',
   topicSafeguardingHint: 'រាយការណ៍កង្វល់អំពីកុមារ',
+  contactSafeguardingPolicy: '',
   safeguardingPanelTitle: 'រាយការណ៍កង្វល់អំពីសុវត្ថិភាពកុមារ',
   nextTitle: 'អ្វីដែលនឹងកើតឡើងបន្ទាប់',
   nextStep1: 'សាររបស់អ្នកនឹងទៅដល់បុគ្គលិកត្រឹមត្រូវនៅ SKO។',

@@ -1,5 +1,6 @@
 import type { Locale } from './i18n/config';
-import { text } from './i18n/utils';
+import { pick } from './i18n/utils';
+import { stripInlineLinks } from './inline-links';
 import type { CmsImage, Seo } from './content/types';
 
 export interface ResolvedSeo {
@@ -26,15 +27,25 @@ export function resolveSeo(
     image?: CmsImage | null;
   },
 ): ResolvedSeo {
-  const title = text(seo?.title, lang) || fallback.title;
-  const description = text(seo?.description, lang) || fallback.description || '';
+  const title = ownLanguage(seo?.title, lang) || fallback.title;
+  const description = ownLanguage(seo?.description, lang) || fallback.description || '';
 
   return {
     title,
-    description: description ? truncate(description, 300) : undefined,
+    description: description ? truncate(stripInlineLinks(description), 300) : undefined,
     ogImage: seo?.image ?? fallback.image ?? null,
     noindex: seo?.noindex === true,
   };
+}
+
+/**
+ * The override in the page's own language only. Elsewhere the fallback is the
+ * page's own localised heading and intro, so an English override never lands
+ * on a Khmer page's title or description.
+ */
+function ownLanguage(field: Seo['title'], lang: Locale): string {
+  const picked = pick(field, lang);
+  return picked.isFallback ? '' : (picked.value ?? '');
 }
 
 function truncate(value: string, limit: number): string {

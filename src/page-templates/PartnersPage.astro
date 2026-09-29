@@ -7,6 +7,8 @@ import PageHero from '~/components/content/PageHero.astro';
 import PartnerWall from '~/components/content/PartnerWall.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
+import { stripInlineLinks } from '~/lib/inline-links';
+import { partnersJsonLd } from '~/lib/seo/page-schema';
 
 interface Props {
   lang: Locale;
@@ -25,9 +27,12 @@ const categoryLabels: Record<string, Record<Locale, string>> = {
 };
 
 const groups = [...new Set(partners.map((partner) => partner.category ?? 'other'))];
+const title = t(lang, 'seoPartners') || heading;
+const description = t(lang, 'metaPartners') || stripInlineLinks(t(lang, 'introPartners'));
+const partnerList = partnersJsonLd({ name: title, partners });
 ---
 
-<BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introPartners')}>
+<BaseLayout headerOverlay lang={lang} title={title} description={description} jsonLd={partnerList}>
   <PageHero
     lang={lang}
     title={heading}

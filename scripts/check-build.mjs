@@ -120,6 +120,22 @@ for await (const file of htmlFiles(DIST)) {
   check(imgsWithoutAlt === 0, page, `${imgsWithoutAlt} <img> without alt`);
 }
 
+// Crawler files: llms.txt lists the site for answer engines, and every sitemap
+// entry carries a lastmod so re-crawls can tell a changed page from an old one.
+const llms = await readFile(join(DIST, 'llms.txt'), 'utf8').catch(() => '');
+check(llms.startsWith('# '), '/llms.txt', 'missing or does not start with an H1 line');
+check(/^## Programmes$/m.test(llms) && /^## Pages$/m.test(llms), '/llms.txt', 'missing a section');
+check(!/\]\(\//.test(llms), '/llms.txt', 'contains a relative link');
+const sitemap = await readFile(join(DIST, 'sitemap-0.xml'), 'utf8').catch(() => '');
+const sitemapUrls = (sitemap.match(/<url>/g) ?? []).length;
+const sitemapLastmods = (sitemap.match(/<lastmod>/g) ?? []).length;
+check(sitemapUrls > 0, '/sitemap-0.xml', 'missing or empty');
+check(
+  sitemapUrls === sitemapLastmods,
+  '/sitemap-0.xml',
+  `${sitemapUrls} <url> entries but ${sitemapLastmods} <lastmod> elements`,
+);
+
 // Secrets — every shipped text file, not only HTML. `_astro/*.js` is where a
 // leaked `import.meta.env` value would actually land.
 const secretEnv = secretEnvEntries(env);

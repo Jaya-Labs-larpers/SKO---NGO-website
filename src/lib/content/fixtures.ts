@@ -25,6 +25,7 @@
  * now and falls back with lang="en"; it needs a Khmer-speaking staff writer.
  */
 
+import { inlineLinkSpans } from '../inline-links';
 import { localCmsImage } from '../sanity/image';
 import type {
   Activity,
@@ -43,7 +44,10 @@ import type {
   TeamMember,
 } from './types';
 
-/** Compact Portable Text builder. A paragraph beginning "## " becomes an h2, "- " a bullet. */
+/**
+ * Compact Portable Text builder. A paragraph beginning "## " becomes an h2, "- " a bullet,
+ * and `[anchor](/path)` becomes a link.
+ */
 function blocks(en: string[], km: string[]): LocaleBlocks {
   const build = (paragraphs: string[]): PortableBlock[] =>
     paragraphs.map((raw, index) => {
@@ -54,12 +58,7 @@ function blocks(en: string[], km: string[]): LocaleBlocks {
         _key: `b${index}`,
         style: isHeading ? ('h2' as const) : ('normal' as const),
         ...(isBullet ? { listItem: 'bullet' as const, level: 1 } : {}),
-        children: [
-          {
-            _type: 'span' as const,
-            text: isHeading ? raw.slice(3) : isBullet ? raw.slice(2) : raw,
-          },
-        ],
+        ...inlineLinkSpans(isHeading ? raw.slice(3) : isBullet ? raw.slice(2) : raw),
       };
     });
   return { en: build(en), km: build(km) };
@@ -264,8 +263,14 @@ export const impactStats: ImpactStat[] = [
 export const programs: Program[] = [
   {
     _id: 'program-hali',
-    image: localCmsImage('hali-cover'),
-    cardImage: localCmsImage('hali-card'),
+    image: localCmsImage('hali-cover', {
+      en: 'SKO social worker leading a community counselling session with families under a shelter in Phnom Penh',
+      km: 'បុគ្គលិកសង្គមកិច្ច SKO កំពុងដឹកនាំវគ្គប្រឹក្សាសហគមន៍ជាមួយគ្រួសារ នៅក្រោមជម្រកមួយក្នុងរាជធានីភ្នំពេញ',
+    }),
+    cardImage: localCmsImage('hali-card', {
+      en: 'Women in a community gender discussion group with an SKO social worker',
+      km: 'ស្ត្រីក្នុងក្រុមពិភាក្សាយេនឌ័រសហគមន៍ ជាមួយបុគ្គលិកសង្គមកិច្ច SKO',
+    }),
     slug: 'housing-and-living-conditions-hali',
     order: 1,
     title: {
@@ -273,8 +278,14 @@ export const programs: Program[] = [
       km: 'ការកែលម្អលំនៅឋាន និងលក្ខខណ្ឌរស់នៅ (HALI)',
     },
     summary: {
-      en: 'To enhance the quality of life of families, especially children, youth and women, living in urban poor areas. Using the Family Development Program (FDP) methodology, SKO provides psychological counselling, resilience-building, information, and referrals to essential services (health, education, economic, administrative). The project also aims to reduce domestic violence and promote safe, healthy living.',
+      en: "HALI is SKO's programme to reduce gender-based violence and improve living conditions for families in Phnom Penh's urban poor areas. Using the Family Development Program (FDP) methodology, social workers provide family counselling, resilience-building, information and referrals to health, education, economic and administrative services, with a focus on women, children and youth.",
       km: 'ដើម្បីលើកម្ពស់គុណភាពជីវិតរបស់គ្រួសារ ជាពិសេសកុមារ យុវជន និងស្ត្រី ដែលរស់នៅក្នុងតំបន់ក្រីក្រទីក្រុង។ ដោយប្រើវិធីសាស្ត្រកម្មវិធីអភិវឌ្ឍន៍គ្រួសារ (FDP) SKO ផ្តល់ការប្រឹក្សាផ្លូវចិត្ត ការកសាងភាពធន់ ព័ត៌មាន និងការបញ្ជូនទៅសេវាសំខាន់ៗ។ គម្រោងក៏មានគោលបំណងកាត់បន្ថយអំពើហិង្សាក្នុងគ្រួសារ និងលើកកម្ពស់ការរស់នៅប្រកបដោយសុវត្ថិភាព។',
+    },
+    seo: {
+      title: { en: 'Gender-Based Violence Prevention in Phnom Penh: HALI' },
+      description: {
+        en: "HALI reduces gender-based violence in Phnom Penh's urban poor areas through family counselling, GBV training and referrals. 94% now know where to seek help.",
+      },
     },
     body: enOnly([
       '## What we do',
@@ -285,9 +296,9 @@ export const programs: Program[] = [
       'Gender-Based Violence Training. Awareness and response training for local authorities and community leaders to strengthen referral systems and support victims.',
       '## Partner',
       'Planète Enfants & Développement (PE&D).',
-      '## Impact and results',
+      '## Impact and results: GBV prevention and family counselling',
       'Family counselling was provided to 200 households. SKO’s family counselling has proven instrumental in resolving intra-household conflicts and fostering healthier relationships, with a notable percentage of beneficiaries reporting a reduction in domestic violence and improved emotional well-being. 97% of beneficiaries surveyed who received assistance from social workers reported feeling more capable than before of dealing with problems, or knowing better where to get help. Of beneficiaries using referral services facilitated by a social worker, 95% report they will continue to use referral services in future and are satisfied with them.',
-      'Gender awareness and empowerment through gender discussion groups reached 80% of all HALI beneficiaries, through SKO training (40 individuals) and CAFÉ training with PE&D (122 individuals). A large majority of beneficiaries consider gender-based violence a serious issue. 89% of beneficiaries report more equitable decision-making within households, and 75% of female respondents report that they make decisions on financial matters in the household. 94% of beneficiaries surveyed know where to seek assistance if they or someone they know experiences gender-based violence.',
+      "Gender awareness and empowerment through gender discussion groups reached 80% of all HALI beneficiaries, through SKO training (40 individuals) and CAFÉ training with PE&D (122 individuals). A large majority of beneficiaries consider gender-based violence a serious issue. 89% of beneficiaries report more equitable decision-making within households, and 75% of female respondents report that they make decisions on financial matters in the household — see our [women's empowerment results](/impact/). 94% of beneficiaries surveyed know where to seek assistance if they or someone they know experiences gender-based violence.",
       'Daily engagement by social workers in the community and within households over an extended period, giving households tools for problem-solving, intra-household communication and links to existing services, has proven crucial to these results within a relatively short period (1.5 years per target area), while also drawing the community into other project activities.',
       'Group discussions for men and women, including role-playing, have proven effective at engaging participants and helping them understand gender roles and coping mechanisms against stereotypes and domestic violence.',
     ]),
@@ -348,24 +359,36 @@ export const programs: Program[] = [
   },
   {
     _id: 'program-tfcf1',
-    image: localCmsImage('tfcf1-cover'),
-    cardImage: localCmsImage('tfcf1-card'),
+    image: localCmsImage('tfcf1-cover', {
+      en: 'Children seated in a circle on a mat at a community session in an urban poor neighbourhood of Phnom Penh',
+      km: 'កុមារអង្គុយជារង្វង់លើកន្ទេលនៅក្នុងវគ្គសហគមន៍មួយ ក្នុងសង្កាត់ក្រីក្រទីក្រុងនៃរាជធានីភ្នំពេញ',
+    }),
+    cardImage: localCmsImage('tfcf1-card', {
+      en: "Children holding up their drawings at a Children's Club session with SKO staff",
+      km: 'កុមារកំពុងលើកគំនូររបស់ខ្លួននៅវគ្គក្លឹបកុមារ ជាមួយបុគ្គលិក SKO',
+    }),
     slug: 'childrens-active-citizenship',
     order: 2,
     title: { en: "Children's Active Citizenship", km: 'សកម្មភាពពលរដ្ឋកុមារ' },
     summary: {
-      en: 'To promote understanding of basic education and primary health care among community members, caregivers, and authorities for vulnerable children.',
+      en: "Children's Active Citizenship is SKO's programme for the education, health and child protection of vulnerable children in three sangkats of Phnom Penh. Children learn their rights, child protection and online safety; schools, parents, Family Development Volunteers and local authorities work together to keep them in school and safe.",
       km: 'ដើម្បីលើកកម្ពស់ការយល់ដឹងអំពីការអប់រំមូលដ្ឋាន និងសុខភាពថែទាំបឋមក្នុងចំណោមសមាជិកសហគមន៍ អ្នកថែទាំ និងអាជ្ញាធរ សម្រាប់កុមារងាយរងគ្រោះ។',
     },
+    seo: {
+      title: { en: "Child Protection: Children's Active Citizenship" },
+      description: {
+        en: "Child protection for vulnerable children in Phnom Penh: Children's Active Citizenship teaches child rights and online safety and keeps children in school.",
+      },
+    },
     body: enOnly([
-      '## Impact and results',
+      '## Impact and results: child protection and education',
       'The project made meaningful progress in strengthening vulnerable families and improving the well-being, education, health, and protection of children across the three target Sangkats. Through close collaboration with local authorities, schools, health centers, Family Development Volunteers (FDVs), parents, and community stakeholders, the project reached children, families, and community members with practical and integrated support.',
-      'Under education and child protection, children demonstrated increased awareness of their rights, child protection, online safety, and the risks of drug use. Mobile library activities strengthened children’s reading, listening, communication, and learning engagement, while also improving their knowledge of road safety. The distribution of school materials to 410 children reduced financial pressure on vulnerable families and helped children remain motivated and better equipped for school. School Support Committee meetings also strengthened cooperation among schools, parents, volunteers, and local authorities, enabling stakeholders to identify children at risk of dropping out and develop practical solutions to support their continued education.',
+      "Under education and child protection, children demonstrated increased awareness of their rights, child protection, online safety, and the risks of drug use. Mobile library activities strengthened children’s reading, listening, communication, and learning engagement, while also improving their knowledge of road safety. The distribution of school materials to 410 children reduced financial pressure on vulnerable families and helped children remain motivated and better equipped for school. School Support Committee meetings also strengthened cooperation among schools, parents, volunteers, and local authorities, enabling stakeholders to identify children at risk of dropping out and develop practical solutions to support their continued education. SKO's own [child safeguarding](/safeguarding/) policy applies to every activity.",
       'Under health, hygiene, and family well-being, the project improved access to basic healthcare for vulnerable families through 52 medical check-up sessions reaching 656 people within 2,624 indirect reaches, including children and elderly community members. Additional ear health services reached 159 people, particularly children, while health education promoted better sanitation, disease prevention, and awareness of available social protection and healthcare services. Environment Day activities engaged 289 direct reaches 1,156 indirect reaches and in practical hygiene and environmental actions, strengthening community responsibility for cleaner and healthier living environments.',
       'The project also provided important food and emergency assistance to vulnerable families. A total of 33,910 kg of rice was distributed to 313 families supporting 410 children, while an additional 1,900 kg of emergency rice supported 189 families. These interventions helped reduce immediate household financial pressure and food insecurity, allowing parents to better focus on supporting their children’s education and well-being. Community contributions in Sangkat Chbar Ampov further demonstrated local solidarity and strengthened community ownership.',
       'Under positive parenting and family development, community meetings strengthened parents’ knowledge and practices related to children’s education, health, stress management, legal documentation, communication, and positive parenting.',
       'Overall, the project contributed to a more supportive and protective environment for vulnerable children and families, strengthening local ownership alongside schools, volunteers, parents and authorities.',
-      'This project shares its partner and highlight activities with its sister project, Promoting Children’s Education and Health through FDP. See that programme page for the full activity list.',
+      'This project shares its partner and highlight activities with its sister project, [Promoting Children’s Education and Health through FDP](/programs/childrens-education-and-health/). See that programme page for the full activity list.',
     ]),
     impactStats: [
       {
@@ -443,8 +466,14 @@ export const programs: Program[] = [
   },
   {
     _id: 'program-tfcf2',
-    image: localCmsImage('tfcf2-cover'),
-    cardImage: localCmsImage('tfcf2-card'),
+    image: localCmsImage('tfcf2-cover', {
+      en: 'Children queue at a registration table during an SKO community session in Phnom Penh',
+      km: 'កុមារតម្រង់ជួរនៅតុចុះឈ្មោះ ក្នុងវគ្គសហគមន៍របស់ SKO នៅរាជធានីភ្នំពេញ',
+    }),
+    cardImage: localCmsImage('tfcf2-card', {
+      en: 'Parents and children at a community meeting with illustrated posters, Phnom Penh',
+      km: 'ឪពុកម្តាយ និងកុមារនៅក្នុងកិច្ចប្រជុំសហគមន៍ដែលមានផ្ទាំងរូបភាពបង្ហាញ នៅរាជធានីភ្នំពេញ',
+    }),
     slug: 'childrens-education-and-health',
     order: 3,
     title: {
@@ -452,12 +481,18 @@ export const programs: Program[] = [
       km: 'ការលើកកម្ពស់ការអប់រំ និងសុខភាពកុមារតាមរយៈ FDP',
     },
     summary: {
-      en: 'To foster awareness among parents, caregivers, and local authorities about the importance of basic education and primary health care for vulnerable children.',
+      en: "Promoting Children's Education and Health through FDP is SKO's family development programme in Khan Dangkor, Phnom Penh. Through the Family Development Program (FDP), social workers, Family Development Volunteers, schools and health centres support 390 vulnerable children and their families with education, health, protection and family strengthening.",
       km: 'ដើម្បីជំរុញការយល់ដឹងក្នុងចំណោមឪពុកម្តាយ អ្នកថែទាំ និងអាជ្ញាធរមូលដ្ឋាន អំពីសារៈសំខាន់នៃការអប់រំមូលដ្ឋាន និងសុខភាពថែទាំបឋមសម្រាប់កុមារងាយរងគ្រោះ។',
+    },
+    seo: {
+      title: { en: "Family Development: Children's Education and Health" },
+      description: {
+        en: 'Family development through FDP in Khan Dangkor, Phnom Penh: SKO supports 390 vulnerable children and their families with education, health and case management.',
+      },
     },
     body: enOnly([
       '## What we do',
-      'Child Protection Training. Building children’s capacity to understand and respond to different forms of violence (emotional, sexual, physical, neglect, exploitation).',
+      "Child Protection Training. Building children’s capacity to understand and respond to different forms of violence (emotional, sexual, physical, neglect, exploitation). Delivered together with our sister project [Children's Active Citizenship](/programs/childrens-active-citizenship/).",
       'Leadership and Management Training for youth and young people. Promotes knowledge, capacity and skill, and a positive, results-oriented attitude, so young people can lead and manage their daily work and living conditions, starting young and carrying into their careers.',
       'Mobile Library. Improving reading skills, promoting education, and teaching safety practices such as traffic awareness.',
       'Distribution of School Materials & Emergency Support. Providing essential supplies to vulnerable children, encouraging school attendance, and mobilizing resources from charities and NGOs.',
@@ -467,7 +502,7 @@ export const programs: Program[] = [
       'Community Meetings. Promoting positive parenting, child protection and child rights while encouraging parents to share practices and find solutions to education and health challenges, strengthening parents’ and caregivers’ capacity to manage stress and anger, and building more positive, peaceful, resilient thinking for the family, children and community.',
       '## Partner',
       'Family Fund for Children Organization.',
-      '## Impact and results',
+      '## Impact and results: family strengthening in Khan Dangkor',
       'The Community Development Project, implemented through SKO’s Family Development Approach, contributed to improving the education, health, protection, and overall well-being of 390 vulnerable children (204 girls and 186 boys) and their families in Sangkat Prey Veng, Prey Sar, and Dangkor of Khan Dangkor. The project combined direct support to children with family strengthening, community engagement, health services, and collaboration with local authorities, schools, health centers, and Family Development Volunteers (FDVs).',
       'Under Objective 1, the project strengthened children’s access to education, learning opportunities, and protection. Four Children’s Clubs provided safe and structured spaces for children to learn, interact, develop life skills, and participate in positive activities. Children’s Club meetings 237 direct reached children and 474 indirect reaches children, increasing their awareness of child rights, protection, online safety, and drug prevention. 40 mobile library sessions reached 182 children, promoting reading, creativity, peer learning, nutrition, hygiene, and road safety. School materials were provided to all 390 target children from 322 families, reducing financial pressure on vulnerable households and helping children remain prepared and engaged in school. Six School Support Committee meetings further strengthened collaboration among schools, parents, FDVs, and local authorities to address challenges such as absenteeism and e-cigarette use and to improve monitoring of children’s education.',
       'In addition, 24,700 kg of rice was distributed to 247 vulnerable families supporting 304 children, while emergency rice assistance supported another 150 families.',
@@ -527,8 +562,14 @@ export const programs: Program[] = [
   },
   {
     _id: 'program-rcmd',
-    image: localCmsImage('rcmd-cover'),
-    cardImage: localCmsImage('rcmd-card'),
+    image: localCmsImage('rcmd-cover', {
+      en: 'An SKO staff member speaks with a microphone at a public forum on legal documents with residents of a Phnom Penh community',
+      km: 'បុគ្គលិក SKO ម្នាក់និយាយតាមមីក្រូនៅក្នុងវេទិកាសាធារណៈស្តីពីឯកសារស្របច្បាប់ ជាមួយអ្នករស់នៅសហគមន៍មួយក្នុងរាជធានីភ្នំពេញ',
+    }),
+    cardImage: localCmsImage('rcmd-card', {
+      en: "A woman holds the official documents obtained with SKO's support",
+      km: 'ស្ត្រីម្នាក់កាន់ឯកសារផ្លូវការដែលទទួលបានដោយមានការគាំទ្រពី SKO',
+    }),
     slug: 'resilient-city-and-migration',
     order: 4,
     title: {
@@ -536,17 +577,23 @@ export const programs: Program[] = [
       km: 'ភាពធន់ទីក្រុង និងសក្ដានុពលចំណាកស្រុក (RCMD)',
     },
     summary: {
-      en: 'To improve the well-being of migrants and vulnerable families through financial literacy, vocational training, legal and public services, education, health, environmental awareness, gender equality, and capacity-building for local authorities. The project also addresses gender-based violence and promotes community engagement.',
+      en: "Resilient City and Migration Dynamics (RCMD) is SKO's migration and development project for migrants and vulnerable families in Phnom Penh: financial literacy, vocational training, legal documents and public services, education, health, gender equality and capacity-building for local authorities, with UNOPS (Cities Alliance) and funding from the Swiss Agency for Development and Cooperation.",
       km: 'ដើម្បីលើកកម្ពស់សុខុមាលភាពរបស់ជនចំណាកស្រុក និងគ្រួសារងាយរងគ្រោះ តាមរយៈចំណេះដឹងហិរញ្ញវត្ថុ ការបណ្តុះបណ្តាលវិជ្ជាជីវៈ សេវាផ្លូវច្បាប់ និងសាធារណៈ ការអប់រំ សុខភាព ការយល់ដឹងបរិស្ថាន សមភាពយេនឌ័រ និងការកសាងសមត្ថភាពអាជ្ញាធរមូលដ្ឋាន។ គម្រោងក៏ដោះស្រាយអំពើហិង្សាយេនឌ័រ និងលើកកម្ពស់ការចូលរួមសហគមន៍។',
+    },
+    seo: {
+      title: { en: 'Migration and Development in Phnom Penh: RCMD Project' },
+      description: {
+        en: 'Migration and development in Phnom Penh: RCMD helps migrants and vulnerable families with financial literacy, legal documents and gender equality, with UNOPS.',
+      },
     },
     body: enOnly([
       '## What we do',
       'Promote Safe Migration and Public Services. Builds understanding of safe migration among vulnerable families, youth and children in host communities, so they can live safely while receiving appropriate public services from relevant stakeholders and government.',
       'Public Forum. Builds knowledge of family residency, birth certificates, and Khmer national ID cards, the official documents that support the daily lives of the most vulnerable families, youth, children and migrants, through engagement with sub-national and local authorities.',
-      'Counselling & Referral Services. Identifies the root causes of problems facing host and migrant communities, meets basic needs, strengthens capacity, and works towards sustainable solutions through scheduled counselling from social workers and weekly family visits.',
-      'Gender-Based Violence (GBV) Training. Trains host community and migrant residents on gender concepts and the root causes and impact of GBV, building towards positive change for families and the wider community.',
+      'Counselling & Referral Services. Identifies the root causes of problems facing host and migrant communities, meets basic needs, strengthens capacity, and works towards sustainable solutions through [scheduled counselling from social workers and weekly family visits](/programs/childrens-education-and-health/).',
+      "Gender-Based Violence (GBV) Training. Trains host community and migrant residents on gender concepts and the root causes and impact of GBV, building towards positive change for families and the wider community. SKO's GBV work began in [HALI](/programs/housing-and-living-conditions-hali/).",
       'Men and Women Group Discussion. Promotes understanding and positive practice between men and women, so their daily lives are safer and more supportive, and build a brighter future for children and young people.',
-      'Economic Empowerment. Builds migrant and host community members’ capacity to manage household income and expenses through microfinance, without added stress.',
+      'Economic Empowerment. Builds migrant and host community members’ capacity to manage household income and expenses through microfinance, without added stress. Results across programmes: [community economic development](/impact/).',
       '## Partner',
       'UNOPS (Cities Alliance), funded by the Swiss Agency for Development and Cooperation.',
       '## Impact and results',
@@ -697,7 +744,7 @@ export const reports: Report[] = [
       km: 'គោលការណ៍ការពារកុមារ',
     },
     summary: {
-      en: 'Opens SKO’s reports folder (Google Drive) until the PDF is uploaded here.',
+      en: 'Opens SKO’s reports folder (Google Drive) until the PDF is uploaded here. Read how it is applied on our [child safeguarding](/safeguarding/) page.',
       km: 'បើកថតឯកសាររបស់ SKO (Google Drive) រហូតដល់ឯកសារ PDF ត្រូវបានផ្ទុកឡើងទីនេះ។',
     },
     file: {
@@ -898,10 +945,16 @@ export const pages: Page[] = [
   {
     _id: 'page-about',
     slug: 'about',
-    title: { en: 'About us', km: 'អំពីយើង' },
+    title: { en: 'About SKO: family preservation in Phnom Penh', km: 'អំពីយើង' },
     intro: {
-      en: 'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities.',
+      en: "Samatapheap Khnom Organization (SKO) is a Cambodian local NGO whose work is family preservation: social work that keeps vulnerable families in Phnom Penh's urban poor and migrant communities together, so children grow up at home rather than in institutions.",
       km: 'អង្គការសមត្ថភាពខ្ញុំ (SKO) ជាអង្គការក្រៅរដ្ឋាភិបាលក្នុងស្រុករបស់កម្ពុជា ដែលធ្វើការគាំទ្រកុមារ គ្រួសារ និងសហគមន៍ងាយរងគ្រោះ ជាពិសេសនៅសហគមន៍ក្រីក្រទីក្រុង និងសហគមន៍ចំណាកស្រុក។',
+    },
+    seo: {
+      title: { en: 'Family Preservation NGO in Phnom Penh: About Us' },
+      description: {
+        en: 'Samatapheap Khnom Organization (SKO) is a family preservation and social work NGO in Phnom Penh, registered since 2007, keeping vulnerable families together.',
+      },
     },
     body: enOnly([
       'Samatapheap Khnom Organization (SKO) is a local, neutral, non-sectarian, non-political, non-racial and non-profit organization, registered with the Ministry of Interior under permit number 457 (សជណ) on 20 April 2007. SKO is recognised as Cambodia’s leading expert in family care and social work.',
@@ -916,7 +969,7 @@ export const pages: Page[] = [
       'Integrity. We are honest and transparent in all our actions and decisions.',
       'Respect. We value the dignity, choices, potential and contribution of staff, families, partners and donors.',
       'Responsibility. We accept personal and collective responsibility for our learning and our performance, to increase our impact.',
-      '## Key Approaches of FDP',
+      '## How we work: the Family Development Program (FDP)',
       '- Family-centred approach: Focuses on the overall well-being of vulnerable families, children and youth.',
       '- Strengths-based approach: Identifies family strengths, capacities, resources and resilience, alongside their needs and challenges.',
       '- Family assessment and case management: Conducts family assessments, identifies root causes and priorities, develops appropriate support and follows up on progress.',
@@ -926,11 +979,12 @@ export const pages: Page[] = [
       '- Family empowerment and participation: Encourages families to participate in identifying solutions and building their own capacity and resilience.',
       '- Partnership and community approach: Works closely with local authorities, communities, NGOs and other stakeholders to strengthen support for families.',
       '## Networking and partnership',
-      'SKO recognizes that lasting change for children, families, and communities cannot be achieved by one organization alone. Networking and partnership are therefore an important part of SKO’s approach, enabling us to work together with government institutions, local authorities, NGOs, community groups, schools, service providers, development partners, and other stakeholders.',
-      'Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions. By connecting people, services, and resources, SKO aims to strengthen family and community resilience and contribute to safer, more protective, and supportive environments for children and families.',
+      'SKO recognizes that lasting change for children, families, and communities cannot be achieved by one organization alone. Networking and partnership are therefore an important part of SKO’s approach, enabling us to work together with government institutions, local authorities, NGOs, community groups, schools, service providers, development partners, and other stakeholders. See [the partners in our NGO work in Cambodia](/partners/).',
+      'Through these relationships, SKO strengthens coordination, referrals, knowledge sharing, and joint problem-solving to better respond to the needs and challenges faced by vulnerable children and families. SKO values partnerships based on trust, mutual learning, shared responsibility, and a common commitment to sustainable solutions. By connecting people, services, and resources, SKO aims to strengthen [family and community resilience](/impact/) and contribute to safer, more protective, and supportive environments for children and families.',
       '## Where we work',
       '- Phnom Penh, across 14 khans within 105 Sangkat (urban poor communities are selected)',
       '- Some provinces will be selected for urban poor communities.',
+      '- Four [family support programs](/programs/), all delivered through FDP',
     ]),
     faqs: [
       {
@@ -968,10 +1022,16 @@ export const pages: Page[] = [
   {
     _id: 'page-faq',
     slug: 'faq',
-    title: { en: 'Common questions', km: 'សំណួរដែលសួរញឹកញាប់' },
+    title: { en: 'Common questions about SKO, an NGO in Cambodia', km: 'សំណួរដែលសួរញឹកញាប់' },
     intro: {
-      en: 'Answers to the questions we are asked most often by donors, partners and people who want to understand our work.',
+      en: 'Common questions about SKO, a local NGO in Cambodia working with vulnerable families in Phnom Penh: what we do, who we help, how the Family Development Approach works, and how a Cambodian NGO, funder or company can partner with us.',
       km: 'ចម្លើយចំពោះសំណួរដែលយើងត្រូវបានសួរញឹកញាប់បំផុត ដោយម្ចាស់ជំនួយ ដៃគូ និងអ្នកដែលចង់យល់អំពីការងាររបស់យើង។',
+    },
+    seo: {
+      title: { en: 'NGO in Cambodia: Common Questions About Our Work' },
+      description: {
+        en: 'Common questions about SKO, an NGO in Cambodia: what we do, who we help, whether we run an orphanage (we do not), how the Family Development Approach works.',
+      },
     },
     body: enOnly(['If your question is not answered here, email info@samatapheapkhnom.org.']),
     faqs: [
@@ -981,7 +1041,7 @@ export const pages: Page[] = [
           km: 'តើ SKO មានមណ្ឌលកុមារកំព្រា ឬមណ្ឌលថែទាំកុមារដែរឬទេ?',
         },
         answer: {
-          en: 'No. SKO does the opposite: our work is to prevent children being separated from their families in the first place. We provide counselling, case management and practical support so that families under pressure can stay together. Children do better in families than in institutions, and every part of the Family Development Program is built on that principle.',
+          en: 'No. SKO does the opposite: our work is to [prevent children being separated from their families](/about/) in the first place. We provide counselling, case management and practical support so that families under pressure can stay together. Children do better in families than in institutions, and every part of the Family Development Program is built on that principle.',
           km: 'ទេ។ SKO ធ្វើផ្ទុយពីនេះ៖ ការងាររបស់យើងគឺទប់ស្កាត់កុំឱ្យកុមារត្រូវបែកចេញពីគ្រួសារតាំងពីដំបូង។ យើងផ្តល់ការប្រឹក្សា ការគ្រប់គ្រងករណី និងជំនួយជាក់ស្តែង ដើម្បីឱ្យគ្រួសារដែលកំពុងជួបការលំបាកអាចនៅជាមួយគ្នា។ កុមាររីកចម្រើនល្អជាងនៅក្នុងគ្រួសារ ជាងនៅក្នុងមណ្ឌល។',
         },
       },
@@ -998,14 +1058,14 @@ export const pages: Page[] = [
       {
         question: { en: 'What does SKO do?', km: 'តើ SKO ធ្វើអ្វីខ្លះ?' },
         answer: {
-          en: 'SKO works with the most vulnerable families in Phnom Penh’s urban poor communities. Social workers visit families at home, help them identify their own needs and objectives, and connect them to health, education, administrative and economic services. The aim is for families to sustain the progress themselves after SKO withdraws.',
+          en: 'SKO works with [the most vulnerable families in Phnom Penh’s urban poor communities](/). Social workers visit families at home, help them identify their own needs and objectives, and connect them to health, education, administrative and economic services. The aim is for families to sustain the progress themselves after SKO withdraws. This runs through four [family support programs](/programs/), including [child protection](/programs/childrens-active-citizenship/) training.',
           km: 'SKO ធ្វើការជាមួយគ្រួសារងាយរងគ្រោះបំផុតនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ។ បុគ្គលិកសង្គមកិច្ចទៅសួរសុខទុក្ខគ្រួសារនៅផ្ទះ ជួយពួកគេកំណត់តម្រូវការ និងគោលដៅរបស់ខ្លួន ហើយភ្ជាប់ពួកគេទៅសេវាសុខភាព អប់រំ រដ្ឋបាល និងសេដ្ឋកិច្ច។',
         },
       },
       {
         question: { en: 'Who does SKO help?', km: 'តើ SKO ជួយអ្នកណាខ្លះ?' },
         answer: {
-          en: 'Families living in poverty in Phnom Penh’s urban poor communities, and the children and young people in them, including children at risk of separation from their families, children without birth certificates, children affected by domestic violence, children with disabilities, children affected by HIV/AIDS, and children whose parents have migrated for work.',
+          en: 'Families living in poverty in Phnom Penh’s urban poor communities, and the children and young people in them, including children at risk of separation from their families, children without birth certificates, children affected by [domestic violence](/programs/housing-and-living-conditions-hali/), children with disabilities, children affected by HIV/AIDS, and children whose parents have [migrated for work](/programs/resilient-city-and-migration/).',
           km: 'គ្រួសារដែលរស់នៅក្នុងភាពក្រីក្រនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ និងកុមារ យុវជននៅក្នុងគ្រួសារទាំងនោះ រួមទាំងកុមារដែលប្រឈមនឹងការបែកចេញពីគ្រួសារ កុមារគ្មានសំបុត្រកំណើត កុមារដែលរងផលប៉ះពាល់ពីអំពើហិង្សាក្នុងគ្រួសារ កុមារពិការ និងកុមារដែលឪពុកម្តាយចំណាកស្រុក។',
         },
       },
@@ -1015,7 +1075,7 @@ export const pages: Page[] = [
           km: 'តើវិធីសាស្ត្រអភិវឌ្ឍន៍គ្រួសារជាអ្វី?',
         },
         answer: {
-          en: 'A structured method for working with families in poverty, built on the premise that families are not short of capability but of support, information and access. Social workers visit families at home, assess the situation together, agree objectives the family sets for itself, and work through them over a series of visits.',
+          en: 'A structured method for working with families in poverty, built on the premise that families are not short of capability but of support, information and access. Social workers visit families at home, assess the situation together, agree objectives the family sets for itself, and work through them over a series of visits. See [family development in practice](/programs/childrens-education-and-health/) in Khan Dangkor.',
           km: 'វិធីសាស្ត្រមានរចនាសម្ព័ន្ធសម្រាប់ធ្វើការជាមួយគ្រួសារក្រីក្រ ដោយផ្អែកលើគោលការណ៍ថាគ្រួសារមិនខ្វះសមត្ថភាពទេ ប៉ុន្តែខ្វះការគាំទ្រ ព័ត៌មាន និងលទ្ធភាពទទួលបានសេវា។',
         },
       },
@@ -1065,7 +1125,7 @@ export const pages: Page[] = [
           km: 'តើអង្គការរបស់ខ្ញុំអាចក្លាយជាដៃគូជាមួយ SKO ដោយរបៀបណា?',
         },
         answer: {
-          en: 'SKO works in partnership with government ministries, NGOs and private-sector partners, and holds quarterly meetings with partners to work through shared challenges. Email info@samatapheapkhnom.org to start a conversation.',
+          en: 'SKO works in partnership with government ministries, NGOs and private-sector partners, and holds quarterly meetings with partners to work through shared challenges. Email info@samatapheapkhnom.org to start a conversation or [visit our office in Phnom Penh](/contact/).',
           km: 'SKO ធ្វើការជាដៃគូជាមួយក្រសួង អង្គការក្រៅរដ្ឋាភិបាល និងដៃគូវិស័យឯកជន ហើយរៀបចំកិច្ចប្រជុំប្រចាំត្រីមាសជាមួយដៃគូ។ សូមផ្ញើអ៊ីមែលទៅ info@samatapheapkhnom.org។',
         },
       },
@@ -1074,34 +1134,52 @@ export const pages: Page[] = [
   {
     _id: 'page-safeguarding',
     slug: 'safeguarding',
-    title: { en: 'Safeguarding and child protection', km: 'ការការពារកុមារ' },
+    title: {
+      en: 'Child safeguarding: our policy and how to report a concern',
+      km: 'ការការពារកុមារ',
+    },
     intro: {
-      en: 'Every person working with SKO, staff, volunteers and partners, is responsible for keeping children safe.',
+      en: 'Child safeguarding at SKO means every person working with us, staff, volunteers and partners, is responsible for keeping children safe. It applies to all our work with [vulnerable families](/) and to the [child protection](/programs/childrens-active-citizenship/) training we deliver.',
       km: 'មនុស្សគ្រប់រូបដែលធ្វើការជាមួយ SKO បុគ្គលិក អ្នកស្ម័គ្រចិត្ត និងដៃគូ មានទំនួលខុសត្រូវរក្សាសុវត្ថិភាពកុមារ។',
+    },
+    seo: {
+      title: { en: 'Child Safeguarding Policy and How to Report a Concern' },
+      description: {
+        en: "SKO's child safeguarding policy: every staff member, volunteer and partner is responsible for keeping children safe. How to report a concern, and the policy.",
+      },
     },
     body: enOnly([
       '## Reporting a concern',
       'To report a safeguarding concern, please contact Soraksmey Heng, Senior Team Leader, directly at stlhali@samatapheapkhnom.org or +855 12 781 203 rather than using the form below. Concerns are treated confidentially.',
-      'The full policy is available under Reports & policies.',
+      'The full policy is available under [Reports & policies](/reports/).',
     ]),
   },
   {
     _id: 'page-impact',
     slug: 'impact',
-    title: { en: 'Impact & results', km: 'លទ្ធផល និងផលប្រយោជន៍' },
+    title: {
+      en: "Our impact on women's empowerment and family resilience",
+      km: 'លទ្ធផល និងផលប្រយោជន៍',
+    },
     intro: {
-      en: 'What we have done, how we count it, and what the families we work with say.',
+      en: "SKO measures its impact in women's empowerment, family resilience and child protection. In the HALI programme, 89% of households report more equitable decision-making, 75% of women surveyed make the household's financial decisions, and 94% know where to seek help for [gender-based violence](/programs/housing-and-living-conditions-hali/).",
       km: 'អ្វីដែលយើងបានធ្វើ របៀបដែលយើងរាប់ និងអ្វីដែលគ្រួសារដែលយើងធ្វើការជាមួយបាននិយាយ។',
+    },
+    seo: {
+      title: { en: "Women's Empowerment & Family Resilience: Our Impact" },
+      description: {
+        en: "SKO's impact in Phnom Penh: women's empowerment and family resilience. 89% of households report fairer decisions and 94% know where to get help for GBV.",
+      },
     },
     body: enOnly([
       'Through the Family Development Approach (FDA), SKO’s work goes beyond immediate support. It helps families, youth, and children recognize their own strengths, build confidence, and take an active role in identifying challenges and finding solutions. Through counselling, guidance, and regular engagement, families gradually become more capable of making informed decisions and managing difficulties with greater confidence and resilience.',
       '## Children and youth',
-      'For children and youth, empowerment means giving them opportunities to be heard, express their needs, develop life skills, and participate in decisions that affect their lives. This helps them build confidence, responsibility, and hope for their future rather than depending only on external support.',
-      '## Families and communities',
-      'At the family and community level, empowerment strengthens relationships, communication, mutual support, and community participation. Families become more connected to available services and resources, while communities become better able to support vulnerable children and families.',
+      "For children and youth, empowerment means giving them opportunities to be heard, express their needs, develop life skills, and participate in decisions that affect their lives. This helps them build confidence, responsibility, and hope for their future rather than depending only on external support. Child protection training is delivered through [Children's Active Citizenship](/programs/childrens-active-citizenship/).",
+      '## Families, communities and economic resilience',
+      'At the family and community level, empowerment strengthens relationships, communication, mutual support, and community participation. Families become more connected to available services and resources, while communities become better able to support vulnerable children and families through the [Family Development Program](/programs/childrens-education-and-health/) delivered in Khan Dangkor.',
       'The lasting impact of SKO’s work is therefore not only the support provided today, but the strength, knowledge, confidence, and resilience that people can carry forward and use to create positive change in their own lives and communities.',
       '## Results by project',
-      'The results for each of SKO’s four projects are on their own programme pages.',
+      'The results for each of SKO’s four projects are on their own programme pages. Month-by-month updates are under [activities from our family strengthening programs](/activities/).',
     ]),
   },
   {

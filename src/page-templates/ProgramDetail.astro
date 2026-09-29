@@ -5,6 +5,7 @@ import { getPartners, getPrograms, getStories } from '~/lib/content';
 import { ACTIVITY_LIMITS, blockText } from '~/lib/content/sections';
 import { localizePath, pick, t } from '~/lib/i18n/utils';
 import { resolveSeo } from '~/lib/seo';
+import { serviceJsonLd } from '~/lib/seo/page-schema';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
@@ -73,6 +74,12 @@ const seo = resolveSeo(program.seo, lang, {
   description: summary.value,
   image: program.image,
 });
+const service = serviceJsonLd({
+  slug: program.slug,
+  pathname: Astro.url.pathname,
+  name: heading,
+  description: seo.description,
+});
 ---
 
 <BaseLayout
@@ -82,10 +89,11 @@ const seo = resolveSeo(program.seo, lang, {
   description={seo.description}
   ogImage={seo.ogImage}
   noindex={seo.noindex}
+  jsonLd={service}
 >
   <section class="hero-overlap program-hero border-b border-[color:var(--color-line-subtle)]">
     <div class="program-hero__media [view-transition-name:card-media]" data-morph-hero>
-      <ResponsiveImage image={program.image} lang={lang} alt="" aspect="auto" eager sizes="100vw" />
+      <ResponsiveImage image={program.image} lang={lang} aspect="auto" eager sizes="100vw" />
     </div>
     <div class="wrap program-hero__inner">
       <div class="program-hero__text">
@@ -177,6 +185,19 @@ const seo = resolveSeo(program.seo, lang, {
   }
 
   <CtaBand lang={lang} title={t(lang, 'ctaProgramTitle')} />
+
+  {
+    t(lang, 'activitiesFromProgram') && (
+      <div class="wrap py-8">
+        <a href={localizePath('/activities', lang)} class="link-arrow">
+          {t(lang, 'activitiesFromProgram')}
+          <span class="arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+      </div>
+    )
+  }
 </BaseLayout>
 
 <script>

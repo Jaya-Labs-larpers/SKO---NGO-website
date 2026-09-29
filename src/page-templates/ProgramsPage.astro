@@ -1,13 +1,16 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import { getPrograms } from '~/lib/content';
-import { t } from '~/lib/i18n/utils';
+import { localizePath, pick, t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
 import ProgramCard from '~/components/content/ProgramCard.astro';
+import SectionHeading from '~/components/content/SectionHeading.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
 import CtaBand from '~/components/content/CtaBand.astro';
 import { cardGridCols, cardImageSizes } from '~/lib/grid';
+import { stripInlineLinks } from '~/lib/inline-links';
+import { canonicalUrl, collectionPageJsonLd } from '~/lib/seo/page-schema';
 
 interface Props {
   lang: Locale;
@@ -16,9 +19,20 @@ interface Props {
 const { lang } = Astro.props;
 const programs = await getPrograms();
 const heading = t(lang, 'pagePrograms');
+const title = t(lang, 'seoPrograms') || heading;
+const description = t(lang, 'metaPrograms') || stripInlineLinks(t(lang, 'introPrograms'));
+const collection = collectionPageJsonLd({
+  pathname: Astro.url.pathname,
+  name: title,
+  description,
+  items: programs.map((program) => ({
+    name: pick(program.title, lang).value ?? '',
+    url: canonicalUrl(localizePath(`/programs/${program.slug}`, lang)),
+  })),
+});
 ---
 
-<BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introPrograms')}>
+<BaseLayout headerOverlay lang={lang} title={title} description={description} jsonLd={collection}>
   <PageHero
     lang={lang}
     title={heading}
@@ -27,6 +41,13 @@ const heading = t(lang, 'pagePrograms');
   />
   <section class="section">
     <div class="wrap">
+      {
+        programs.length > 0 && t(lang, 'programsSectionTitle') && (
+          <div class="mb-8">
+            <SectionHeading title={t(lang, 'programsSectionTitle')} />
+          </div>
+        )
+      }
       {
         programs.length === 0 ? (
           <EmptyState message={t(lang, 'emptyGeneric')} />
