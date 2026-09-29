@@ -157,8 +157,9 @@ const en = {
     'Contact SKO, an NGO in Phnom Penh: Street 138, Sangkat Veal Vong, Khan 7 Makara. Call +855 12 781 203 or email info@samatapheapkhnom.org, Mon–Fri 8:00–17:00.',
   nextFaq:
     'Not sure who to ask? Start with our [common questions about SKO, an NGO in Cambodia](/faq/).',
-  seoReports: 'Annual reports & financials',
-  metaReports: 'Our annual reports, audited financial statements and governance documents.',
+  seoReports: 'Annual Reports and Audited Financial Statements',
+  metaReports:
+    "SKO's annual reports, audited financial statements and Safeguarding & Child Protection Policy, published in full by a Cambodian NGO registered since 2007.",
 
   // --- Placeholder marketing copy -------------------------------------------
   // These sit here rather than in a component so nothing English can leak onto
@@ -172,7 +173,8 @@ const en = {
   introActivities:
     "News from SKO's family strengthening programs in Phnom Penh: community counselling, [family counselling](/programs/housing-and-living-conditions-hali/) at home, training with local authorities, and stories from the families we work with, month by month.",
   introImpact: 'What we have done, how we count it, and what the families we work with say.',
-  introReports: 'Our annual reports, audited financial statements and governance documents.',
+  introReports:
+    'SKO publishes its annual reports, audited financial statements and its Safeguarding & Child Protection Policy in full. Registered with the Ministry of Interior since 2007, we account for our social work as an [NGO in Cambodia](/faq/) to the families we serve, our partners and our donors.',
   introPartners:
     "SKO's NGO work in Cambodia is delivered with international NGOs, foundations, UN agencies and government partners: Planète Enfants & Développement, Family Fund for Children Organization, UNOPS (Cities Alliance) and the Swiss Agency for Development and Cooperation. As a [social work NGO](/about/) we hold quarterly meetings with partners to work through shared challenges.",
   introContact:

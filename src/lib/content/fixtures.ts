@@ -744,7 +744,7 @@ export const reports: Report[] = [
       km: 'គោលការណ៍ការពារកុមារ',
     },
     summary: {
-      en: 'Opens SKO’s reports folder (Google Drive) until the PDF is uploaded here.',
+      en: 'Opens SKO’s reports folder (Google Drive) until the PDF is uploaded here. Read how it is applied on our [child safeguarding](/safeguarding/) page.',
       km: 'បើកថតឯកសាររបស់ SKO (Google Drive) រហូតដល់ឯកសារ PDF ត្រូវបានផ្ទុកឡើងទីនេះ។',
     },
     file: {
