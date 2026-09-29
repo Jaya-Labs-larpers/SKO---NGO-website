@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '~/lib/i18n/config';
 import type { Story } from '~/lib/content/types';
-import { pick } from '~/lib/i18n/utils';
+import { localizePath, pick } from '~/lib/i18n/utils';
 import { hasImage } from '~/lib/sanity/image';
 import ResponsiveImage from '~/components/media/ResponsiveImage.astro';
 import RichText from '~/components/content/RichText.astro';
@@ -17,6 +17,8 @@ interface Props {
   compact?: boolean;
   /** Show the pull quote alone even when the full account exists. */
   quoteOnly?: boolean;
+  /** Link the role line to the story's programme page. */
+  linkProgram?: boolean;
 }
 
 const {
@@ -26,6 +28,7 @@ const {
   inverse = false,
   compact = false,
   quoteOnly = false,
+  linkProgram = false,
 } = Astro.props;
 
 const quote = pick(story.quote, lang);
@@ -33,6 +36,8 @@ const hasBody =
   !quoteOnly &&
   Object.values(story.body ?? {}).some((value) => Array.isArray(value) && value.length > 0);
 const role = pick(story.personRole, lang);
+const programHref =
+  linkProgram && story.program ? localizePath(`/programs/${story.program.slug}`, lang) : null;
 
 /**
  * A photo is only shown when one exists AND staff have not asked for the
@@ -102,7 +107,28 @@ const quoteClass = inverse
     }
     <span>
       — {story.personName}
-      {role.value && <span lang={role.isFallback ? role.lang : undefined}>, {role.value}</span>}
+      {
+        role.value && (
+          <span lang={role.isFallback ? role.lang : undefined}>
+            ,{' '}
+            {programHref ? (
+              <a
+                href={programHref}
+                class:list={[
+                  'underline underline-offset-4',
+                  inverse
+                    ? 'decoration-white/40 hover:decoration-white'
+                    : 'decoration-current/40 hover:decoration-current',
+                ]}
+              >
+                {role.value}
+              </a>
+            ) : (
+              role.value
+            )}
+          </span>
+        )
+      }
     </span>
   </figcaption>
 </figure>

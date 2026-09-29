@@ -135,8 +135,12 @@ const en = {
   // The six code-driven pages and the home page keep their H1 in pageX/tagline;
   // these are what search results and link previews show. Empty in Khmer: the
   // page then falls back to its Khmer heading and intro.
-  seoHome: 'Samatapheap Khnom Organization',
-  metaHome: 'Families with the strength to change their own lives.',
+  seoHome: 'Support for Vulnerable Families in Phnom Penh',
+  metaHome:
+    'Samatapheap Khnom Organization (SKO): a Cambodian NGO supporting vulnerable families in Phnom Penh since 2007 through social work and child protection.',
+  homeAboutLink: 'Our approach to family preservation',
+  viewAllPrograms: 'All our family support programs',
+  allPartners: 'All partners and funders',
   seoPrograms: 'Family Support Programs in Phnom Penh: Our Work',
   metaPrograms:
     "SKO's four family support programs in Phnom Penh: family counselling and GBV prevention, child protection, education and health, and migration. Since 2007.",
@@ -156,7 +160,7 @@ const en = {
   // can edit them; the keys stay as the fallback.
   homeEyebrow: 'Phnom Penh, Cambodia · Since 2007',
   homeHeroIntro:
-    'Samatapheap Khnom Organization (SKO) is a Cambodian local NGO working to support vulnerable children, families, and communities, particularly in urban poor and migrant communities. SKO is recognized as Cambodia’s leading expert in family care and social work.',
+    "Samatapheap Khnom Organization (SKO) is a Cambodian local NGO supporting vulnerable families, children and communities in Phnom Penh's urban poor and migrant communities since 2007. SKO is recognized as Cambodia's leading expert in family care and social work.",
   introPrograms:
     "SKO runs four family support programs in Phnom Penh's urban poor communities, all delivered through one approach, the Family Development Program: social work services so that a child grows up safe, in a family, in their own community.",
   introActivities: 'What our teams are doing, month by month.',
@@ -355,6 +359,9 @@ const km: Record<UIKey, string> = {
 
   seoHome: '',
   metaHome: '',
+  homeAboutLink: '',
+  viewAllPrograms: '',
+  allPartners: '',
   seoPrograms: '',
   metaPrograms: '',
   programsSectionTitle: '',
