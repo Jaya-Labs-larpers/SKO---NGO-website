@@ -1022,10 +1022,16 @@ export const pages: Page[] = [
   {
     _id: 'page-faq',
     slug: 'faq',
-    title: { en: 'Common questions', km: 'សំណួរដែលសួរញឹកញាប់' },
+    title: { en: 'Common questions about SKO, an NGO in Cambodia', km: 'សំណួរដែលសួរញឹកញាប់' },
     intro: {
-      en: 'Answers to the questions we are asked most often by donors, partners and people who want to understand our work.',
+      en: 'Common questions about SKO, a local NGO in Cambodia working with vulnerable families in Phnom Penh: what we do, who we help, how the Family Development Approach works, and how a Cambodian NGO, funder or company can partner with us.',
       km: 'ចម្លើយចំពោះសំណួរដែលយើងត្រូវបានសួរញឹកញាប់បំផុត ដោយម្ចាស់ជំនួយ ដៃគូ និងអ្នកដែលចង់យល់អំពីការងាររបស់យើង។',
+    },
+    seo: {
+      title: { en: 'NGO in Cambodia: Common Questions About Our Work' },
+      description: {
+        en: 'Common questions about SKO, an NGO in Cambodia: what we do, who we help, whether we run an orphanage (we do not), how the Family Development Approach works.',
+      },
     },
     body: enOnly(['If your question is not answered here, email info@samatapheapkhnom.org.']),
     faqs: [
@@ -1035,7 +1041,7 @@ export const pages: Page[] = [
           km: 'តើ SKO មានមណ្ឌលកុមារកំព្រា ឬមណ្ឌលថែទាំកុមារដែរឬទេ?',
         },
         answer: {
-          en: 'No. SKO does the opposite: our work is to prevent children being separated from their families in the first place. We provide counselling, case management and practical support so that families under pressure can stay together. Children do better in families than in institutions, and every part of the Family Development Program is built on that principle.',
+          en: 'No. SKO does the opposite: our work is to [prevent children being separated from their families](/about/) in the first place. We provide counselling, case management and practical support so that families under pressure can stay together. Children do better in families than in institutions, and every part of the Family Development Program is built on that principle.',
           km: 'ទេ។ SKO ធ្វើផ្ទុយពីនេះ៖ ការងាររបស់យើងគឺទប់ស្កាត់កុំឱ្យកុមារត្រូវបែកចេញពីគ្រួសារតាំងពីដំបូង។ យើងផ្តល់ការប្រឹក្សា ការគ្រប់គ្រងករណី និងជំនួយជាក់ស្តែង ដើម្បីឱ្យគ្រួសារដែលកំពុងជួបការលំបាកអាចនៅជាមួយគ្នា។ កុមាររីកចម្រើនល្អជាងនៅក្នុងគ្រួសារ ជាងនៅក្នុងមណ្ឌល។',
         },
       },
@@ -1052,14 +1058,14 @@ export const pages: Page[] = [
       {
         question: { en: 'What does SKO do?', km: 'តើ SKO ធ្វើអ្វីខ្លះ?' },
         answer: {
-          en: 'SKO works with the most vulnerable families in Phnom Penh’s urban poor communities. Social workers visit families at home, help them identify their own needs and objectives, and connect them to health, education, administrative and economic services. The aim is for families to sustain the progress themselves after SKO withdraws.',
+          en: 'SKO works with [the most vulnerable families in Phnom Penh’s urban poor communities](/). Social workers visit families at home, help them identify their own needs and objectives, and connect them to health, education, administrative and economic services. The aim is for families to sustain the progress themselves after SKO withdraws. This runs through four [family support programs](/programs/), including [child protection](/programs/childrens-active-citizenship/) training.',
           km: 'SKO ធ្វើការជាមួយគ្រួសារងាយរងគ្រោះបំផុតនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ។ បុគ្គលិកសង្គមកិច្ចទៅសួរសុខទុក្ខគ្រួសារនៅផ្ទះ ជួយពួកគេកំណត់តម្រូវការ និងគោលដៅរបស់ខ្លួន ហើយភ្ជាប់ពួកគេទៅសេវាសុខភាព អប់រំ រដ្ឋបាល និងសេដ្ឋកិច្ច។',
         },
       },
       {
         question: { en: 'Who does SKO help?', km: 'តើ SKO ជួយអ្នកណាខ្លះ?' },
         answer: {
-          en: 'Families living in poverty in Phnom Penh’s urban poor communities, and the children and young people in them, including children at risk of separation from their families, children without birth certificates, children affected by domestic violence, children with disabilities, children affected by HIV/AIDS, and children whose parents have migrated for work.',
+          en: 'Families living in poverty in Phnom Penh’s urban poor communities, and the children and young people in them, including children at risk of separation from their families, children without birth certificates, children affected by [domestic violence](/programs/housing-and-living-conditions-hali/), children with disabilities, children affected by HIV/AIDS, and children whose parents have [migrated for work](/programs/resilient-city-and-migration/).',
           km: 'គ្រួសារដែលរស់នៅក្នុងភាពក្រីក្រនៅសហគមន៍ក្រីក្រក្នុងរាជធានីភ្នំពេញ និងកុមារ យុវជននៅក្នុងគ្រួសារទាំងនោះ រួមទាំងកុមារដែលប្រឈមនឹងការបែកចេញពីគ្រួសារ កុមារគ្មានសំបុត្រកំណើត កុមារដែលរងផលប៉ះពាល់ពីអំពើហិង្សាក្នុងគ្រួសារ កុមារពិការ និងកុមារដែលឪពុកម្តាយចំណាកស្រុក។',
         },
       },
@@ -1069,7 +1075,7 @@ export const pages: Page[] = [
           km: 'តើវិធីសាស្ត្រអភិវឌ្ឍន៍គ្រួសារជាអ្វី?',
         },
         answer: {
-          en: 'A structured method for working with families in poverty, built on the premise that families are not short of capability but of support, information and access. Social workers visit families at home, assess the situation together, agree objectives the family sets for itself, and work through them over a series of visits.',
+          en: 'A structured method for working with families in poverty, built on the premise that families are not short of capability but of support, information and access. Social workers visit families at home, assess the situation together, agree objectives the family sets for itself, and work through them over a series of visits. See [family development in practice](/programs/childrens-education-and-health/) in Khan Dangkor.',
           km: 'វិធីសាស្ត្រមានរចនាសម្ព័ន្ធសម្រាប់ធ្វើការជាមួយគ្រួសារក្រីក្រ ដោយផ្អែកលើគោលការណ៍ថាគ្រួសារមិនខ្វះសមត្ថភាពទេ ប៉ុន្តែខ្វះការគាំទ្រ ព័ត៌មាន និងលទ្ធភាពទទួលបានសេវា។',
         },
       },
@@ -1119,7 +1125,7 @@ export const pages: Page[] = [
           km: 'តើអង្គការរបស់ខ្ញុំអាចក្លាយជាដៃគូជាមួយ SKO ដោយរបៀបណា?',
         },
         answer: {
-          en: 'SKO works in partnership with government ministries, NGOs and private-sector partners, and holds quarterly meetings with partners to work through shared challenges. Email info@samatapheapkhnom.org to start a conversation.',
+          en: 'SKO works in partnership with government ministries, NGOs and private-sector partners, and holds quarterly meetings with partners to work through shared challenges. Email info@samatapheapkhnom.org to start a conversation or [visit our office in Phnom Penh](/contact/).',
           km: 'SKO ធ្វើការជាដៃគូជាមួយក្រសួង អង្គការក្រៅរដ្ឋាភិបាល និងដៃគូវិស័យឯកជន ហើយរៀបចំកិច្ចប្រជុំប្រចាំត្រីមាសជាមួយដៃគូ។ សូមផ្ញើអ៊ីមែលទៅ info@samatapheapkhnom.org។',
         },
       },

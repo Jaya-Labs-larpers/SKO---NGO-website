@@ -54,7 +54,7 @@ const en = {
   tapToEnlarge: 'Tap to enlarge',
 
   // --- Section headings -----------------------------------------------------
-  faqHeading: 'Common questions',
+  faqHeading: 'Questions and answers',
   faqMore: 'More common questions about SKO',
   latestActivities: 'Latest activities',
   whatWeDo: 'What we do',
