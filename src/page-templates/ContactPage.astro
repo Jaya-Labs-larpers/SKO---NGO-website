@@ -176,6 +176,13 @@ const contactPage = contactPageJsonLd({ pathname: Astro.url.pathname, name: titl
             {nextSteps.map((step) => <li>{t(lang, step)}</li>)}
           </ol>
           {
+            t(lang, 'nextFaq') && (
+              <p class="contact-next__block inline-links">
+                <InlineLinks text={t(lang, 'nextFaq')} />
+              </p>
+            )
+          }
+          {
             hours.value && (
               <div class="contact-next__block">
                 <b>{t(lang, 'nextHours')}</b>
