@@ -41,7 +41,8 @@ function isCalloutBlock(block: PortableBlock): block is PortableCalloutBlock {
   return block._type === 'callout';
 }
 
-function renderSpans(block: PortableTextBlock): string {
+/** The inline HTML of one text block, without its <p> or <li> wrapper. */
+export function renderSpans(block: PortableTextBlock): string {
   const markDefs = block.markDefs ?? [];
 
   return (block.children ?? [])

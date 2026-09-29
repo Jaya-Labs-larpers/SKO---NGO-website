@@ -113,3 +113,37 @@ test("an empty or missing body yields nothing", () => {
   assert.deepEqual(plain(sections.splitBody(null)), { lead: [], sections: [] });
   assert.equal(sections.splitBody([]).sections.length, 0);
 });
+
+const withLink = (block, anchor, href) => {
+  const at = block.children[0].text.indexOf(anchor);
+  const text = block.children[0].text;
+  return {
+    ...block,
+    markDefs: [{ _key: "l0", _type: "link", href }],
+    children: [
+      { _type: "span", text: text.slice(0, at) },
+      { _type: "span", text: anchor, marks: ["l0"] },
+      { _type: "span", text: text.slice(at + anchor.length) },
+    ],
+  };
+};
+
+test("a row that carries a link keeps its rows layout", () => {
+  const rows = blocks(["Hope. One.", "Integrity. Two goes here.", "Respect. Three."]);
+  rows[1] = withLink(rows[1], "goes", "/faq/");
+  assert.equal(sections.layoutFor(rows), "terms");
+});
+
+test("formatting other than a link still makes a row prose", () => {
+  const rows = blocks(["Hope. One.", "Integrity. Two.", "Respect. Three."]);
+  rows[1].children[0].marks = ["strong"];
+  assert.equal(sections.layoutFor(rows), "prose");
+});
+
+test("the running text after a lead-in keeps its link", () => {
+  const row = withLink(blocks(["Integrity. We are honest with families."])[0], "honest", "/about/");
+  const split = sections.splitLeadIn("Integrity. We are honest with families.");
+  const after = sections.blockAfterLeadIn(row, split.rest);
+  assert.equal(after.children.map((child) => child.text).join(""), "We are honest with families.");
+  assert.deepEqual(plain(after.children.filter((child) => child.marks).map((child) => child.text)), ["honest"]);
+});

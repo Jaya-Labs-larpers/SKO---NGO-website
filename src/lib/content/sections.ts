@@ -56,11 +56,36 @@ export function blockText(block: PortableBlock): string {
   return isTextBlock(block) ? (block.children ?? []).map((child) => child.text).join('') : '';
 }
 
+/** Plain enough to lay out as rows: no formatting, though links are allowed. */
 function isPlain(block: PortableBlock): boolean {
-  return (
-    isTextBlock(block) &&
-    (block.children ?? []).every((child) => !child.marks || child.marks.length === 0)
+  if (!isTextBlock(block)) return false;
+  const linkKeys = new Set(
+    (block.markDefs ?? []).filter((def) => def._type === 'link').map((def) => def._key),
   );
+  return (block.children ?? []).every((child) => (child.marks ?? []).every((m) => linkKeys.has(m)));
+}
+
+/**
+ * The part of a row's text after its lead-in, as a block, so a link inside the
+ * running text survives the split into "Term" and "rest".
+ */
+export function blockAfterLeadIn(block: PortableBlock, rest: string): PortableTextBlock | null {
+  if (!isTextBlock(block)) return null;
+  let skip = blockText(block).trimEnd().length - rest.length;
+  const children = [];
+  for (const child of block.children ?? []) {
+    if (skip >= child.text.length) {
+      skip -= child.text.length;
+      continue;
+    }
+    children.push({ ...child, text: child.text.slice(skip) });
+    skip = 0;
+  }
+  return { ...block, children };
+}
+
+export function hasLinkMarks(block: PortableBlock): boolean {
+  return isTextBlock(block) && (block.markDefs ?? []).some((def) => def._type === 'link');
 }
 
 /**
