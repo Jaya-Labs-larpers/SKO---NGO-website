@@ -4,14 +4,34 @@ import type { FaqItem } from '~/lib/content/types';
 import { pick, t } from '~/lib/i18n/utils';
 import SectionHeading from './SectionHeading.astro';
 import { serializeJsonLd } from '~/lib/seo/json-ld';
+import { stripInlineLinks } from '~/lib/inline-links';
+import InlineLinks from './InlineLinks.astro';
 
 interface Props {
   lang: Locale;
   faqs: FaqItem[];
   heading?: string;
+  /** A link under the list, e.g. from the About page to the full FAQ. */
+  moreHref?: string;
+  moreLabel?: string;
 }
 
-const { lang, faqs, heading } = Astro.props;
+const { lang, faqs, heading, moreHref, moreLabel } = Astro.props;
+
+/** Stable, quotable anchors: built from the English question so /faq/#… is the same in both languages. */
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+const taken = new Set<string>();
+const anchorFor = (faq: FaqItem) => {
+  const base = slugify(pick(faq.question, 'en').value ?? '') || 'question';
+  let id = base;
+  for (let n = 2; taken.has(id); n++) id = `${base}-${n}`;
+  taken.add(id);
+  return id;
+};
 
 /**
  * Each answer is written to stand alone, because that is how answer engines and
@@ -23,6 +43,7 @@ const { lang, faqs, heading } = Astro.props;
  */
 const resolved = faqs
   .map((faq) => ({
+    id: anchorFor(faq),
     question: pick(faq.question, lang),
     answer: pick(faq.answer, lang),
   }))
@@ -36,7 +57,7 @@ const jsonLd =
         mainEntity: resolved.map((faq) => ({
           '@type': 'Question',
           name: faq.question.value,
-          acceptedAnswer: { '@type': 'Answer', text: faq.answer.value },
+          acceptedAnswer: { '@type': 'Answer', text: stripInlineLinks(faq.answer.value ?? '') },
         })),
       }
     : null;
@@ -51,20 +72,29 @@ const jsonLd =
           {resolved.map((faq) => (
             <div class="border-b border-[color:var(--color-line)] py-6">
               <dt
-                class="text-[length:var(--text-h4)] font-semibold text-[color:var(--color-ink-900)]"
+                id={faq.id}
+                class="scroll-mt-[calc(var(--header-offset)+1rem)] text-[length:var(--text-h4)] font-semibold text-[color:var(--color-ink-900)]"
                 lang={faq.question.isFallback ? faq.question.lang : undefined}
               >
                 {faq.question.value}
               </dt>
               <dd
-                class="justify mt-2.5 text-[color:var(--color-ink-600)]"
+                class="justify inline-links mt-2.5 text-[color:var(--color-ink-600)]"
                 lang={faq.answer.isFallback ? faq.answer.lang : undefined}
               >
-                {faq.answer.value}
+                <InlineLinks text={faq.answer.value ?? ''} />
               </dd>
             </div>
           ))}
         </dl>
+        {moreHref && moreLabel && (
+          <a href={moreHref} class="link-arrow mt-6">
+            {moreLabel}
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        )}
       </div>
       <script is:inline type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
     </section>

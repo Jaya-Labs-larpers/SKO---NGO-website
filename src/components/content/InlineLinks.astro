@@ -1,0 +1,27 @@
+---
+import { inlineLinkSpans } from '~/lib/inline-links';
+
+interface Props {
+  text: string;
+}
+
+const { children, markDefs } = inlineLinkSpans(Astro.props.text);
+const hrefFor = (marks?: string[]) => markDefs.find((def) => def._key === marks?.[0])?.href;
+---
+
+{
+  children.map((span) => {
+    const href = hrefFor(span.marks);
+    if (!href) return span.text;
+    const external = /^https?:\/\//i.test(href);
+    return (
+      <a
+        href={href}
+        target={external ? '_blank' : undefined}
+        rel={external ? 'noopener noreferrer' : undefined}
+      >
+        {span.text}
+      </a>
+    );
+  })
+}

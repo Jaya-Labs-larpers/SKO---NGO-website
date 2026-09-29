@@ -3,7 +3,7 @@ import type { Locale } from '~/lib/i18n/config';
 import Breadcrumbs from '~/components/layout/Breadcrumbs.astro';
 import ButterflyField from '~/components/media/ButterflyField.astro';
 import type { Crumb } from '~/lib/breadcrumbs';
-import { inlineLinksToHtml } from '~/lib/inline-links';
+import InlineLinks from './InlineLinks.astro';
 
 interface Props {
   lang: Locale;
@@ -44,8 +44,9 @@ const { lang, title, intro, introLang, eyebrow, trail } = Astro.props;
           <p
             class="justify inline-links mt-4 text-[length:var(--text-lead)] text-[color:var(--color-ink-400)]"
             lang={introLang}
-            set:html={inlineLinksToHtml(intro)}
-          />
+          >
+            <InlineLinks text={intro} />
+          </p>
         )
       }
       <slot />

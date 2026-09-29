@@ -32,30 +32,6 @@ export function inlineLinkSpans(value: string): InlineParts {
   return { children, markDefs };
 }
 
-export function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-/** Safe for `set:html`: text is escaped, links become anchors. */
-export function inlineLinksToHtml(value: string): string {
-  const { children, markDefs } = inlineLinkSpans(value);
-  return children
-    .map((span) => {
-      const text = escapeHtml(span.text);
-      const def = markDefs.find((entry) => entry._key === span.marks?.[0]);
-      if (!def?.href) return text;
-      const external = /^https?:\/\//i.test(def.href);
-      const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : '';
-      return `<a href="${escapeHtml(def.href)}"${attrs}>${text}</a>`;
-    })
-    .join('');
-}
-
 /** The anchor text only, for metadata and structured data that cannot hold links. */
 export function stripInlineLinks(value: string): string {
   return value.replace(LINK, '$1');
