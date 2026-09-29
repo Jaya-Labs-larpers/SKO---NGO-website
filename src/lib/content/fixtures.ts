@@ -263,8 +263,14 @@ export const impactStats: ImpactStat[] = [
 export const programs: Program[] = [
   {
     _id: 'program-hali',
-    image: localCmsImage('hali-cover'),
-    cardImage: localCmsImage('hali-card'),
+    image: localCmsImage('hali-cover', {
+      en: 'SKO social worker leading a community counselling session with families under a shelter in Phnom Penh',
+      km: 'បុគ្គលិកសង្គមកិច្ច SKO កំពុងដឹកនាំវគ្គប្រឹក្សាសហគមន៍ជាមួយគ្រួសារ នៅក្រោមជម្រកមួយក្នុងរាជធានីភ្នំពេញ',
+    }),
+    cardImage: localCmsImage('hali-card', {
+      en: 'Women in a community gender discussion group with an SKO social worker',
+      km: 'ស្ត្រីក្នុងក្រុមពិភាក្សាយេនឌ័រសហគមន៍ ជាមួយបុគ្គលិកសង្គមកិច្ច SKO',
+    }),
     slug: 'housing-and-living-conditions-hali',
     order: 1,
     title: {
@@ -272,8 +278,14 @@ export const programs: Program[] = [
       km: 'ការកែលម្អលំនៅឋាន និងលក្ខខណ្ឌរស់នៅ (HALI)',
     },
     summary: {
-      en: 'To enhance the quality of life of families, especially children, youth and women, living in urban poor areas. Using the Family Development Program (FDP) methodology, SKO provides psychological counselling, resilience-building, information, and referrals to essential services (health, education, economic, administrative). The project also aims to reduce domestic violence and promote safe, healthy living.',
+      en: "HALI is SKO's programme to reduce gender-based violence and improve living conditions for families in Phnom Penh's urban poor areas. Using the Family Development Program (FDP) methodology, social workers provide family counselling, resilience-building, information and referrals to health, education, economic and administrative services, with a focus on women, children and youth.",
       km: 'ដើម្បីលើកម្ពស់គុណភាពជីវិតរបស់គ្រួសារ ជាពិសេសកុមារ យុវជន និងស្ត្រី ដែលរស់នៅក្នុងតំបន់ក្រីក្រទីក្រុង។ ដោយប្រើវិធីសាស្ត្រកម្មវិធីអភិវឌ្ឍន៍គ្រួសារ (FDP) SKO ផ្តល់ការប្រឹក្សាផ្លូវចិត្ត ការកសាងភាពធន់ ព័ត៌មាន និងការបញ្ជូនទៅសេវាសំខាន់ៗ។ គម្រោងក៏មានគោលបំណងកាត់បន្ថយអំពើហិង្សាក្នុងគ្រួសារ និងលើកកម្ពស់ការរស់នៅប្រកបដោយសុវត្ថិភាព។',
+    },
+    seo: {
+      title: { en: 'Gender-Based Violence Prevention in Phnom Penh: HALI' },
+      description: {
+        en: "HALI reduces gender-based violence in Phnom Penh's urban poor areas through family counselling, GBV training and referrals. 94% now know where to seek help.",
+      },
     },
     body: enOnly([
       '## What we do',
@@ -284,9 +296,9 @@ export const programs: Program[] = [
       'Gender-Based Violence Training. Awareness and response training for local authorities and community leaders to strengthen referral systems and support victims.',
       '## Partner',
       'Planète Enfants & Développement (PE&D).',
-      '## Impact and results',
+      '## Impact and results: GBV prevention and family counselling',
       'Family counselling was provided to 200 households. SKO’s family counselling has proven instrumental in resolving intra-household conflicts and fostering healthier relationships, with a notable percentage of beneficiaries reporting a reduction in domestic violence and improved emotional well-being. 97% of beneficiaries surveyed who received assistance from social workers reported feeling more capable than before of dealing with problems, or knowing better where to get help. Of beneficiaries using referral services facilitated by a social worker, 95% report they will continue to use referral services in future and are satisfied with them.',
-      'Gender awareness and empowerment through gender discussion groups reached 80% of all HALI beneficiaries, through SKO training (40 individuals) and CAFÉ training with PE&D (122 individuals). A large majority of beneficiaries consider gender-based violence a serious issue. 89% of beneficiaries report more equitable decision-making within households, and 75% of female respondents report that they make decisions on financial matters in the household. 94% of beneficiaries surveyed know where to seek assistance if they or someone they know experiences gender-based violence.',
+      "Gender awareness and empowerment through gender discussion groups reached 80% of all HALI beneficiaries, through SKO training (40 individuals) and CAFÉ training with PE&D (122 individuals). A large majority of beneficiaries consider gender-based violence a serious issue. 89% of beneficiaries report more equitable decision-making within households, and 75% of female respondents report that they make decisions on financial matters in the household — see our [women's empowerment results](/impact/). 94% of beneficiaries surveyed know where to seek assistance if they or someone they know experiences gender-based violence.",
       'Daily engagement by social workers in the community and within households over an extended period, giving households tools for problem-solving, intra-household communication and links to existing services, has proven crucial to these results within a relatively short period (1.5 years per target area), while also drawing the community into other project activities.',
       'Group discussions for men and women, including role-playing, have proven effective at engaging participants and helping them understand gender roles and coping mechanisms against stereotypes and domestic violence.',
     ]),
