@@ -38,12 +38,15 @@ const orgName = text(settings.orgName, lang);
 const tagline = pick(settings.tagline, lang);
 const registration = pick(settings.registration, lang);
 const story = stories[0];
+const brand = settings.orgShortName ?? 'SKO';
+const seoTitle = t(lang, 'seoHome');
 ---
 
 <BaseLayout
   lang={lang}
-  title={orgName}
-  description={tagline.value ?? undefined}
+  title={seoTitle ? `${seoTitle} · ${brand}` : orgName}
+  plainTitle
+  description={t(lang, 'metaHome') || tagline.value || undefined}
   ogImage={settings.ogImage}
   headerOverlay
   intro

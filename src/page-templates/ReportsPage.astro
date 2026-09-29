@@ -22,7 +22,12 @@ const years = [...new Set(reports.map((report) => report.year ?? 0))].sort((a, b
 const heading = t(lang, 'pageReports');
 ---
 
-<BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introReports')}>
+<BaseLayout
+  headerOverlay
+  lang={lang}
+  title={t(lang, 'seoReports') || heading}
+  description={t(lang, 'metaReports') || t(lang, 'introReports')}
+>
   <PageHero
     lang={lang}
     title={heading}

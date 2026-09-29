@@ -23,7 +23,12 @@ const tel = (phone: string) => `tel:${phone.replace(/[^+\d]/g, '')}`;
 const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
 ---
 
-<BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introContact')}>
+<BaseLayout
+  headerOverlay
+  lang={lang}
+  title={t(lang, 'seoContact') || heading}
+  description={t(lang, 'metaContact') || t(lang, 'introContact')}
+>
   <PageHero
     lang={lang}
     title={heading}

@@ -130,6 +130,24 @@ const en = {
   notFoundBody: 'The page you were looking for has moved or never existed.',
   notFoundCta: 'Go to the homepage',
 
+  // --- Search-result titles and descriptions ----------------------------------
+  // The six code-driven pages and the home page keep their H1 in pageX/tagline;
+  // these are what search results and link previews show. Empty in Khmer: the
+  // page then falls back to its Khmer heading and intro.
+  seoHome: 'Samatapheap Khnom Organization',
+  metaHome: 'Families with the strength to change their own lives.',
+  seoPrograms: 'Our work',
+  metaPrograms:
+    'Four projects, one approach: a child growing up safe, in a family, in their own community.',
+  seoActivities: 'Activities & news',
+  metaActivities: 'What our teams are doing, month by month.',
+  seoPartners: 'Partners & supporters',
+  metaPartners: 'The institutions and organisations we work alongside.',
+  seoContact: 'Contact us',
+  metaContact: 'Questions, partnerships, volunteering. We read every message.',
+  seoReports: 'Annual reports & financials',
+  metaReports: 'Our annual reports, audited financial statements and governance documents.',
+
   // --- Placeholder marketing copy -------------------------------------------
   // These sit here rather than in a component so nothing English can leak onto
   // a Khmer page. In Phase 4 they move into Sanity `page` documents so staff
@@ -331,6 +349,19 @@ const km: Record<UIKey, string> = {
   notFoundTitle: 'រកមិនឃើញទំព័រ',
   notFoundBody: 'ទំព័រដែលអ្នកកំពុងស្វែងរក ត្រូវបានផ្លាស់ប្តូរ ឬមិនធ្លាប់មាន។',
   notFoundCta: 'ត្រឡប់ទៅទំព័រដើម',
+
+  seoHome: '',
+  metaHome: '',
+  seoPrograms: '',
+  metaPrograms: '',
+  seoActivities: '',
+  metaActivities: '',
+  seoPartners: '',
+  metaPartners: '',
+  seoContact: '',
+  metaContact: '',
+  seoReports: '',
+  metaReports: '',
 
   homeEyebrow: 'ភ្នំពេញ កម្ពុជា · តាំងពីឆ្នាំ ២០០៧',
   homeHeroIntro:

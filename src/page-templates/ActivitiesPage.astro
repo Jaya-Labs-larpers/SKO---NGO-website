@@ -26,8 +26,8 @@ const hrefFor = (page: number) =>
 <BaseLayout
   headerOverlay
   lang={lang}
-  title={heading}
-  description={t(lang, 'introActivities')}
+  title={t(lang, 'seoActivities') || heading}
+  description={t(lang, 'metaActivities') || t(lang, 'introActivities')}
   noindex={currentPage > 1}
 >
   <PageHero

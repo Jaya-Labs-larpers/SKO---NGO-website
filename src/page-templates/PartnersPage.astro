@@ -27,7 +27,12 @@ const categoryLabels: Record<string, Record<Locale, string>> = {
 const groups = [...new Set(partners.map((partner) => partner.category ?? 'other'))];
 ---
 
-<BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introPartners')}>
+<BaseLayout
+  headerOverlay
+  lang={lang}
+  title={t(lang, 'seoPartners') || heading}
+  description={t(lang, 'metaPartners') || t(lang, 'introPartners')}
+>
   <PageHero
     lang={lang}
     title={heading}

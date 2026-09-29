@@ -18,7 +18,12 @@ const programs = await getPrograms();
 const heading = t(lang, 'pagePrograms');
 ---
 
-<BaseLayout headerOverlay lang={lang} title={heading} description={t(lang, 'introPrograms')}>
+<BaseLayout
+  headerOverlay
+  lang={lang}
+  title={t(lang, 'seoPrograms') || heading}
+  description={t(lang, 'metaPrograms') || t(lang, 'introPrograms')}
+>
   <PageHero
     lang={lang}
     title={heading}
