@@ -562,8 +562,14 @@ export const programs: Program[] = [
   },
   {
     _id: 'program-rcmd',
-    image: localCmsImage('rcmd-cover'),
-    cardImage: localCmsImage('rcmd-card'),
+    image: localCmsImage('rcmd-cover', {
+      en: 'An SKO staff member speaks with a microphone at a public forum on legal documents with residents of a Phnom Penh community',
+      km: 'បុគ្គលិក SKO ម្នាក់និយាយតាមមីក្រូនៅក្នុងវេទិកាសាធារណៈស្តីពីឯកសារស្របច្បាប់ ជាមួយអ្នករស់នៅសហគមន៍មួយក្នុងរាជធានីភ្នំពេញ',
+    }),
+    cardImage: localCmsImage('rcmd-card', {
+      en: "A woman holds the official documents obtained with SKO's support",
+      km: 'ស្ត្រីម្នាក់កាន់ឯកសារផ្លូវការដែលទទួលបានដោយមានការគាំទ្រពី SKO',
+    }),
     slug: 'resilient-city-and-migration',
     order: 4,
     title: {
@@ -571,17 +577,23 @@ export const programs: Program[] = [
       km: 'ភាពធន់ទីក្រុង និងសក្ដានុពលចំណាកស្រុក (RCMD)',
     },
     summary: {
-      en: 'To improve the well-being of migrants and vulnerable families through financial literacy, vocational training, legal and public services, education, health, environmental awareness, gender equality, and capacity-building for local authorities. The project also addresses gender-based violence and promotes community engagement.',
+      en: "Resilient City and Migration Dynamics (RCMD) is SKO's migration and development project for migrants and vulnerable families in Phnom Penh: financial literacy, vocational training, legal documents and public services, education, health, gender equality and capacity-building for local authorities, with UNOPS (Cities Alliance) and funding from the Swiss Agency for Development and Cooperation.",
       km: 'ដើម្បីលើកកម្ពស់សុខុមាលភាពរបស់ជនចំណាកស្រុក និងគ្រួសារងាយរងគ្រោះ តាមរយៈចំណេះដឹងហិរញ្ញវត្ថុ ការបណ្តុះបណ្តាលវិជ្ជាជីវៈ សេវាផ្លូវច្បាប់ និងសាធារណៈ ការអប់រំ សុខភាព ការយល់ដឹងបរិស្ថាន សមភាពយេនឌ័រ និងការកសាងសមត្ថភាពអាជ្ញាធរមូលដ្ឋាន។ គម្រោងក៏ដោះស្រាយអំពើហិង្សាយេនឌ័រ និងលើកកម្ពស់ការចូលរួមសហគមន៍។',
+    },
+    seo: {
+      title: { en: 'Migration and Development in Phnom Penh: RCMD Project' },
+      description: {
+        en: 'Migration and development in Phnom Penh: RCMD helps migrants and vulnerable families with financial literacy, legal documents and gender equality, with UNOPS.',
+      },
     },
     body: enOnly([
       '## What we do',
       'Promote Safe Migration and Public Services. Builds understanding of safe migration among vulnerable families, youth and children in host communities, so they can live safely while receiving appropriate public services from relevant stakeholders and government.',
       'Public Forum. Builds knowledge of family residency, birth certificates, and Khmer national ID cards, the official documents that support the daily lives of the most vulnerable families, youth, children and migrants, through engagement with sub-national and local authorities.',
-      'Counselling & Referral Services. Identifies the root causes of problems facing host and migrant communities, meets basic needs, strengthens capacity, and works towards sustainable solutions through scheduled counselling from social workers and weekly family visits.',
-      'Gender-Based Violence (GBV) Training. Trains host community and migrant residents on gender concepts and the root causes and impact of GBV, building towards positive change for families and the wider community.',
+      'Counselling & Referral Services. Identifies the root causes of problems facing host and migrant communities, meets basic needs, strengthens capacity, and works towards sustainable solutions through [scheduled counselling from social workers and weekly family visits](/programs/childrens-education-and-health/).',
+      "Gender-Based Violence (GBV) Training. Trains host community and migrant residents on gender concepts and the root causes and impact of GBV, building towards positive change for families and the wider community. SKO's GBV work began in [HALI](/programs/housing-and-living-conditions-hali/).",
       'Men and Women Group Discussion. Promotes understanding and positive practice between men and women, so their daily lives are safer and more supportive, and build a brighter future for children and young people.',
-      'Economic Empowerment. Builds migrant and host community members’ capacity to manage household income and expenses through microfinance, without added stress.',
+      'Economic Empowerment. Builds migrant and host community members’ capacity to manage household income and expenses through microfinance, without added stress. Results across programmes: [community economic development](/impact/).',
       '## Partner',
       'UNOPS (Cities Alliance), funded by the Swiss Agency for Development and Cooperation.',
       '## Impact and results',
