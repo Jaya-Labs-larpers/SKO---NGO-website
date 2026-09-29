@@ -21,6 +21,8 @@ interface Props {
   publishedAt?: string | null;
   /** Extra schema.org node for this page type. */
   jsonLd?: Record<string, unknown> | null;
+  /** Extra properties for the Organization node, e.g. opening hours on the contact page. */
+  orgJsonLd?: Record<string, unknown> | null;
 }
 
 const {
@@ -34,6 +36,7 @@ const {
   settings,
   publishedAt,
   jsonLd: extraJsonLd,
+  orgJsonLd,
 } = Astro.props;
 
 const orgName = text(settings.orgName, lang);
@@ -126,6 +129,7 @@ const jsonLd = {
           .filter((url) => /^https?:\/\//.test(url)),
       }
     : {}),
+  ...orgJsonLd,
 };
 
 /** WebSite node, so search engines can attribute the site to the organisation. */

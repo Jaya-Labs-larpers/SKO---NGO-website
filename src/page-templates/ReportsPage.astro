@@ -6,6 +6,8 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
 import ReportList from '~/components/content/ReportList.astro';
 import EmptyState from '~/components/content/EmptyState.astro';
+import { stripInlineLinks } from '~/lib/inline-links';
+import { collectionPageJsonLd } from '~/lib/seo/page-schema';
 
 interface Props {
   lang: Locale;
@@ -20,14 +22,12 @@ const reports = types ? all.filter((report) => types.includes(report.type ?? 'ot
 
 const years = [...new Set(reports.map((report) => report.year ?? 0))].sort((a, b) => b - a);
 const heading = t(lang, 'pageReports');
+const title = t(lang, 'seoReports') || heading;
+const description = t(lang, 'metaReports') || stripInlineLinks(t(lang, 'introReports'));
+const collection = collectionPageJsonLd({ pathname: Astro.url.pathname, name: title, description });
 ---
 
-<BaseLayout
-  headerOverlay
-  lang={lang}
-  title={t(lang, 'seoReports') || heading}
-  description={t(lang, 'metaReports') || t(lang, 'introReports')}
->
+<BaseLayout headerOverlay lang={lang} title={title} description={description} jsonLd={collection}>
   <PageHero
     lang={lang}
     title={heading}

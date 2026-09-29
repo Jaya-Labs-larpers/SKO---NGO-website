@@ -21,6 +21,8 @@ interface Props {
   publishedAt?: string | null;
   /** Extra schema.org node for this page type, e.g. Article or BreadcrumbList. */
   jsonLd?: Record<string, unknown> | null;
+  /** Extra properties for the Organization node. */
+  orgJsonLd?: Record<string, unknown> | null;
   /**
    * Float the header over the page's own opening art instead of giving it a
    * white band. Only for pages whose first element is a full-bleed hero that
@@ -40,6 +42,7 @@ const {
   plainTitle,
   publishedAt,
   jsonLd,
+  orgJsonLd,
   headerOverlay,
   intro,
 } = Astro.props;
@@ -96,6 +99,7 @@ const pathname = Astro.url.pathname;
       settings={settings}
       publishedAt={publishedAt}
       jsonLd={jsonLd}
+      orgJsonLd={orgJsonLd}
     />
 
     {

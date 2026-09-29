@@ -6,6 +6,8 @@ import { pick, t } from '~/lib/i18n/utils';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PageHero from '~/components/content/PageHero.astro';
 import ContactForm from '~/components/forms/ContactForm.astro';
+import { stripInlineLinks } from '~/lib/inline-links';
+import { contactPageJsonLd, officeOpeningHours } from '~/lib/seo/page-schema';
 
 interface Props {
   lang: Locale;
@@ -21,13 +23,18 @@ const heading = t(lang, 'pageContact');
 const formId = 'form-contact';
 const tel = (phone: string) => `tel:${phone.replace(/[^+\d]/g, '')}`;
 const nextSteps: UIKey[] = ['nextStep1', 'nextStep2', 'nextStep3'];
+const title = t(lang, 'seoContact') || heading;
+const description = t(lang, 'metaContact') || stripInlineLinks(t(lang, 'introContact'));
+const contactPage = contactPageJsonLd({ pathname: Astro.url.pathname, name: title, description });
 ---
 
 <BaseLayout
   headerOverlay
   lang={lang}
-  title={t(lang, 'seoContact') || heading}
-  description={t(lang, 'metaContact') || t(lang, 'introContact')}
+  title={title}
+  description={description}
+  jsonLd={contactPage}
+  orgJsonLd={{ openingHoursSpecification: officeOpeningHours }}
 >
   <PageHero
     lang={lang}
