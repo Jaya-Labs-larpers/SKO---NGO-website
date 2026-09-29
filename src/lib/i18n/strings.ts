@@ -74,7 +74,7 @@ const en = {
   pageImpact: 'Impact & results',
   pageReports: 'Annual reports & financials',
   pageSafeguarding: 'Safeguarding & child protection',
-  pagePartners: 'Partners & supporters',
+  pagePartners: 'Partners in our NGO work in Cambodia',
   pageContact: 'Contact us',
   pageAbout: 'About us',
   pagePrivacy: 'Privacy',
@@ -149,8 +149,9 @@ const en = {
   metaActivities:
     "News from SKO's family strengthening programs in Phnom Penh: community counselling, training with local authorities, and stories from families, month by month.",
   activitiesFromProgram: 'Activities from this programme',
-  seoPartners: 'Partners & supporters',
-  metaPartners: 'The institutions and organisations we work alongside.',
+  seoPartners: 'NGO Work in Cambodia: Our Partners and Funders',
+  metaPartners:
+    "SKO's NGO work in Cambodia is delivered with Planète Enfants & Développement, Family Fund for Children, UNOPS (Cities Alliance) and Swiss funding from SDC.",
   seoContact: 'Contact us',
   metaContact: 'Questions, partnerships, volunteering. We read every message.',
   seoReports: 'Annual reports & financials',
@@ -169,7 +170,8 @@ const en = {
     "News from SKO's family strengthening programs in Phnom Penh: community counselling, [family counselling](/programs/housing-and-living-conditions-hali/) at home, training with local authorities, and stories from the families we work with, month by month.",
   introImpact: 'What we have done, how we count it, and what the families we work with say.',
   introReports: 'Our annual reports, audited financial statements and governance documents.',
-  introPartners: 'The institutions and organisations we work alongside.',
+  introPartners:
+    "SKO's NGO work in Cambodia is delivered with international NGOs, foundations, UN agencies and government partners: Planète Enfants & Développement, Family Fund for Children Organization, UNOPS (Cities Alliance) and the Swiss Agency for Development and Cooperation. As a [social work NGO](/about/) we hold quarterly meetings with partners to work through shared challenges.",
   introContact: 'Questions, partnerships, volunteering. We read every message.',
   ctaHomeTitle: 'Want to learn more about SKO?',
   ctaHomeBody:
@@ -180,7 +182,7 @@ const en = {
   ctaProgramsTitle: 'Ask about a program.',
   ctaProgramTitle: 'Ask about this program.',
   ctaImpactTitle: 'Ask how we reach more families.',
-  ctaPartnersTitle: 'Work with us.',
+  ctaPartnersTitle: 'Fund or partner with our community development work.',
   viewOnGoogleMaps: 'Open in Google Maps',
   contactCall: 'Call',
   contactCallAction: 'Tap to call',
