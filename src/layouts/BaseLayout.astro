@@ -17,6 +17,7 @@ interface Props {
   description?: string;
   ogImage?: CmsImage | null;
   noindex?: boolean;
+  plainTitle?: boolean;
   publishedAt?: string | null;
   /** Extra schema.org node for this page type, e.g. Article or BreadcrumbList. */
   jsonLd?: Record<string, unknown> | null;
@@ -30,8 +31,18 @@ interface Props {
   intro?: boolean;
 }
 
-const { lang, title, description, ogImage, noindex, publishedAt, jsonLd, headerOverlay, intro } =
-  Astro.props;
+const {
+  lang,
+  title,
+  description,
+  ogImage,
+  noindex,
+  plainTitle,
+  publishedAt,
+  jsonLd,
+  headerOverlay,
+  intro,
+} = Astro.props;
 
 const settings = await getSiteSettings();
 const pathname = Astro.url.pathname;
@@ -81,6 +92,7 @@ const pathname = Astro.url.pathname;
       description={description}
       ogImage={ogImage}
       noindex={noindex}
+      plainTitle={plainTitle}
       settings={settings}
       publishedAt={publishedAt}
       jsonLd={jsonLd}
