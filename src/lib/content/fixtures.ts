@@ -1111,20 +1111,29 @@ export const pages: Page[] = [
   {
     _id: 'page-impact',
     slug: 'impact',
-    title: { en: 'Impact & results', km: 'លទ្ធផល និងផលប្រយោជន៍' },
+    title: {
+      en: "Our impact on women's empowerment and family resilience",
+      km: 'លទ្ធផល និងផលប្រយោជន៍',
+    },
     intro: {
-      en: 'What we have done, how we count it, and what the families we work with say.',
+      en: "SKO measures its impact in women's empowerment, family resilience and child protection. In the HALI programme, 89% of households report more equitable decision-making, 75% of women surveyed make the household's financial decisions, and 94% know where to seek help for [gender-based violence](/programs/housing-and-living-conditions-hali/).",
       km: 'អ្វីដែលយើងបានធ្វើ របៀបដែលយើងរាប់ និងអ្វីដែលគ្រួសារដែលយើងធ្វើការជាមួយបាននិយាយ។',
+    },
+    seo: {
+      title: { en: "Women's Empowerment & Family Resilience: Our Impact" },
+      description: {
+        en: "SKO's impact in Phnom Penh: women's empowerment and family resilience. 89% of households report fairer decisions and 94% know where to get help for GBV.",
+      },
     },
     body: enOnly([
       'Through the Family Development Approach (FDA), SKO’s work goes beyond immediate support. It helps families, youth, and children recognize their own strengths, build confidence, and take an active role in identifying challenges and finding solutions. Through counselling, guidance, and regular engagement, families gradually become more capable of making informed decisions and managing difficulties with greater confidence and resilience.',
       '## Children and youth',
-      'For children and youth, empowerment means giving them opportunities to be heard, express their needs, develop life skills, and participate in decisions that affect their lives. This helps them build confidence, responsibility, and hope for their future rather than depending only on external support.',
-      '## Families and communities',
-      'At the family and community level, empowerment strengthens relationships, communication, mutual support, and community participation. Families become more connected to available services and resources, while communities become better able to support vulnerable children and families.',
+      "For children and youth, empowerment means giving them opportunities to be heard, express their needs, develop life skills, and participate in decisions that affect their lives. This helps them build confidence, responsibility, and hope for their future rather than depending only on external support. Child protection training is delivered through [Children's Active Citizenship](/programs/childrens-active-citizenship/).",
+      '## Families, communities and economic resilience',
+      'At the family and community level, empowerment strengthens relationships, communication, mutual support, and community participation. Families become more connected to available services and resources, while communities become better able to support vulnerable children and families through the [Family Development Program](/programs/childrens-education-and-health/) delivered in Khan Dangkor.',
       'The lasting impact of SKO’s work is therefore not only the support provided today, but the strength, knowledge, confidence, and resilience that people can carry forward and use to create positive change in their own lives and communities.',
       '## Results by project',
-      'The results for each of SKO’s four projects are on their own programme pages.',
+      'The results for each of SKO’s four projects are on their own programme pages. Month-by-month updates are under [activities from our family strengthening programs](/activities/).',
     ]),
   },
   {
