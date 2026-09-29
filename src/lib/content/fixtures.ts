@@ -466,8 +466,14 @@ export const programs: Program[] = [
   },
   {
     _id: 'program-tfcf2',
-    image: localCmsImage('tfcf2-cover'),
-    cardImage: localCmsImage('tfcf2-card'),
+    image: localCmsImage('tfcf2-cover', {
+      en: 'Children queue at a registration table during an SKO community session in Phnom Penh',
+      km: 'កុមារតម្រង់ជួរនៅតុចុះឈ្មោះ ក្នុងវគ្គសហគមន៍របស់ SKO នៅរាជធានីភ្នំពេញ',
+    }),
+    cardImage: localCmsImage('tfcf2-card', {
+      en: 'Parents and children at a community meeting with illustrated posters, Phnom Penh',
+      km: 'ឪពុកម្តាយ និងកុមារនៅក្នុងកិច្ចប្រជុំសហគមន៍ដែលមានផ្ទាំងរូបភាពបង្ហាញ នៅរាជធានីភ្នំពេញ',
+    }),
     slug: 'childrens-education-and-health',
     order: 3,
     title: {
@@ -475,12 +481,18 @@ export const programs: Program[] = [
       km: 'ការលើកកម្ពស់ការអប់រំ និងសុខភាពកុមារតាមរយៈ FDP',
     },
     summary: {
-      en: 'To foster awareness among parents, caregivers, and local authorities about the importance of basic education and primary health care for vulnerable children.',
+      en: "Promoting Children's Education and Health through FDP is SKO's family development programme in Khan Dangkor, Phnom Penh. Through the Family Development Program (FDP), social workers, Family Development Volunteers, schools and health centres support 390 vulnerable children and their families with education, health, protection and family strengthening.",
       km: 'ដើម្បីជំរុញការយល់ដឹងក្នុងចំណោមឪពុកម្តាយ អ្នកថែទាំ និងអាជ្ញាធរមូលដ្ឋាន អំពីសារៈសំខាន់នៃការអប់រំមូលដ្ឋាន និងសុខភាពថែទាំបឋមសម្រាប់កុមារងាយរងគ្រោះ។',
+    },
+    seo: {
+      title: { en: "Family Development: Children's Education and Health" },
+      description: {
+        en: 'Family development through FDP in Khan Dangkor, Phnom Penh: SKO supports 390 vulnerable children and their families with education, health and case management.',
+      },
     },
     body: enOnly([
       '## What we do',
-      'Child Protection Training. Building children’s capacity to understand and respond to different forms of violence (emotional, sexual, physical, neglect, exploitation).',
+      "Child Protection Training. Building children’s capacity to understand and respond to different forms of violence (emotional, sexual, physical, neglect, exploitation). Delivered together with our sister project [Children's Active Citizenship](/programs/childrens-active-citizenship/).",
       'Leadership and Management Training for youth and young people. Promotes knowledge, capacity and skill, and a positive, results-oriented attitude, so young people can lead and manage their daily work and living conditions, starting young and carrying into their careers.',
       'Mobile Library. Improving reading skills, promoting education, and teaching safety practices such as traffic awareness.',
       'Distribution of School Materials & Emergency Support. Providing essential supplies to vulnerable children, encouraging school attendance, and mobilizing resources from charities and NGOs.',
@@ -490,7 +502,7 @@ export const programs: Program[] = [
       'Community Meetings. Promoting positive parenting, child protection and child rights while encouraging parents to share practices and find solutions to education and health challenges, strengthening parents’ and caregivers’ capacity to manage stress and anger, and building more positive, peaceful, resilient thinking for the family, children and community.',
       '## Partner',
       'Family Fund for Children Organization.',
-      '## Impact and results',
+      '## Impact and results: family strengthening in Khan Dangkor',
       'The Community Development Project, implemented through SKO’s Family Development Approach, contributed to improving the education, health, protection, and overall well-being of 390 vulnerable children (204 girls and 186 boys) and their families in Sangkat Prey Veng, Prey Sar, and Dangkor of Khan Dangkor. The project combined direct support to children with family strengthening, community engagement, health services, and collaboration with local authorities, schools, health centers, and Family Development Volunteers (FDVs).',
       'Under Objective 1, the project strengthened children’s access to education, learning opportunities, and protection. Four Children’s Clubs provided safe and structured spaces for children to learn, interact, develop life skills, and participate in positive activities. Children’s Club meetings 237 direct reached children and 474 indirect reaches children, increasing their awareness of child rights, protection, online safety, and drug prevention. 40 mobile library sessions reached 182 children, promoting reading, creativity, peer learning, nutrition, hygiene, and road safety. School materials were provided to all 390 target children from 322 families, reducing financial pressure on vulnerable households and helping children remain prepared and engaged in school. Six School Support Committee meetings further strengthened collaboration among schools, parents, FDVs, and local authorities to address challenges such as absenteeism and e-cigarette use and to improve monitoring of children’s education.',
       'In addition, 24,700 kg of rice was distributed to 247 vulnerable families supporting 304 children, while emergency rice assistance supported another 150 families.',
