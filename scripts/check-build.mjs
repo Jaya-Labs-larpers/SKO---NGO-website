@@ -16,6 +16,9 @@ import { findEnvLeaks, findSecrets, secretEnvEntries } from './secrets.mjs';
 const env = { ...loadEnv('production', process.cwd(), ''), ...process.env };
 const production = deploymentEnvironment(env) === 'production';
 const localContent = env.PUBLIC_CONTENT_SOURCE === 'fixtures';
+const cmsContent =
+  (env.PUBLIC_CONTENT_SOURCE?.trim() || (env.PUBLIC_SANITY_PROJECT_ID?.trim() ? 'sanity' : 'fixtures')) ===
+  'sanity';
 const siteUrl = (env.PUBLIC_SITE_URL || 'http://localhost:4321').replace(/\/+$/, '');
 
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
@@ -120,8 +123,9 @@ for await (const file of htmlFiles(DIST)) {
   check(imgsWithoutAlt === 0, page, `${imgsWithoutAlt} <img> without alt`);
 }
 
-// Crawler files: llms.txt lists the site for answer engines, and every sitemap
-// entry carries a lastmod so re-crawls can tell a changed page from an old one.
+// Crawler files: llms.txt lists the site for answer engines. A sitemap lastmod
+// is the page's last CMS edit, never the build time, or Google stops trusting it;
+// a fixtures build has no edit dates and omits it.
 const llms = await readFile(join(DIST, 'llms.txt'), 'utf8').catch(() => '');
 check(llms.startsWith('# '), '/llms.txt', 'missing or does not start with an H1 line');
 check(/^## Programmes$/m.test(llms) && /^## Pages$/m.test(llms), '/llms.txt', 'missing a section');
@@ -131,7 +135,7 @@ const sitemapUrls = (sitemap.match(/<url>/g) ?? []).length;
 const sitemapLastmods = (sitemap.match(/<lastmod>/g) ?? []).length;
 check(sitemapUrls > 0, '/sitemap-0.xml', 'missing or empty');
 check(
-  sitemapUrls === sitemapLastmods,
+  sitemapLastmods === (cmsContent ? sitemapUrls : 0),
   '/sitemap-0.xml',
   `${sitemapUrls} <url> entries but ${sitemapLastmods} <lastmod> elements`,
 );
