@@ -7,6 +7,7 @@ import {
   deploymentEnvironment,
   validateBuildConfig,
 } from "./scripts/readiness.mjs";
+import { editedDocuments, lastmodFor } from "./scripts/sitemap-lastmod.mjs";
 
 const env = {
   ...loadEnv(process.env.NODE_ENV || "production", process.cwd(), ""),
@@ -20,6 +21,7 @@ const SITE = (env.PUBLIC_SITE_URL?.trim() || "http://localhost:4321").replace(
   "",
 );
 process.env.PUBLIC_SITE_URL = SITE;
+const documents = await editedDocuments(env);
 
 export default defineConfig({
   site: SITE,
@@ -59,7 +61,10 @@ export default defineConfig({
         locales: { en: "en-US", km: "km-KH" },
       },
       filter: (page) => !page.includes("/404"),
-      lastmod: new Date(),
+      serialize: (item) => {
+        const lastmod = documents && lastmodFor(new URL(item.url).pathname, documents);
+        return lastmod ? { ...item, lastmod } : item;
+      },
     }),
   ],
 });
