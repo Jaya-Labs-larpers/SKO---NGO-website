@@ -151,5 +151,5 @@ jobs:
         working-directory: studio
         env:
           SANITY_STUDIO_PROJECT_ID: abc12345
-      - run: npm audit --audit-level=moderate
+      - run: node ../scripts/audit.mjs
         working-directory: studio
