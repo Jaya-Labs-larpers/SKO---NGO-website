@@ -90,7 +90,9 @@ const jsonLd = {
     '@type': 'PostalAddress',
     addressLocality: 'Phnom Penh',
     addressCountry: 'KH',
-    ...(text(settings.address, lang) ? { streetAddress: text(settings.address, lang) } : {}),
+    ...(text(settings.address, lang)
+      ? { streetAddress: text(settings.address, lang).replace(/\s*\n\s*/g, ' ') }
+      : {}),
   },
   areaServed: {
     '@type': 'City',
@@ -111,17 +113,16 @@ const jsonLd = {
     'Family Development Program (FDP)',
     'Migration and development',
   ],
-  nonprofitStatus: 'NonprofitANBI',
+  legalName: text(settings.orgName, 'en'),
   foundingDate: '2007-04-20',
-  ...(text(settings.registration, lang)
-    ? {
-        identifier: {
-          '@type': 'PropertyValue',
-          name: 'Ministry of Interior registration',
-          value: text(settings.registration, lang),
-        },
-      }
-    : {}),
+  identifier: {
+    '@type': 'PropertyValue',
+    propertyID: 'Ministry of Interior registration',
+    value: '457 (សជណ)',
+    ...(text(settings.registration, lang)
+      ? { description: text(settings.registration, lang) }
+      : {}),
+  },
   ...(settings.socials && settings.socials.length > 0
     ? {
         sameAs: settings.socials
