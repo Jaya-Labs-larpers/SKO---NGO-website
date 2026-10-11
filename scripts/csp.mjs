@@ -40,14 +40,18 @@ const BASE_DIRECTIVES = [
   "object-src 'none'",
   "form-action 'self'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://cdn.sanity.io",
+  "img-src 'self' data: https://cdn.sanity.io https://*.google-analytics.com https://*.googletagmanager.com",
   "font-src 'self'",
-  "connect-src 'self' https://cloudflareinsights.com",
-  'frame-src https://challenges.cloudflare.com',
+  "connect-src 'self' https://cloudflareinsights.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
+  'frame-src https://challenges.cloudflare.com https://www.googletagmanager.com',
   'upgrade-insecure-requests',
 ];
 
-const SCRIPT_HOSTS = ['https://challenges.cloudflare.com', 'https://static.cloudflareinsights.com'];
+const SCRIPT_HOSTS = [
+  'https://challenges.cloudflare.com',
+  'https://static.cloudflareinsights.com',
+  'https://*.googletagmanager.com',
+];
 
 /**
  * Matches inline <script> blocks — those with no src attribute. The captured
