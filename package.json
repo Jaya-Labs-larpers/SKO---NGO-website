@@ -27,19 +27,19 @@
     "studio:deploy": "npm --prefix studio run deploy"
   },
   "dependencies": {
-    "@astrojs/sitemap": "3.7.3",
+    "@astrojs/sitemap": "3.7.4",
     "@sanity/client": "7.26.0",
     "@sanity/image-url": "1.2.0",
-    "astro": "7.3.2",
-    "zod": "4.4.3"
+    "astro": "7.3.7",
+    "zod": "4.6.5"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
     "@tailwindcss/vite": "4.3.3",
     "@types/node": "24.13.3",
-    "prettier": "3.9.6",
+    "prettier": "3.9.9",
     "prettier-plugin-astro": "0.14.1",
-    "prettier-plugin-tailwindcss": "0.6.14",
+    "prettier-plugin-tailwindcss": "0.8.1",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
     "wrangler": "4.149.0"
