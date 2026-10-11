@@ -4,6 +4,7 @@ import '~/styles/global.css';
 import { htmlLang, type Locale } from '~/lib/i18n/config';
 import { t } from '~/lib/i18n/utils';
 import { getSiteSettings } from '~/lib/content';
+import { gtmId } from '~/lib/config';
 import type { CmsImage } from '~/lib/content/types';
 import Header from '~/components/layout/Header.astro';
 import Footer from '~/components/layout/Footer.astro';
@@ -49,6 +50,9 @@ const {
 
 const settings = await getSiteSettings();
 const pathname = Astro.url.pathname;
+const gtmSnippet =
+  gtmId &&
+  `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`;
 ---
 
 <!doctype html>
@@ -64,6 +68,7 @@ const pathname = Astro.url.pathname;
     */
     }
     <meta http-equiv="Content-Security-Policy" content="__CSP_POLICY__" />
+    {gtmSnippet && <script is:inline set:html={gtmSnippet} />}
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -132,6 +137,18 @@ const pathname = Astro.url.pathname;
     </script>
   </head>
   <body class="bg-white">
+    {
+      gtmId && (
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+            height="0"
+            width="0"
+            style="display:none;visibility:hidden"
+          />
+        </noscript>
+      )
+    }
     {intro && <PageLoader />}
 
     <a
