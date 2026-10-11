@@ -37,7 +37,7 @@ test('patched YAML and TOML preserve normal config parsing and reject malformed 
     name: 'ngo',
     items: ['one', 'two'],
   });
-  assert.deepEqual(toml.parse('name = "ngo"'), { name: 'ngo' });
+  assert.deepEqual({ ...toml.parse('name = "ngo"') }, { name: 'ngo' });
   assert.throws(() => toml.parse('value = [,,,,]'));
   assert.throws(() => yaml.load('a: [invalid'));
 });
