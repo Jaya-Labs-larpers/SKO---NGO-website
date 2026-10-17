@@ -35,7 +35,7 @@ test("production is a separate Worker on the canonical host with its own KV name
   assert.equal(production.workers_dev, false);
   assert.equal(production.preview_urls, false);
   assert.deepEqual(production.routes, [
-    { pattern: "www.sko-samatapheapkhnom.org", custom_domain: true },
+    { pattern: "www.samatapheapkhnom.org", custom_domain: true },
   ]);
   assert.equal(production.vars.PUBLIC_DEPLOYMENT_ENV, "production");
   const binding = (env) =>

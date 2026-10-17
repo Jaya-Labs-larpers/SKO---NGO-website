@@ -20,7 +20,7 @@ verified, and what you skipped and why.
   `lighthouse`, `studio`. Do not require `claude-review`.
 - Sanity project `xm91vtfk`, dataset `production`, API version `2026-01-01`.
   All three are public values.
-- Production URL: `https://www.sko-samatapheapkhnom.org`.
+- Production URL: `https://www.samatapheapkhnom.org`.
 - GitHub environments: `Production` is live (deploy.yml's `production`
   resolves to it; last deployment today). `Preview`, `Preview – sko`,
   `Preview – sko-website` and `Production – sko` are Vercel leftovers with no
@@ -66,7 +66,7 @@ verified, and what you skipped and why.
    - Steps: pinned `actions/checkout` (same SHA as `verify.yml`,
      `persist-credentials: false`, `fetch-depth: 1`), pinned
      `actions/setup-node` with `node-version-file: .nvmrc`, then
-     `node scripts/check-edge.mjs https://www.sko-samatapheapkhnom.org`.
+     `node scripts/check-edge.mjs https://www.samatapheapkhnom.org`.
      No `npm ci`.
    - Add a leading comment block only for what the file cannot say itself:
      that GitHub emails the workflow's last committer on failure, that

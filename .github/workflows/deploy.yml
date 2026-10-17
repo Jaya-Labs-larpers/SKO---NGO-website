@@ -7,7 +7,7 @@ name: Deploy
 # Until CLOUDFLARE_API_TOKEN exists as a repository secret the deploy steps are
 # skipped and the job still goes green, so main is never red for a missing
 # credential. Create the token from the "Edit Cloudflare Workers" template with
-# the sko-samatapheapkhnom.org zone included, and store it with
+# the samatapheapkhnom.org zone included, and store it with
 # `gh secret set CLOUDFLARE_API_TOKEN`. Never the Global API Key.
 
 on:
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://www.sko-samatapheapkhnom.org
+      url: https://www.samatapheapkhnom.org
     env:
       PUBLIC_DEPLOYMENT_ENV: production
       PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
@@ -101,7 +101,7 @@ jobs:
       - name: Live checks against production
         id: live
         if: steps.creds.outputs.ready == 'true'
-        run: npm run check:edge -- https://www.sko-samatapheapkhnom.org --expect-build
+        run: npm run check:edge -- https://www.samatapheapkhnom.org --expect-build
 
       # The new version is already serving when the live checks fail, so put the
       # recorded one back. The job stays failed either way, and GitHub emails.
@@ -120,4 +120,4 @@ jobs:
 
       - name: Live checks after rollback
         if: failure() && steps.rollback.outcome == 'success'
-        run: npm run check:edge -- https://www.sko-samatapheapkhnom.org
+        run: npm run check:edge -- https://www.samatapheapkhnom.org

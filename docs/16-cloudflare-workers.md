@@ -11,7 +11,7 @@ One rule: **rehearse on workers.dev, pass the checks there, and only then touch 
 
 | Piece               | Where                                                                                                                                                                                                                                                                                                                         |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Worker config       | `wrangler.jsonc`. Top level is the rehearsal (`sko-website` on workers.dev); `env.production` is `sko-website-production` on `www.sko-samatapheapkhnom.org`.                                                                                                                                                                  |
+| Worker config       | `wrangler.jsonc`. Top level is the rehearsal (`sko-website` on workers.dev); `env.production` is `sko-website-production` on `www.samatapheapkhnom.org`.                                                                                                                                                                  |
 | Worker script       | `worker/index.ts`. Only `/api/*` reaches it (`assets.run_worker_first`). It answers `/api/contact` through `functions/api/contact.ts` and hands everything else back to static assets.                                                                                                                                        |
 | Static site         | `dist/`, built by `npm run build`. Missing pages get the nearest `404.html`; `scripts/not-found.mjs` copies the Khmer page to `dist/km/404.html` so `/km/*` misses are Khmer.                                                                                                                                                 |
 | Headers and caching | `public/_headers`. Applies to static responses only; the Worker sets its own headers on `/api/*`.                                                                                                                                                                                                                             |
@@ -61,22 +61,35 @@ The zone is already on Cloudflare nameservers. A person does the dashboard steps
 3. **Apex placeholder.** DNS → add `AAAA`, name `@`, content `100::`, Proxied. It never receives
    traffic; it lets Cloudflare answer for the apex. If an apex record exists, switch it to Proxied.
 4. **Apex to www.** Rules → Redirect Rules → create. Wildcard pattern, request URL
-   `https://sko-samatapheapkhnom.org/*`, target `https://www.sko-samatapheapkhnom.org/${1}`, 301,
+   `https://samatapheapkhnom.org/*`, target `https://www.samatapheapkhnom.org/${1}`, 301,
    preserve query string. Ignore the built-in template; it points the wrong way.
 5. SSL/TLS → turn on **Always Use HTTPS**.
 6. Verify from the authoritative server, not the local resolver:
-   `dig +short A www.sko-samatapheapkhnom.org @hadlee.ns.cloudflare.com`, then
-   `curl -sI https://www.sko-samatapheapkhnom.org/` shows `server: cloudflare`,
-   `curl -sI "https://sko-samatapheapkhnom.org/x/?q=1"` is a 301 to the www URL, and
-   `npm run check:edge -- https://www.sko-samatapheapkhnom.org` passes.
+   `dig +short A www.samatapheapkhnom.org @hadlee.ns.cloudflare.com`, then
+   `curl -sI https://www.samatapheapkhnom.org/` shows `server: cloudflare`,
+   `curl -sI "https://samatapheapkhnom.org/x/?q=1"` is a 301 to the www URL, and
+   `npm run check:edge -- https://www.samatapheapkhnom.org` passes.
 7. Perform the one real business action once forms are enabled: submit each form, confirm delivery.
+
+## Domain move (October 2026)
+
+The site moved from `www.sko-samatapheapkhnom.org` to `www.samatapheapkhnom.org`.
+
+- **New zone.** The apex `A` record stays on the cPanel host (15.235.164.97) because mail,
+  webmail and the SPF `+a` depend on it. Do not touch `mail`, `MX`, SPF or DKIM. A Redirect Rule
+  sends the apex to `https://www.samatapheapkhnom.org/${1}` before it reaches cPanel, except
+  `/.well-known/`, `/webmail`, `/cpanel` and `/whm`, which the cPanel host still answers.
+- **Old zone.** Kept, and kept registered. One Redirect Rule sends every path on the apex and
+  `www` to the same path on `https://www.samatapheapkhnom.org`, query kept, in one 301. `www`
+  is a proxied `AAAA 100::` placeholder so Cloudflare answers for it. The Resend records there
+  are untouched until sending moves to the new domain.
 
 ## Deploying from CI
 
 After cutover nobody deploys from a laptop.
 
 - A person creates the API token: My Profile → API Tokens → template **Edit Cloudflare Workers**,
-  zone `sko-samatapheapkhnom.org` included. Use the value labelled API Token, never the Global API
+  zone `samatapheapkhnom.org` included. Use the value labelled API Token, never the Global API
   Key. Store it with `gh secret set CLOUDFLARE_API_TOKEN`; the account ID goes in
   `CLOUDFLARE_ACCOUNT_ID`.
 - Public build values are repository variables: `PUBLIC_SITE_URL`, `PUBLIC_CONTENT_SOURCE`,
@@ -130,7 +143,7 @@ unaffected.
 ## Enabling the contact form (later)
 
 Requires, in order: the sending domain verified in Resend (SPF and DKIM records in the zone), the
-production Turnstile widget listing `www.sko-samatapheapkhnom.org`, the five secrets set on
+production Turnstile widget listing `www.samatapheapkhnom.org`, the five secrets set on
 `env.production`, `PUBLIC_CONTACT_ENABLED=true` at build time and `CONTACT_ENABLED` flipped to
 `"true"` in `wrangler.jsonc` for production. Then submit both forms on the live site and confirm
 each lands in the right inbox and not in spam.

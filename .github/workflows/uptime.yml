@@ -28,4 +28,4 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - run: node scripts/check-edge.mjs https://www.sko-samatapheapkhnom.org
+      - run: node scripts/check-edge.mjs https://www.samatapheapkhnom.org

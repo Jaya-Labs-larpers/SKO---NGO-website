@@ -438,7 +438,7 @@ Notes: This page ranks for nothing in the pool by design (see SEO-KEYWORDS.md co
 
 | Field | Value |
 |---|---|
-| URL | https://www.sko-samatapheapkhnom.org/family-development-program/ (and `/km/family-development-program/`) |
+| URL | https://www.samatapheapkhnom.org/family-development-program/ (and `/km/family-development-program/`) |
 | Title | Social Work in Cambodia: Family Development Program · SKO (57) |
 | H1 | The Family Development Program: how SKO does social work in Cambodia |
 | Meta description | The Family Development Program is SKO's social work method in Cambodia: home visits, family assessment, case management, counselling and referrals for families. (160) |
@@ -540,13 +540,13 @@ Run after applying, from the project root, against the built or deployed site.
 
 ```bash
 # every changed page: 200, title, H1, canonical, no noindex
-for u in https://www.sko-samatapheapkhnom.org/ https://www.sko-samatapheapkhnom.org/about/ https://www.sko-samatapheapkhnom.org/programs/ https://www.sko-samatapheapkhnom.org/programs/housing-and-living-conditions-hali/ https://www.sko-samatapheapkhnom.org/programs/childrens-active-citizenship/ https://www.sko-samatapheapkhnom.org/programs/childrens-education-and-health/ https://www.sko-samatapheapkhnom.org/programs/resilient-city-and-migration/ https://www.sko-samatapheapkhnom.org/activities/ https://www.sko-samatapheapkhnom.org/impact/ https://www.sko-samatapheapkhnom.org/partners/ https://www.sko-samatapheapkhnom.org/contact/ https://www.sko-samatapheapkhnom.org/faq/ https://www.sko-samatapheapkhnom.org/reports/ https://www.sko-samatapheapkhnom.org/safeguarding/; do
+for u in https://www.samatapheapkhnom.org/ https://www.samatapheapkhnom.org/about/ https://www.samatapheapkhnom.org/programs/ https://www.samatapheapkhnom.org/programs/housing-and-living-conditions-hali/ https://www.samatapheapkhnom.org/programs/childrens-active-citizenship/ https://www.samatapheapkhnom.org/programs/childrens-education-and-health/ https://www.samatapheapkhnom.org/programs/resilient-city-and-migration/ https://www.samatapheapkhnom.org/activities/ https://www.samatapheapkhnom.org/impact/ https://www.samatapheapkhnom.org/partners/ https://www.samatapheapkhnom.org/contact/ https://www.samatapheapkhnom.org/faq/ https://www.samatapheapkhnom.org/reports/ https://www.samatapheapkhnom.org/safeguarding/; do
   echo "== $u"
   curl -sI "$u" | grep -iE "^HTTP/|x-robots-tag"
   curl -s "$u" | grep -ioE '<title>[^<]*</title>|<h1[^>]*>[^<]*</h1>|<link[^>]*canonical[^>]*>|<meta[^>]*robots[^>]*>'
 done
 # redirects (unchanged, but they carry the retired keywords' equity — confirm they still hold)
-for o in /donate/ /volunteer/ /careers/ /partner-with-us/; do curl -sI "https://www.sko-samatapheapkhnom.org$o" | grep -iE "^HTTP/|location"; done
+for o in /donate/ /volunteer/ /careers/ /partner-with-us/; do curl -sI "https://www.samatapheapkhnom.org$o" | grep -iE "^HTTP/|location"; done
 # duplicate titles across the plan
 printf '%s\n' \
  'Gender-Based Violence Prevention in Phnom Penh: HALI · SKO' \
@@ -606,7 +606,7 @@ Every field changed above is a `LocaleString` with a `.km` side (or a `km` block
 
 - Keywords change → run 1, then run 2.
 - Site changes (new pages, redesign, CMS migration) → run 2.
-- 4–8 weeks after run 3 → paste the new Search Console rows into 1.3 and run 1 again; compare position and CTR per cluster with the "Now" column in the previous SEO-KEYWORDS.md. Search Console is not connected yet — connect the property (`https://www.sko-samatapheapkhnom.org`) before run 3 so there is a baseline.
+- 4–8 weeks after run 3 → paste the new Search Console rows into 1.3 and run 1 again; compare position and CTR per cluster with the "Now" column in the previous SEO-KEYWORDS.md. Search Console is not connected yet — connect the property (`https://www.samatapheapkhnom.org`) before run 3 so there is a baseline.
 
 ## Applied — 2026-09-29
 

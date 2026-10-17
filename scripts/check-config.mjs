@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 const runFile = promisify(execFile);
 const repository = "Jaya-Labs-larpers/SKO---NGO-website";
 const projectId = "xm91vtfk";
-const siteUrl = "https://www.sko-samatapheapkhnom.org";
+const siteUrl = "https://www.samatapheapkhnom.org";
 const variableNames = [
   "PUBLIC_SITE_URL",
   "PUBLIC_CONTENT_SOURCE",

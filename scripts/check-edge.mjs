@@ -2,8 +2,8 @@
  * Live checks against a deployed copy of the site.
  *
  *   node scripts/check-edge.mjs https://sko-website.<subdomain>.workers.dev
- *   node scripts/check-edge.mjs https://www.sko-samatapheapkhnom.org --indexable
- *   node scripts/check-edge.mjs https://www.sko-samatapheapkhnom.org --expect-build
+ *   node scripts/check-edge.mjs https://www.samatapheapkhnom.org --indexable
+ *   node scripts/check-edge.mjs https://www.samatapheapkhnom.org --expect-build
  *
  * Run it on the workers.dev rehearsal before attaching the domain, on
  * production after every deploy, and after any incident. Exits 1 on failure.
