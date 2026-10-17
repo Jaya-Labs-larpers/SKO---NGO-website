@@ -1,6 +1,6 @@
 # SKO website — handoff v3: website icon set (Heroicons outline, 1.5 px)
 
-**Site:** `https://www.sko-samatapheapkhnom.org/` · Astro static · EN + `/km/` mirror
+**Site:** `https://www.samatapheapkhnom.org/` · Astro static · EN + `/km/` mirror
 **Prepared:** 18 September 2026 · replaces the **icon** parts of handoff v1 (17 Sept). Logo kit, colour-token remap and `Logo.astro` from v1 stay exactly as they are.
 **Scope:** one thing — the UI icons placed beside elements across the site. No change to the NGO logo, the brand colours, the favicon/app icon (still parked — the website icons ship first, the app icon follows once direction A/B/C is chosen), or any page content.
 

@@ -144,7 +144,7 @@ test("explicit local production content needs a real domain and disabled forms, 
   const { validateBuildConfig } = await import("../scripts/readiness.mjs");
   const env = {
     PUBLIC_DEPLOYMENT_ENV: "production",
-    PUBLIC_SITE_URL: "https://www.sko-samatapheapkhnom.org",
+    PUBLIC_SITE_URL: "https://www.samatapheapkhnom.org",
     PUBLIC_CONTENT_SOURCE: "fixtures",
     PUBLIC_CONTACT_ENABLED: "false",
   };

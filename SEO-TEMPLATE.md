@@ -23,7 +23,7 @@ Outputs live next to this file. The skeletons for both outputs are in section 6;
 
 | Field | Value |
 |---|---|
-| Site URL (canonical, with https) | https://www.sko-samatapheapkhnom.org |
+| Site URL (canonical, with https) | https://www.samatapheapkhnom.org |
 | Brand name | Samatapheap Khnom Organization (SKO) |
 | What the site sells / does (one sentence) | A Phnom Penh NGO (registered 2007) that keeps vulnerable families together through home-based social work: family counselling, child protection, GBV prevention, education and health, and support for migrants. |
 | Locale(s) | en, km (English at `/`, Khmer at `/km/`; keyword scores are English-only) |
