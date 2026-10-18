@@ -118,7 +118,7 @@ Sanity webhook runs the Deploy workflow on every publish. A person sets it up on
 - Check: publish any small edit, and a Deploy run appears under Actions within seconds.
 - Delivery log: `npx sanity hook logs "Rebuild site on publish"` from `studio/`. A 204 is a
   delivered publish.
-- Safety net: the Content sync workflow runs every 15 minutes. If a publish is 10 minutes old and no
+- Safety net: the Content sync workflow runs hourly. If a publish is 10 minutes old and no
   deploy picked it up, it starts one and fails, which emails its last committer. A failing run means
   the webhook needs attention. Deletions are not detected; the nightly rebuild covers them.
 
@@ -153,7 +153,7 @@ each lands in the right inbox and not in spam.
 - The Sanity publish webhook is configured to dispatch the Deploy workflow; its GitHub token scope
   still needs review.
 - A nightly rebuild is scheduled at 02:00 Asia/Phnom_Penh so expired job posts drop off.
-- The Uptime workflow checks the live site every 15 minutes. A manual run passed 28/28 checks on
+- The Uptime workflow checks the live site hourly. A manual run passed 28/28 checks on
   2026-09-24.
 - Move the zone and Worker to an SKO-owned Cloudflare account.
 
