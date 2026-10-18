@@ -5,7 +5,9 @@ name: Uptime
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    # Hourly, not more often: each run bills at least a minute, and the org's
+    # free 2,000 Actions minutes a month ran out at every 15 minutes.
+    - cron: "15 * * * *"
   workflow_dispatch:
 
 permissions:
