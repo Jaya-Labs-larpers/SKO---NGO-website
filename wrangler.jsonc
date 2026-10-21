@@ -19,6 +19,9 @@
   "kv_namespaces": [
     { "binding": "RATE_LIMIT_KV", "id": "0bd8a5bfc040452db9e214f5dee44eb8" },
   ],
+  "version_metadata": { "binding": "CF_VERSION_METADATA" },
+  // The rehearsal runs no cron jobs; production's are in worker/scheduled.ts.
+  "triggers": { "crons": [] },
 
   "env": {
     "production": {
@@ -32,13 +35,21 @@
       "vars": {
         "PUBLIC_DEPLOYMENT_ENV": "production",
         "CONTACT_ENABLED": "false",
+        "SITE_URL": "https://www.samatapheapkhnom.org",
+        "SANITY_PROJECT_ID": "xm91vtfk",
+        "SANITY_DATASET": "production",
+        "SANITY_API_VERSION": "2026-01-01",
       },
+      // DEPLOY_HOOK_URL and ALERT_TO_EMAIL are secrets: `wrangler secret put <NAME> --env production`.
       "kv_namespaces": [
         {
           "binding": "RATE_LIMIT_KV",
           "id": "ff33586a0bd441ed84f75231b8045da5",
         },
       ],
+      "version_metadata": { "binding": "CF_VERSION_METADATA" },
+      // Uptime, Content sync, nightly rebuild. Must match CRONS in worker/scheduled.ts.
+      "triggers": { "crons": ["15 * * * *", "45 * * * *", "0 19 * * *"] },
     },
   },
 }

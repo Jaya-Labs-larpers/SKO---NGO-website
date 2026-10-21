@@ -49,12 +49,26 @@ test("production is a separate Worker on the canonical host with its own KV name
     binding(production).id,
     "rehearsal and production must not share a counter",
   );
+  const publicVars = [
+    "PUBLIC_DEPLOYMENT_ENV",
+    "CONTACT_ENABLED",
+    "SITE_URL",
+    "SANITY_PROJECT_ID",
+    "SANITY_DATASET",
+    "SANITY_API_VERSION",
+  ];
   for (const key of Object.keys({ ...config.vars, ...production.vars })) {
-    assert.ok(
-      key === "PUBLIC_DEPLOYMENT_ENV" || key === "CONTACT_ENABLED",
-      `${key} is not a secret-safe var`,
-    );
+    assert.ok(publicVars.includes(key), `${key} is not a secret-safe var`);
   }
+});
+
+test("only production runs the cron jobs, on the schedules worker/scheduled.ts handles", async () => {
+  assert.deepEqual(config.triggers.crons, []);
+  const source = await readFile(new URL("worker/scheduled.ts", root), "utf8");
+  const handled = [...source.matchAll(/^\s+\w+: '([^']*\*[^']*)',$/gm)].map((m) => m[1]);
+  assert.deepEqual([...production.triggers.crons].sort(), handled.sort());
+  assert.equal(production.vars.SITE_URL, "https://www.samatapheapkhnom.org");
+  assert.equal(production.version_metadata.binding, "CF_VERSION_METADATA");
 });
 
 test("_headers carries the security and cache policy, with immutable only on hashed assets", async () => {
