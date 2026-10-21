@@ -33,8 +33,8 @@ at `/about/`, redirecting `/about` once. Do not change either side alone.
 | `npm run preview`                                | Builds, then serves `dist/` with the Worker under `wrangler dev`. The honest local preview; the form endpoint exists only here, not under `astro dev`.  |
 | `npx wrangler deploy --dry-run --env production` | Validates the production config and bundle without deploying.                                                                                           |
 | `npm run deploy:rehearsal`                       | Deploys the top-level environment to workers.dev. The empty `--env ""` is deliberate: once a named environment exists Wrangler needs it.                |
-| `npm run deploy:production`                      | Deploys `env.production`. From CI only once the deploy workflow exists.                                                                                 |
-| `npm run check:edge -- <base-url>`               | Live checks: routes, both 404 pages, headers, caching, API behaviour, indexing state. Add `--indexable` on the day production stops shipping `noindex`, and `--expect-build` straight after deploying `dist/` (the Deploy workflow does). |
+| `npm run deploy:production`                      | Deploys `env.production` from your machine. Normally Workers Builds does this on every push to `main`.                                                  |
+| `npm run check:edge -- <base-url>`               | Live checks: routes, both 404 pages, headers, caching, API behaviour, indexing state. Add `--indexable` on the day production stops shipping `noindex`, and `--expect-build` straight after deploying `dist/` (the Workers Builds deploy command does). The production Worker's cron runs the same checks hourly. |
 | `npx wrangler versions list --env production`    | Deployed versions.                                                                                                                                      |
 | `npx wrangler rollback --env production`         | Restores the previous Worker and its files. It does not undo DNS, Redirect Rules, secrets or KV contents.                                               |
 | `npx wrangler secret put NAME --env production`  | Sets a runtime secret. A person runs this from their own terminal.                                                                                      |
@@ -95,46 +95,69 @@ After cutover nobody deploys from a laptop.
 - Public build values are repository variables: `PUBLIC_SITE_URL`, `PUBLIC_CONTENT_SOURCE`,
   `PUBLIC_CONTACT_ENABLED`, `PUBLIC_TURNSTILE_SITE_KEY`, `PUBLIC_CF_ANALYTICS_TOKEN`,
   `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET`, `PUBLIC_SANITY_API_VERSION`.
-- The deploy workflow runs `npm run check` with `PUBLIC_DEPLOYMENT_ENV=production`, then
-  `wrangler deploy --env production`, then `check:edge` against the live host. Pull requests run
-  `check` only.
+- Deploys run on Cloudflare Workers Builds, not GitHub Actions (Actions stopped running on the org's
+  free plan in October 2026). Set up once in the dashboard: Workers & Pages →
+  `sko-website-production` → Settings → Builds → Connect the repository, production branch `main`.
+  - Build command `npm ci && npm run check`
+  - Deploy command
+    `npx wrangler deploy --env production && npm run check:edge -- https://www.samatapheapkhnom.org --expect-build`
+  - Build variables: `PUBLIC_DEPLOYMENT_ENV=production` plus every repository variable above.
+  - A failed live check fails the build but does not roll back; roll back by hand (below).
+- `.github/workflows/deploy.yml` is now a manual fallback with automatic rollback, run from the
+  Actions tab when Actions is available.
+
+## Cron jobs
+
+The production Worker runs these itself (`worker/scheduled.ts`, schedules in `wrangler.jsonc`). The
+rehearsal runs none.
+
+| Schedule (UTC)  | Job                                                                                          |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| `15 * * * *`    | Uptime: the `check:edge` checks against `SITE_URL`.                                          |
+| `45 * * * *`    | Content sync (below).                                                                        |
+| `0 19 * * *`    | Nightly rebuild through the deploy hook, 02:00 Asia/Phnom_Penh, so expired job posts drop off. |
+
+A failing job throws, so it shows as an error under the Worker's Logs, and emails `ALERT_TO_EMAIL`
+through Resend once that secret and the Resend secrets are set. Secrets, set from your own
+terminal with `npx wrangler secret put <NAME> --env production`:
+
+- `DEPLOY_HOOK_URL`: Settings → Builds → Deploy Hooks → create one for `main`.
+- `ALERT_TO_EMAIL`: who hears about failures.
+
+Run a job locally: `npx wrangler dev --env production`, then
+`curl -X POST "http://localhost:8787/cdn-cgi/local/explorer/api/local/scheduled?worker=sko-website-production" -H 'Content-Type: application/json' -d '{"cron":"15 * * * *"}'`.
 
 ## Publishing from the Studio
 
 The site reads Sanity at build time, so a publish reaches the live site only through a deploy. A
-Sanity webhook runs the Deploy workflow on every publish. A person sets it up once:
+Sanity webhook calls the Workers Builds deploy hook on every publish. A person sets it up once:
 
-- Token: GitHub → Settings → Developer settings → fine-grained token, resource owner
-  `Jaya-Labs-larpers`, only the `SKO---NGO-website` repository, one permission: **Actions: Read and
-  write**. Not Contents: the token lives in Sanity, and Actions cannot touch the code. The org
-  requires an owner to approve the token (Org Settings → Personal access tokens → Pending requests);
-  until then every delivery gets a 403. Note its expiry date and replace it in the webhook before
-  then.
-- Webhook: sanity.io/manage → project `xm91vtfk` → API → Webhooks → Create.
-  - URL `https://api.github.com/repos/Jaya-Labs-larpers/SKO---NGO-website/actions/workflows/deploy.yml/dispatches`
+- Deploy hook: Workers & Pages → `sko-website-production` → Settings → Builds → Deploy Hooks →
+  create one for `main`. The URL is the credential; keep it out of the repository.
+- Webhook "Rebuild site on publish": sanity.io/manage → project `xm91vtfk` → API → Webhooks.
+  - URL: the deploy hook URL; method POST; no headers.
   - Dataset `production`; trigger on create, update and delete; drafts and versions off.
-  - Projection `{"ref": "main"}`; method POST.
-  - Headers `Authorization: Bearer <token>` and `Accept: application/vnd.github+json`.
-- Check: publish any small edit, and a Deploy run appears under Actions within seconds.
+- Check: publish any small edit, and a build appears under the Worker's Builds tab within seconds.
 - Delivery log: `npx sanity hook logs "Rebuild site on publish"` from `studio/`. A 204 is a
   delivered publish.
-- Safety net: the Content sync workflow runs hourly. If a publish is 10 minutes old and no
-  deploy picked it up, it starts one and fails, which emails its last committer. A failing run means
-  the webhook needs attention. Deletions are not detected; the nightly rebuild covers them.
+- Safety net: the hourly content sync cron. If a publish is 10 minutes old and the live Worker
+  version predates it, it calls the deploy hook and fails, which alerts. That means the webhook
+  needs attention. If it already called the hook for that publish and the site is still behind, it
+  reports the failed build instead of retrying. It remembers that in `RATE_LIMIT_KV` under
+  `cron:content-sync:triggered`. Deletions are not detected; the nightly rebuild covers them.
+- After a rollback the live version is older, so the next content sync rebuilds `main` if anything
+  was published since. Fix or revert the bad commit before rolling back.
 
-Deploys queue one at a time and a newer pending run replaces an older one, so a burst of publishes
-builds once or twice, not once per edit. Until `PUBLIC_CONTENT_SOURCE` is `sanity` those runs
+Workers Builds skips a hook call when a build from an earlier call has not started yet, so a burst
+of publishes builds once or twice, not once per edit. Until `PUBLIC_CONTENT_SOURCE` is `sanity` those runs
 still build from fixtures, harmlessly.
 
 To seed an empty dataset from the fixtures, see `scripts/sanity-seed.mjs`.
 
 ## Rollback
 
-Automatic: the Deploy workflow records the live version before deploying. If the live checks fail
-after the deploy, it rolls back to that version, reruns the live checks and leaves the run failed,
-so GitHub emails. The site then serves the previous build, including its older Sanity content,
-until the cause is fixed and a deploy passes. Content sync reports the failed deploy but does not
-retry it.
+Workers Builds does not roll back: a failed live check fails the build and leaves the new version
+serving. Only the manual Deploy workflow rolls back automatically, when Actions is available.
 
 Manual: `npx wrangler rollback --env production`, confirm with `check:edge`, redeploy the current
 version. Rollback restores files and code only: DNS, Redirect Rules, secrets and KV contents are
@@ -150,11 +173,10 @@ each lands in the right inbox and not in spam.
 
 ## Automation and remaining ownership
 
-- The Sanity publish webhook is configured to dispatch the Deploy workflow; its GitHub token scope
-  still needs review.
-- A nightly rebuild is scheduled at 02:00 Asia/Phnom_Penh so expired job posts drop off.
-- The Uptime workflow checks the live site hourly. A manual run passed 28/28 checks on
-  2026-09-24.
+- The Sanity publish webhook must point at the Workers Builds deploy hook (Publishing from the
+  Studio, above).
+- Nightly rebuild, hourly uptime and content sync run on the Worker's cron (Cron jobs, above). A
+  local run of the uptime job passed 28/28 checks on 2026-10-21.
 - Move the zone and Worker to an SKO-owned Cloudflare account.
 
 ## Launch record

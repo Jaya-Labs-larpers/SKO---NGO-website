@@ -1,8 +1,10 @@
 name: Deploy
 
-# Production deploys happen here and nowhere else. A push to main that passes
-# the one command (tests, typecheck, build with CSP and structural checks) is
-# deployed to the sko-website-production Worker, then checked live.
+# Manual fallback only. Production deploys run on Cloudflare Workers Builds
+# (docs/16-cloudflare-workers.md), and the nightly rebuild, uptime and content
+# sync run on the Worker's cron (worker/scheduled.ts), since Actions stopped
+# running on the org's free plan in October 2026. Run this by hand to deploy main with an automatic
+# rollback if the live checks fail.
 #
 # Until CLOUDFLARE_API_TOKEN exists as a repository secret the deploy steps are
 # skipped and the job still goes green, so main is never red for a missing
@@ -11,12 +13,6 @@ name: Deploy
 # `gh secret set CLOUDFLARE_API_TOKEN`. Never the Global API Key.
 
 on:
-  push:
-    branches: [main]
-  schedule:
-    - cron: "0 19 * * *"
-  # Also how a Studio publish rebuilds the site: a Sanity webhook calls the
-  # workflow dispatch API (docs/16-cloudflare-workers.md).
   workflow_dispatch:
 
 permissions:

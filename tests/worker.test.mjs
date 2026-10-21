@@ -19,12 +19,20 @@ const core = compile(
     "utf8",
   ),
 ).replace(/from ['"]zod['"]/, `from '${import.meta.resolve("zod")}'`);
+const scheduled = compile(
+  await readFile(new URL("../worker/scheduled.ts", import.meta.url), "utf8"),
+).replace(
+  /from ['"]\.\.\/scripts\/([\w-]+\.mjs)['"]/g,
+  (_, file) => `from '${new URL(`../scripts/${file}`, import.meta.url)}'`,
+);
 const worker = compile(
   await readFile(new URL("../worker/index.ts", import.meta.url), "utf8"),
-).replace(
-  /from ['"]\.\.\/functions\/api\/contact(?:\.ts|\.js)?['"]/,
-  `from '${dataUrl(core)}'`,
-);
+)
+  .replace(
+    /from ['"]\.\.\/functions\/api\/contact(?:\.ts|\.js)?['"]/,
+    `from '${dataUrl(core)}'`,
+  )
+  .replace(/from ['"]\.\/scheduled(?:\.ts|\.js)?['"]/, `from '${dataUrl(scheduled)}'`);
 const { default: handler } = await import(dataUrl(worker));
 
 const assets = {
@@ -144,4 +152,57 @@ test("enabled contact keeps byte limits and takes the client IP from Cloudflare"
     200,
   );
   assert.equal(verifiedIp, "192.0.2.99");
+});
+
+test("an unknown cron schedule fails loudly", async () => {
+  await assert.rejects(
+    handler.scheduled({ cron: "* * * * *" }, env()),
+    /no job for cron/,
+  );
+});
+
+test("content sync rebuilds a missed publish once, then reports instead of retrying", async () => {
+  const realFetch = globalThis.fetch;
+  const hookCalls = [];
+  const publishedAt = new Date(Date.now() - 20 * 60_000).toISOString();
+  globalThis.fetch = async (url, init) => {
+    if (String(url).includes(".api.sanity.io/")) {
+      return Response.json({ result: publishedAt });
+    }
+    hookCalls.push([String(url), init?.method]);
+    return new Response(null, { status: 200 });
+  };
+  const store = new Map();
+  const cronEnv = env({
+    SANITY_PROJECT_ID: "abc123",
+    DEPLOY_HOOK_URL: "https://hooks.example/deploy",
+    CF_VERSION_METADATA: {
+      id: "v1",
+      tag: "",
+      timestamp: new Date(Date.now() - 60 * 60_000).toISOString(),
+    },
+    RATE_LIMIT_KV: {
+      async get(key) {
+        return store.get(key) ?? null;
+      },
+      async put(key, value) {
+        store.set(key, value);
+      },
+    },
+  });
+  try {
+    await assert.rejects(
+      handler.scheduled({ cron: "45 * * * *" }, cronEnv),
+      /started a rebuild/,
+    );
+    assert.deepEqual(hookCalls, [["https://hooks.example/deploy", "POST"]]);
+
+    await assert.rejects(
+      handler.scheduled({ cron: "45 * * * *" }, cronEnv),
+      /still not live/,
+    );
+    assert.equal(hookCalls.length, 1);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
 });

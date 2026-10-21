@@ -3,10 +3,12 @@
  *
  * `assets.run_worker_first` sends only `/api/*` here. Every other request is
  * served straight from `dist/` without invoking this code, and requests for
- * missing pages fall through to the nearest `404.html`.
+ * missing pages fall through to the nearest `404.html`. Cron jobs are in
+ * scheduled.ts.
  */
 
 import { onRequest } from '../functions/api/contact';
+import { scheduled } from './scheduled';
 
 interface KVNamespaceLike {
   get(key: string): Promise<string | null>;
@@ -23,6 +25,13 @@ export interface Env {
   CONTACT_TO_EMAIL?: string;
   PARTNER_TO_EMAIL?: string;
   RATE_LIMIT_KV?: KVNamespaceLike;
+  CF_VERSION_METADATA?: { id: string; tag: string; timestamp: string };
+  SITE_URL?: string;
+  SANITY_PROJECT_ID?: string;
+  SANITY_DATASET?: string;
+  SANITY_API_VERSION?: string;
+  DEPLOY_HOOK_URL?: string;
+  ALERT_TO_EMAIL?: string;
 }
 
 function json(body: unknown, status: number, headers: Record<string, string> = {}): Response {
@@ -60,4 +69,6 @@ export default {
 
     return env.ASSETS.fetch(request);
   },
+
+  scheduled,
 };
