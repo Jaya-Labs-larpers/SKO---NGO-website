@@ -101,3 +101,9 @@ variables and runtime secrets are Wrangler secrets on `env.production`.
 
 The runbook is [`docs/16-cloudflare-workers.md`](docs/16-cloudflare-workers.md): rehearsal on
 workers.dev, cutover, CI deploys, rollback, and who does which step.
+
+## License
+
+The code is [MIT](LICENSE). SKO's name, logo, photographs and written content are not covered by
+that license; all rights reserved. Fonts and icons keep their own licenses (`public/fonts/`,
+`public/icons/`).
