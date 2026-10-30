@@ -30,7 +30,7 @@
     "@astrojs/sitemap": "3.7.3",
     "@sanity/client": "7.26.0",
     "@sanity/image-url": "1.2.0",
-    "astro": "7.3.2",
+    "astro": "7.3.3",
     "zod": "4.4.3"
   },
   "devDependencies": {
