@@ -5,6 +5,7 @@ import { ui } from '~/lib/i18n/strings';
 import { text } from '~/lib/i18n/utils';
 import { stripInlineLinks } from '~/lib/inline-links';
 import { resolveSeo } from '~/lib/seo';
+import { donationEnabled } from '~/lib/donation';
 
 const en = ui.en;
 
@@ -62,7 +63,9 @@ export const GET: APIRoute = async ({ site }) => {
     cmsPageLine(impact, '/impact/', en.pageImpact),
     { title: en.pagePartners, path: '/partners/', description: clean(en.metaPartners) },
     { title: en.pageContact, path: '/contact/', description: clean(en.metaContact) },
-    { title: en.pageDonate, path: '/donate/', description: clean(en.donateHeroIntro) },
+    donationEnabled
+      ? { title: en.pageDonate, path: '/donate/', description: clean(en.donateHeroIntro) }
+      : null,
     cmsPageLine(faq, '/faq/', en.pageFaq),
     { title: en.pageReports, path: '/reports/', description: clean(en.metaReports) },
     cmsPageLine(safeguarding, '/safeguarding/', en.pageSafeguarding),
