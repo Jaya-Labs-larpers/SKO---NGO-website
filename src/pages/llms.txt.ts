@@ -62,6 +62,7 @@ export const GET: APIRoute = async ({ site }) => {
     cmsPageLine(impact, '/impact/', en.pageImpact),
     { title: en.pagePartners, path: '/partners/', description: clean(en.metaPartners) },
     { title: en.pageContact, path: '/contact/', description: clean(en.metaContact) },
+    { title: en.pageDonate, path: '/donate/', description: clean(en.donateHeroIntro) },
     cmsPageLine(faq, '/faq/', en.pageFaq),
     { title: en.pageReports, path: '/reports/', description: clean(en.metaReports) },
     cmsPageLine(safeguarding, '/safeguarding/', en.pageSafeguarding),
