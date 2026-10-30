@@ -1,16 +1,6 @@
 import { execSync } from "node:child_process";
 
-const allowed = {
-  // No patched braces exists (every version is affected). It only reaches the
-  // Studio through @sanity/cli's file watcher and globbing at build time, and
-  // `npm audit fix --force` would downgrade sanity to 5.7.0. Drop this entry
-  // once braces ships a fix.
-  "GHSA-vfj7-8cjw-p6xm": "braces stack-exhaustion DoS",
-  // No patched sprintf-js exists. It only reaches the Studio through
-  // @sanity/cli -> @vercel/frameworks -> js-yaml 3 -> argparse 1 at build
-  // time, never with untrusted format strings. Drop once a fix ships.
-  "GHSA-hp3w-g68c-fv3c": "sprintf-js unbounded precision DoS",
-};
+const allowed = {};
 
 const blocking = new Set(["moderate", "high", "critical"]);
 
