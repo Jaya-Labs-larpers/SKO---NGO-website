@@ -7,10 +7,10 @@ Delivered in six phases, each with an approval gate.
 
 **Start here if you are:**
 
-| You are…                    | Read                                                                        |
-| --------------------------- | --------------------------------------------------------------------------- |
-| Deploying it                | [16-cloudflare-workers.md](16-cloudflare-workers.md)                        |
-| A developer picking this up | [../README.md](../README.md), then [07-architecture.md](07-architecture.md) |
+| You are…                    | Read                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| Deploying it                | [16-cloudflare-workers.md](16-cloudflare-workers.md)                            |
+| A developer picking this up | [DEVELOPMENT.md](DEVELOPMENT.md), then [07-architecture.md](07-architecture.md) |
 
 ---
 
@@ -45,7 +45,7 @@ Delivered in six phases, each with an approval gate.
 | #   | Deliverable                                                      | Where                                    |
 | --- | ---------------------------------------------------------------- | ---------------------------------------- |
 | 9   | What was built, what was verified, what is deliberately deferred | [07-architecture.md](07-architecture.md) |
-| 10  | Developer setup and the rules that keep this maintainable        | [../README.md](../README.md)             |
+| 10  | Developer setup and the rules that keep this maintainable        | [DEVELOPMENT.md](DEVELOPMENT.md)         |
 | 11  | The code                                                         | `src/`, `functions/`, `studio/`          |
 
 **Phase 3 approved.**
